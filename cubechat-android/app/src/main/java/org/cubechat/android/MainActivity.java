@@ -85,7 +85,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private boolean inEnrollment, resumed, privacyPaused;
 
     private UpdateCheck updates;
-    private Button updateBanner, fileNotice, jumpLatest;
+    private Button updateBanner, fileNotice, jumpLatest, undoDraft;
     private AttachmentsUi files;
     private CubeProfile profile;
     private WifiDirectController direct;
@@ -101,10 +101,13 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private AlertDialog inviteDialog, shareDialog;
     private boolean wantsInvite, closing;
     private String lastProblem = "", submitted, exportCode;
+    private String clearedDraft;
+    private long clearedDraftContact;
     private long renderedId, inviteFrom = -1;
     private boolean draftDirty, loadingDraft, shareSelecting;
     private final Handler ui = new Handler(Looper.getMainLooper());
     private final Runnable writeDraft = this::flushDraft;
+    private final Runnable expireDraftUndo = this::forgetClearedDraft;
     private Retained retained;
     private ShareText share;
     private long shareTarget;
@@ -207,6 +210,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         inviteDialog = null;
         exportCode = null;
         retained = null;
+        forgetClearedDraft();
         renderedId = 0;
         submitted = null;
         loadingDraft = true;
@@ -221,7 +225,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         // Let Android release the detached chat tree, including recycled message rows.
         if (history != null) history.setAdapter(null);
         history = null; adapter = null; draft = null;
-        updateBanner = fileNotice = jumpLatest = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
+        updateBanner = fileNotice = jumpLatest = undoDraft = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
         draftLength = null;
         subtitle = status = radioStatus = relayStatus = contactName = pingResult = pairTitle = pairHint = null;
         startPanel = composerRow = contactBar = null;
@@ -560,6 +564,13 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         draft.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         chatPrefs.apply(draft, this::send);
         composerRow.addView(draft, weight(WRAP));
+        Button draftMenu = button("Draft ⋮", false, null);
+        draftMenu.setContentDescription("Draft actions: copy or clear");
+        draftMenu.setOnClickListener(v -> showDraftActions(v));
+        composerRow.addView(draftMenu);
+        undoDraft = button("Undo clear", false, v -> restoreClearedDraft());
+        undoDraft.setVisibility(View.GONE);
+        composerRow.addView(undoDraft);
         send = button("Send", true, v -> send());
         send.setEnabled(false);
         LinearLayout.LayoutParams sendParams = new LinearLayout.LayoutParams(WRAP, dp(52));
@@ -594,6 +605,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         boolean paired = !next.role.isEmpty();
         boolean switched = next.activeId != renderedId;
         if (switched) {
+            forgetClearedDraft();
             flushDraft();
             if (renderedId != 0) leaveRadio();
             renderedId = next.activeId;
@@ -649,6 +661,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             flushDraft();
         }
         submitted = null;
+        forgetClearedDraft();
         refreshSend();
     }
 
@@ -812,6 +825,63 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             else { leaveRadio(); link.useRelay(ip); }
             dialog.dismiss();
         });
+    }
+
+    private void showDraftActions(View anchor) {
+        if (!chatOpen() || renderedId == 0 || draft == null || submitted != null) return;
+        PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add("Copy draft").setEnabled(draft.length() > 0);
+        menu.getMenu().add("Clear draft").setEnabled(draft.length() > 0);
+        menu.setOnMenuItemClickListener(item -> {
+            if (!chatOpen() || draft == null || renderedId == 0 || submitted != null) return true;
+            String contents = draft.getText().toString();
+            if ("Copy draft".contentEquals(item.getTitle())) {
+                try {
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    if (clipboard != null) {
+                        clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat draft", contents));
+                        Toast.makeText(this, "Draft copied", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (RuntimeException ignored) {
+                    Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_SHORT).show();
+                }
+            } else if ("Clear draft".contentEquals(item.getTitle()) && !contents.isEmpty()) {
+                forgetClearedDraft();
+                clearedDraft = contents;
+                clearedDraftContact = renderedId;
+                draft.setText("");
+                flushDraft();
+                if (undoDraft != null) undoDraft.setVisibility(View.VISIBLE);
+                ui.postDelayed(expireDraftUndo, 10_000);
+            }
+            return true;
+        });
+        menu.show();
+    }
+
+    private void restoreClearedDraft() {
+        if (!chatOpen() || draft == null || clearedDraft == null
+                || renderedId != clearedDraftContact || submitted != null) {
+            forgetClearedDraft();
+            return;
+        }
+        // Undo must not overwrite newer typed text.
+        if (!draft.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Clear the new draft before restoring", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String restored = clearedDraft;
+        forgetClearedDraft();
+        draft.setText(restored);
+        draft.setSelection(draft.length());
+        flushDraft();
+    }
+
+    private void forgetClearedDraft() {
+        ui.removeCallbacks(expireDraftUndo);
+        clearedDraft = null;
+        clearedDraftContact = 0;
+        if (undoDraft != null) undoDraft.setVisibility(View.GONE);
     }
 
     private void refreshSend() {
