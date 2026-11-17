@@ -123,10 +123,10 @@ jobs:
           grep -F "INSTRUMENTATION_CODE: -1" "$RUNNER_TEMP/store-check.log"
 
       - name: Save key-free attachment screenshots
-        if: ${{ !cancelled() }}
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: CubeChat-Android-013-files
           path: ${{ runner.temp }}/CubeChat-013-*.png
-          if-no-files-found: ${{ success() && 'error' || 'warn' }}
+          if-no-files-found: warn
           retention-days: 7

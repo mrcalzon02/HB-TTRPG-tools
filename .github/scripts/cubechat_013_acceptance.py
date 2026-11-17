@@ -218,10 +218,39 @@ def bluetooth_status(phone):
     ui.report(phone.serial+" Bluetooth state: windows="+",".join(packages)+" status="+str(states)+
               " bond state events="+str(len(bonds))+" stack event counts="+str(tally))
 
+def choose_host_bluetooth(guest,host,bt):
+    deadline=time.monotonic()+90
+    expected=bt.host_address(host)
+    last=None
+    next_search=time.monotonic()+18
+    while time.monotonic()<deadline:
+        nodes=guest.tree()
+        if bt.approve_android(nodes,guest): continue
+        # A peer row is a device name and a Bluetooth address on its own line.
+        candidates=[]
+        for n in nodes:
+            lines=bt.text(n).splitlines()
+            if n.get("package")==ui.APP and len(lines)>=2 and bt.MAC.fullmatch(lines[-1].strip()):
+                candidates.append((n,lines[-1].strip().upper()))
+        matching=[node for node,address in candidates if expected and address==expected]
+        summary=(len(candidates),bool(expected),bool(matching))
+        if summary!=last:
+            ui.report("Bluetooth picker: "+str(summary[0])+" real device rows, host address known="+
+                      str(summary[1])+", exact host match="+str(summary[2])+".")
+            last=summary
+        if matching or (expected is None and len(candidates)==1):
+            guest.tap(matching[0] if matching else candidates[0][0])
+            return
+        if time.monotonic()>=next_search:
+            refresh=next((n for n in nodes if bt.text(n).casefold()=="search again"),None)
+            if refresh is not None: guest.tap(refresh)
+            next_search=time.monotonic()+20
+    raise ui.CheckFailed("The requested host was not found among Bluetooth devices")
+
 def connect_bluetooth(host,guest,bt):
     host.choose_bluetooth(); bt.wait_host_ready(host)
     ui.report("The card holder opened its Bluetooth listening service.")
-    guest.choose_bluetooth(); bt.select_discovered_peer(guest,host)
+    guest.choose_bluetooth(); choose_host_bluetooth(guest,host,bt)
     ui.report("The recipient chose the discoverable host in CubeChat.")
     try:
         bt.bond(host,guest)
