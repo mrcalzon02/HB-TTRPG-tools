@@ -1,6 +1,10 @@
 # CubeChat for Android
 
-[Download the signed APK](https://cubechat-android.lankytangerine2.chatgpt.site/CubeChat.apk) or [open the installation page](https://cubechat-android.lankytangerine2.chatgpt.site/). The app supports Android 8.0 and newer. It keeps one paired conversation on each phone.
+Open the [Android installation page](https://cubechat-android.lankytangerine2.chatgpt.site/) on your phone or [download CubeChat 0.1.1 from GitHub Releases](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/download/cubechat-android-v0.1.1/CubeChat.apk). Open **CubeChat.apk** from your browser’s Downloads, then choose **Install** or **Update** in Android. The app supports Android 8.0 and newer and keeps one paired conversation on each phone.
+
+## Updates
+
+When CubeChat opens with internet access, it checks GitHub Releases for a higher Android build number. Published prereleases are eligible. Drafts are excluded. An available update appears above the conversation. Open the notice to see the installed and available versions, then choose **Open download** or **Not now**. An APK downloads only when you open the download, and Android asks before installing it. You can also choose **Pairing → Check for updates**. Offline pairing and chats work independently of the update check.
 
 ## Exchange the key
 
@@ -27,3 +31,7 @@ The native transport authenticates delivery sessions using the QR credentials an
 ## Build
 
 Use JDK 17 and Android SDK 35. Run `./gradlew assembleDebug` from this directory (Windows: `gradlew.bat assembleDebug`). The output is `app/build/outputs/apk/debug/app-debug.apk`. For release use `assembleRelease`, then sign the aligned release APK with the project’s private signing key. Its public certificate SHA-256 is `7D:8A:D8:86:14:3D:7C:8E:95:1C:D2:8A:F2:BB:14:30:11:D4:98:B0:3B:C4:8E:C9:0A:9D:87:6D:9E:E1:78:77`.
+
+To publish a signed build, put it at `cubechat-android/downloads/CubeChat.apk` and run `python3 scripts/release_manifest.py --write` from this directory with `ANDROID_HOME` set. Commit the APK, generated `release.json`, and matching Android version changes together. The CubeChat release workflow on `main` verifies the package, version and signer, then publishes the verified files on the versioned GitHub release. Update `RELEASE_NOTES.md` with the version, build number and user-facing changes before publishing. Increment `versionCode` for every update, including prereleases, and give each build a new version tag.
+
+The 0.1.1 release includes `CubeChat.apk`, `release.json`, `RELEASE_NOTES.md`, `SHA256SUMS.txt`, and `CubeChat-Android-0.1.1-Source.zip`. The source archive contains the Android build and the canonical Cube engine it imports. To verify downloaded files from the release, run `sha256sum -c SHA256SUMS.txt` in their directory.

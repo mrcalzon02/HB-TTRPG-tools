@@ -67,6 +67,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private static final int WRAP = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     private PeerLink link;
+    private UpdateCheck updates;
+    private Button updateBanner;
     private CubeProfile profile;
     private WifiDirectController direct;
     private BluetoothRadio bluetooth;
@@ -87,6 +89,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         buildScreen();
+        updates = new UpdateCheck(this, updateBanner);
         Object retained = getLastNonConfigurationInstance();
         if (retained instanceof String[]) {
             String[] previous = (String[]) retained;
@@ -154,6 +157,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override protected void onResume() {
         super.onResume();
+        if (updates != null) updates.check(false);
         if (bluetooth != null) bluetooth.resume();
     }
 
@@ -165,6 +169,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     @Override protected void onDestroy() {
         closing = true;
+        if (updates != null) updates.close();
         if (inviteDialog != null) inviteDialog.dismiss();
         if (joiningDialog != null) joiningDialog.dismiss();
         if (bluetooth != null) bluetooth.stop();
@@ -240,6 +245,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         options = button("Pairing", false, v -> menu());
         header.addView(options);
         root.addView(header);
+        updateBanner = button("Update available", false, null);
+        updateBanner.setVisibility(View.GONE);
+        root.addView(updateBanner);
         status = label("Starting local connection…", 14, MUTED, false);
         status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
         pad(status, 18, 7, 8);
@@ -462,9 +470,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void menu() {
-        if (link == null) return;
-        PeerLink.Snapshot state = link.snapshot();
         PopupMenu popup = new PopupMenu(this, options);
+        popup.getMenu().add("Check for updates").setOnMenuItemClickListener(i -> { updates.check(true); return true; });
+        if (link == null) { popup.show(); return; }
+        PeerLink.Snapshot state = link.snapshot();
         popup.getMenu().add("Connection…").setOnMenuItemClickListener(i -> {
             chooseConnection(); return true;
         });

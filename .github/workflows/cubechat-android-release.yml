@@ -1,0 +1,37 @@
+name: Publish CubeChat Android
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cubechat-android/downloads/CubeChat.apk'
+      - 'cubechat-android/release.json'
+      - '.github/workflows/cubechat-android-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cubechat-android-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: cubechat-android
+      - name: Check APK identity, signing certificate, Android version and release manifest
+        run: |
+          if [[ ! -x "$ANDROID_HOME/build-tools/35.0.0/apksigner" ]]; then
+            "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;35.0.0"
+          fi
+          python3 cubechat-android/scripts/release_manifest.py
+      - name: Verify and publish the versioned APK and update manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash cubechat-android/scripts/publish-release.sh
