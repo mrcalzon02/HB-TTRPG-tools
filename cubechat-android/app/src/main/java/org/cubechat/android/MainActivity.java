@@ -90,7 +90,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private CubeProfile profile;
     private WifiDirectController direct;
     private BluetoothRadio bluetooth;
-    private TextView subtitle, status, radioStatus, relayStatus, contactName, pingResult, draftLength;
+    private TextView subtitle, status, radioStatus, relayStatus, contactName, conversationState, pingResult, draftLength;
     private LinearLayout startPanel, composerRow, contactBar;
     private ListView history;
     private EditText draft;
@@ -227,7 +227,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         history = null; adapter = null; draft = null;
         updateBanner = fileNotice = jumpLatest = undoDraft = send = options = inviteButton = scanButton = pasteButton = ping = createProfile = null;
         draftLength = null;
-        subtitle = status = radioStatus = relayStatus = contactName = pingResult = pairTitle = pairHint = null;
+        subtitle = status = radioStatus = relayStatus = contactName = conversationState = pingResult = pairTitle = pairHint = null;
         startPanel = composerRow = contactBar = null;
         if (link == null) parked.run(); else link.lockVault(parked);
     }
@@ -469,6 +469,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         contactBar.addView(ping);
         contactBar.setVisibility(View.GONE);
         root.addView(contactBar);
+        conversationState = label("", 13, MUTED, false);
+        conversationState.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        pad(conversationState, 18, 2, 5);
+        conversationState.setVisibility(View.GONE);
+        root.addView(conversationState);
         updateBanner = button("Update available", false, null);
         updateBanner.setVisibility(View.GONE);
         root.addView(updateBanner);
@@ -622,8 +627,21 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             if (!TextUtils.equals(saved, next.draft)) { draftDirty = true; flushDraft(); }
             retained = null;
         }
-        for (ChatStore.Contact c : next.contacts) if (c.id == renderedId) { contactName.setText(c.name); break; }
+        int queuedHere = 0;
+        for (ChatStore.Contact c : next.contacts) if (c.id == renderedId) {
+            contactName.setText(c.name);
+            queuedHere = c.pending;
+            break;
+        }
         contactBar.setVisibility(paired ? View.VISIBLE : View.GONE);
+        conversationState.setVisibility(paired ? View.VISIBLE : View.GONE);
+        if (paired) {
+            String reachability = next.connected ? "Connected" : "Not connected";
+            String queue = queuedHere == 0 ? "No queued messages"
+                    : queuedHere == 1 ? "1 message queued" : queuedHere + " messages queued";
+            conversationState.setText(reachability + " · " + queue + " · Route: " + next.route);
+            conversationState.setTextColor(next.connected ? GREEN : MUTED);
+        }
         ping.setEnabled(paired && !next.pinging);
         String checked = next.pingTime == 0 || next.pinging ? "" : " · " +
                 android.text.format.DateFormat.getTimeFormat(this).format(new Date(next.pingTime));
@@ -937,8 +955,13 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 ChatStore.Contact contact = getItem(position);
                 TextView name = view.findViewById(android.R.id.text1);
                 name.setText(contact.name);
-                String detail = contact.id == current.activeId ? "Current conversation" : "Conversation " + contact.id;
-                if (contact.pending > 0) detail += " · " + contact.pending + " queued";
+                String detail;
+                if (contact.id == current.activeId)
+                    detail = current.connected ? "Selected · Connected" : "Selected · Not connected";
+                else detail = "Not selected · Open to reconnect";
+                if (contact.pending > 0)
+                    detail += " · " + contact.pending + (contact.pending == 1 ? " queued message" : " queued messages");
+                else detail += " · No queued messages";
                 ((TextView) view.findViewById(android.R.id.text2)).setText(detail);
                 return view;
             }
