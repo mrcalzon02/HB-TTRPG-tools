@@ -40,6 +40,7 @@ He wrote one sack received, its weighed amount, and one sack held outside the st
 "I know the difference," Meret said. "I also know what happens when there's no proof anything arrived."
 
 She tied her half under her coat. Tomorrow depended on the mill, the rain, the crossing, and whether this household remembered its own words. She had not sold the castle a week. She had delivered one dry sack, and made sure someone could say so.
+
 ---
 
 **Editorial continuity gate (not story text):** 488 narrative words. Set immediately after the first night's kitchen-supply argument or at the following first-week delivery; no fixed timetable for later deliveries is established. The carrier Meret and the unnamed kitchen steward are optional candidate characters, not already-certified canon. The narrow bridge remains obstructive, no new workroom or repaired route appears, and one sack's provisional receipt is not a flour purchase, wage payment or week-long supply contract. The porter task's wage is *agreed*, not paid; the other sack remains held for inspection, not accepted as dry. This scene belongs to early Edselsto logistical realities, not Season Three Episode 18's Bessa off-wall gate tally or uncommissioned S3E19–23.
