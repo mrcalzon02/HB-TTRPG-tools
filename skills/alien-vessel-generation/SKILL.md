@@ -3,12 +3,16 @@ name: alien-vessel-generation
 description: Generate deterministic semantic multi-deck alien vessels from an immutable intact reference, then apply operational, damaged, abandoned, salvaged, crippled, wrecked, or destroyed condition histories without discarding the original topology. Use when a user needs an alien ship, ruined alien ship, salvage relic, or vessel encounter space.
 compatibility: Requires access to HBFoundryAPI or the canonical ordered HB-TTRPG-tools browser JavaScript runtime.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.2.0"
   foundry-capability: spatial.alien-vessel.generate
 ---
 
 # Alien Vessel Generation
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical capability `spatial.alien-vessel.generate`.
 

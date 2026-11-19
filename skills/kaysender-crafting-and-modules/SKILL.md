@@ -3,12 +3,16 @@ name: kaysender-crafting-and-modules
 description: Use Kaysender crafting, equipment, gadget, ship-module, ship-weapon, airship-core, materials, facilities, quality, legality, flaw, improvement, and construction data. Activate when a user wants to design or inspect Kaysender equipment or ship systems using the repository's canonical crafting workflow.
 compatibility: The authoritative crafting generator is currently browser-workflow based; its manifests, templates, modifiers, and schemas are remotely retrievable.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-module: crafting-gadget-equipment
 ---
 
 # Kaysender Crafting and Ship Modules
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical Kaysender crafting generator and its data manifests rather than inventing an independent recipe/balance system.
 

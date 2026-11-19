@@ -3,10 +3,14 @@ name: environment-production
 description: Develop and review authored 3D maps and their supporting models through terrain, architecture, functional integration, visual refinement, story dressing, and evidence-based acceptance. Use for iterative environment production or migration of its workflow between local, web, and CI hosts.
 compatibility: Documents are remotely readable; evidence tools require Python 3.10+ and writable storage. Rendering and gameplay checks require target-engine adapters.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   version: 1.0.0
 ---
 
 # Iterative environment production
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this workflow to advance an existing environment from its current verified stage. Preserve accepted work; do not regenerate a map merely because a new session starts. The portable package is an evidence and production protocol, not a replacement game engine or procedural map generator.
 

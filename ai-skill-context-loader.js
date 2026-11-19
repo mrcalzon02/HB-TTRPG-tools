@@ -64,53 +64,125 @@
     return cleared;
   }
 
+  const ENGRAM_PATH = 'docs/blacklight/charles-personality-engram.json';
+  const REGISTRY_PATH = 'skills/index.json';
+  const ENGRAM_ID = 'blacklight.charles';
+
   function findSkill(index, skillName) {
     const skills = Array.isArray(index && index.skills) ? index.skills : [];
     const skill = skills.find(item => item && item.name === skillName);
-    if (!skill) throw new Error(`Skill is not registered in skills/index.json: ${skillName}`);
-    const expectedPath = `skills/${skillName}/SKILL.md`;
-    if (skill.path !== expectedPath) {
-      throw new Error(`Registered skill path does not match its authoritative skill name: ${skillName}`);
+    if (!skill) throw new Error('Skill is not registered in skills/index.json: ' + skillName);
+    if (skill.path !== 'skills/' + skillName + '/SKILL.md') {
+      throw new Error('Registered skill path does not match its authoritative skill name: ' + skillName);
+    }
+    if (skill.personalityPolicy !== 'inherit-default' ||
+        !Array.isArray(skill.personalityEngramIds) ||
+        !skill.personalityEngramIds.includes(ENGRAM_ID)) {
+      throw new Error('Skill does not declare the required Charles personality companion: ' + skillName);
     }
     return skill;
   }
 
   function validatePersonalityBinding(index) {
     const binding = index && index.defaultPersonality;
-    if (
-      !binding ||
-      binding.engramId !== 'blacklight.charles' ||
-      typeof binding.authorityPath !== 'string' ||
-      !binding.authorityPath ||
-      binding.binding !== 'inherited' ||
-      binding.scope !== 'all-registered-skills' ||
-      binding.loadPolicy !== 'load-once-before-selected-skills'
-    ) {
-      throw new Error('The Agent Skills registry does not expose the canonical blacklight.charles defaultPersonality binding.');
+    if (!binding || binding.engramId !== ENGRAM_ID ||
+        binding.authorityPath !== ENGRAM_PATH ||
+        binding.personalityVersion !== 'CE1.1' ||
+        binding.binding !== 'inherited' ||
+        binding.scope !== 'all-registered-skills' ||
+        binding.loadPolicy !== 'load-once-before-selected-skills' ||
+        binding.required !== true ||
+        binding.reciprocalRegistryPath !== REGISTRY_PATH ||
+        binding.missingCompanionPolicy !== 'fail-closed-before-skill-activation' ||
+        binding.optionalSkillDiscovery !== true ||
+        binding.integrity?.algorithm !== 'sha256' ||
+        !/^[a-f0-9]{64}$/.test(binding.integrity.digest)) {
+      throw new Error('The Agent Skills registry has no valid mandatory reciprocal Charles engram binding.');
     }
     return binding;
   }
 
+  async function sha256(value) {
+    const subtle = root.crypto && root.crypto.subtle;
+    const Encoder = root.TextEncoder;
+    if (!subtle || typeof Encoder !== 'function') {
+      throw new Error('Cannot verify Charles engram integrity: host SHA-256 verification is unavailable.');
+    }
+    const digest = await subtle.digest('SHA-256', new Encoder().encode(value));
+    return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function loadMandatoryEngram(index, baseUrl) {
+    const binding = validatePersonalityBinding(index);
+    const raw = await fetchResource(ENGRAM_PATH, baseUrl, 'text');
+    const actualHash = await sha256(raw);
+    if (actualHash !== binding.integrity.digest) {
+      throw new Error('Charles engram SHA-256 mismatch; refusing skill activation.');
+    }
+    let personality;
+    try {
+      personality = JSON.parse(raw);
+    } catch (error) {
+      throw new Error('Charles engram is not valid JSON: ' + error.message);
+    }
+    const link = personality.skill_registry;
+    if (personality.engram_id !== ENGRAM_ID ||
+        personality.personality_version !== binding.personalityVersion ||
+        personality.kind !== 'personality_engram' ||
+        personality.passive !== true ||
+        !link || link.registry_path !== REGISTRY_PATH ||
+        link.binding !== 'bidirectional-required' ||
+        link.index_load !== 'mandatory-before-skill-selection' ||
+        link.skill_selection !== 'optional-on-demand' ||
+        link.missing_or_invalid !== 'fail-closed-for-skill-activation' ||
+        link.tool_authority !== 'host-controlled' ||
+        personality.capability_boundary?.grants_tools !== false ||
+        personality.instruction_boundary?.host_and_system_policy_overrides_engram !== true) {
+      throw new Error('Charles engram does not satisfy the reciprocal registry and authority contract.');
+    }
+    return { personality: deepFreeze(personality), binding: deepFreeze(binding) };
+  }
+
+  function validatePortableSkillDocument(skill, skillText) {
+    const end = skillText.indexOf('\n---\n', 4);
+    if (!skillText.startsWith('---\n') || end < 0) {
+      throw new Error('Missing required skill frontmatter: ' + skill.name);
+    }
+    const frontmatter = skillText.slice(4, end);
+    if (!/^  required-personality-engram: blacklight\.charles\s*$/m.test(frontmatter) ||
+        !/^  required-skill-index: skills\/index\.json\s*$/m.test(frontmatter)) {
+      throw new Error('Skill lacks mandatory reciprocal companion metadata: ' + skill.name);
+    }
+  }
+
+  async function discover(options = {}) {
+    const baseUrl = normalizeBaseUrl(options.baseUrl);
+    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
+    const verified = await loadMandatoryEngram(index, baseUrl);
+    return Object.freeze({
+      personality: verified.personality,
+      personalityBinding: verified.binding,
+      skills: Array.isArray(index.skills) ? index.skills : [],
+      skillSelection: 'optional-on-demand',
+      rule: 'Registry and engram are required companions. Skills are optional selections; none grants host permissions.'
+    });
+  }
+
   async function load(skillName, options = {}) {
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const index = await fetchResource('skills/index.json', baseUrl, 'json');
+    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
+    const verified = await loadMandatoryEngram(index, baseUrl);
     const skill = findSkill(index, skillName);
-    const personalityBinding = validatePersonalityBinding(index);
-    const [personality, skillText] = await Promise.all([
-      fetchResource(personalityBinding.authorityPath, baseUrl, 'json'),
-      fetchResource(skill.path, baseUrl, 'text')
-    ]);
-    if (personality.engram_id !== personalityBinding.engramId) {
-      throw new Error(`Loaded personality engram id does not match registry binding: ${personality.engram_id}`);
-    }
+    const skillText = await fetchResource(skill.path, baseUrl, 'text');
+    validatePortableSkillDocument(skill, skillText);
     return Object.freeze({
       skillName,
       skill,
       skillText,
-      personalityEngramId: personalityBinding.engramId,
-      personalityBinding,
-      personality,
-      rule: 'Apply the canonical Charles personality as the conversational layer while using the selected skill as task procedure. Personality does not grant capability execution.'
+      personalityEngramId: verified.binding.engramId,
+      personalityBinding: verified.binding,
+      personality: verified.personality,
+      rule: 'Apply the canonical Charles personality beneath host policy. The selected skill supplies workflow, not permissions.'
     });
   }
 
@@ -118,25 +190,23 @@
     const names = Array.from(new Set((Array.isArray(skillNames) ? skillNames : [skillNames]).map(String).filter(Boolean)));
     if (!names.length) throw new Error('At least one registered skill name is required.');
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const index = await fetchResource('skills/index.json', baseUrl, 'json');
+    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
+    const verified = await loadMandatoryEngram(index, baseUrl);
     const skills = names.map(name => findSkill(index, name));
-    const personalityBinding = validatePersonalityBinding(index);
-    const personality = await fetchResource(personalityBinding.authorityPath, baseUrl, 'json');
-    if (personality.engram_id !== personalityBinding.engramId) {
-      throw new Error(`Loaded personality engram id does not match registry binding: ${personality.engram_id}`);
-    }
     const skillTexts = await Promise.all(skills.map(skill => fetchResource(skill.path, baseUrl, 'text')));
+    skills.forEach((skill, position) => validatePortableSkillDocument(skill, skillTexts[position]));
     return Object.freeze({
       skillNames: names,
-      skills: skills.map((skill, index) => Object.freeze({ skill, skillText: skillTexts[index] })),
-      personalityEngramId: personalityBinding.engramId,
-      personalityBinding,
-      personality,
-      rule: 'Load Charles once, then apply all selected skills beneath the same conversational personality layer.'
+      skills: skills.map((skill, position) => Object.freeze({ skill, skillText: skillTexts[position] })),
+      personalityEngramId: verified.binding.engramId,
+      personalityBinding: verified.binding,
+      personality: verified.personality,
+      rule: 'Verify one required Charles engram and the registry before applying optionally selected skills.'
     });
   }
 
   root.HBFoundrySkillContextLoader = Object.freeze({
+    discover,
     load,
     loadMany,
     clearCache,

@@ -26,7 +26,7 @@ Do not use this file as a capability catalog. Current capability IDs, skill name
 
 ## Charles
 
-Registered Agent Skills inherit `blacklight.charles` through the skill registry. Load the canonical Charles engram once per orchestration context when the selected workflow requires the shared personality layer:
+**Mandatory reciprocal companion:** every registered Agent Skill requires the canonical `blacklight.charles` engram, and that engram requires `skills/index.json` as its optional-skill discovery index. Load and verify both before selecting or activating any skill. Missing or altered companions mean no supported skill activation. Persona presentation may be suppressed by higher-priority policy or an explicit OOC request, but the dependency remains required. The registry pins the engram SHA-256 (this is not an independent publisher signature):
 
 https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
 

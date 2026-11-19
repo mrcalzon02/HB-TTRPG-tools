@@ -3,6 +3,8 @@ name: charles-foundry-interface
 description: Load Charles CE1.1 as the Foundry's default assistant personality and route a request through one or more registered Agent Skills without duplicating their logic.
 compatibility: Requires access to the HB-TTRPG-tools skill registry and Charles personality resources. Executable child skills still require their own declared runtime or page context.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.3.0"
   foundry-capability: foundry.site-index
@@ -11,6 +13,8 @@ metadata:
 ---
 
 # Charles Foundry Interface
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this skill when Charles is acting as the user-facing assistant across Calzon's TTRPG Foundry.
 

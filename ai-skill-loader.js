@@ -290,14 +290,30 @@
     }
   }
 
+  async function loadRequiredPersonalityContext(skillName, baseUrl) {
+    if (!root.HBFoundrySkillContextLoader || typeof root.HBFoundrySkillContextLoader.load !== 'function') {
+      await loadScript('ai-skill-context-loader.js', baseUrl);
+    }
+    const guard = root.HBFoundrySkillContextLoader;
+    if (!guard || typeof guard.load !== 'function') {
+      throw new Error('Required Charles engram context loader is not available. Refusing executable skill loading.');
+    }
+    return guard.load(skillName, { baseUrl: baseUrl.href });
+  }
+
   async function inspect(skillName, options = {}) {
     const baseUrl = normalizeBaseUrl(options.baseUrl);
+    const boundContext = await loadRequiredPersonalityContext(skillName, baseUrl);
     const [skillIndex, capabilityRegistry, operationContracts] = await Promise.all([
       fetchJson('skills/index.json', baseUrl),
       fetchJson('api/foundry-capabilities.json', baseUrl),
       fetchJson('api/operation-contracts.json', baseUrl)
     ]);
     const skill = findSkill(skillIndex, skillName);
+    if (skill.path !== boundContext.skill.path ||
+        skillIndex.defaultPersonality?.integrity?.digest !== boundContext.personalityBinding.integrity.digest) {
+      throw new Error('Executable skill package index drifted from its verified Charles engram binding.');
+    }
     const manifestPath = manifestPathForSkill(skill);
     const manifest = await fetchJson(manifestPath, baseUrl);
     const capabilityId = manifest.skill?.capabilityId;
@@ -308,7 +324,7 @@
     const selfTest = await fetchJson(selfTestPath, baseUrl);
     if (selfTest.capabilityId !== capabilityId) throw new Error('Self-test capability does not match the package capability.');
     validateSelfTestRuntime(selfTest, resolved);
-    return { baseUrl: baseUrl.href, skillIndex, operationContracts, skill, manifestPath, manifest, capability, contract: resolved.contract, selfTestPath, selfTest, resolved };
+    return { baseUrl: baseUrl.href, boundContext, skillIndex, operationContracts, skill, manifestPath, manifest, capability, contract: resolved.contract, selfTestPath, selfTest, resolved };
   }
 
   async function loadAndTest(skillName, options = {}) {
@@ -323,6 +339,7 @@
     try {
       const inspected = await inspect(skillName, options);
       report.capabilityId = inspected.resolved.capabilityId;
+      report.stages.push({ id: 'required-charles-engram', passed: true, sha256: inspected.boundContext.personalityBinding.integrity.digest }, { id: 'reciprocal-skill-index', passed: true });
       report.statuses.push(STATUS.DISCOVERABLE, STATUS.ONBOARDABLE);
       report.stages.push({ id: 'discovery', passed: true }, { id: 'manifest-valid', passed: true }, { id: 'contract-resolved', passed: true });
       if (inspected.manifest.runtime?.family !== 'javascript' || inspected.manifest.runtime?.class !== 'browser-js') {

@@ -3,6 +3,8 @@ name: interpersonal-theory-of-mind-modeling
 description: Model how one actor understands another actor over time using evidence-bounded beliefs, trust, goals, constraints, competing hypotheses, and update history without collapsing inference into fact.
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.8.0"
   foundry-capability: foundry.site-index
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Interpersonal Theory of Mind Modeling
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this skill when a task depends on what one actor believes, suspects, expects, misunderstands, trusts, fears, or predicts about another actor rather than only on objective biography.
 

@@ -3,12 +3,16 @@ name: kaysender-airship-generation
 description: Generate Kaysender airships and skyships with semantic interiors, hulls, crew spaces, cargo, armament, defenses, condition damage, faction context, encounter content, and provenance. Use when a user needs a Kaysender vessel, skyship encounter location, or reproducible airship profile.
 compatibility: Requires access to HBFoundryAPI or the canonical HB-TTRPG-tools JavaScript runtime; Kaysender lore resources improve setting-aware inputs.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-capability: kaysender.airship.generate
 ---
 
 # Kaysender Airship Generation
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use `kaysender.airship.generate` as the authoritative generator and the Kaysender wiki index for setting context.
 

@@ -3,10 +3,14 @@ name: visual-gallery-publication
 description: Publish newly generated project art, rendered model GIFs, screenshots and approved reference sheets into a genuine, verifiable GitHub project gallery as part of visual-content delivery. Use when creating or revising game visuals, models, textures, turntables or promotional concepts for a user's project.
 compatibility: Requires a writable repository plus readable generated image files. GitHub verification requires a connected GitHub API or equivalent git push/readback; optional Python 3 for hashing. A text-only host cannot pretend to upload binary media.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   version: 1.0.0
 ---
 
 # Visual gallery publication — default production gate
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Whenever the current task generates **project visual assets**, publish the approved results as Git-tracked gallery media in the owning repository **within the same work iteration**, not merely as conversation images, sandbox links or a private Drive document. This portable skill records the user-approved cross-project policy, originally applied to the Sitka boat progression gallery.
 

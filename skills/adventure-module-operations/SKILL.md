@@ -3,12 +3,16 @@ name: adventure-module-operations
 description: Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.
 compatibility: Module data and pages are remotely retrievable; individual generation/editing actions may remain browser/UI-bound depending on the selected module tool.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-resource: modules.workspace
 ---
 
 # Adventure Module Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use `modules.workspace`, the Foundry search index, and any module-specific registered resources/capabilities before relying on generic TTRPG assumptions.
 

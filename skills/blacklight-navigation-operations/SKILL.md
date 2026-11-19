@@ -3,12 +3,16 @@ name: blacklight-navigation-operations
 description: Use the Blacklight EXO Crew Operations Navigation station for reference selection, transfer and avoidance solutions, azimuth/elevation plotting, delta-v and timebase work, rendezvous, dead reckoning, debris corridors, gravity assists, and solution relay to Helm. Activate for Blacklight EXO navigation-console procedures.
 compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Navigation is a distinct station workflow inside the shared simulator.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-station: navigation
 ---
 
 # Blacklight Navigation Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the **Navigation** station in `blacklight-exo-crew-operations.html` and the shared `blacklight-exo-crew-operations.js` authority. Station code: `NAV`.
 

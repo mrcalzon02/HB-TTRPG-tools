@@ -3,12 +3,16 @@ name: blacklight-gunnery-operations
 description: Use the Blacklight EXO Crew Operations Gunnery station for weapon safing, bank selection, track modes, range gating, capacitor state, arming, fire-control confirmation, engagement preparation, and combat fire-control procedures. Activate for Blacklight EXO weapons-console and gunnery tasks.
 compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Gunnery is a distinct station workflow with station-specific fire-control confirmation support.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-station: gunnery
 ---
 
 # Blacklight Gunnery Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the **Gunnery** station in `blacklight-exo-crew-operations.html`. Station code: `GUN`.
 

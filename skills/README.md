@@ -22,7 +22,7 @@ Canonical discovery surfaces:
 
 ## Shared Charles personality
 
-`skills/index.json` declares `blacklight.charles` as the inherited default personality for **all registered Agent Skills**. A consuming host should load `docs/blacklight/charles-personality-engram.json` once for the current orchestration context, then load whichever task skills are needed beneath that personality layer.
+`skills/index.json` declares `blacklight.charles` as the **required inherited companion** for every registered Agent Skill. Conversely, the canonical engram's `skill_registry` field requires `skills/index.json` as its discovery companion. The **index is mandatory; selecting individual skills is optional and demand-driven**. A supported loader must verify both directions and the registry-pinned engram SHA-256 *before* providing skill instructions or executable runtimes. Missing, mismatched, or unverified dependencies fail closed; temporary out-of-character presentation does not remove the dependency. This gate is enforceable by our loaders/packages, not by arbitrary agents copying public files.
 
 Individual skills may point to `blacklight.charles` for discoverability, but they must not copy, fork, mutate, summarize into a replacement persona, or silently override the canonical engram. Higher-priority host/system policy remains authoritative, and an explicit out-of-character/system presentation request may suppress Charles presentation without changing the engram.
 
@@ -121,6 +121,20 @@ Skill registry status values use `/api/ai/status-vocabulary.json`. `onboardable`
 `ai-skill-context-loader.js` is for declarative skill/personality context. `HBFoundrySkillContextLoader.load(name)` returns the selected registered skill document with the canonical Charles engram; `loadMany(names)` loads Charles once and returns multiple task skills beneath the same personality binding.
 
 `ai-skill-loader.js` remains a separate executable-package proof loader. It validates registered browser-JavaScript companion packages, loads only allow-listed same-origin runtime scripts, and runs declared deterministic self-tests. Do not confuse personality/skill context loading with executable runtime readiness. Likewise, a tabletop skill's helper path does not prove the consuming host has Python, Pillow, Web Crypto, writable file access, or successful persistence.
+
+## Reproducible, reversible companion bundles
+
+Use `scripts/agent-skill-bundle.py` to export a selected skill or the whole skill registry together with the canonical Charles engram, manifest, profile, specification, schema, conformance suite, registry, and a SHA-256 file lock. The association works both ways: a skill requires the engram and the engram requires the index of optional skills.
+
+```sh
+python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output dist/foundry-discovery-engram.zip
+python3 scripts/agent-skill-bundle.py pack --all --output dist/all-skills-engram.zip
+python3 scripts/agent-skill-bundle.py verify dist/foundry-discovery-engram.zip --trusted-engram-sha256 <digest-from-trusted-checkout-or-signed-release>
+```
+
+The bundle is declarative and does **not** contain or authorize a complete executable runtime for every skill. The lock detects accidental corruption and mismatched companion files; it is **not a publisher signature**. Consumers who need authenticity must pin the digest through a trusted channel or verify an independently signed release. Individual `SKILL.md` files are public, so a hostile external model can copy and ignore the rule; the enforcement claim is limited to compliant hosts, our package tool and our loader.
+
+Future skill families are recorded in [the expansion backlog](../docs/ai-access/engram-skill-expansion-backlog.md) and are **not** advertised as implemented until their capability and conformance contracts are ready.
 
 ## Adding a skill
 

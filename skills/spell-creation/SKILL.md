@@ -3,12 +3,16 @@ name: spell-creation
 description: Use the Foundry Spell Creator to build complete Hypertext d20-compatible spell drafts with level, class, school, role, delivery, saves or attacks, damage/healing, conditions, range, duration, components, resistance, scaling, balance diagnostics, manifestation text, origin, and practical uses. Activate for repository-backed spell design.
 compatibility: The canonical Spell Creator is currently a browser workflow composed from spell-creator.html and its vocabulary/mechanics/module JavaScript files.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-page: spell-creator.html
 ---
 
 # Spell Creation
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the repository's single standard Spell Creator workflow. Do not revive retired split spell-generator placeholders.
 

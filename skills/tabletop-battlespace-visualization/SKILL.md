@@ -3,6 +3,8 @@ name: tabletop-battlespace-visualization
 description: Maintain a system-neutral grid battlespace in CSV, calculate relative positioning/ranges/areas, and render deliberately primitive Pillow previews down to exactly one pixel per grid cell.
 compatibility: Requires a host that can load Agent Skills. State mutation requires writable CSV storage. Preview rendering requires Python 3 and Pillow. Rules adjudication still requires the active system's distance, line-of-sight, cover, movement, and area-template rules when those differ from the generic geometric model.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   personality-engram: blacklight.charles
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Tabletop Battlespace Visualization
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this skill whenever Charles or another Agent Skills consumer needs an explicit spatial model of a tabletop battlefield: token placement, relative position, proximity, movement, range, elevation, terrain occupancy, areas of effect, or a low-resolution battlefield preview that a human can visually correct.
 

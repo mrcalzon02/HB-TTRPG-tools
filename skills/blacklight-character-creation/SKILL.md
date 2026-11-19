@@ -3,12 +3,16 @@ name: blacklight-character-creation
 description: Guide Blacklight Continuum character creation using the repository's authoritative character rules, archetypes, supernatural subgroup options, equipment, factions, random-character content, and canonical UI generator. Activate when a user asks to create, randomize, review, or explain a Blacklight character.
 compatibility: Rules/content resources are remotely retrievable; the current random-character generator is browser-UI/state-bound pending canonical core extraction.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-capability: blacklight.random-character
 ---
 
 # Blacklight Character Creation
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the repository's character-creation resources and the canonical Blacklight character generator without inventing a parallel character system.
 

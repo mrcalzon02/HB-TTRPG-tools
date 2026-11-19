@@ -3,12 +3,16 @@ name: blacklight-helm-operations
 description: Use the Blacklight EXO Crew Operations Helm station for flight-mode selection, thruster-bank control, translation thrust, attitude correction, maneuver confirmation, docking alignment, evasive maneuvering, pursuit, braking, and damaged-drive procedures. Activate for Blacklight EXO piloting and helm-console tasks.
 compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Helm is a distinct station workflow inside the shared simulator, not a standalone headless engine.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-station: helm
 ---
 
 # Blacklight Helm Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the **Helm** station in `blacklight-exo-crew-operations.html` and its canonical Crew Operations runtime. Station code: `HEL`.
 

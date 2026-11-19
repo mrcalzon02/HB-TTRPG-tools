@@ -16,7 +16,15 @@
     "scope": "all-registered-skills",
     "loadPolicy": "load-once-before-selected-skills",
     "presentationOverride": "Higher-priority host/system policy or an explicit out-of-character/system presentation request may suppress Charles presentation without mutating the engram.",
-    "capabilityBoundary": "The personality engram grants no tools, permissions, credentials, network access, or execution state."
+    "capabilityBoundary": "The personality engram grants no tools, permissions, credentials, network access, or execution state.",
+    "required": true,
+    "integrity": {
+      "algorithm": "sha256",
+      "digest": "85e4884dedf58522574c041c63ed678c803bd5d54dde616ff33fc022b4f57ec7"
+    },
+    "reciprocalRegistryPath": "skills/index.json",
+    "missingCompanionPolicy": "fail-closed-before-skill-activation",
+    "optionalSkillDiscovery": true
   },
   "skills": [
     {

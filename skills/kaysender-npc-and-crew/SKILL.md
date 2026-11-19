@@ -3,12 +3,16 @@ name: kaysender-npc-and-crew
 description: Use the Kaysender NPC and Crew Generator, population bands, ancestry/name data, class pools, occupations, crew roles, faction ties, dispositions, and open-d20 stat stubs. Activate when a user needs Kaysender NPCs, civilians, officials, specialists, pirates, or airship crew members.
 compatibility: The authoritative generator is currently browser-UI/state-bound; its JSON manifests and population packs are remotely retrievable for inspection and guidance.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-module: npc-crew-generator
 ---
 
 # Kaysender NPC and Crew
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical `kaysender-npc-generator.js` workflow and `data/kaysender/generators/npc-crew-generator.json` data family.
 

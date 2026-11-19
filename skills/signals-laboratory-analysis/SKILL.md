@@ -3,12 +3,16 @@ name: signals-laboratory-analysis
 description: Use the Foundry Signals Laboratory for RF, antenna, RLC, propagation, environment-map, heterodyne, interfrequency, range-scenario, and experiment analysis. Activate when a user asks for Signals Laboratory calculations or interpretation and the canonical solver should be used instead of hand-reimplementing formulas.
 compatibility: Requires access to HBFoundryAPI or the canonical signals-laboratory.js runtime. Live sensor capture remains a separate browser/device-context capability.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-capabilities: "signals.configuration.analyze signals.utilities"
 ---
 
 # Signals Laboratory Analysis
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical capabilities `signals.configuration.analyze` and `signals.utilities`.
 

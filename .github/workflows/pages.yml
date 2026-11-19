@@ -52,6 +52,17 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Validate engram-bound Agent Skills and portable bundle
+        if: steps.scope.outputs.full_validation == 'true'
+        shell: bash
+        run: |
+          node --check ai-skill-context-loader.js
+          node --check ai-skill-loader.js
+          node scripts/validate-agent-skills.mjs
+          python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output "$RUNNER_TEMP/foundry-discovery-engram.zip"
+          PIN="$(python3 -c 'import json; print(json.load(open("skills/index.json"))["defaultPersonality"]["integrity"]["digest"])')"
+          python3 scripts/agent-skill-bundle.py verify "$RUNNER_TEMP/foundry-discovery-engram.zip" --trusted-engram-sha256 "$PIN"
+
       - name: Check Work Shift Guide and Software catalog
         if: steps.scope.outputs.full_validation == 'false'
         run: |

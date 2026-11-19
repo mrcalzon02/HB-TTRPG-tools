@@ -3,10 +3,14 @@ name: fmpl-asset-production
 description: Reuse the versioned Factorio Modeling Production Library of approved PBR materials, candidate geometry, procedural Blender scripts and game sprite pipelines across authorized projects.
 compatibility: Static FMPL discovery requires the public manifest. Native 3D operations require a pinned source checkout and authorized local Blender/Python or an existing self-hosted runner.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   version: "1.0.0"
 ---
 
 # FMPL asset production — cross-project skill
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 ## Authorities
 

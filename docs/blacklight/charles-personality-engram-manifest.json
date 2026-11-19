@@ -7,14 +7,21 @@
       "kind": "personality_engram",
       "schema_version": "BLC-ENGRAM-1",
       "personality_version": "CE1.1",
-      "modalities": ["text", "speech"],
+      "modalities": [
+        "text",
+        "speech"
+      ],
       "transport": "charles-personality-engram.json",
       "specification": "charles-personality-engram.md",
       "profile": "charles-personality-profile.md",
       "schema": "charles-personality-engram.schema.json",
       "conformance": "charles-personality-engram-conformance.json",
       "activation_policy": "host_directed",
-      "passive": true
+      "passive": true,
+      "required_skill_registry": "skills/index.json",
+      "binding": "bidirectional-required",
+      "optional_skills_only": true,
+      "missing_companion": "fail-closed-for-skill-activation"
     }
   ]
 }

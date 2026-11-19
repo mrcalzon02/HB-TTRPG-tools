@@ -13,6 +13,7 @@
     "modalities",
     "compact",
     "resources",
+    "skill_registry",
     "identity",
     "presentation",
     "canon",
@@ -50,6 +51,20 @@
         "profile": { "type": "string", "minLength": 1 },
         "schema": { "type": "string", "minLength": 1 },
         "conformance": { "type": "string", "minLength": 1 }
+      }
+    },
+    "skill_registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry_path", "binding", "index_load", "skill_selection", "missing_or_invalid", "tool_authority", "note"],
+      "properties": {
+        "registry_path": { "const": "skills/index.json" },
+        "binding": { "const": "bidirectional-required" },
+        "index_load": { "const": "mandatory-before-skill-selection" },
+        "skill_selection": { "const": "optional-on-demand" },
+        "missing_or_invalid": { "const": "fail-closed-for-skill-activation" },
+        "tool_authority": { "const": "host-controlled" },
+        "note": { "type": "string", "minLength": 20 }
       }
     },
     "identity": {

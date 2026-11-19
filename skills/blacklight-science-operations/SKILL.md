@@ -3,12 +3,16 @@ name: blacklight-science-operations
 description: Use the Blacklight EXO Crew Operations Science station for receiver bands, apertures, gain, integration, emitter inhibition/gating, scanning, contact analysis, sensor confirmation, and science-console procedures. Activate for Blacklight EXO sensors, scanning, analysis, and science-station tasks.
 compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Science is a distinct station workflow with station-specific tape-router support.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-station: science
 ---
 
 # Blacklight Science Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the **Science / Scanning** station in `blacklight-exo-crew-operations.html`. Station code: `SCI`.
 

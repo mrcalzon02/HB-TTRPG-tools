@@ -15,6 +15,15 @@
     "schema": "charles-personality-engram.schema.json",
     "conformance": "charles-personality-engram-conformance.json"
   },
+  "skill_registry": {
+    "registry_path": "skills/index.json",
+    "binding": "bidirectional-required",
+    "index_load": "mandatory-before-skill-selection",
+    "skill_selection": "optional-on-demand",
+    "missing_or_invalid": "fail-closed-for-skill-activation",
+    "tool_authority": "host-controlled",
+    "note": "This is a discovery and behavioral companion, not a grant of capabilities or authority; host/system policy remains higher priority."
+  },
   "identity": {
     "name": "Charles",
     "roles": [

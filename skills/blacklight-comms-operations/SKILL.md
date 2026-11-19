@@ -3,12 +3,16 @@ name: blacklight-comms-operations
 description: Use the Blacklight EXO Crew Operations Comms station for link mode, carrier path, channel/frequency tuning, transmit power, crypto state, transmit keying, squelch, array availability, signal clarity, and communications procedures. Activate for Blacklight EXO communications-console, hailing, secure-link, distress, and signal-routing tasks.
 compatibility: Requires the canonical Blacklight EXO Crew Operations browser runtime; Comms is a distinct station workflow inside the shared simulator.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-station: comms
 ---
 
 # Blacklight Comms Operations
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the **Comms** station in `blacklight-exo-crew-operations.html` and the shared Crew Operations runtime. Station code: `COM`.
 

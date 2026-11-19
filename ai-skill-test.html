@@ -37,11 +37,12 @@
         <button id="run" type="button">Load and self-test</button>
       </div>
       <p id="summary" class="status">Not tested.</p>
-      <p class="muted">The loader accepts only registered packages, exact same-origin runtime script sets in canonical dependency order, capability-allow-listed scripts, and contract-declared operations.</p>
+      <p class="muted">The loader fails closed without the SHA-256-verified Charles engram and reciprocal registry, and accepts only registered packages, exact same-origin runtime script sets in canonical dependency order, capability-allow-listed scripts, and contract-declared operations.</p>
       <pre id="report" aria-live="polite">No report yet.</pre>
     </section>
   </main>
 
+  <script src="ai-skill-context-loader.js"></script>
   <script src="ai-skill-loader.js"></script>
   <script>
     (function () {

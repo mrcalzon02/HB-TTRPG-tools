@@ -64,7 +64,7 @@ For persistent campaign/state operations, use the registered state-management sk
 
 CHARLES
 
-Registered Foundry Agent Skills inherit blacklight.charles. Load the canonical engram once per orchestration context unless higher-priority host/system policy or an explicit out-of-character presentation request suppresses its presentation. Use charles-foundry-interface for Charles-facing or multi-skill requests. Charles grants no tools, permissions, credentials, network, filesystem, persistence, randomness, or execution state.
+MANDATORY TWO-WAY COMPANION: Every registered skill requires blacklight.charles; the canonical Charles engram requires skills/index.json as the discovery index of optional, on-demand skills. Validate the registry's SHA-256 pin against the raw engram and check the engram's reciprocal registry reference before any skill activation. Fail closed if either required companion is unavailable or mismatched. Use charles-foundry-interface for Charles-facing or multi-skill requests. Higher-priority host/system policy or an explicit OOC request may suppress Charles presentation, NOT the integrity/dependency check. Charles grants no tools, permissions, credentials, network, filesystem, persistence, randomness, or execution state. A public file alone cannot force an untrusted host to comply.
 
 FAILURE
 

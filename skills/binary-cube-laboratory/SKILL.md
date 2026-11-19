@@ -3,12 +3,16 @@ name: binary-cube-laboratory
 description: Operate, inspect, validate, strengthen, and test the Binary Cube Laboratory across canonical cube transforms, reversible pre-entry masks, subcube multi-input indexing, tolerant recovery, corruption/diffusion analysis, independent experimental integrity verification, strengthening strategy comparison, composition, and structural failure analysis.
 compatibility: Requires HBFoundryAPI/shadowrun-binary-cube-engine.js for canonical cube work. Node/CommonJS and same-origin browser research modules expose the same authorities. Structured AI hosts use the declared local tool projections. Experimental TTRPG obfuscation research; not production cryptography.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.9.0"
   foundry-capability: shadowrun.binary-cube
 ---
 
 # Binary Cube Laboratory
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical modules rather than recreating algorithms in UI, adapters, tests, or AI prompts. Human, API/Node, and AI surfaces must converge on the same implementation authority. Preserve failing cases and measured weaknesses as evidence.
 

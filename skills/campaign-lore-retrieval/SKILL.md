@@ -3,12 +3,16 @@ name: campaign-lore-retrieval
 description: Search and retrieve authoritative campaign lore, rules references, factions, wiki entries, modules, archives, and setting data across Kaysender, Blacklight Continuum, Warhammer 40K, Barotrauma, Shadowrun, World of Darkness, Solanum Umbra, and Foundry module resources. Use when a user asks what the campaign canon says or needs setting-grounded information.
 compatibility: Requires network access to the HB-TTRPG-tools GitHub Pages resources or repository files.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-resource: foundry.campaign-lore-index
 ---
 
 # Campaign and Lore Retrieval
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the Foundry resource/index APIs rather than relying on memory when the repository contains the answer.
 

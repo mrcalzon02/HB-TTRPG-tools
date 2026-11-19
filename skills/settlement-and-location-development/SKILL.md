@@ -3,6 +3,8 @@ name: settlement-and-location-development
 description: Develop settlements and important locations from purpose, population, infrastructure, districts, conflict, and playable spatial logic.
 compatibility: System-neutral workflow skill. Use repository/campaign resources when the task depends on established setting canon or mechanics.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-capability: foundry.site-index
@@ -10,6 +12,8 @@ metadata:
 ---
 
 # Settlement And Location Development
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 ## Workflow
 

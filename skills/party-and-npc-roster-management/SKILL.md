@@ -3,12 +3,16 @@ name: party-and-npc-roster-management
 description: Maintain player-character, companion, hireling, NPC, faction-agent, and creature rosters with stable IDs and current status.
 compatibility: Requires a host that can load Agent Skills. File-backed operations additionally require a writable sandbox/filesystem; randomness additionally requires a cryptographic RNG source.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   personality-engram: blacklight.charles
 ---
 
 # Party and NPC Roster Management
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this skill to maintain who exists, who belongs to which group, and their current operational status.
 

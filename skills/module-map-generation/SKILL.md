@@ -3,12 +3,16 @@ name: module-map-generation
 description: Generate semantic purpose-aware TTRPG locations, buildings, dungeons, laboratories, fortresses, sewers, tombs, civic sites, and encounter spaces using the Foundry shared spatial engine. Use when a user needs a deterministic module map or structured adventure location.
 compatibility: Requires access to HBFoundryAPI or the canonical ordered browser JavaScript runtime on HB-TTRPG-tools.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.1.0"
   foundry-capability: spatial.module-map.generate
 ---
 
 # Module Map Generation
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use the canonical capability `spatial.module-map.generate`.
 

@@ -3,12 +3,16 @@ name: foundry-discovery
 description: Discover Calzon's TTRPG Foundry tools, generators, laboratories, campaign resources, operation contracts, and indexed site content. Use when a user asks what the repository can do, wants to find a tool or setting resource, or needs the correct callable capability before executing work.
 compatibility: Requires network access to the HB-TTRPG-tools repository or its GitHub Pages site for live discovery.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: "1.0.0"
   foundry-capability: foundry.site-index
 ---
 
 # Foundry Discovery
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use this skill to locate the authoritative Foundry capability or resource before attempting repository-backed work.
 
