@@ -63,26 +63,29 @@ final class ManagedLockdownController {
         DevicePolicyManager dpm = manager(context);
         ComponentName admin = admin(context);
 
-        // Do not silently replace a separately configured user/third-party
-        // always-on VPN. On older Android even the same package name is not
-        // enough to establish that this admin previously installed the VPN.
+        // Do not replace any user- or system-managed VPN. A package match is
+        // not by itself evidence of ownership, regardless of API level.
         String existingVpn = dpm.getAlwaysOnVpnPackage(admin);
         boolean locallyManagedBefore = context.getSharedPreferences(
                 VPN_PROVENANCE_PREF, Context.MODE_PRIVATE)
                 .getBoolean(VPN_CONFIGURED_BY_ADMIN, false);
-        if (existingVpn != null &&
-                (!context.getPackageName().equals(existingVpn)
-                        || (Build.VERSION.SDK_INT < 31 && !locallyManagedBefore)))
+        // A null readback also covers a system-provided VPN, not just "none".
+        // Never auto-provision over that ambiguity. Reapplication requires an
+        // existing CubeChat configuration AND this admin's durable record.
+        // Initial provisioning is a separate, not-yet-implemented audited flow.
+        if (existingVpn == null
+                || !context.getPackageName().equals(existingVpn)
+                || !locallyManagedBefore)
             throw new IllegalStateException(
-                    "Existing always-on VPN cannot be replaced without verified ownership");
+                    "Managed VPN provenance unverified; initial provisioning unavailable");
 
-        // Apply this FIRST: later restriction failures must not produce an
-        // unfiltered device. No allowlist of third-party applications.
+        // Even a future integrated build must confirm this policy belongs to
+        // this admin and can be safely relinquished before reapplying it.
         dpm.setAlwaysOnVpnPackage(admin, context.getPackageName(), true);
-        if (Build.VERSION.SDK_INT < 31 && !context.getSharedPreferences(
+        if (!context.getSharedPreferences(
                 VPN_PROVENANCE_PREF, Context.MODE_PRIVATE).edit()
                 .putBoolean(VPN_CONFIGURED_BY_ADMIN, true).commit())
-            throw new IllegalStateException("Could not record VPN ownership for legacy Android");
+            throw new IllegalStateException("Could not retain managed VPN ownership record");
         for (String restriction : RADIO_RESTRICTIONS) dpm.addUserRestriction(admin, restriction);
 
         if (Build.VERSION.SDK_INT >= 33) {
