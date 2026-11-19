@@ -1,86 +1,119 @@
 package org.cubechat.android;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/** Pure host regressions: no HTTP, Android services, calling, or radio actions. */
+/** Offline update-cancellation tests: fake connections never touch a network. */
 public final class UpdateRunGateTest {
     private static int checks;
 
-    private static void check(boolean condition, String message) {
+    private static void check(boolean yes, String why) {
         checks++;
-        if (!condition) throw new AssertionError(message);
+        if (!yes) throw new AssertionError(why);
     }
 
-    private static void rejects(UpdateRunGate.Permit permit, String reason) {
-        checks++;
+    private static void rejects(UpdateRunGate.Permit permit, String why) {
         try {
             permit.verify();
-            throw new AssertionError("Expected denied update request: " + reason);
+            throw new AssertionError("Unexpectedly authorized: " + why);
         } catch (IOException expected) {
-            check(expected.getMessage().contains("cancelled"), reason + " has clear cancellation");
+            check(expected.getMessage().contains("cancelled"), why + " cancellation reason");
         }
+    }
+
+    private static final class FakeConnection extends HttpURLConnection {
+        final AtomicInteger disconnects = new AtomicInteger();
+        FakeConnection() throws Exception { super(new URL("https://example.invalid/")); }
+        @Override public void disconnect() { disconnects.incrementAndGet(); }
+        @Override public boolean usingProxy() { return false; }
+        @Override public void connect() { throw new AssertionError("No network allowed in fixture"); }
     }
 
     public static void main(String[] args) throws Exception {
-        AtomicBoolean unlocked = new AtomicBoolean(true);
-        UpdateRunGate.Permit first = UpdateRunGate.enter(unlocked::get);
-        check(first.allowed(), "new unblocked request allowed");
+        AtomicBoolean permitted = new AtomicBoolean(true);
+        UpdateRunGate.Permit first = UpdateRunGate.enter(permitted::get);
+        check(first.allowed(), "fresh request permitted");
         first.verify();
-        check(true, "request may proceed while policy permits");
+        FakeConnection firstSocket = new FakeConnection();
+        first.track(firstSocket);
+        check(firstSocket.disconnects.get() == 0, "permitted active request stays connected");
 
-        unlocked.set(false);
-        check(!first.allowed(), "persisted block revokes access");
-        rejects(first, "locked policy");
-
-        unlocked.set(true);
-        check(!first.allowed(), "a previously denied request cannot regain authorization");
-        rejects(first, "denial persists after reopening permission");
         UpdateRunGate.invalidate();
-        check(!first.allowed(), "activation epoch revokes earlier request");
-        rejects(first, "stale activation epoch");
+        check(firstSocket.disconnects.get() == 1, "lockdown actively disconnects in-flight HTTP");
+        check(!first.allowed(), "revoked permit unusable");
+        rejects(first, "lockdown invalidate");
+        permitted.set(false);
+        permitted.set(true);
+        check(!first.allowed(), "rapid on-off never resurrects a request");
+        first.close();
+        check(firstSocket.disconnects.get() == 1, "closing cancelled permit does not disconnect twice");
 
-        UpdateRunGate.Permit renewed = UpdateRunGate.enter(unlocked::get);
-        check(renewed.allowed(), "new authorized check may start after release");
-        renewed.verify();
-        UpdateRunGate.invalidate();
-        unlocked.set(false);
-        unlocked.set(true);
-        check(!renewed.allowed(), "rapid on/off must not resurrect an earlier request");
-        rejects(renewed, "rapid toggle");
+        UpdateRunGate.Permit next = UpdateRunGate.enter(permitted::get);
+        FakeConnection other = new FakeConnection();
+        next.track(other);
+        next.untrack(other);
+        next.close();
+        check(other.disconnects.get() == 0, "closed response is not disconnected a second time");
+        check(!next.allowed(), "closed permit must never be reusable");
+        rejects(next, "closed permit");
 
-        UpdateRunGate.Permit blocked = UpdateRunGate.enter(() -> false);
-        check(!blocked.allowed(), "new request still denied by saved policy");
-        rejects(blocked, "persisted lock");
+        UpdateRunGate.Permit denied = UpdateRunGate.enter(() -> false);
+        FakeConnection deniedSocket = new FakeConnection();
+        denied.track(deniedSocket);
+        check(deniedSocket.disconnects.get() == 1, "late connection registration is rejected");
+        rejects(denied, "never granted");
+        denied.close();
+
+        UpdateRunGate.Permit replaced = UpdateRunGate.enter(() -> true);
+        FakeConnection old = new FakeConnection();
+        FakeConnection latest = new FakeConnection();
+        replaced.track(old);
+        replaced.track(latest);
+        check(old.disconnects.get() == 1, "replaced connection closed");
+        replaced.close();
+        check(latest.disconnects.get() == 1, "active connection closed on shutdown");
 
         UpdateRunGate.Permit interrupted = UpdateRunGate.enter(() -> true);
         Thread.currentThread().interrupt();
-        try {
-            check(!interrupted.allowed(), "interruption also revokes work");
-            rejects(interrupted, "interrupted worker");
-        } finally {
-            Thread.interrupted();
-        }
-        check(UpdateRunGate.enter(() -> true).allowed(),
-                "later fresh manual check can proceed when explicitly permitted");
+        try { check(!interrupted.allowed(), "interrupted worker revoked"); }
+        finally { Thread.interrupted(); }
+        check(!interrupted.allowed(), "interrupted worker cannot recover on main thread");
+        interrupted.close();
 
-        UpdateRunGate.Permit crossThread = UpdateRunGate.enter(() -> true);
-        final boolean[] rejectedOnWorker = { false };
-        Thread worker = new Thread(() -> {
+        UpdateRunGate.Permit acrossThread = UpdateRunGate.enter(() -> true);
+        AtomicBoolean rejectedOnWorker = new AtomicBoolean();
+        Thread thread = new Thread(() -> {
             Thread.currentThread().interrupt();
-            try {
-                crossThread.verify();
-            } catch (IOException expected) {
-                rejectedOnWorker[0] = true;
-            }
-        }, "offline-revocation-fixture");
-        worker.start();
-        worker.join();
-        check(rejectedOnWorker[0], "interrupted worker must deny permission");
-        check(!crossThread.allowed(), "worker's denial remains denied on the main thread");
-        rejects(crossThread, "cross-thread denial latch");
+            try { acrossThread.verify(); }
+            catch (IOException expected) { rejectedOnWorker.set(true); }
+        });
+        thread.start();
+        thread.join();
+        check(rejectedOnWorker.get(), "worker interruption cancels permit");
+        check(!acrossThread.allowed(), "main thread cannot revive worker's permit");
+        acrossThread.close();
 
-        System.out.println("UpdateRunGate: " + checks
-                + " host-only checks passed; no network connections opened");
+        UpdateRunGate.Permit active = UpdateRunGate.enter(() -> true);
+        FakeConnection activeHttp = new FakeConnection();
+        active.track(activeHttp);
+        AtomicBoolean didRevoke = new AtomicBoolean();
+        Thread concurrentLock = new Thread(() -> {
+            UpdateRunGate.invalidate();
+            didRevoke.set(true);
+        });
+        concurrentLock.start();
+        concurrentLock.join();
+        check(didRevoke.get(), "lock thread ran");
+        check(activeHttp.disconnects.get() == 1, "cross-thread activation disconnects HTTP");
+        check(!active.allowed(), "cross-thread activation revokes gate");
+        active.close();
+
+        UpdateRunGate.Permit fresh = UpdateRunGate.enter(() -> true);
+        check(fresh.allowed(), "new permit allowed after explicit unlock");
+        fresh.close();
+        System.out.println("UpdateRunGate: " + checks + " offline assertions passed; zero HTTP connections attempted");
     }
 }
