@@ -8,7 +8,7 @@ package org.cubechat.android;
 final class LockdownRecoverySummary {
     enum State {
         NOT_REQUESTED, LOCAL_VPN_ACTIVE, OS_IP_LOCKDOWN_REPORTED,
-        REQUESTED_NOT_RUNNING, RELEASE_INCOMPLETE
+        REQUESTED_NOT_RUNNING, MANAGED_POLICY_UNVERIFIED, RELEASE_INCOMPLETE
     }
 
     static final class Snapshot {
@@ -48,6 +48,12 @@ final class LockdownRecoverySummary {
             headline = "LOCKDOWN REQUESTED, VPN NOT RUNNING";
             details = "CubeChat requested IP lockdown, but its local packet filter is absent. "
                     + "Other application traffic may be possible unless Android separately blocks it.";
+        } else if (deviceOwner && !managedRestrictionsPresent) {
+            state = State.MANAGED_POLICY_UNVERIFIED;
+            headline = "MANAGED RADIO RESTRICTIONS UNVERIFIED";
+            details = "Android device-owner mode is present, but the required CubeChat-managed "
+                    + "radio restrictions were not all reported. VPN status alone must not "
+                    + "be presented as complete device lockdown.";
         } else if (osLockdownReported) {
             state = State.OS_IP_LOCKDOWN_REPORTED;
             headline = "ANDROID IP LOCKDOWN REPORTED";
