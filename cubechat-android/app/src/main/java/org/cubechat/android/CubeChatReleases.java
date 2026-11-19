@@ -34,7 +34,12 @@ final class CubeChatReleases {
     }
 
     interface Reader { String read(String url, int limit) throws IOException; }
-    interface AccessCheck { void verify() throws IOException; }
+    interface AccessCheck {
+        void verify() throws IOException;
+        /** Optional hook for promptly canceling an already-open HTTP connection. */
+        default void connectionOpened(HttpURLConnection connection) { }
+        default void connectionClosed(HttpURLConnection connection) { }
+    }
 
     static Offer check(long installed) throws IOException, JSONException {
         return check(installed, () -> {});
@@ -155,12 +160,16 @@ final class CubeChatReleases {
             }
             access.verify();
             HttpURLConnection c = (HttpURLConnection) next.openConnection();
-            c.setRequestProperty("User-Agent", "CubeChat Android updater");
-            c.setRequestProperty("Accept", "api.github.com".equals(host) ? "application/vnd.github+json" : "*/*");
-            c.setInstanceFollowRedirects(false);
-            c.setConnectTimeout(7000);
-            c.setReadTimeout(10000);
             try {
+                // Register before the first response byte; a lockdown change
+                // can now disconnect blocked HTTP reads, not just deny later pages.
+                access.connectionOpened(c);
+                access.verify();
+                c.setRequestProperty("User-Agent", "CubeChat Android updater");
+                c.setRequestProperty("Accept", "api.github.com".equals(host) ? "application/vnd.github+json" : "*/*");
+                c.setInstanceFollowRedirects(false);
+                c.setConnectTimeout(7000);
+                c.setReadTimeout(10000);
                 access.verify();
                 int status = c.getResponseCode();
                 access.verify();
@@ -186,7 +195,10 @@ final class CubeChatReleases {
                     access.verify();
                     return new String(out.toByteArray(), StandardCharsets.UTF_8);
                 }
-            } finally { c.disconnect(); }
+            } finally {
+                access.connectionClosed(c);
+                c.disconnect();
+            }
         }
         throw new IOException("Too many release redirects.");
     }
