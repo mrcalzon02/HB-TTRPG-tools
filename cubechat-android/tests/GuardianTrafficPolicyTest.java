@@ -33,6 +33,14 @@ public final class GuardianTrafficPolicyTest {
         GuardianTrafficPolicy empty = GuardianTrafficPolicy.defaultDeny(generation);
         expect(GuardianTrafficPolicy.SCHEMA_VERSION == 1, "contract version");
         expect(empty.generation() == generation, "default policy generation");
+        expect(!Flow.class.isRecord() && !Permit.class.isRecord(),
+                "Android 8 compatibility: no Java record superclass");
+        Flow duplicateChat = flow(10234, 41, Layer.IPV4, Direction.EGRESS,
+                Protocol.TCP, "192.168.88.2", 47743, "wlan0", generation);
+        expect(chat.equals(duplicateChat), "immutable flow preserves record-like equality");
+        expect(chat.hashCode() == duplicateChat.hashCode(), "equal flows hash identically");
+        expect(chat.uid() == 10234 && chat.socketCookie() == 41
+                && chat.policyGeneration() == generation, "original accessor contract retained");
         expect(empty.evaluate(chat, 100) == Verdict.DROP, "default deny CubeChat too");
 
         Flow[] unauthorized = {
@@ -50,6 +58,11 @@ public final class GuardianTrafficPolicyTest {
                     "no implicit IP exemption for DNS, QUIC, incoming, root or system");
 
         Permit shortChat = new Permit(chat, Purpose.CUBECHAT_PEER, 1000);
+        Permit sameGrant = new Permit(duplicateChat, Purpose.CUBECHAT_PEER, 1000);
+        expect(shortChat.equals(sameGrant), "immutable permit preserves exact-match equality");
+        expect(shortChat.hashCode() == sameGrant.hashCode(), "equal permits hash identically");
+        expect(shortChat.expiresAtElapsedNanos() == 1000,
+                "legacy permit expiration accessor retained");
         GuardianTrafficPolicy active = new GuardianTrafficPolicy(generation, Set.of(shortChat));
         expect(active.evaluate(chat, 1) == Verdict.ALLOW, "precisely authorized peer allowed");
         expect(active.evaluate(chat, 999) == Verdict.ALLOW, "permit valid before expiry");
