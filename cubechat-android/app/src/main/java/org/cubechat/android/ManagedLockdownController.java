@@ -29,6 +29,17 @@ final class ManagedLockdownController {
 
     private ManagedLockdownController() { }
 
+    /**
+     * Deployment gate, intentionally CLOSED on this build.
+     * Android does not expose a universal, guaranteed early priority handoff
+     * to ordinary apps. Do not install persistent device-owner radio/VPN
+     * restrictions until an audited, trusted OS component can disengage them
+     * before platform telephone services might need the connection.
+     *
+     * This is NOT an emergency-path test or an emergency state detector.
+     */
+    static boolean deploymentSupported() { return false; }
+
     private static DevicePolicyManager manager(Context context) {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
@@ -44,6 +55,9 @@ final class ManagedLockdownController {
 
     /** Strongest stock-Android managed-device configuration, not a hardware kill switch. */
     static void enforce(Context context) throws Exception {
+        if (!deploymentSupported())
+            throw new UnsupportedOperationException(
+                    "Advanced managed lockdown unavailable: trusted priority-release integration absent");
         if (!isDeviceOwner(context)) throw new SecurityException("CubeChat is not the device owner");
         if (!LockdownFirewall.armed(context)) throw new IllegalStateException("Arm the IP firewall first");
         DevicePolicyManager dpm = manager(context);
