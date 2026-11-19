@@ -55,6 +55,11 @@ final class WifiDirectController {
     }
 
     void begin() {
+        if (LockdownFirewall.armed(screen)
+                && ManagedLockdownController.restrictionsPresent(screen)) {
+            feedback.accept("Wi-Fi Direct is disabled by managed lockdown; use LAN chat or disable lockdown.");
+            return;
+        }
         if (link.snapshot().role.isEmpty()) {
             feedback.accept("Create or scan a key card before opening Wi-Fi Direct.");
             return;
@@ -63,6 +68,9 @@ final class WifiDirectController {
             feedback.accept("This device does not offer Wi-Fi Direct. Choose Local Wi-Fi or Bluetooth.");
             return;
         }
+        // A user-chosen transport is a transient grant; old grants never
+        // carry across lockdown activation or an app process restart.
+        LockdownRadioPolicy.chooseWifiDirect(screen);
         String permission = Build.VERSION.SDK_INT >= 33
                 ? Manifest.permission.NEARBY_WIFI_DEVICES : Manifest.permission.ACCESS_FINE_LOCATION;
         if (screen.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -171,6 +179,11 @@ final class WifiDirectController {
     }
 
     private void discover() {
+        if (!LockdownRadioPolicy.wifiDirectAllowed(screen)) {
+            feedback.accept("Wi-Fi Direct discovery is denied in lockdown.");
+            stop(true);
+            return;
+        }
         if (active && channel != null) manager.discoverPeers(channel, action(this::refreshPeers, "Discover nearby devices"));
     }
 
