@@ -184,6 +184,7 @@ public final class FirewallSettings extends Activity {
         text(page, "REQUIRED for fail-closed IP filtering: Select CubeChat as Always-on VPN, then enable Block connections without VPN in Android's VPN settings. Android may require a separate VPN consent prompt.", 15, MUTED);
         if (Build.VERSION.SDK_INT < 29) text(page,
                 "Android 8–9 cannot report the OS lockdown flags to this screen through the public VpnService API. Treat this status as unverified until device tests.", 14, DANGER);
+        text(page, "Emergency priority: RadioGuard's planned trusted-system override must remove all of its enforcement controls, with no prompt or allowlist. The public APK cannot reliably detect every emergency-call activation, so automatic release is NOT implemented or verified. We do not test emergency calls.", 15, DANGER);
         text(page, "This controls app IP traffic, not Bluetooth, Wi-Fi management frames, cellular signaling, emergency calling, carrier services or all privileged OS traffic. See the Radios tab.", 15, MUTED);
         text(page, "Android permits only one active VPN. Enabling this can disconnect another VPN, work profile, captive portal or ordinary internet service.", 14, MUTED);
     }
@@ -405,16 +406,9 @@ public final class FirewallSettings extends Activity {
     }
 
     private void stopFirewall() {
-        try {
-            // Managed policies first: if Android refuses to release them, keep
-            // the IP deny rule armed and tell the user that shutdown failed.
-            ManagedLockdownController.release(this);
-            LockdownFirewall.setArmed(this, false);
-            LockdownFirewall.stop(this);
-        } catch (Exception e) {
-            Toast.makeText(this, "Could not fully disable lockdown: " + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
+        LockdownReleaseController.Result result =
+                LockdownReleaseController.releaseAllOwnedControls(this);
+        Toast.makeText(this, result.detail, Toast.LENGTH_LONG).show();
         render();
     }
 
