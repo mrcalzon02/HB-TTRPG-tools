@@ -3,6 +3,8 @@
 **Date:** 2026-11-18 · **Status:** architecture and offline simulation only; no privileged hook or hardware interception installed.  
 **Primary goal:** an attacker controlling a third-party Android app (and possibly an Android framework service) cannot use ordinary internet-capable sockets outside narrowly granted CubeChat routes. We also inventory the remaining wireless data paths rather than asserting that IP controls stop all RF.
 
+**Absolute project prohibition:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md). No actual or simulated emergency-call continuity tests, ever; normal non-emergency communication testing remains permitted.
+
 **Scope / trust boundary:** Below application permissions is not automatically outside the operating system. The Android Linux kernel is part of Android. eBPF, netfilter, the Radio HAL, and root daemons may resist an *app-level* exploit, but **not arbitrary kernel control**. Any defense against a kernel-compromised attacker needs a separately protected execution/power boundary proven on real hardware.
 
 ## P0.1 — Packet path and enforcement candidates
@@ -67,7 +69,7 @@ Separate paths: Wi-Fi management, Bluetooth controller/HCI,
 | --- | --- | --- | --- |
 | Modem registration, SIM/eSIM authentication | Baseband, radio firmware, SIM | Preserve ordinary registration unless separate user-selected radio silence | IP hooks cannot attest or necessarily control |
 | Incoming/outgoing voice and IMS/VoLTE | Vendor modem + OS IMS components; IP may be carried internally | Preserve normal calls by default; platform-specific exception where measurable | Call both directions before and after policy; no generic UID whitelist |
-| Emergency calling | Modem/OS/carrier emergency path | Preserve; hard gate before any radio restriction affecting service | Use manufacturer/carrier-certified simulated emergency test, never real automated emergency calls |
+| Emergency calling | Modem/OS/carrier emergency path | Leave emergency functionality outside RadioGuard's modified/tested scope; flag possible impacts | **TESTING PROHIBITED UNDER ALL CONDITIONS** — no actual, simulated, laboratory, test-SIM or certified emergency-call exercises. Status: **NOT_TESTED_BY_PROJECT** |
 | SMS / cell broadcasts | Modem / telephony stack, variable by carrier | Preserve essential SMS and alerts | Device evidence; some SMS over IMS |
 | Wi-Fi calling | IMS IP traffic via Wi-Fi | Optional supported functionality explicitly measured | May require narrowly scoped vendor system IP flow or may be unavailable |
 | Android network validation | OS connectivity verifier and captive portal probes | Allow only if proven necessary and minimally scoped; otherwise fail validation visibly | Dynamic system endpoints; do not invent fixed URL |
@@ -95,7 +97,7 @@ The newly added `GuardianTrafficPolicy` is a **pure Java model** to exercise tup
 ## P0.5 — Modem and rogue-cell claims
 
 - Filtering AT/QMI/MBIM control messages does **not** necessarily filter autonomous baseband cell selection, attach, NAS/RRC or signaling. A modem command filter is not a verified false-base-station firewall.
-- Disable 2G only where the hardware/carrier/Android implementation supports it; emergency service behavior may override normal policy. Test LTE/NR availability, rural roaming, and emergency behavior in approved lab conditions.
+- Disable 2G only where the hardware/carrier/Android implementation supports it; emergency service behavior may override normal policy. **Only test non-emergency** LTE/NR availability and ordinary roaming. Do not test emergency behavior under any circumstances. Report it as **NOT_TESTED_BY_PROJECT**.
 - 5G SUCI depends on SIM/USIM credentials and home-network provisioning; userland cannot generally force universal concealed-identity behavior. Initial signaling may include unciphered states, and null-cipher rules have necessary specification and emergency exceptions.
 - A cell's MCC/MNC/TAC/PCI, signal power, neighbor list, or a plausible `DIAG` frame is **not** proof that physical tower equipment is authenticated. Unknown means unknown; no automatic cell barring.
 - Start with opt-in, bounded, read-only observations already present in CubeChat. Any live radio controls require exact device/firmware evidence and safe rollback.
@@ -105,7 +107,7 @@ The newly added `GuardianTrafficPolicy` is a **pure Java model** to exercise tup
 1. **No handset required:** exercise the host-only deny model, malformed/missing/stale/mismatched exact grants, non-IP scope, policy-generation mismatch and empty critical-service exception list. Keep tests in manual-only workflow.
 2. **Exact spare handset required for P3:** record model, variant, SoC, Android API, kernel config and release, modem firmware, carrier, SIM mode, bootloader status, verified root-of-trust and stock rollback images. No changes to an active daily phone.
 3. **First privileged proof:** choose one compatible eBPF/cgroup or `tc`/netfilter path with repeatable Android integration. Do NOT overwrite Android's netd BPF maps. Run an external independent capture for every target interface, with baseline and negative tests.
-4. **Telephony preservation:** voice, IMS/VoLTE, SMS, Wi-Fi calling and carrier registration before and after. Never auto-dial emergency numbers.
+4. **Non-emergency telephony checks only:** ordinary voice, IMS/VoLTE, SMS, Wi-Fi calling and carrier registration before/after. **Never conduct emergency-call continuity tests** (including manual, simulated, emulator, shielded or certified lab tests). Emergency-call effects remain untested and cannot be certified.
 5. **Release blocker:** any advertised complete protection must survive verified boot/OTA, helper failure, interface migration, privileged app attack scenarios and audited recovery. Unmeasured radio paths are not complete protection.
 
 ## Technical grounding
