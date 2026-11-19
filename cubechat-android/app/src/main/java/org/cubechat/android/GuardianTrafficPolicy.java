@@ -46,12 +46,20 @@ public final class GuardianTrafficPolicy {
             this.protocol = Objects.requireNonNull(protocol, "protocol");
             this.peerAddress = Objects.requireNonNull(peerAddress, "peerAddress");
             this.networkInterface = Objects.requireNonNull(networkInterface, "interface");
-            if (peerAddress.trim().isEmpty() || networkInterface.trim().isEmpty())
+            if (blank(peerAddress) || blank(networkInterface))
                 throw new IllegalArgumentException("Unresolved peer or interface");
             this.uid = uid;
             this.socketCookie = socketCookie;
             this.peerPort = peerPort;
             this.policyGeneration = policyGeneration;
+        }
+
+        // Equivalent to String.isBlank for Unicode whitespace, but does not
+        // require the newer JDK String method on Android 8.0.
+        private static boolean blank(String text) {
+            for (int i = 0; i < text.length(); i++)
+                if (!Character.isWhitespace(text.charAt(i))) return false;
+            return true;
         }
 
         public int uid() { return uid; }
