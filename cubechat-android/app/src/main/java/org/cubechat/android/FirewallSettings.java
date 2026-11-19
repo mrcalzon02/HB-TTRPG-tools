@@ -27,11 +27,9 @@ public final class FirewallSettings extends Activity {
     private static final int VPN_CONSENT = 243;
     private static final int INK = 0xff17251e, MUTED = 0xff4c6157, DANGER = 0xff8c351c;
     private final Handler ui = new Handler(Looper.getMainLooper());
-    private final Runnable refresh = new Runnable() {
-        @Override public void run() {
-            if (visible) { render(); ui.postDelayed(this, 1200); }
-        }
-    };
+    // One delayed refresh allows service startup without replacing the entire
+    // interactive tab every second while a person is touching its controls.
+    private final Runnable refresh = () -> { if (visible) render(); };
     private LinearLayout page;
     private int tab;
     private boolean visible;
@@ -51,7 +49,7 @@ public final class FirewallSettings extends Activity {
         super.onResume();
         visible = true;
         ui.removeCallbacks(refresh);
-        refresh.run();
+        ui.postDelayed(refresh, 1200);
     }
 
     @Override protected void onPause() {
