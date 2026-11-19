@@ -49,6 +49,19 @@ final class ManagedLockdownController {
         DevicePolicyManager dpm = manager(context);
         ComponentName admin = admin(context);
 
+        // Do not silently replace a separately configured user/third-party
+        // always-on VPN. On older Android even the same package name is not
+        // enough to establish that this admin previously installed the VPN.
+        String existingVpn = dpm.getAlwaysOnVpnPackage(admin);
+        boolean locallyManagedBefore = context.getSharedPreferences(
+                VPN_PROVENANCE_PREF, Context.MODE_PRIVATE)
+                .getBoolean(VPN_CONFIGURED_BY_ADMIN, false);
+        if (existingVpn != null &&
+                (!context.getPackageName().equals(existingVpn)
+                        || (Build.VERSION.SDK_INT < 31 && !locallyManagedBefore)))
+            throw new IllegalStateException(
+                    "Existing always-on VPN cannot be replaced without verified ownership");
+
         // Apply this FIRST: later restriction failures must not produce an
         // unfiltered device. No allowlist of third-party applications.
         dpm.setAlwaysOnVpnPackage(admin, context.getPackageName(), true);
