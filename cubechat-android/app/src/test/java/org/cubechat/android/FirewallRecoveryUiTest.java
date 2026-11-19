@@ -89,6 +89,10 @@ public final class FirewallRecoveryUiTest {
         assertTrue("Release attempt timestamp saved",
                 app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
                         .contains("last-release-at"));
+        assertTrue("Write-ahead release must have a final request state",
+                LockdownReleaseJournal.REQUESTS_SENT.equals(app.getSharedPreferences(
+                        "cubechat-firewall-recovery", Context.MODE_PRIVATE)
+                        .getString("last-release-phase", "")));
         String steps = app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
                 .getString("last-release-steps", "");
         assertTrue("Recovery saves distinct managed-policy command status",
@@ -100,6 +104,33 @@ public final class FirewallRecoveryUiTest {
         View refreshed = activity.findViewById(android.R.id.content);
         assertTrue("Result explicitly denies a verification claim",
                 hasText(refreshed, "removal NOT independently verified"));
+    }
+
+    @Test public void unfinishedManualReleaseWarnsOnReopenWithoutReplayingOldReceipts() {
+        app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
+                .edit()
+                .putLong("last-release-at", 123456L)
+                .putString("last-release-phase", LockdownReleaseJournal.STARTED)
+                .putBoolean("last-release-requests-sent", true)
+                .putString("last-release-steps", "OBSOLETE_RECEIPT")
+                .commit();
+        FirewallSettings activity = Robolectric.buildActivity(FirewallSettings.class).setup().get();
+        View root = activity.findViewById(android.R.id.content);
+        buttonNamed(root, "Recovery").performClick();
+        assertTrue("An interrupted cleanup must not be mistaken for old success",
+                hasText(root, "may have been interrupted"));
+        assertFalse("Old per-step receipt must not be presented as current",
+                hasText(root, "OBSOLETE_RECEIPT"));
+        Button copy = buttonNamed(root, "Copy non-sensitive status summary");
+        assertNotNull(copy);
+        copy.performClick();
+        ClipboardManager clipboard = (ClipboardManager)
+                app.getSystemService(Context.CLIPBOARD_SERVICE);
+        assertNotNull(clipboard);
+        String summary = clipboard.getPrimaryClip().getItemAt(0).coerceToText(app).toString();
+        assertTrue(summary.contains("INTERRUPTED_OR_UNCONFIRMED"));
+        assertFalse(summary.contains("OBSOLETE_RECEIPT"));
+        assertFalse("Viewing recovery never triggers policy or radios", LockdownFirewall.armed(app));
     }
 
     private static Button buttonNamed(View root, String label) {
