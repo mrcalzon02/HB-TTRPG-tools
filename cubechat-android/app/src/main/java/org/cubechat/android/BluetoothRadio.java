@@ -86,6 +86,14 @@ final class BluetoothRadio {
         if (closed) return;
         if (radio == null) { notice("This phone has no Bluetooth Classic adapter."); return; }
         if (link.snapshot().role.isEmpty()) { notice("Create or scan a key card first."); return; }
+        if (LockdownFirewall.armed(activity)
+                && ManagedLockdownController.restrictionsPresent(activity)) {
+            notice("Bluetooth is disabled by managed lockdown. Use local Wi-Fi, or turn lockdown off first.");
+            return;
+        }
+        // Explicit CubeChat selection only; never restore old radio authorizations
+        // from saved settings on a fresh strict-mode process.
+        LockdownRadioPolicy.chooseBluetooth(activity);
         choosingContact = link.snapshot().activeId;
         List<String> missing = missing();
         if (!missing.isEmpty()) { activity.requestPermissions(missing.toArray(new String[0]), PERMISSIONS); return; }
@@ -122,6 +130,7 @@ final class BluetoothRadio {
 
     void resume() {
         if (closed || active || !saved.getBoolean("enabled", false) || radio == null) return;
+        if (!LockdownRadioPolicy.bluetoothAllowed(activity)) return;
         // Pairing is restored by PeerLink on a worker thread.
         if (link.snapshot().role.isEmpty()) {
             if (link.snapshot().status.startsWith("Opening")) ui.postDelayed(this::resume, 400);
@@ -149,6 +158,10 @@ final class BluetoothRadio {
     private void tick() {
         ui.removeCallbacks(maintenance);
         if (!active || closed) return;
+        if (!LockdownRadioPolicy.bluetoothAllowed(activity)) {
+            leave();
+            return;
+        }
         if (!inFlight && !link.snapshot().connected && !link.snapshot().role.isEmpty()) {
             int epoch = generation;
             boolean host = "host".equals(link.snapshot().role);
@@ -165,6 +178,8 @@ final class BluetoothRadio {
         BluetoothSocket candidate = null;
         BluetoothServerSocket listening = null;
         try {
+            if (!LockdownRadioPolicy.bluetoothAllowed(activity))
+                throw new IOException("Bluetooth is not authorized by the current CubeChat lockdown session");
             if (host) {
                 listening = radio.listenUsingRfcommWithServiceRecord(SERVICE_NAME, SERVICE);
                 synchronized (sockets) {
