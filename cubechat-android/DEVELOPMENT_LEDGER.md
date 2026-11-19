@@ -1,5 +1,7 @@
 # CubeChat Android development ledger
 
+> **Lockdown Mode lower-layer work:** [execution and safety plan](docs/LOCKDOWN_MODE_EXECUTION_PLAN.md) · [tracking issue #23](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/23). Current VPN and device-owner changes on `main` are fallback development code, **not** proof of device-wide RF isolation. Runtime firewall changes are paused pending the kernel/radio feasibility gate.
+
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
 ## November 17, 2026 · Preserve the next draft during an offline send
