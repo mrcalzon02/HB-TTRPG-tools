@@ -3,6 +3,8 @@ package org.cubechat.android;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -34,6 +36,7 @@ import java.util.List;
  */
 public final class FirewallSettings extends Activity {
     private static final int VPN_CONSENT = 243, CELL_PERMISSION = 244;
+    private static final String RECOVERY_PREFS = "cubechat-firewall-recovery";
     private static final long MIN_CELL_REFRESH_MS = 15_000L;
     private static final CellObservationBook CELL_HISTORY = new CellObservationBook();
     private static final int INK = 0xff17251e, MUTED = 0xff4c6157, DANGER = 0xff8c351c;
@@ -115,7 +118,7 @@ public final class FirewallSettings extends Activity {
         text(root, "CubeChat · Firewall settings", 23, INK);
         LinearLayout tabs = new LinearLayout(this);
         tabs.setOrientation(LinearLayout.HORIZONTAL);
-        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections"};
+        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections", "Recovery"};
         for (int index = 0; index < names.length; index++) {
             final int selected = index;
             Button choice = new Button(this);
@@ -130,6 +133,8 @@ public final class FirewallSettings extends Activity {
         tabStrip.setHorizontalScrollBarEnabled(false);
         tabStrip.addView(tabs);
         root.addView(tabStrip);
+        final int selectedTab = tab;
+        tabStrip.post(() -> tabStrip.scrollTo(Math.max(0, dp(103 * selectedTab - 130)), 0));
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
         page = col();
@@ -142,7 +147,8 @@ public final class FirewallSettings extends Activity {
         if (tab == 0) showLockdown();
         else if (tab == 1) showExceptions();
         else if (tab == 2) showRadios();
-        else showConnections();
+        else if (tab == 3) showConnections();
+        else showRecovery();
     }
 
     private void showLockdown() {
@@ -162,7 +168,7 @@ public final class FirewallSettings extends Activity {
             else disable();
         });
         page.addView(toggle);
-        if (!requested) text(page, "OFF · Ordinary Android networking is available.", 17, DANGER);
+        if (!requested) text(page, "OFF REQUESTED · CubeChat's firewall is not armed. Android's own Always-on VPN or other policies may still restrict network access. See Recovery.", 17, DANGER);
         else if (verified) text(page, "OS-ENFORCED · Android reports Always-on VPN and Block connections without VPN. IP traffic is fail-closed.", 17, 0xff185f46);
         else if (running) text(page, "PARTIAL · CubeChat is dropping IP packets, but protection after a reboot, VPN failure or force-stop is NOT verified.", 17, DANGER);
         else text(page, "NOT PROTECTED · Lockdown was requested but the VPN is not running. Other apps may have network access.", 17, DANGER);
@@ -181,6 +187,7 @@ public final class FirewallSettings extends Activity {
             text(page, "STANDARD APPLICATION · This installation cannot enforce device-owner radio restrictions. A malicious app with elevated privileges may circumvent IP filtering.", 15, DANGER);
         }
         button(page, "Open Android VPN settings", () -> open(Settings.ACTION_VPN_SETTINGS));
+        button(page, "Recovery & release status", () -> { tab = 4; render(); });
         text(page, "REQUIRED for fail-closed IP filtering: Select CubeChat as Always-on VPN, then enable Block connections without VPN in Android's VPN settings. Android may require a separate VPN consent prompt.", 15, MUTED);
         if (Build.VERSION.SDK_INT < 29) text(page,
                 "Android 8–9 cannot report the OS lockdown flags to this screen through the public VpnService API. Treat this status as unverified until device tests.", 14, DANGER);
@@ -264,6 +271,60 @@ public final class FirewallSettings extends Activity {
             render();
         });
         text(page, "Not enabled: rogue tower verdicts, cell selection, baseband blocking, background collection, cloud uploads and persistent location history.", 14, DANGER);
+    }
+
+    /**
+     * Recovery is read-only until the user explicitly selects a release action.
+     * Status is local OS/app readback, not a kernel, RF or calling attestation.
+     */
+    private void showRecovery() {
+        LockdownRecoverySummary.Snapshot snapshot = LockdownRecoverySummary.inspect(
+                LockdownFirewall.armed(this), LockdownFirewall.running(),
+                LockdownFirewall.systemLockdownVerified(),
+                ManagedLockdownController.isDeviceOwner(this),
+                ManagedLockdownController.restrictionsPresent(this));
+        text(page, "Recovery & manual controls", 19, INK);
+        text(page, snapshot.headline, 17,
+                snapshot.state == LockdownRecoverySummary.State.NOT_REQUESTED ? INK : DANGER);
+        text(page, snapshot.details, 15, MUTED);
+        text(page, "Status is based on CubeChat's own observations. Other Android-owned VPN settings, privileged helpers, kernel drivers and physical transmitters are not independently checked.", 14, DANGER);
+
+        android.content.SharedPreferences recovery =
+                getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE);
+        long attemptedAt = recovery.getLong("last-release-at", 0L);
+        if (attemptedAt > 0) {
+            String time = java.text.DateFormat.getDateTimeInstance().format(
+                    new java.util.Date(attemptedAt));
+            String state = recovery.getBoolean("last-release-requests-sent", false)
+                    ? "Release requests sent; removal NOT independently verified"
+                    : "Some release requests FAILED";
+            text(page, "Last manual release · " + time + "\\n" + state, 14,
+                    recovery.getBoolean("last-release-requests-sent", false) ? MUTED : DANGER);
+        } else {
+            text(page, "No manual release attempt recorded on this installation.", 14, MUTED);
+        }
+        button(page, "Release all CubeChat controls", () ->
+                new AlertDialog.Builder(this)
+                        .setTitle("Release CubeChat lockdown controls?")
+                        .setMessage("This attempts to remove CubeChat-owned restrictions and stop its VPN. Other applications may regain network access. Android-owned Always-on VPN settings may still need manual changes.")
+                        .setNegativeButton("Keep current state", null)
+                        .setPositiveButton("Release controls", (dialog, which) -> stopFirewall())
+                        .show());
+        button(page, "Android VPN settings", () -> open(Settings.ACTION_VPN_SETTINGS));
+        button(page, "Copy non-sensitive status summary", () -> {
+            String report = snapshot.diagnostics;
+            if (attemptedAt > 0)
+                report += "\\nLast manual release requests sent: "
+                        + (recovery.getBoolean("last-release-requests-sent", false) ? "YES" : "NO");
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            if (clipboard == null) {
+                Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_LONG).show();
+                return;
+            }
+            clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat lockdown status", report));
+            Toast.makeText(this, "Status copied (no messages, peers or cell identities)", Toast.LENGTH_SHORT).show();
+        });
+        text(page, "Automatic trusted-system priority release is NOT implemented in this standard APK. No emergency-call tests are performed. Advanced controls requiring that integration remain unavailable.", 14, DANGER);
     }
 
     private boolean hasCellPermission() {
@@ -408,6 +469,12 @@ public final class FirewallSettings extends Activity {
     private void stopFirewall() {
         LockdownReleaseController.Result result =
                 LockdownReleaseController.releaseAllOwnedControls(this);
+        // Record only the result of issuing cleanup requests; never claim a
+        // verified physical radio shutdown or removal of OS-owned policies.
+        getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE).edit()
+                .putLong("last-release-at", System.currentTimeMillis())
+                .putBoolean("last-release-requests-sent", result.requestsCompleted)
+                .apply();
         Toast.makeText(this, result.detail, Toast.LENGTH_LONG).show();
         render();
     }
