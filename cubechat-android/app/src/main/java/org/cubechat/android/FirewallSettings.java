@@ -38,12 +38,12 @@ public final class FirewallSettings extends Activity {
     private static final CellObservationBook CELL_HISTORY = new CellObservationBook();
     private static final int INK = 0xff17251e, MUTED = 0xff4c6157, DANGER = 0xff8c351c;
     private final Handler ui = new Handler(Looper.getMainLooper());
+    private boolean visible;
     // One delayed refresh allows service startup without replacing the entire
     // interactive tab every second while a person is touching its controls.
     private final Runnable refresh = () -> { if (visible) render(); };
     private LinearLayout page;
     private int tab;
-    private boolean visible;
     private List<CellObservation> observedCells = Collections.emptyList();
     private String cellStatus = "No cellular observations requested.";
     private boolean cellRequestRunning;
