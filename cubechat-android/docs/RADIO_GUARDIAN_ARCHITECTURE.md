@@ -4,6 +4,8 @@ Status: **design proposal only; not implemented, built, or device-validated**
 Reviewed: 2026-11-18  
 Scope: CubeChat Android `org.cubechat.android`, existing local VPN lockdown, cellular/Wi-Fi/Bluetooth observation, optional device-specific elevated radio enforcement.
 
+> **Active execution order (2026-11-18):** The [Lockdown Mode lower-layer execution plan](LOCKDOWN_MODE_EXECUTION_PLAN.md) is the prioritized continuation of the stalled CubeChat Lockdown Mode effort. Evaluate kernel/IP interception, baseband boundaries, critical OS traffic, a recoverable privileged helper and test-handset feasibility **before** changing current firewall runtime behavior. The VPN/device-owner implementation remains a compatibility fallback, not verified device-wide radio isolation.
+
 ## Objective
 
 Ship **one user-facing, signed CubeChat APK** that functions as a normal messenger and security monitor on unmodified Android phones. If a device has been *separately and knowingly* provisioned for root or an integrated OS build, the same APK may offer an **optional** privileged Radio Guardian engine. It must never pretend ordinary APK installation grants modem control.
