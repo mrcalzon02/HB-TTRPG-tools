@@ -278,15 +278,21 @@ public final class FirewallSettings extends Activity {
      * Status is local OS/app readback, not a kernel, RF or calling attestation.
      */
     private void showRecovery() {
+        ManagedLockdownController.Audit managed = ManagedLockdownController.audit(this);
         LockdownRecoverySummary.Snapshot snapshot = LockdownRecoverySummary.inspect(
                 LockdownFirewall.armed(this), LockdownFirewall.running(),
-                LockdownFirewall.systemLockdownVerified(),
-                ManagedLockdownController.isDeviceOwner(this),
-                ManagedLockdownController.restrictionsPresent(this));
+                LockdownFirewall.systemLockdownVerified(), managed.deviceOwner,
+                managed.appliedRestrictions, managed.totalRestrictions,
+                managed.restrictionsReadable, managed.cubechatOwnsAlwaysOnVpn,
+                managed.vpnReadable);
         text(page, "Recovery & manual controls", 19, INK);
         text(page, snapshot.headline, 17,
                 snapshot.state == LockdownRecoverySummary.State.NOT_REQUESTED ? INK : DANGER);
         text(page, snapshot.details, 15, MUTED);
+        text(page, managed.localSummary(), 15,
+                snapshot.state == LockdownRecoverySummary.State.RELEASE_INCOMPLETE
+                        || snapshot.state == LockdownRecoverySummary.State.READBACK_UNAVAILABLE
+                        ? DANGER : MUTED);
         text(page, "Status is based on CubeChat's own observations. Other Android-owned VPN settings, privileged helpers, kernel drivers and physical transmitters are not independently checked.", 14, DANGER);
 
         android.content.SharedPreferences recovery =
