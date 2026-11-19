@@ -22,6 +22,14 @@ The **Recovery** tab writes an ordinary manual release journal entry *before* at
 
 Both the **Recovery** and **Device** tabs offer an explicit copy action for compact diagnostics. Copied data is marked as sensitive so compatible Android versions obscure its visual clipboard preview. **It is still a normal system clipboard item:** other applications with access may read it. Copy only if you intend to share the report; neither tab automatically exports the information. The report excludes chat messages, contact identities, SIM/subscriber identifiers, network packet contents and location observations.
 
+## Managed-device VPN ownership protection (development builds)
+
+When a phone is already provisioned with CubeChat as its **device owner**, manual lockdown cleanup attempts to remove only CubeChat's managed restrictions and VPN configuration. It now reads the configured always-on VPN package first. A different VPN package is preserved.
+
+On Android 8–11 (API 26–30), the device-owner APIs cannot reliably distinguish a user-configured same-package VPN from one established by CubeChat. This development build therefore requires a stored record of CubeChat having installed the managed VPN before removing it on these devices. Missing provenance is reported as **incomplete cleanup**, not silently treated as permission to remove a user's VPN. On Android 12+ the platform restricts an admin's VPN removal to the configuration it owns. If Recovery reports uncertainty, open Android VPN settings and examine the current configuration; **do not assume a successful release command proves the VPN was removed**.
+
+This mechanism does not add a privileged radio, modem or emergency-call feature. The emergency-call testing prohibition and automatic trusted-priority-yield deployment gate remain unchanged.
+
 ## Read-only RadioGuard feasibility probe (developer use)
 
 Before choosing a disposable handset for deeper kernel research, install Android Platform Tools on your computer and explicitly select **one spare phone** using `adb devices`. From the `cubechat-android` directory run:
