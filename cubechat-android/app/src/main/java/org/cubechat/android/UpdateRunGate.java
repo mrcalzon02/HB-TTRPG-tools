@@ -55,9 +55,9 @@ final class UpdateRunGate {
         void track(HttpURLConnection connection) {
             Objects.requireNonNull(connection);
             HttpURLConnection old = currentConnection.getAndSet(connection);
-            if (old != null && old != connection) old.disconnect();
+            if (old != null && old != connection) disconnectQuietly(old);
             if (!allowed()) {
-                if (currentConnection.compareAndSet(connection, null)) connection.disconnect();
+                if (currentConnection.compareAndSet(connection, null)) disconnectQuietly(connection);
             }
         }
 
@@ -69,7 +69,15 @@ final class UpdateRunGate {
         private void cancel() {
             revoked.set(true);
             HttpURLConnection active = currentConnection.getAndSet(null);
-            if (active != null) active.disconnect();
+            if (active != null) disconnectQuietly(active);
+        }
+
+        private static void disconnectQuietly(HttpURLConnection connection) {
+            try { connection.disconnect(); }
+            catch (RuntimeException ignored) {
+                // A failing vendor HTTP implementation cannot prevent the
+                // actual lockdown invalidation or other permit cleanup.
+            }
         }
 
         @Override public void close() {
