@@ -124,7 +124,9 @@ public final class FirewallSettings extends Activity {
         boolean requested = LockdownFirewall.armed(this);
         boolean running = LockdownFirewall.running();
         boolean verified = LockdownFirewall.systemLockdownVerified();
-        text(page, "Default: CubeChat peer connections only. All other app IP packets are dropped while the firewall VPN runs.", 16, INK);
+        boolean owner = ManagedLockdownController.isDeviceOwner(this);
+        boolean managed = owner && ManagedLockdownController.restrictionsPresent(this);
+        text(page, "Default: CubeChat peer connections only. Other apps' ordinary IP packets are dropped while this firewall VPN runs.", 16, INK);
         Switch toggle = new Switch(this);
         toggle.setText("IP lockdown");
         toggle.setTextSize(19);
@@ -143,6 +145,16 @@ public final class FirewallSettings extends Activity {
         String error = LockdownFirewall.failure();
         if (!error.isEmpty()) text(page, "VPN error: " + error, 14, DANGER);
         if (requested && !running) button(page, "Retry firewall", this::enable);
+        if (owner) {
+            if (requested && managed) text(page,
+                    "MANAGED DEVICE · Bluetooth and Wi-Fi Direct are denied at the OS policy level. Wi-Fi remains in its existing on/off state; other apps' IP remains subject to the VPN.", 16, 0xff185f46);
+            else if (requested) {
+                text(page, "MANAGED POLICY INCOMPLETE · One or more device-owner radio restrictions are not confirmed. Treat lockdown as partial.", 16, DANGER);
+                button(page, "Retry managed restrictions", this::applyManaged);
+            } else text(page, "Device-owner authorization detected · Enabling lockdown will apply stronger radio and OS-network restrictions.", 15, MUTED);
+        } else {
+            text(page, "STANDARD APPLICATION · This installation cannot enforce device-owner radio restrictions. A malicious app with elevated privileges may circumvent IP filtering.", 15, DANGER);
+        }
         button(page, "Open Android VPN settings", () -> open(Settings.ACTION_VPN_SETTINGS));
         text(page, "REQUIRED for fail-closed IP filtering: Select CubeChat as Always-on VPN, then enable Block connections without VPN in Android's VPN settings. Android may require a separate VPN consent prompt.", 15, MUTED);
         if (Build.VERSION.SDK_INT < 29) text(page,
@@ -162,11 +174,16 @@ public final class FirewallSettings extends Activity {
 
     private void showRadios() {
         text(page, "Radio exposure controls", 19, INK);
-        text(page, "The VPN does not prevent Bluetooth discovery/pairing, Wi-Fi probe traffic, hotspot beacons, nearby-device advertisements, mobile registration or calls. Other applications can still access Bluetooth with their Android permissions.", 16, DANGER);
+        text(page, "The VPN does not prevent Bluetooth discovery/pairing, Wi-Fi probe traffic, hotspot beacons, nearby-device advertisements, mobile registration or calls. Other applications may access Bluetooth with Android permissions unless a managed-device restriction disables it.", 16, DANGER);
         text(page, "For strict radio quiet, manually turn Bluetooth off and disable Wi-Fi Direct discovery, hotspot and nearby sharing in Android. Keep only the radio needed for your selected CubeChat transport. CubeChat cannot force these device-wide states as an ordinary Android app.", 16, MUTED);
         button(page, "Bluetooth settings", () -> open(Settings.ACTION_BLUETOOTH_SETTINGS));
         button(page, "Wi-Fi settings", () -> open(Settings.ACTION_WIFI_SETTINGS));
-        text(page, "Future managed-device edition: device-owner restrictions, radio-policy status and verified application allowlists. Device-owner enrollment is a separate, destructive administrative setup process and will never happen silently.", 15, MUTED);
+        if (ManagedLockdownController.isDeviceOwner(this)) {
+            text(page, "Device owner active. Managed lockdown blocks Bluetooth and Wi-Fi Direct for EVERY app, including CubeChat. Use Wi-Fi IP chat while strict managed lockdown is on. Cellular signaling is not under this controller.", 15, INK);
+            text(page, "Wi-Fi is not physically cut off. It remains under Android's driver and its current radio state is locked on Android 13+. A privileged OS exploit is still outside this guarantee.", 15, MUTED);
+        } else {
+            text(page, "Device owner unavailable. To obtain stronger radio restrictions requires deliberate fully managed device provisioning, typically during initial setup or after a factory reset. This screen cannot self-provision or silently reset the phone.", 15, MUTED);
+        }
     }
 
     private void open(String action) {
@@ -184,6 +201,14 @@ public final class FirewallSettings extends Activity {
         }
         try {
             LockdownFirewall.setArmed(this, true);
+        } catch (Exception e) {
+            Toast.makeText(this, "Could not save firewall request: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            render(); return;
+        }
+        // Even if a later managed-policy operation fails, attempt local packet
+        // filtering. Never silently roll the entire request back to "off".
+        if (ManagedLockdownController.isDeviceOwner(this)) applyManaged();
+        try {
             LockdownFirewall.start(this);
         } catch (Exception e) {
             Toast.makeText(this, "Could not start firewall: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -191,22 +216,38 @@ public final class FirewallSettings extends Activity {
         render();
     }
 
+    private void applyManaged() {
+        if (!ManagedLockdownController.isDeviceOwner(this) || !LockdownFirewall.armed(this)) return;
+        try {
+            ManagedLockdownController.enforce(this);
+        } catch (Exception e) {
+            Toast.makeText(this, "Managed protection incomplete: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+        render();
+    }
+
     private void disable() {
-        if (LockdownFirewall.systemLockdownVerified()) {
-            new AlertDialog.Builder(this).setTitle("Turn off firewall?")
-                    .setMessage("Android is in VPN lockdown. Stopping CubeChat's VPN can leave the phone without internet until you disable Always-on VPN or Block connections without VPN in Android settings.")
+        if (ManagedLockdownController.isDeviceOwner(this)
+                || LockdownFirewall.systemLockdownVerified()) {
+            new AlertDialog.Builder(this).setTitle("Turn off lockdown?")
+                    .setMessage("This removes CubeChat's managed restrictions and packet filtering when permitted. Other applications may regain network access. If a separate Android VPN lockdown remains, internet may stay blocked until it is switched off in Android settings.")
                     .setNegativeButton("Keep enabled", (d, w) -> render())
-                    .setPositiveButton("Stop firewall", (d, w) -> stopFirewall())
+                    .setPositiveButton("Disable lockdown", (d, w) -> stopFirewall())
                     .show();
         } else stopFirewall();
     }
 
     private void stopFirewall() {
         try {
+            // Managed policies first: if Android refuses to release them, keep
+            // the IP deny rule armed and tell the user that shutdown failed.
+            ManagedLockdownController.release(this);
             LockdownFirewall.setArmed(this, false);
             LockdownFirewall.stop(this);
         } catch (Exception e) {
-            Toast.makeText(this, "Could not stop firewall: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Could not fully disable lockdown: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
         }
         render();
     }
