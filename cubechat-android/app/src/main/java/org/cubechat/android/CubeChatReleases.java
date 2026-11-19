@@ -34,19 +34,37 @@ final class CubeChatReleases {
     }
 
     interface Reader { String read(String url, int limit) throws IOException; }
+    interface AccessCheck { void verify() throws IOException; }
 
     static Offer check(long installed) throws IOException, JSONException {
-        return check(installed, CubeChatReleases::read);
+        return check(installed, () -> {});
     }
 
+    /** Production entry point; checks revocation before each connection and read. */
+    static Offer check(long installed, AccessCheck access) throws IOException, JSONException {
+        return check(installed, (url, limit) -> read(url, limit, access), access);
+    }
+
+    /** Retain the original offline-fixture entry point without changing its API. */
     static Offer check(long installed, Reader reader) throws IOException, JSONException {
+        return check(installed, reader, () -> {});
+    }
+
+    static Offer check(long installed, Reader reader, AccessCheck access)
+            throws IOException, JSONException {
         Offer best = null;
         boolean invalid = false;
         for (long page = 1; ; page++) {
+            access.verify();
             JSONArray batch;
             try {
-                batch = new JSONArray(reader.read(API + "?per_page=" + PAGE + "&page=" + page, 4 * 1024 * 1024));
+                String pageData = reader.read(API + "?per_page=" + PAGE + "&page=" + page, 4 * 1024 * 1024);
+                access.verify();
+                batch = new JSONArray(pageData);
             } catch (IOException | JSONException unavailable) {
+                // A security cancellation must never be converted into a
+                // partially validated update suggestion or a successful scan.
+                access.verify();
                 if (best == null || Thread.currentThread().isInterrupted()) throw unavailable;
                 invalid = true;
                 break;
@@ -71,7 +89,10 @@ final class CubeChatReleases {
                     continue;
                 }
                 try {
-                    JSONObject metadata = new JSONObject(reader.read(manifestUrl, 32768));
+                    access.verify();
+                    String manifestData = reader.read(manifestUrl, 32768);
+                    access.verify();
+                    JSONObject metadata = new JSONObject(manifestData);
                     Object codeValue = metadata.get("versionCode");
                     long code = metadata.getLong("versionCode");
                     String hash = metadata.getString("sha256");
@@ -90,12 +111,14 @@ final class CubeChatReleases {
                         best = new Offer(code, version, apkUrl, notes, false);
                     }
                 } catch (IOException | JSONException missingOrMalformed) {
+                    access.verify();
                     if (Thread.currentThread().isInterrupted()) throw missingOrMalformed;
                     invalid = true;
                 }
             }
             if (batch.length() < PAGE) break;
         }
+        access.verify();
         if (!invalid) return best;
         if (best == null) throw new IOException("CubeChat release metadata could not be fully verified.");
         return new Offer(best.code, best.version, best.url, best.notes, true);
@@ -119,9 +142,10 @@ final class CubeChatReleases {
         return null;
     }
 
-    private static String read(String address, int limit) throws IOException {
+    private static String read(String address, int limit, AccessCheck access) throws IOException {
         URL next = new URL(address);
         for (int hop = 0; hop <= 4; hop++) {
+            access.verify();
             if (Thread.currentThread().isInterrupted()) throw new IOException("Update check interrupted.");
             String host = next.getHost();
             if (!"https".equals(next.getProtocol()) || next.getUserInfo() != null || (next.getPort() != -1 && next.getPort() != 443)
@@ -129,6 +153,7 @@ final class CubeChatReleases {
                     || "release-assets.githubusercontent.com".equals(host) || "objects.githubusercontent.com".equals(host))) {
                 throw new IOException("Unrecognized update source.");
             }
+            access.verify();
             HttpURLConnection c = (HttpURLConnection) next.openConnection();
             c.setRequestProperty("User-Agent", "CubeChat Android updater");
             c.setRequestProperty("Accept", "api.github.com".equals(host) ? "application/vnd.github+json" : "*/*");
@@ -136,7 +161,9 @@ final class CubeChatReleases {
             c.setConnectTimeout(7000);
             c.setReadTimeout(10000);
             try {
+                access.verify();
                 int status = c.getResponseCode();
+                access.verify();
                 if (status == 301 || status == 302 || status == 303 || status == 307 || status == 308) {
                     String location = c.getHeaderField("Location");
                     if (location == null) throw new IOException("Missing release redirect.");
@@ -145,12 +172,18 @@ final class CubeChatReleases {
                 }
                 if (status != 200) throw new IOException("GitHub returned HTTP " + status + ".");
                 if (c.getContentLengthLong() > limit) throw new IOException("Release metadata is too large.");
+                access.verify();
                 try (InputStream in = c.getInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
                     byte[] chunk = new byte[8192];
-                    for (int n; (n = in.read(chunk)) != -1;) {
+                    while (true) {
+                        access.verify();
+                        int n = in.read(chunk);
+                        access.verify();
+                        if (n < 0) break;
                         if (out.size() + n > limit) throw new IOException("Release metadata is too large.");
                         out.write(chunk, 0, n);
                     }
+                    access.verify();
                     return new String(out.toByteArray(), StandardCharsets.UTF_8);
                 }
             } finally { c.disconnect(); }
