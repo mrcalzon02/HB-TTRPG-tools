@@ -22,7 +22,13 @@ The **Recovery** tab writes an ordinary manual release journal entry *before* at
 
 Both the **Recovery** and **Device** tabs offer an explicit copy action for compact diagnostics. Copied data is marked as sensitive so compatible Android versions obscure its visual clipboard preview. **It is still a normal system clipboard item:** other applications with access may read it. Copy only if you intend to share the report; neither tab automatically exports the information. The report excludes chat messages, contact identities, SIM/subscriber identifiers, network packet contents and location observations.
 
-## Managed-device VPN ownership protection (development builds)
+## Managed-device safeguards and current deployment gate (development builds)
+
+**Advanced managed-device lockdown is intentionally disabled in this APK.** Even on an already-provisioned device-owner phone, the IP lockdown switch does not install new device-owner radio restrictions or a managed Always-on VPN. CubeChat does not have a verified early trusted-platform priority-release handoff, so these persistent restrictions cannot be represented as a safe automatic feature. The normal opt-in Android VPN fallback remains separate and needs Android's VPN consent/settings; it is not a hardware radio or emergency compatibility guarantee. If an older build left CubeChat-managed restrictions, the **Recovery** tab can attempt to remove them and report what Android does and does not confirm.
+
+The [GuardianDeploymentGate](app/src/main/java/org/cubechat/android/GuardianDeploymentGate.java) marks device-owner, kernel-IP, radio-driver and cellular-modem enforcement disabled until dedicated hardware/OS integration is reviewed. The device-owner gate does not inspect, simulate or invoke telephone/emergency procedures.
+
+## Legacy managed-device VPN ownership notes
 
 When a phone is already provisioned with CubeChat as its **device owner**, manual lockdown cleanup attempts to remove only CubeChat's managed restrictions and VPN configuration. It now reads the configured always-on VPN package first. A different VPN package is preserved.
 
