@@ -89,6 +89,12 @@ public final class FirewallRecoveryUiTest {
         assertTrue("Release attempt timestamp saved",
                 app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
                         .contains("last-release-at"));
+        String steps = app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
+                .getString("last-release-steps", "");
+        assertTrue("Recovery saves distinct managed-policy command status",
+                steps.contains("Managed-device release: REQUEST_COMPLETED"));
+        assertTrue("Recovery saves distinct VPN stop command status",
+                steps.contains("CubeChat VPN stop request: REQUEST_COMPLETED"));
         // Release rerenders the Activity, replacing its previous content view.
         // Inspect the NEW tree; a stale root can never see the updated status.
         View refreshed = activity.findViewById(android.R.id.content);
