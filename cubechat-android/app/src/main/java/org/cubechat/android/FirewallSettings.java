@@ -118,7 +118,7 @@ public final class FirewallSettings extends Activity {
         text(root, "CubeChat · Firewall settings", 23, INK);
         LinearLayout tabs = new LinearLayout(this);
         tabs.setOrientation(LinearLayout.HORIZONTAL);
-        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections", "Recovery"};
+        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections", "Recovery", "Device"};
         for (int index = 0; index < names.length; index++) {
             final int selected = index;
             Button choice = new Button(this);
@@ -148,7 +148,8 @@ public final class FirewallSettings extends Activity {
         else if (tab == 1) showExceptions();
         else if (tab == 2) showRadios();
         else if (tab == 3) showConnections();
-        else showRecovery();
+        else if (tab == 4) showRecovery();
+        else showDevice();
     }
 
     private void showLockdown() {
@@ -271,6 +272,27 @@ public final class FirewallSettings extends Activity {
             render();
         });
         text(page, "Not enabled: rogue tower verdicts, cell selection, baseband blocking, background collection, cloud uploads and persistent location history.", 14, DANGER);
+    }
+
+    /**
+     * Device capabilities are an Android-declared read-only snapshot, not an
+     * independent kernel driver or radio-power audit. No radio scan occurs.
+     */
+    private void showDevice() {
+        text(page, "RadioGuard device inventory", 19, INK);
+        text(page, "Use this information when assessing a supported test handset. A reported Wi-Fi or modem feature does NOT prove driver access or safe kernel enforcement.", 15, MUTED);
+        String inventory = GuardianDeviceInventory.snapshot(this);
+        text(page, inventory, 14, INK);
+        button(page, "Copy device inventory", () -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            if (clipboard == null) {
+                Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_LONG).show();
+                return;
+            }
+            clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat RadioGuard device inventory", inventory));
+            Toast.makeText(this, "Inventory copied · includes model and software versions", Toast.LENGTH_SHORT).show();
+        });
+        text(page, "No hardware access was requested, no cellular registration was changed, and no location or subscriber identifiers were collected. Physical radio and early priority-release guarantees remain unverified.", 14, DANGER);
     }
 
     /**
