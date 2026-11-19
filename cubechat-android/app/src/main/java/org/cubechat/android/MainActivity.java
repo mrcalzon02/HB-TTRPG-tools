@@ -146,10 +146,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         DisplayPrivacy.apply(this);
         // The Java transport helpers remain Android-independent for host regressions.
         // Only CubeChat's audited peer sockets receive VPN protection.
+        android.content.Context networkApp = getApplicationContext();
         LanDiscovery.setSocketProtector(socket ->
-                LockdownFirewall.protectChatDatagram(getApplicationContext(), socket));
+                LockdownFirewall.protectChatDatagram(networkApp, socket));
         RelayForwarder.setSocketProtector(socket ->
-                LockdownFirewall.protectChatSocket(getApplicationContext(), socket));
+                LockdownFirewall.protectChatSocket(networkApp, socket));
         buildScreen();
         securityChanged();
         updates = new UpdateCheck(this, updateBanner);
