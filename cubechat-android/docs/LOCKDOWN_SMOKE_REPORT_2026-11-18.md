@@ -5,6 +5,8 @@
 **Final passing run:** [GitHub Actions #44454923448](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44454923448)  
 **Status:** **PASS application compilation, automated tests and emulator; NOT approved for actual-phone security installation or privileged radio control.**
 
+> **Superseding safety decision (2026-11-18):** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md). This report records past build evidence only, not an emergency-call test. No future CubeChat/RadioGuard emergency-call continuity tests are permitted under any circumstances (real, simulated, lab, carrier, manual or automated). Emergency call impact remains **NOT_TESTED_BY_PROJECT**.
+
 ## Implemented on main
 
 - Firewall **Connections** tab; manual, permission-gated, read-only registered/neighboring cellular observations, timestamp, numeric IDs, technology, and signal where Android reports them. Android 10+ can request an updated observation, with throttling and no guaranteed modem response.
@@ -42,7 +44,7 @@
 
 1. Physical Android permission grant/deny/revocation, GPS disabled, no SIM, dual SIM/eSIM, roaming, airplane, sleep/wake, cellular modem reporting and battery tests.
 2. Independent IPv4/IPv6, DNS, VPN, QUIC, system UID, captive portal, boot, process death and Always-on lockdown *external packet capture*; do not infer absence of IP leaks from unit tests.
-3. Voice, incoming calls, SMS, IMS/VoLTE, Wi-Fi calling, radio recovery and update/rollback on expendable phone hardware. Never automate actual emergency-number calls.
+3. **Ordinary non-emergency** voice, incoming calls, SMS, IMS/VoLTE, Wi-Fi calling, radio recovery and update/rollback on expendable phone hardware. **All emergency-call continuity testing is prohibited**, not merely automated dialing; no simulations or laboratory exceptions. Emergency availability remains **NOT_TESTED_BY_PROJECT**.
 4. Narrow authenticated privileged helper and safe root module uninstall; enforce protections only through documented supported device hooks; no arbitrary shell command endpoint.
 5. Vendor- and firmware-specific radio readback; no rogue-cell blacklist or full RF-silence claim until demonstrated on identified hardware.
 6. Full two-phone encrypted chat/file/receipt and release-signed upgrade acceptance. Existing build success alone is not sufficient.
