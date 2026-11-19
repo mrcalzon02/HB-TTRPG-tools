@@ -69,6 +69,17 @@ public final class LockdownFirewallTest {
         }
     }
 
+    @Test public void armingPolicyRevokesExistingUpdatePermitIrreversibly() throws Exception {
+        UpdateRunGate.Permit permit = UpdateRunGate.enter(() -> true);
+        permit.verify();
+        LockdownFirewall.setArmed(app, true);
+        assertFalse("Lockdown must revoke outstanding update permission", permit.allowed());
+        LockdownFirewall.setArmed(app, false);
+        assertFalse("Releasing lockdown never resurrects old update traffic", permit.allowed());
+        UpdateRunGate.Permit newer = UpdateRunGate.enter(() -> !LockdownFirewall.armed(app));
+        assertTrue("New ordinary checks can be authorized after release", newer.allowed());
+    }
+
     @Test public void disablingPolicyRestoresOrdinarySocketBehavior() throws Exception {
         try (Socket socket = new Socket(); DatagramSocket datagram = new DatagramSocket(null)) {
             LockdownFirewall.protectChatSocket(app, socket);
