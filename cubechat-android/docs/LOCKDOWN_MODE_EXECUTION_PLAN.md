@@ -16,6 +16,14 @@
 6. **Known-cell history is an anomaly heuristic, not a physical tower certificate.** Broadcast cellular identities are spoofable; identifying a specific rogue base station or selectively blocking it requires hardware support not yet demonstrated.
 7. **No changes to existing firewall enforcement paths** until feasibility assessment selects a device-specific approach, tests can show no unintended bypass and a recovery procedure exists. Documentation and isolated lab harnesses may proceed now.
 
+## November 18, 2026 · P0 lower-layer security boundaries and P1 offline model
+
+[P0 kernel/radio boundaries, bypass inventory and critical telephone-service matrix](RADIOGUARD_KERNEL_AND_RADIO_BOUNDARIES.md) is now the operational source for packet-path assumptions. It explicitly distinguishes the Android application / framework / kernel / vendor / baseband trust boundaries, explains why XDP alone does not cover outbound traffic, and requires verified external packet measurements before kernel enforcement can be claimed.
+
+A **pure host-only** `GuardianTrafficPolicy` reference contract models exact per-UID, socket-cookie, destination, port, protocol, interface, direction and policy-generation grants with monotonic expiry. The `GuardianTrafficPolicyTest` adds **41 offline assertions** for denial of IPv4/IPv6, DNS, UDP/QUIC, root/system identity, unsolicited ingress, wrong socket identity, stale grants and non-IP scope. The class has **no privileged operating-system effect**. The main smoke script now compiles/runs these fixtures. A local Java 17-targeted reproduction passed 41 checks; the repository's CI has **not** been rerun on this revision.
+
+**Remaining blockers:** exact spare-handset identity, kernel feature/attachment probes, vendor modem path and irreversible-change preflight; no actual eBPF kernel program, driver, baseband filter, root service or independently measured radio suppression exists. Preserve the runtime-firewall freeze until those gates are resolved.
+
 ## 1. Existing code audit (read-only, not release certification)
 
 On `main` as reviewed after commits `02c86a8` and `467c67e`:
@@ -142,10 +150,10 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 - [x] Ingest paused Lockdown Mode direction: prioritize lower-layer radio/kernel evaluation, retain existing VPN as compatibility fallback, preserve one-APK requirement.
 - [x] Audit current committed Android firewall, device-owner, manifest and existing tests (read-only).
 - [x] Commit this executable plan and link it from the Radio Guardian architecture document on `main`.
-- [ ] Inventory **supported kernel enforcement points** on an AOSP reference configuration (eBPF/cgroup/UID/netfilter, netd interactions), produce a bypass matrix.
-- [ ] Draft critical system survival-service matrix; classify unknowns as `UNVERIFIED`.
-- [ ] Define a host-testable policy `LockdownPolicy` + `GuardianCapabilities` + `GuardianAttestation` schema with no privileged operations.
-- [ ] Assemble offline synthetic observation/packet fixtures and write non-radio acceptance tests.
+- [x] Document candidate AOSP kernel hooks, netd ownership constraints and an explicit unverified bypass matrix. **Live hook support is not established until a real handset probe.**
+- [x] Draft critical system survival-service matrix; all unmeasured interfaces and services remain `UNVERIFIED`.
+- [x] Define the versioned `LockdownPolicy` / `GuardianCapabilities` / `GuardianAttestation` **proposed** wire contracts and an immutable exact-match Java IP policy model. Privileged IPC, attestation authenticity and enforcement remain open.
+- [x] Add offline synthetic packet, bypass and non-IP-scope tests (41 assertions) to manual smoke script. **No kernel/radio claims.**
 - [ ] Probe exact spare handset only after model/firmware and rollback information are available.
 - [ ] Implement passive Connections screen and threat history only after permission/privacy review.
 - [ ] Resume runtime firewall changes only after P0 findings and supported approach are reviewed.
