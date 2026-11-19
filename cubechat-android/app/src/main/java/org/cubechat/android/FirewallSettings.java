@@ -221,7 +221,7 @@ public final class FirewallSettings extends Activity {
                 text(page, "Previously configured device-owner restrictions are still reported. Use the Recovery tab to request ordinary removal; completion is not independently verified.", 15, DANGER);
             text(page, "Stock Android and the vendor modem retain radio/call authority. No hardware transmission cutoff is provided by CubeChat.", 15, MUTED);
         } else {
-            text(page, "Device owner unavailable. To obtain stronger radio restrictions requires deliberate fully managed device provisioning, typically during initial setup or after a factory reset. This screen cannot self-provision or silently reset the phone.", 15, MUTED);
+            text(page, "This device is not provisioned as CubeChat device owner. Provisioning or factory-resetting a phone would NOT unlock advanced RadioGuard restrictions in this build: those controls remain disabled until trusted priority release and independent device verification are available. Do not reset a phone just to enable this feature.", 15, DANGER);
         }
     }
 
