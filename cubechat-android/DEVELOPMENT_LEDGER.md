@@ -9,6 +9,15 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 19, 2026 · Experimental QR luminance artwork compositor
+
+- Added [QrLuminanceOverlay](app/src/main/java/org/cubechat/android/QrLuminanceOverlay.java), a **pure Java experimental compositor** that encodes an existing QR matrix as local sRGB-brightness changes over an ARGB image. Preserves original image array and colors as feasible, requires an already present four-module quiet zone and at least six output pixels per QR module, and fails on invalid geometry/contrast.
+- Existing pairing invite creation, scanner and standard black-and-white PNG export are **unchanged**. This prototype has **no user-facing switch or exporter yet**. A future optional export must decode the **final image** with ZXing, deny/revert on decoding failure, and retain the plain QR as the reliable fallback.
+- Added [19-assertion offline Java host test](tests/QrLuminanceOverlayTest.java) and [single-purpose run script](scripts/test-qr-luminance-host.sh). The exact committed Java compositor/test file blobs (`885d86e5c824e1619cf9a25570ff1fbb1b4b1201`, `f3b2d9d744ee4fc0271ddac3b26e9ba5f0e35a3a`) compiled via `javac --release 17` and passed **19/19**. No camera, network, phone, or actual pairing keys were involved.
+- **Synthetic decoder proof:** A 960×960 textured artificial background and dummy H-error-correction QR (57×57 modules including quiet zone) were processed using the **actual Java compositor** and then decoded with independent OpenCV `QRCodeDetector`. Strengths **0.40–1.00 decoded**, **0.30 did not detect**. This is a single controlled synthetic sample, **not a recommended universal scanner threshold** or proof of real camera/printing reliability.
+- Added `QrLuminanceOverlayDecodeTest` (Java ZXing end-to-end with dummy data) to Android unit tests, and wired the standalone host smoke into the [existing manual Android workflow](../.github/workflows/cubechat-lockdown-smoke.yml). **The Android/ZXing regression and full APK build have not run on this revision.**
+- **Security/privacy:** A hidden-looking QR is not cryptographic concealment. Anyone who scans the picture can obtain the embedded CubeChat invite and key material. Avoid exporting an artwork card until the image is demonstrated scan-ready and explicitly approved by its owner. Original QR export remains unchanged.
+
 ## November 19, 2026 · Fail-safe advanced enforcement gate and clearer user messaging
 
 **Reason for change:** Android's `DevicePolicyManager.getAlwaysOnVpnPackage(admin)` returns `null` if no app VPN is configured **or** a system-provided VPN is active. A null result cannot prove the VPN slot is empty. Further, this application has no authenticated early platform mechanism that guarantees relinquishing device-owner/network/radio controls when platform priority services require them.
