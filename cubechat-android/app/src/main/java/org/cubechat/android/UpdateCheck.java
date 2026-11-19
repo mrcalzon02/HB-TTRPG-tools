@@ -142,7 +142,7 @@ final class UpdateCheck {
 
     private void explainPaused() {
         DisplayPrivacy.dialog(activity).setTitle("Updates paused by lockdown")
-                .setMessage("CubeChat blocks ordinary update checks and browser downloads while IP lockdown is requested. Existing verified update information is preserved. To download, deliberately turn off lockdown and check again.")
+                .setMessage("CubeChat's updater does not contact GitHub or open its download link while lockdown is requested. Cached release information remains available. Other apps and browsers are controlled by Android's separate network policies. To update, explicitly turn off lockdown and check again.")
                 .setNegativeButton("Close", null)
                 .setPositiveButton("Firewall settings", (d, w) ->
                         activity.startActivity(new Intent(activity, FirewallSettings.class)))
