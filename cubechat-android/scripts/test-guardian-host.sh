@@ -26,4 +26,5 @@ java -cp "$classes" org.cubechat.android.LockdownRecoverySummaryTest
 java -cp "$classes" org.cubechat.android.GuardianDeviceInventoryTextTest
 java -cp "$classes" org.cubechat.android.UpdateRunGateTest
 java -cp "$classes" org.cubechat.android.LockdownReleaseReportTest
+bash "$here/scripts/test-lockdown-release-host.sh"
 bash "$here/scripts/test-radioguard-readonly-probe.sh"
