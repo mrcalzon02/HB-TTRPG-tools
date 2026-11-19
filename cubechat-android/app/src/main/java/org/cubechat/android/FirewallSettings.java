@@ -320,21 +320,23 @@ public final class FirewallSettings extends Activity {
         android.content.SharedPreferences recovery =
                 getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE);
         long attemptedAt = recovery.getLong("last-release-at", 0L);
+        LockdownReleaseJournal.Review review = LockdownReleaseJournal.inspect(
+                attemptedAt, recovery.getString("last-release-phase", null),
+                recovery.getBoolean("last-release-requests-sent", false));
         if (attemptedAt > 0) {
             String time = java.text.DateFormat.getDateTimeInstance().format(
                     new java.util.Date(attemptedAt));
-            String state = recovery.getBoolean("last-release-requests-sent", false)
-                    ? "Release requests sent; removal NOT independently verified"
-                    : "Some release requests FAILED";
-            text(page, "Last manual release · " + time + "\n" + state, 14,
-                    recovery.getBoolean("last-release-requests-sent", false) ? MUTED : DANGER);
-            String steps = recovery.getString("last-release-steps", "");
-            if (steps != null && !steps.isEmpty())
-                text(page, steps, 14,
-                        recovery.getBoolean("last-release-requests-sent", false)
-                                ? MUTED : DANGER);
+            text(page, "Last manual release · " + time + "\n" + review.label, 14,
+                    review.state == LockdownReleaseJournal.State.REQUESTS_SENT ? MUTED : DANGER);
+            if (review.showReceipts) {
+                String steps = recovery.getString("last-release-steps", "");
+                if (steps != null && !steps.isEmpty())
+                    text(page, steps, 14,
+                            review.state == LockdownReleaseJournal.State.REQUESTS_SENT
+                                    ? MUTED : DANGER);
+            }
         } else {
-            text(page, "No manual release attempt recorded on this installation.", 14, MUTED);
+            text(page, review.label, 14, MUTED);
         }
         button(page, "Release all CubeChat controls", () ->
                 new AlertDialog.Builder(this)
@@ -347,11 +349,12 @@ public final class FirewallSettings extends Activity {
         button(page, "Copy non-sensitive status summary", () -> {
             String report = snapshot.diagnostics;
             if (attemptedAt > 0) {
-                report += "\nLast manual release requests sent: "
-                        + (recovery.getBoolean("last-release-requests-sent", false) ? "YES" : "NO");
-                String steps = recovery.getString("last-release-steps", "");
-                if (steps != null && !steps.isEmpty())
-                    report += "\nLast cleanup commands (not verified removals):\n" + steps;
+                report += "\nLast manual release status: " + review.state.name();
+                if (review.showReceipts) {
+                    String steps = recovery.getString("last-release-steps", "");
+                    if (steps != null && !steps.isEmpty())
+                        report += "\nLast cleanup commands (not verified removals):\n" + steps;
+                }
             }
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             if (clipboard == null) {
@@ -504,20 +507,31 @@ public final class FirewallSettings extends Activity {
     }
 
     private void stopFirewall() {
+        // Write-ahead receipt: if the app is terminated during this ordinary
+        // manual cleanup, Recovery must show an INTERRUPTED state instead of
+        // replaying the previous attempt's successful-looking receipt.
+        android.content.SharedPreferences recovery =
+                getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE);
+        boolean startedSaved = recovery.edit()
+                .putLong("last-release-at", System.currentTimeMillis())
+                .putString("last-release-phase", LockdownReleaseJournal.STARTED)
+                .remove("last-release-requests-sent")
+                .remove("last-release-steps")
+                .commit();
+        // Cleanup is safety-critical relative to the request: it proceeds
+        // regardless of whether writing the journal entry was possible.
         LockdownReleaseController.Result result =
                 LockdownReleaseController.releaseAllOwnedControls(this);
-        // Record only the result of issuing cleanup requests; never claim a
-        // verified physical radio shutdown or removal of OS-owned policies.
-        // Persist the last command receipt synchronously, as with the actual
-        // firewall armed preference: a process exit must not silently discard
-        // the user's most recent cleanup outcome.
-        boolean receiptSaved = getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE).edit()
-                .putLong("last-release-at", System.currentTimeMillis())
+        boolean receiptSaved = recovery.edit()
+                .putString("last-release-phase", result.requestsCompleted
+                        ? LockdownReleaseJournal.REQUESTS_SENT
+                        : LockdownReleaseJournal.REQUESTS_FAILED)
                 .putBoolean("last-release-requests-sent", result.requestsCompleted)
                 .putString("last-release-steps", result.stepSummary)
                 .commit();
-        Toast.makeText(this, receiptSaved ? result.detail
-                : result.detail + " Cleanup receipt could not be saved.", Toast.LENGTH_LONG).show();
+        String warning = (!startedSaved || !receiptSaved)
+                ? " Cleanup history could not be saved reliably." : "";
+        Toast.makeText(this, result.detail + warning, Toast.LENGTH_LONG).show();
         render();
     }
 
