@@ -43,8 +43,9 @@ public final class UpdateCheckLockdownTest {
             updater.check(true);
             AlertDialog dialog = ShadowAlertDialog.getLatestAlertDialog();
             assertNotNull("A clear explanation replaces an HTTP timeout", dialog);
-            assertEquals("Updates paused by lockdown", dialog.getWindow() == null
-                    ? dialog.getTitle().toString() : dialog.getTitle().toString());
+            assertNotNull("Dialog includes firewall navigation", dialog.getButton(AlertDialog.BUTTON_POSITIVE));
+            assertEquals("Firewall settings",
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).getText().toString());
             assertFalse("No network check timestamp should be written",
                     app.getSharedPreferences("app-updates", Context.MODE_PRIVATE)
                             .contains("checked"));
