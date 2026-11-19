@@ -105,6 +105,81 @@ final class ManagedLockdownController {
                     + String.join(", ", failures));
     }
 
+    /**
+     * Read-only snapshot of restrictions issued through THIS admin. A partial
+     * teardown must not look identical to a completely clean device.
+     * Android may report null for system-owned Always-on VPN configurations;
+     * those remain outside this application's attestation.
+     */
+    static final class Audit {
+        final boolean deviceOwner;
+        final boolean restrictionsReadable, vpnReadable;
+        final int appliedRestrictions, totalRestrictions;
+        final boolean cubechatOwnsAlwaysOnVpn;
+        final String vpnState;
+
+        Audit(boolean owner, boolean restrictionsReadable, boolean vpnReadable,
+              int applied, int total, boolean ownsVpn, String vpnState) {
+            this.deviceOwner = owner;
+            this.restrictionsReadable = restrictionsReadable;
+            this.vpnReadable = vpnReadable;
+            this.appliedRestrictions = applied;
+            this.totalRestrictions = total;
+            this.cubechatOwnsAlwaysOnVpn = ownsVpn;
+            this.vpnState = vpnState;
+        }
+
+        String localSummary() {
+            if (!deviceOwner) return "Device owner: not provisioned";
+            String restrictions = restrictionsReadable
+                    ? appliedRestrictions + " of " + totalRestrictions + " CubeChat policy restrictions reported"
+                    : "CubeChat restriction readback unavailable";
+            return restrictions + "\\nCubeChat-owned always-on VPN: " + vpnState;
+        }
+    }
+
+    static Audit audit(Context context) {
+        if (!isDeviceOwner(context)) return new Audit(
+                false, false, false, 0, 0, false, "NOT_DEVICE_OWNER");
+
+        DevicePolicyManager dpm = manager(context);
+        ComponentName owner = admin(context);
+        String[] known = Build.VERSION.SDK_INT >= 33
+                ? new String[] { UserManager.DISALLOW_BLUETOOTH,
+                    UserManager.DISALLOW_BLUETOOTH_SHARING,
+                    UserManager.DISALLOW_CONFIG_BLUETOOTH,
+                    UserManager.DISALLOW_WIFI_DIRECT,
+                    UserManager.DISALLOW_WIFI_TETHERING,
+                    UserManager.DISALLOW_CHANGE_WIFI_STATE,
+                    UserManager.DISALLOW_CONFIG_VPN }
+                : new String[] { UserManager.DISALLOW_BLUETOOTH,
+                    UserManager.DISALLOW_BLUETOOTH_SHARING,
+                    UserManager.DISALLOW_CONFIG_BLUETOOTH,
+                    UserManager.DISALLOW_CONFIG_VPN };
+        boolean restrictionsReadable = false;
+        int applied = 0;
+        try {
+            Bundle restrictions = dpm.getUserRestrictions(owner);
+            if (restrictions != null) {
+                restrictionsReadable = true;
+                for (String name : known) if (restrictions.getBoolean(name, false)) applied++;
+            }
+        } catch (RuntimeException ignored) { /* Not proven cleared. */ }
+
+        boolean vpnReadable = false;
+        boolean ownVpn = false;
+        String vpnState = "UNVERIFIED";
+        try {
+            String vpn = dpm.getAlwaysOnVpnPackage(owner);
+            vpnReadable = true;
+            ownVpn = context.getPackageName().equals(vpn);
+            vpnState = ownVpn ? "REPORTED_ACTIVE"
+                    : vpn == null ? "NONE_OR_SYSTEM" : "ANOTHER_PACKAGE";
+        } catch (RuntimeException ignored) { /* Not proven cleared. */ }
+        return new Audit(true, restrictionsReadable, vpnReadable,
+                applied, known.length, ownVpn, vpnState);
+    }
+
     static boolean restrictionsPresent(Context context) {
         if (!isDeviceOwner(context)) return false;
         DevicePolicyManager dpm = manager(context);
