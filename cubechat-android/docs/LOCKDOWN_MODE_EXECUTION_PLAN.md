@@ -158,6 +158,12 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 | OTA, baseband update, root removal, APK uninstall | Fail to safe/monitor-only mode, remove/disable helper where explicitly authorized, preserve OS boot and normal calls |
 | Clean and upgraded APK, offline P2P, attachment transfer, receipt, updater | No regression in existing CubeChat features or storage |
 
+## November 19, 2026 — Read-only ADB preflight (no privileged operations)
+
+A developer-invoked [hardware feasibility probe](../scripts/radioguard-readonly-probe.sh) now reads version, kernel, SELinux and limited non-sensitive capability hints **only when an explicit ADB device serial is provided**. It never installs or roots anything, changes radio settings, opens a network connection, tests calling, or scans cellular systems. A separate [mocked-ADB host check](../scripts/test-radioguard-readonly-probe.sh) validates its read-only query allowlist without touching any hardware; the host smoke script includes it.
+
+**Interpretation:** Build fingerprints and boot property values are unverified hints, not proof of a working BPF hook, intact verified boot, secure radio driver, viable rollback, or independent priority release. A selected device still requires the documented six-check preflight before any destructive operation. No mobile phone was probed in this iteration.
+
 ## 7. Immediate next execution batch
 
 - [x] Ingest paused Lockdown Mode direction: prioritize lower-layer radio/kernel evaluation, retain existing VPN as compatibility fallback, preserve one-APK requirement.
@@ -167,6 +173,7 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 - [x] Draft critical system survival-service matrix; all unmeasured interfaces and services remain `UNVERIFIED`.
 - [x] Define the versioned `LockdownPolicy` / `GuardianCapabilities` / `GuardianAttestation` **proposed** wire contracts and an immutable exact-match Java IP policy model. Privileged IPC, attestation authenticity and enforcement remain open.
 - [x] Add offline synthetic packet, bypass and non-IP-scope tests (41 assertions) to manual smoke script. **No kernel/radio claims.**
+- [x] Add manual, read-only ADB inventory script and host-only mock checks. **No handset has been probed or marked compatible.**
 - [ ] Probe exact spare handset only after model/firmware and rollback information are available.
 - [ ] Implement passive Connections screen and threat history only after permission/privacy review.
 - [ ] Resume runtime firewall changes only after P0 findings and supported approach are reviewed.
