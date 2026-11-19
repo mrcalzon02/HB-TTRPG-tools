@@ -56,6 +56,13 @@ final class UpdateCheck {
 
     void check(boolean requested) {
         if (closed) return;
+        // A release check is NOT an authorized CubeChat peer connection.
+        // Skip it entirely while lockdown is requested; do not burn battery on
+        // blocked HTTP timeouts or generate false "network broken" notices.
+        if (LockdownFirewall.armed(activity)) {
+            if (requested) explainPaused();
+            return;
+        }
         if (!requested) {
             long elapsed = System.currentTimeMillis() - saved.getLong("checked", 0);
             long interval = offer != null && offer.incomplete ? TimeUnit.MINUTES.toMillis(15) : TimeUnit.HOURS.toMillis(6);
@@ -72,6 +79,12 @@ final class UpdateCheck {
         if (checking) return;
         checking = true;
         network.execute(() -> {
+            // Re-evaluate after queueing; policy could have changed before this
+            // worker began. No automatic retry or special network exemption.
+            if (LockdownFirewall.armed(activity)) {
+                activity.runOnUiThread(() -> { checking = false; manual = false; });
+                return;
+            }
             try {
                 CubeChatReleases.Offer newest = CubeChatReleases.check(installedCode);
                 activity.runOnUiThread(() -> {
@@ -112,8 +125,21 @@ final class UpdateCheck {
         banner.setVisibility(offer == null ? View.GONE : View.VISIBLE);
     }
 
+    private void explainPaused() {
+        DisplayPrivacy.dialog(activity).setTitle("Updates paused by lockdown")
+                .setMessage("CubeChat blocks ordinary update checks and browser downloads while IP lockdown is requested. Existing verified update information is preserved. To download, deliberately turn off lockdown and check again.")
+                .setNegativeButton("Close", null)
+                .setPositiveButton("Firewall settings", (d, w) ->
+                        activity.startActivity(new Intent(activity, FirewallSettings.class)))
+                .show();
+    }
+
     private void review() {
         CubeChatReleases.Offer update = offer;
+        if (LockdownFirewall.armed(activity)) {
+            explainPaused();
+            return;
+        }
         if (update == null) {
             DisplayPrivacy.dialog(activity).setTitle("CubeChat is up to date")
                     .setMessage("Installed CubeChat " + installed + " (build " + installedCode + ").")
@@ -129,6 +155,10 @@ final class UpdateCheck {
     }
 
     private void open(String url) {
+        if (LockdownFirewall.armed(activity)) {
+            explainPaused();
+            return;
+        }
         // Resolve a generic HTTPS address to prefer the system browser even if a GitHub client handles release links.
         Intent view = new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE);
         Intent generic = new Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org/")).addCategory(Intent.CATEGORY_BROWSABLE);
