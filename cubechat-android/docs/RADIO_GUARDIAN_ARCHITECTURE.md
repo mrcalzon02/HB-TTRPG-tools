@@ -1,6 +1,7 @@
 # CubeChat Radio Guardian — single-APK architecture RFC
 
 Status: **design proposal only; not implemented, built, or device-validated**  
+**Mandatory exclusion:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md) — never test emergency-call continuity by any method, including simulations or labs.  
 Reviewed: 2026-11-18  
 Scope: CubeChat Android `org.cubechat.android`, existing local VPN lockdown, cellular/Wi-Fi/Bluetooth observation, optional device-specific elevated radio enforcement.
 
@@ -10,7 +11,7 @@ Scope: CubeChat Android `org.cubechat.android`, existing local VPN lockdown, cel
 
 Ship **one user-facing, signed CubeChat APK** that functions as a normal messenger and security monitor on unmodified Android phones. If a device has been *separately and knowingly* provisioned for root or an integrated OS build, the same APK may offer an **optional** privileged Radio Guardian engine. It must never pretend ordinary APK installation grants modem control.
 
-Keep Android's normal telephony stack, call handling, SMS, SIM/eSIM management, carrier services, emergency calling, Wi-Fi calling, mobile data, and OTA compatibility unless the user explicitly selects a supported restriction. The guardian is not a replacement baseband firmware or a universal radio driver.
+Keep Android's normal telephony stack, ordinary call handling, SMS, SIM/eSIM management, carrier services, Wi-Fi calling, mobile data, and OTA compatibility unless the user explicitly selects a supported restriction. **Do not modify or test emergency calling**; its availability cannot be certified by this project. The guardian is not a replacement baseband firmware or a universal radio driver.
 
 ## One package, three capability tiers
 
@@ -53,7 +54,7 @@ Collect only metadata needed for user-selected diagnostics; never retain packet 
 - Keep the existing no-upstream, drop-by-default VPN and Android Always-on + Block without VPN confirmation separately displayed. Never claim it intercepts cellular signaling, emergency calls or all privileged OS traffic. Keep one-VPN-at-a-time limitations.
 - AOSP privileged permissions require appropriate system placement/permission allowlists; a normal signed APK or root subprocess does not automatically become a platform-signed privileged app. SELinux remains enforcing. Prefer an additive system service instead of replacing the vendor Radio HAL.
 - AIDL/VINTF/HIDL and modem interfaces vary by device and Android release. A privileged app cannot invent cell-bar commands the firmware does not expose.
-- Preserve phone call state, default dialer, mobile network registration, SIM/eSIM, IMS/VoLTE, Wi-Fi calling, alarms, network validation and update reliability. When radio security and emergency access conflict, preserve emergency call path and report the exception.
+- Preserve ordinary non-emergency phone calls, default dialer, mobile network registration, SIM/eSIM, IMS/VoLTE, Wi-Fi calling, alarms, network validation and update reliability. Do not modify or test the emergency-call path. Flag potential interference as **NOT_TESTED_BY_PROJECT** and avoid claims of preserved emergency-call functionality.
 - Guard against OTA compatibility: detect build/fingerprint changes, disable unvalidated adapters, and fall back to safe standard observation mode.
 
 ## Installation experience
@@ -74,7 +75,7 @@ Statuses reported independently:
 - **Radio control:** `NONE` / `PRIVILEGED_AVAILABLE` / `RESTRICTION_REQUESTED` / `RESTRICTION_READBACK_CONFIRMED` / `FAILED`.
 - **Cell identity:** `UNVERIFIED` always for purely broadcast-based fingerprints; risk assessment is not cryptographic tower authentication.
 
-Policy modes: `MONITOR` (default, zero telephony changes), `WARN`, `RESTRICT_CHAT`, `RADIO_RESTRICT` (only available with supported verified privileged adapter), `RADIO_OFF` (explicit request, with prominent impact warning and emergency handling). No invisible auto-enable of a destructive radio mode.
+Policy modes: `MONITOR` (default, zero telephony changes), `WARN`, `RESTRICT_CHAT`, `RADIO_RESTRICT` (only available with supported verified privileged adapter), `RADIO_OFF` (explicit request, with prominent warning that calling and emergency services may be unavailable). **No emergency-call simulation, validation, or test.** No invisible auto-enable of a destructive radio mode.
 
 ## Recovery, support and release gates
 
@@ -82,8 +83,8 @@ Policy modes: `MONITOR` (default, zero telephony changes), `WARN`, `RESTRICT_CHA
 - Heartbeat/watchdog, boot-loop counter, staged activation, 60-second recovery window after privileged changes, and a reliable documented recovery/disable path from root manager or recovery environment.
 - Fail closed for **CubeChat message/packet policy** when uncertain; fail safe for **core Android radio service** by leaving stock telephony in charge and alerting, rather than bricking calling. User-selected whole-radio-off mode is a separate explicit exception.
 - No firmware partition patch, modem calibration/NV write, SELinux permissive mode or bootloader operation from the APK.
-- Separate tests: Java/Robolectric risk-engine fixtures; permission denial and API level; dual-SIM/eSIM and SIM swap; LTE↔NR and handover; malformed/stale cell data; baseband reset; no-service recovery; VPN leakage checks; helper signature and IPC authorization; OTA change and uninstall; calls, incoming calls, SMS, MMS, Wi-Fi calling and ordinary internet; two-phone CubeChat chat/attachments; device wake/sleep/reboot.
-- Never place an actual emergency call as an automated test. Use manufacturer/carrier test environments or explicitly coordinated, non-emergency validation where appropriate. No on-air rogue base station transmissions during development; use recorded/synthetic observations and certified lab setups.
+- Separate **non-emergency** tests: Java/Robolectric risk-engine fixtures; permission denial and API level; dual-SIM/eSIM and SIM swap; LTE↔NR and handover; malformed/stale cell data; baseband reset; no-service recovery; VPN leakage checks; helper signature and IPC authorization; OTA change and uninstall; **normal** inbound/outbound calls, SMS, MMS, Wi-Fi calling and ordinary internet; two-phone CubeChat chat/attachments; device wake/sleep/reboot. **No emergency-call continuity tests, even simulated.**
+- **No emergency-call continuity testing under ANY conditions:** no real or simulated emergency call attempts, no manufacturer/carrier, shielded RF, emulator, test-SIM, or certified lab emergency-path validation. Permanently out of scope, not a deferred QA task. Other ordinary, **non-emergency** telephony tests remain allowed. No on-air rogue base station transmissions during development; use recorded/synthetic **non-emergency** observations. See [the absolute prohibition](NO_EMERGENCY_CALL_TESTING.md).
 - Do not ship a `RADIO_RESTRICT` capability until a specified real handset, exact OS build and baseband support have passed lab verification and rollback tests.
 
 ## First milestones
@@ -100,7 +101,7 @@ Policy modes: `MONITOR` (default, zero telephony changes), `WARN`, `RESTRICT_CHA
 
 - Pick **one** expendable handset (exact model, model variant, SoC, Android build, baseband version, carrier and bootloader unlock status) for elevated testing; existing daily-use phones should not be the first test targets.
 - Decide whether location history is cell-cooccurrence-only by default, or location-bucket-enabled after consent.
-- Establish what emergency, carrier, enterprise and Wi-Fi calling traffic should remain accessible under each lockdown mode; do not claim IP allowlisting proves every OS bypass is covered.
+- Document potential emergency-service consequences by static examination only; do not initiate or simulate emergency services. Establish narrow carrier, enterprise, and ordinary Wi-Fi calling allowances through **non-emergency** observations. Emergency-call availability is **NOT_TESTED_BY_PROJECT** and must not be inferred from IP filtering.
 - Run battery and field false-positive measurements before enabling continuous scan intervals.
 - Identify a modem/SoC with *documented, verifiable* cell-rejection facilities before designing a specific-cell blocking UI.
 
