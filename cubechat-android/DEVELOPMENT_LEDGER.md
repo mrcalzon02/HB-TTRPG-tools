@@ -1,5 +1,7 @@
 # CubeChat Android development ledger
 
+> **Safety architecture (new):** [Emergency priority yield](docs/RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md) requires unconditional release of **all** CubeChat-owned lockdown controls on a trusted early platform indication; no confirmation, rearming, or partial emergency allowlist. `LockdownReleaseController` now centralizes best-effort ordinary manual release, and device-owner cleanup attempts every restriction even after individual failures. Automatic emergency detection is **not implemented or verified**; new privileged radio drivers remain blocked pending a trustworthy early handoff. **No emergency calls or simulations tested.**
+
 > **Absolute safety directive:** [No Emergency Call Testing](docs/NO_EMERGENCY_CALL_TESTING.md). CubeChat/RadioGuard will **never** perform emergency-call continuity tests: not real calls, not simulations, not shielded laboratories, not manufacturer/carrier-coordinated tests, and not manual or automated procedures. All past plans mentioning emergency-call lab validation are superseded. Continue normal non-emergency calls, SMS, IMS, Wi-Fi calling and the other networking/security regressions. Emergency calling remains **NOT_TESTED_BY_PROJECT**, with no compatibility assurance.
 
 
