@@ -9,6 +9,16 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 19, 2026 · Per-operation lockdown recovery receipts
+
+- Added pure Java `LockdownReleaseReport`, which attempts **all three** ordinary manual cleanup operations in sequence—device-owner policy release, clearing CubeChat's armed preference, and stopping its VPN—even if one or more fail. Each step now produces a **REQUEST_COMPLETED (not independently verified)** or **FAILED (exception class only)** receipt. Exception messages are excluded from diagnostics.
+- `LockdownReleaseController` uses this shared report and returns a complete per-stage summary. The Recovery tab displays the latest command receipts, includes them in opt-in copied diagnostics, and uses synchronous `SharedPreferences.commit()` for last-attempt persistence; it warns if that receipt cannot be saved.
+- Added Android/Robolectric assertions for persisted per-stage receipts; **these and the actual APK build have not been run** in this environment.
+- **Executed host verification:** `LockdownReleaseReportTest` passed **17/17** assertions under `javac --release 17`. A second integration test compiled the actual `LockdownReleaseController.java` alongside the actual report model with **inert Android and policy-provider stubs** and passed **14/14** assertions. Both tested source trees, the test fixtures, and the integration script matched GitHub's returned blob hashes. Total: **31/31 new manual-release host assertions passed**.
+- The ordinary manual release remains **a best-effort command attempt**, not independent proof of VPN removal, modem control, radio silence, or automatic priority release. No Android SDK, physical handset, privileged helper, live packet capture, emergency-call test or emergency simulation was involved. No public APK or release was changed.
+
+The original [absolute no-emergency-call-testing policy](docs/NO_EMERGENCY_CALL_TESTING.md) and the [unimplemented priority-yield gate](docs/RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md) remain binding. Next step is the manual Android SDK build and API 26/35 test suite. This pass did not change live kernel or radio enforcement.
+
 ## November 19, 2026 · Active updater disconnect and reversible read-only preflight
 
 - **In-flight HTTP cancellation:** The process-local `UpdateRunGate` now tracks live request permits and their current `HttpURLConnection`. Requesting lockdown invalidates each previously granted updater token and attempts to disconnect the associated connection. `CubeChatReleases` registers connections before obtaining response data, then unregisters them on completion; `UpdateCheck` closes its permit when the UI accepts/rejects the result or its activity is stopped. Failure of one vendor HTTP `disconnect()` implementation cannot throw through the lockdown transition or prevent other updater permits from being revoked. No new updater network exception was introduced.
