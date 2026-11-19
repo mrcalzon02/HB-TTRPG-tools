@@ -4,6 +4,18 @@ Open the [Android installation page](https://cubechat-android.lankytangerine2.ch
 
 The [Android development ledger](DEVELOPMENT_LEDGER.md) tracks planned features, their dependencies and the tests for each milestone.
 
+## Lockdown and update-check behavior (development builds)
+
+Under **Pairing → Firewall settings**, the **Lockdown**, **Exceptions**, **Radios**, **Connections**, **Recovery**, and **Device** tabs separate current Android capabilities from planned hardware-level enforcement. Lockdown is not a verified radio kill switch. The Recovery screen can request ordinary release of CubeChat-owned restrictions and report incomplete readback. No universal early automatic emergency release exists in this build. [Emergency-call testing of any kind is prohibited](docs/NO_EMERGENCY_CALL_TESTING.md).
+
+While CubeChat's IP lockdown is requested, it **does not initiate GitHub update checks or open its APK download link**. The main screen shows **Update checks paused · Lockdown**, or marks a previously verified update as **Download paused**. Cached release information is retained. After deliberately turning lockdown off, a fresh update check may be requested; turning lockdown off does **not** resurrect a check invalidated by an earlier lockdown activation.
+
+When a metadata fetch has already begun, CubeChat checks for revoked authorization before starting more HTTPS requests, after a server response, during reading, and before accepting release metadata. A system-level blocking network operation may not terminate instantly; **no device-side packet-leak guarantee has been established**. The restriction applies to CubeChat's updater, not a certification of every external browser or privileged system path.
+
+For real network controls, the user must separately configure Android's VPN/managed-device facilities on compatible hardware. The privileged kernel/modem RadioGuard design remains a research track and is not deployed by the APK.
+
+
+
 ## Conversations and drafts
 
 Choose **Conversations → Add contact** to create another invite or scan someone else's. Scanning another card keeps your earlier chats. Scanning the same card again opens its existing conversation. Use **Rename contact** to give the current conversation a local name and **Search contacts** to find it later. The contact list shows how many outgoing messages are waiting. The current chat displays **Connected** or **Not connected**, the selected transport route and the count of locally queued messages. The Conversations picker marks only the selected conversation as potentially connected; inactive contacts say **Not selected · Open to reconnect**. A queued message has not yet been confirmed as delivered. Connection state describes the selected conversation, not a global online status for every contact.
