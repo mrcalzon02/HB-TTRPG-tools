@@ -30,6 +30,20 @@ Keep Android's normal telephony stack, call handling, SMS, SIM/eSIM management, 
 6. **Guardian Service (optional)**: Small native/Java privileged helper in an isolated process with narrow versioned IPC. Root-owned payload, verified hashes/signature, app signer and caller identity checks, explicit user approval for state-changing commands, no generic shell-execution endpoint, detailed audit log, minimal SELinux allowances.
 7. **Device adapter(s)**: Explicit allowlist keyed by model, build fingerprint, modem firmware and capabilities. Start with read-only system APIs; then documented privileged radio capabilities; only validated vendor-specific cell restrictions if genuinely available. Unknown modem => monitoring only. Never patch modem firmware by default.
 
+### Active connection and device inventory
+
+The single `Connections` tab must separate **actively connected**, **nearby/visible**, and **historically observed** objects; never represent scans as complete hardware inventories.
+
+| Surface | Stock Android source | Elevated improvements / limits |
+| --- | --- | --- |
+| Cellular | Registered/subscription cells + reported neighbors via telephony callbacks | Deeper supported modem event/diagnostic reporting; some baseband events remain inaccessible |
+| Wi-Fi | Current associated AP, SSID/BSSID and accessible network state with applicable permissions | Vendor-specific richer scan/driver telemetry, not authentication of AP hardware |
+| Bluetooth | Current CubeChat sessions, bonded devices, permitted nearby scan results | Other apps' private Bluetooth traffic and all RF events are not generally visible |
+| CubeChat P2P | Selected peer route, socket endpoints, authentication, connect/disconnect, bytes and heartbeats | Authoritative for CubeChat's own traffic, not all apps |
+| IP flows | From the local VPN: headers/metadata of packets actually routed through its TUN interface (current firewall drops payloads) | Optional root-owned narrow flow observer; no claim to enumerate traffic bypassing VPN unless independently verified |
+
+Collect only metadata needed for user-selected diagnostics; never retain packet bodies, decrypted chat text, IMSI/IMEI, contacts or raw precise-location trails in the monitoring log. Rate-limit scans, show observation age/source, and respect permission revocation. A privileged network inventory is not a replacement for the IP firewall or a source of guaranteed visibility into modem signaling.
+
 ### Android compatibility strategy
 
 - Keep existing `minSdk 26` and ordinary messaging functional. Gate cellular APIs by SDK, feature, permission, subscription and radio support. `requestCellInfoUpdate` is API 29+, throttled and not guaranteed.
