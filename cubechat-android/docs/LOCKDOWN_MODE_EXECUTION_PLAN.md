@@ -4,6 +4,7 @@
 **Date:** 2026-11-18 (America/Sitka)  
 **Authoritative repository:** `mrcalzon02/HB-TTRPG-tools` · branch `main` · app `cubechat-android/`  
 **Parent architecture:** [Radio Guardian single-APK RFC](RADIO_GUARDIAN_ARCHITECTURE.md)
+**Active tracking:** [CubeChat Lockdown Mode — feasibility issue #23](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/23)
 
 ## 0. Decisions to retain from the stalled "CubeChat Lockdown Mode" effort
 
