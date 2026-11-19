@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   smoke:
-    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'ci(cubechat): one-shot build and smoke')
+    if: "github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'ci(cubechat): one-shot build and smoke')"
     runs-on: ubuntu-24.04
     timeout-minutes: 55
     steps:
