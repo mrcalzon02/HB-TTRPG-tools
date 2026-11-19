@@ -36,9 +36,17 @@ final class UpdateRunGate {
 
         boolean allowed() {
             if (revoked.get()) return false;
-            boolean permitted = !Thread.currentThread().isInterrupted()
-                    && revision == REVISION.get()
-                    && permission.getAsBoolean();
+            boolean permitted;
+            try {
+                permitted = !Thread.currentThread().isInterrupted()
+                        && revision == REVISION.get()
+                        && permission.getAsBoolean();
+            } catch (RuntimeException refused) {
+                // If the platform cannot report network permission, deny this
+                // request rather than letting a failed callback retain a permit.
+                cancel();
+                return false;
+            }
             if (!permitted || revision != REVISION.get()) {
                 cancel();
                 return false;
@@ -68,6 +76,9 @@ final class UpdateRunGate {
 
         private void cancel() {
             revoked.set(true);
+            // A canceled worker can remain stuck in platform I/O. Remove its
+            // registration NOW instead of retaining it until the UI catches up.
+            ACTIVE.remove(this);
             HttpURLConnection active = currentConnection.getAndSet(null);
             if (active != null) disconnectQuietly(active);
         }
@@ -82,7 +93,6 @@ final class UpdateRunGate {
 
         @Override public void close() {
             cancel();
-            ACTIVE.remove(this);
         }
     }
 
@@ -97,6 +107,11 @@ final class UpdateRunGate {
     static void invalidate() {
         REVISION.incrementAndGet();
         for (Permit permit : ACTIVE) permit.cancel();
+    }
+
+    /** Local diagnostic/test counter; never a proof of kernel/network isolation. */
+    static int outstandingRequests() {
+        return ACTIVE.size();
     }
 
     private UpdateRunGate() { }
