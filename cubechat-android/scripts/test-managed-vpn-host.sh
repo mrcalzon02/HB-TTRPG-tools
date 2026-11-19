@@ -79,11 +79,12 @@ import android.os.Bundle;
 public class DevicePolicyManager {
     public boolean owner = true, failRead, nullRestrictions;
     public String vpn;
-    public int clearVpnCalls, clearRestrictionCalls;
+    public int setVpnCalls, clearVpnCalls, clearRestrictionCalls;
     private final Bundle restrictions = new Bundle();
     public boolean isDeviceOwnerApp(String pkg) { return owner; }
     public void setAlwaysOnVpnPackage(ComponentName admin, String pkg, boolean locked) {
         vpn = pkg;
+        setVpnCalls++;
         if (pkg == null) clearVpnCalls++;
     }
     public String getAlwaysOnVpnPackage(ComponentName admin) {
@@ -126,12 +127,31 @@ public final class ManagedVpnControllerHostTest {
     public static void main(String[] args) throws Exception {
         Build.VERSION.SDK_INT = 26;
         Context legacy = new Context();
-        ManagedLockdownController.enforce(legacy);
-        check(legacy.getPackageName().equals(legacy.dpm.vpn), "device owner installed its own VPN");
-        check(legacy.prefs.getBoolean("cubechat-admin-installed-vpn", false),
-                "legacy admin ownership recorded");
+        check(!ManagedLockdownController.deploymentSupported(),
+                "no trusted early platform priority handoff in development build");
+        boolean blocked = false;
+        try { ManagedLockdownController.enforce(legacy); }
+        catch (UnsupportedOperationException expected) { blocked = true; }
+        check(blocked, "device-owner policy activation must be blocked");
+        check(legacy.dpm.setVpnCalls == 0 && legacy.dpm.clearRestrictionCalls == 0,
+                "blocked activation performs zero device-owner mutations");
+        check(!legacy.prefs.getBoolean("cubechat-admin-installed-vpn", false),
+                "blocked activation cannot fabricate VPN ownership");
+
+        // Simulate only ordinary rollback of a LEGACY policy established by
+        // an older build, using inert Android data objects; no call state.
+        legacy.dpm.vpn = legacy.getPackageName();
+        legacy.prefs.edit().putBoolean("cubechat-admin-installed-vpn", true).commit();
+        android.content.ComponentName component = new android.content.ComponentName(
+                legacy, CubeDeviceAdmin.class);
+        for (String restriction : new String[] {
+                android.os.UserManager.DISALLOW_BLUETOOTH,
+                android.os.UserManager.DISALLOW_BLUETOOTH_SHARING,
+                android.os.UserManager.DISALLOW_CONFIG_BLUETOOTH,
+                android.os.UserManager.DISALLOW_CONFIG_VPN
+        }) legacy.dpm.addUserRestriction(component, restriction);
         check(ManagedLockdownController.restrictionsPresent(legacy),
-                "legacy restrictions reported during lockdown");
+                "legacy restrictions reported before cleanup");
         ManagedLockdownController.release(legacy);
         check(legacy.dpm.vpn == null && legacy.dpm.clearVpnCalls == 1,
                 "recorded legacy VPN cleared");
@@ -142,7 +162,7 @@ public final class ManagedVpnControllerHostTest {
         protectExisting.dpm.vpn = "org.other.vpn";
         boolean refusedReplacement = false;
         try { ManagedLockdownController.enforce(protectExisting); }
-        catch (IllegalStateException expected) { refusedReplacement = true; }
+        catch (UnsupportedOperationException expected) { refusedReplacement = true; }
         check(refusedReplacement, "arming managed lockdown refuses unrelated VPN");
         check("org.other.vpn".equals(protectExisting.dpm.vpn),
                 "third-party VPN remains installed after rejected enable");
@@ -151,7 +171,7 @@ public final class ManagedVpnControllerHostTest {
         legacyUserVpn.dpm.vpn = legacyUserVpn.getPackageName();
         boolean refusedAmbiguous = false;
         try { ManagedLockdownController.enforce(legacyUserVpn); }
-        catch (IllegalStateException expected) { refusedAmbiguous = true; }
+        catch (UnsupportedOperationException expected) { refusedAmbiguous = true; }
         check(refusedAmbiguous, "legacy same-package VPN without provenance not hijacked");
         check(!legacyUserVpn.prefs.getBoolean("cubechat-admin-installed-vpn", false),
                 "failed preflight must not mark user VPN as admin-owned");
@@ -180,7 +200,7 @@ public final class ManagedVpnControllerHostTest {
         modernExisting.dpm.vpn = "org.other.vpn";
         boolean modernRefused = false;
         try { ManagedLockdownController.enforce(modernExisting); }
-        catch (IllegalStateException expected) { modernRefused = true; }
+        catch (UnsupportedOperationException expected) { modernRefused = true; }
         check(modernRefused && "org.other.vpn".equals(modernExisting.dpm.vpn),
                 "modern platform preflight also preserves another VPN");
 
