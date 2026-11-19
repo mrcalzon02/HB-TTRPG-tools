@@ -10,11 +10,27 @@ Under **Pairing → Firewall settings**, the **Lockdown**, **Exceptions**, **Rad
 
 While CubeChat's IP lockdown is requested, it **does not initiate GitHub update checks or open its APK download link**. The main screen shows **Update checks paused · Lockdown**, or marks a previously verified update as **Download paused**. Cached release information is retained. After deliberately turning lockdown off, a fresh update check may be requested; turning lockdown off does **not** resurrect a check invalidated by an earlier lockdown activation.
 
-When a metadata fetch has already begun, CubeChat checks for revoked authorization before starting more HTTPS requests, after a server response, during reading, and before accepting release metadata. A system-level blocking network operation may not terminate instantly; **no device-side packet-leak guarantee has been established**. The restriction applies to CubeChat's updater, not a certification of every external browser or privileged system path.
+When a metadata fetch has already begun, CubeChat checks for revoked authorization before starting more HTTPS requests, after a server response, during reading, and before accepting release metadata. It also attempts to disconnect the active HTTP connection immediately upon lockdown activation or app shutdown. A system-level blocking network operation may not terminate instantly; **no device-side packet-leak guarantee has been established**. The restriction applies to CubeChat's updater, not a certification of every external browser or privileged system path.
 
 For real network controls, the user must separately configure Android's VPN/managed-device facilities on compatible hardware. The privileged kernel/modem RadioGuard design remains a research track and is not deployed by the APK.
 
 
+
+## Read-only RadioGuard feasibility probe (developer use)
+
+Before choosing a disposable handset for deeper kernel research, install Android Platform Tools on your computer and explicitly select **one spare phone** using `adb devices`. From the `cubechat-android` directory run:
+
+```bash
+bash scripts/radioguard-readonly-probe.sh YOUR_SELECTED_ADB_SERIAL
+```
+
+This script **only reads** Android build, security patch, model, baseband, boot-state hints, SELinux, kernel release and filesystem/tool availability. It does not require root, install an APK, alter radio settings, issue telephony commands or capture subscriber, contacts, Wi-Fi MAC, GPS or device serial details in its report. It prints no target serial. Handle the resulting build fingerprint and baseband information as local diagnostic data.
+
+A BPF filesystem mount or available `tc` tool does **not** establish that a usable interception point exists. The script explicitly marks hardware offloads, BPF attachment, vendor modem control, and privileged priority release as **NOT VERIFIED**. Never use it to certify any emergency-call functionality. The pure-host mock regression can be run without any phone:
+
+```bash
+bash scripts/test-radioguard-readonly-probe.sh
+```
 
 ## Conversations and drafts
 
