@@ -10,7 +10,7 @@ final class GuardianDeviceInventoryText {
 
     static String clean(String value) {
         if (value == null || value.trim().isEmpty()) return "UNAVAILABLE";
-        String normalized = value.replaceAll("[\\p{Cntrl}]+", " ").trim();
+        String normalized = value.replaceAll("[\\p{Cntrl}\\p{Zl}\\p{Zp}\\p{Cf}]+", " ").trim();
         if (normalized.isEmpty()) return "UNAVAILABLE";
         return normalized.length() > 100 ? normalized.substring(0, 100) + "…" : normalized;
     }
