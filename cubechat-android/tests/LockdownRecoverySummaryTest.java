@@ -52,10 +52,15 @@ public final class LockdownRecoverySummaryTest {
         check(vpnLeft.diagnostics.contains("Local VPN running: YES"), "report lingering VPN");
 
         LockdownRecoverySummary.Snapshot unknown = s(true, true, false, true, false);
+        check(unknown.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
+                "managed restrictions have priority over partial VPN confidence");
         check(unknown.diagnostics.contains("Device-owner policy: NOT_CONFIRMED"),
                 "missing managed restrictions not reported as complete");
         check(unknown.diagnostics.contains("No radio traffic or peer identifiers"),
                 "diagnostic is metadata-only");
+        LockdownRecoverySummary.Snapshot managedVpn = s(true, true, true, true, false);
+        check(managedVpn.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
+                "even OS VPN readback cannot hide missing managed radio restrictions");
 
         System.out.println("LockdownRecoverySummary: " + checks
                 + " offline UI-model assertions passed; no device controls exercised");
