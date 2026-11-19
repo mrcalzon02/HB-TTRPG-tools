@@ -35,6 +35,12 @@ These actions are **out of scope**, not deferred tests waiting for a lab.
 6. If implementing a feature would *require* emergency call tests to demonstrate its safety, **do not ship the feature with that safety claim**. Limit scope or withhold the hazardous radio-modification capability instead of violating this prohibition.
 7. The ordinary phone and CubeChat messaging functions should remain unaffected by default. User-requested radio silence must prominently warn that calling may be unavailable; no project test may exercise emergency calling.
 
+## Emergency priority yield (design mandate, not a test)
+
+A trusted early platform indication that emergency calling is required must **immediately supersede and release all CubeChat/RadioGuard enforcement**, without confirmation: VPN/TUN and its always-on lockdown settings if CubeChat owns them, managed-device restrictions, prospective kernel/LSM/eBPF/tc enforcement, modem/radio restrictions, and privileged helper control. It is a complete disengagement, not an allowlist for emergency traffic. The released state must remain latched until the user deliberately reactivates lockdown. See [the binding override architecture](RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md).
+
+**This requirement does not authorize emergency-call tests, mocks, protocol simulations, lab procedures, or artificial emergency triggers.** No ordinary-app interface guarantees an early, authoritative emergency signal. On devices without an independently trusted and provably early handoff, disable or withhold any new privileged restrictions dependent on that handoff rather than claim the automatic release works. The ordinary APK currently has no trustworthy automatic emergency activation signal. Emergency-call safety remains **NOT_TESTED_BY_PROJECT**.
+
 ## Scope correction to prior planning
 
 This directive **supersedes** every prior CubeChat/RadioGuard instruction proposing manufacturer/carrier-certified emergency simulations, shielded-lab emergency bearer setup, coordinated emergency calls, or emergency-path validation, even where such prior suggestions appeared in external research or conversation text.
