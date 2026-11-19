@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ClipboardManager;
+import android.content.ClipDescription;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -68,6 +69,11 @@ public final class FirewallRecoveryUiTest {
                 (ClipboardManager) app.getSystemService(Context.CLIPBOARD_SERVICE);
         assertNotNull(clipboard);
         assertNotNull(clipboard.getPrimaryClip());
+        assertNotNull("Diagnostic preview hint included",
+                clipboard.getPrimaryClip().getDescription().getExtras());
+        assertTrue("Diagnostic preview is marked sensitive",
+                clipboard.getPrimaryClip().getDescription().getExtras()
+                        .getBoolean(ClipDescription.EXTRA_IS_SENSITIVE));
         String summary = clipboard.getPrimaryClip().getItemAt(0).coerceToText(app).toString();
         assertTrue(summary.contains("Kernel / modem / hardware coverage: NOT_VERIFIED"));
         assertTrue(summary.contains("Other Android-owned VPN settings: NOT_VERIFIED"));
@@ -119,6 +125,8 @@ public final class FirewallRecoveryUiTest {
         buttonNamed(root, "Recovery").performClick();
         assertTrue("An interrupted cleanup must not be mistaken for old success",
                 hasText(root, "may have been interrupted"));
+        assertNotNull("Interrupted cleanup suggests an explicit retry",
+                buttonNamed(root, "Retry CubeChat cleanup"));
         assertFalse("Old per-step receipt must not be presented as current",
                 hasText(root, "OBSOLETE_RECEIPT"));
         Button copy = buttonNamed(root, "Copy non-sensitive status summary");
