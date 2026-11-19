@@ -19,6 +19,8 @@ import android.os.UserManager;
  * traffic remain controlled by Android and the carrier.
  */
 final class ManagedLockdownController {
+    private static final String VPN_PROVENANCE_PREF = "cubechat-managed-vpn-provenance";
+    private static final String VPN_CONFIGURED_BY_ADMIN = "cubechat-admin-installed-vpn";
     private static final String[] RADIO_RESTRICTIONS = {
             UserManager.DISALLOW_BLUETOOTH,
             UserManager.DISALLOW_BLUETOOTH_SHARING,
@@ -50,6 +52,10 @@ final class ManagedLockdownController {
         // Apply this FIRST: later restriction failures must not produce an
         // unfiltered device. No allowlist of third-party applications.
         dpm.setAlwaysOnVpnPackage(admin, context.getPackageName(), true);
+        if (Build.VERSION.SDK_INT < 31 && !context.getSharedPreferences(
+                VPN_PROVENANCE_PREF, Context.MODE_PRIVATE).edit()
+                .putBoolean(VPN_CONFIGURED_BY_ADMIN, true).commit())
+            throw new IllegalStateException("Could not record VPN ownership for legacy Android");
         for (String restriction : RADIO_RESTRICTIONS) dpm.addUserRestriction(admin, restriction);
 
         if (Build.VERSION.SDK_INT >= 33) {
@@ -98,8 +104,25 @@ final class ManagedLockdownController {
             tryRelease(restriction, () -> dpm.clearUserRestriction(admin, restriction), failures);
         tryRelease("VPN configuration restriction",
                 () -> dpm.clearUserRestriction(admin, UserManager.DISALLOW_CONFIG_VPN), failures);
-        tryRelease("CubeChat-owned always-on VPN",
-                () -> dpm.setAlwaysOnVpnPackage(admin, null, false), failures);
+        // On Android versions older than API31, a null package may clear a
+        // user-managed VPN too. Read first, and never remove a different app.
+        // Even matching package names need our own durable provenance on old OS.
+        tryRelease("CubeChat-owned always-on VPN", () -> {
+            android.content.SharedPreferences source = context.getSharedPreferences(
+                    VPN_PROVENANCE_PREF, Context.MODE_PRIVATE);
+            String reported = dpm.getAlwaysOnVpnPackage(admin);
+            ManagedVpnOwnership.Decision decision = ManagedVpnOwnership.decide(
+                    context.getPackageName(), reported, Build.VERSION.SDK_INT,
+                    source.getBoolean(VPN_CONFIGURED_BY_ADMIN, false));
+            if (decision == ManagedVpnOwnership.Decision.OWNERSHIP_UNVERIFIED)
+                throw new IllegalStateException("Cannot establish safe removal ownership");
+            if (decision == ManagedVpnOwnership.Decision.CLEAR_OUR_POLICY)
+                dpm.setAlwaysOnVpnPackage(admin, null, false);
+            // Do not retain a stale ownership marker after verified readback
+            // shows the VPN is absent/different, or the removal call returned.
+            if (!source.edit().putBoolean(VPN_CONFIGURED_BY_ADMIN, false).commit())
+                throw new IllegalStateException("Could not clear legacy VPN ownership record");
+        }, failures);
         if (!failures.isEmpty())
             throw new IllegalStateException("Not all managed restrictions were released: "
                     + String.join(", ", failures));
@@ -134,7 +157,7 @@ final class ManagedLockdownController {
             String restrictions = restrictionsReadable
                     ? appliedRestrictions + " of " + totalRestrictions + " CubeChat policy restrictions reported"
                     : "CubeChat restriction readback unavailable";
-            return restrictions + "\\nCubeChat-owned always-on VPN: " + vpnState;
+            return restrictions + "\nCubeChat-managed VPN package: " + vpnState;
         }
     }
 
@@ -173,7 +196,7 @@ final class ManagedLockdownController {
             String vpn = dpm.getAlwaysOnVpnPackage(owner);
             vpnReadable = true;
             ownVpn = context.getPackageName().equals(vpn);
-            vpnState = ownVpn ? "REPORTED_ACTIVE"
+            vpnState = ownVpn ? "CUBECHAT_PACKAGE_REPORTED"
                     : vpn == null ? "NONE_OR_SYSTEM" : "ANOTHER_PACKAGE";
         } catch (RuntimeException ignored) { /* Not proven cleared. */ }
         return new Audit(true, restrictionsReadable, vpnReadable,
