@@ -162,6 +162,25 @@ public final class PeerLink {
         synchronized (mailboxes) { mailboxes.add(this); }
     }
     public Snapshot snapshot() { return snapshot; }
+
+    /** Revoke existing peer transports as soon as the firewall policy changes. */
+    static void enforceRadioPolicyForAll() {
+        List<PeerLink> existing;
+        synchronized (mailboxes) { existing = new ArrayList<>(mailboxes); }
+        for (PeerLink mailbox : existing) mailbox.enforceRadioPolicy();
+    }
+
+    private void enforceRadioPolicy() {
+        command(() -> {
+            if (!LockdownFirewall.armed(app)) return;
+            if ((route == Route.BLUETOOTH && !LockdownRadioPolicy.bluetoothAllowed(app))
+                    || (route == Route.WIFI_DIRECT && !LockdownRadioPolicy.wifiDirectAllowed(app))) {
+                shutdownNetwork();
+                status = "Radio blocked by lockdown. Select a transport explicitly in CubeChat.";
+                publish();
+            }
+        });
+    }
     private static String detail(Exception error) {
         return error.getMessage() == null ? error.getClass().getSimpleName() : error.getMessage();
     }
