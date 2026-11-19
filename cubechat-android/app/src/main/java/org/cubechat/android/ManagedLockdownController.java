@@ -209,6 +209,7 @@ final class ManagedLockdownController {
         Bundle flags;
         try { flags = dpm.getUserRestrictions(admin(context)); }
         catch (RuntimeException e) { return false; }
+        if (flags == null) return false;
         for (String restriction : RADIO_RESTRICTIONS)
             if (!flags.getBoolean(restriction, false)) return false;
         if (!flags.getBoolean(UserManager.DISALLOW_CONFIG_VPN, false)) return false;
