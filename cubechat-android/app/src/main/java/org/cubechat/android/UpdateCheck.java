@@ -30,7 +30,8 @@ final class UpdateCheck {
     private final String installed;
     private final long installedCode;
     private CubeChatReleases.Offer offer;
-    private boolean checking, manual, closed;
+    private boolean checking, manual;
+    private volatile boolean closed;
 
     UpdateCheck(Activity activity, Button banner) {
         this.activity = activity;
@@ -78,20 +79,21 @@ final class UpdateCheck {
         }
         if (checking) return;
         checking = true;
+        // A permit is permanently invalidated by a lockdown activation,
+        // even if the toggle is briefly switched back off before this job ends.
+        UpdateRunGate.Permit permit = UpdateRunGate.enter(
+                () -> !closed && !LockdownFirewall.armed(activity));
         network.execute(() -> {
-            // Re-evaluate after queueing; policy could have changed before this
-            // worker began. No automatic retry or special network exemption.
-            if (LockdownFirewall.armed(activity)) {
-                activity.runOnUiThread(() -> { checking = false; manual = false; });
-                return;
-            }
             try {
-                CubeChatReleases.Offer newest = CubeChatReleases.check(installedCode);
+                permit.verify();
+                CubeChatReleases.Offer newest = CubeChatReleases.check(installedCode, permit::verify);
+                permit.verify();
                 activity.runOnUiThread(() -> {
                     if (closed) return;
                     boolean show = manual;
                     checking = false;
                     manual = false;
+                    if (!permit.allowed()) return;
                     offer = newest;
                     SharedPreferences.Editor edit = saved.edit().clear().putLong("checked", System.currentTimeMillis());
                     if (newest != null) edit.putLong("code", newest.code).putString("version", newest.version)
@@ -106,6 +108,9 @@ final class UpdateCheck {
                     boolean show = manual;
                     checking = false;
                     manual = false;
+                    // A revoked run is not a connection error, and must not
+                    // overwrite cached metadata or prompt a retry.
+                    if (!permit.allowed()) return;
                     if (show) {
                         String detail = problem instanceof java.net.UnknownHostException
                                 ? "GitHub could not be reached." : problem.getMessage();
