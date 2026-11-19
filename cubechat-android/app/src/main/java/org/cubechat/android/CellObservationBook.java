@@ -33,16 +33,16 @@ public final class CellObservationBook {
         }
     }
 
-    private static final class Entry {
+    private static final class SeenCell {
         long firstSampleMs, lastSampleMs;
         int count;
-        Entry(long sampleMs) { firstSampleMs = lastSampleMs = sampleMs; count = 1; }
+        SeenCell(long sampleMs) { firstSampleMs = lastSampleMs = sampleMs; count = 1; }
         Evidence snapshot() { return new Evidence(count, firstSampleMs, lastSampleMs); }
     }
 
     // Access-order eviction bounds memory without sending data outside the phone.
-    private final LinkedHashMap<String, Entry> entries = new LinkedHashMap<String, Entry>(32, .75f, true) {
-        @Override protected boolean removeEldestEntry(Map.Entry<String, Entry> eldest) {
+    private final LinkedHashMap<String, SeenCell> entries = new LinkedHashMap<String, SeenCell>(32, .75f, true) {
+        @Override protected boolean removeEldestEntry(Map.Entry<String, SeenCell> eldest) {
             return size() > MAX_IDENTITIES;
         }
     };
@@ -56,9 +56,9 @@ public final class CellObservationBook {
             if (key == null) continue;
             long modemObservationMs = nowElapsedMs - cell.ageMs;
             if (modemObservationMs < 0) continue;
-            Entry record = entries.get(key);
+            SeenCell record = entries.get(key);
             if (record == null) {
-                record = new Entry(modemObservationMs);
+                record = new SeenCell(modemObservationMs);
                 entries.put(key, record);
             } else if (modemObservationMs > record.lastSampleMs
                     && modemObservationMs - record.lastSampleMs >= MIN_DISTINCT_SAMPLE_MS) {
@@ -72,7 +72,7 @@ public final class CellObservationBook {
 
     public synchronized Evidence find(CellObservation cell) {
         if (cell == null || cell.identityKey() == null) return null;
-        Entry entry = entries.get(cell.identityKey());
+        SeenCell entry = entries.get(cell.identityKey());
         return entry == null ? null : entry.snapshot();
     }
 
