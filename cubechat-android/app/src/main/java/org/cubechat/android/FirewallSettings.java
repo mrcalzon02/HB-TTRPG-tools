@@ -176,12 +176,16 @@ public final class FirewallSettings extends Activity {
         if (!error.isEmpty()) text(page, "VPN error: " + error, 14, DANGER);
         if (requested && !running) button(page, "Retry firewall", this::enable);
         if (owner) {
-            if (requested && managed) text(page,
-                    "MANAGED DEVICE · Bluetooth and Wi-Fi Direct are denied at the OS policy level. Wi-Fi remains in its existing on/off state; other apps' IP remains subject to the VPN.", 16, 0xff185f46);
+            if (!ManagedLockdownController.deploymentSupported()) {
+                text(page, "ADVANCED DEVICE-OWNER LOCKDOWN DISABLED · This APK has no verified early trusted-system priority release. Turning on IP lockdown will NOT install managed radio restrictions or a managed Always-on VPN.", 16, DANGER);
+                if (managed)
+                    text(page, "PREVIOUS MANAGED RESTRICTIONS REPORTED · Older policies may remain. Use Recovery to review and request their removal.", 15, DANGER);
+            } else if (requested && managed) text(page,
+                    "MANAGED DEVICE · Android reports configured radio restrictions, but this does not prove hardware isolation.", 16, MUTED);
             else if (requested) {
                 text(page, "MANAGED POLICY INCOMPLETE · One or more device-owner radio restrictions are not confirmed. Treat lockdown as partial.", 16, DANGER);
                 button(page, "Retry managed restrictions", this::applyManaged);
-            } else text(page, "Device-owner authorization detected · Enabling lockdown will apply stronger radio and OS-network restrictions.", 15, MUTED);
+            } else text(page, "Device-owner provisioning detected; managed controls require independently verified support.", 15, MUTED);
         } else {
             text(page, "STANDARD APPLICATION · This installation cannot enforce device-owner radio restrictions. A malicious app with elevated privileges may circumvent IP filtering.", 15, DANGER);
         }
@@ -478,7 +482,8 @@ public final class FirewallSettings extends Activity {
         }
         // Even if a later managed-policy operation fails, attempt local packet
         // filtering. Never silently roll the entire request back to "off".
-        if (ManagedLockdownController.isDeviceOwner(this)) applyManaged();
+        if (ManagedLockdownController.isDeviceOwner(this)
+                && ManagedLockdownController.deploymentSupported()) applyManaged();
         try {
             LockdownFirewall.start(this);
         } catch (Exception e) {
@@ -488,7 +493,9 @@ public final class FirewallSettings extends Activity {
     }
 
     private void applyManaged() {
-        if (!ManagedLockdownController.isDeviceOwner(this) || !LockdownFirewall.armed(this)) return;
+        if (!ManagedLockdownController.deploymentSupported()
+                || !ManagedLockdownController.isDeviceOwner(this)
+                || !LockdownFirewall.armed(this)) return;
         try {
             ManagedLockdownController.enforce(this);
         } catch (Exception e) {
