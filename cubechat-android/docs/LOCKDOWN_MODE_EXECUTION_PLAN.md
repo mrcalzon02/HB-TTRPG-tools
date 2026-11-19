@@ -18,6 +18,16 @@
 6. **Known-cell history is an anomaly heuristic, not a physical tower certificate.** Broadcast cellular identities are spoofable; identifying a specific rogue base station or selectively blocking it requires hardware support not yet demonstrated.
 7. **No changes to existing firewall enforcement paths** until feasibility assessment selects a device-specific approach, tests can show no unintended bypass and a recovery procedure exists. Documentation and isolated lab harnesses may proceed now.
 
+## November 19, 2026 · Advanced managed-policy deployment gate
+
+The user-consented application VPN fallback remains eligible on stock Android with separately verified Android VPN settings. New **device-owner Always-on VPN and radio restriction writes are gated OFF** in this development build, even if CubeChat was previously provisioned as device owner. The standard app has no guaranteed, sufficiently early trusted platform handoff to disengage those restrictions before platform services need the connection. A host-tested `GuardianDeploymentGate` declares device-owner, kernel, Wi-Fi/Bluetooth driver and cellular modem enforcement **DISABLED_UNVERIFIED**. Do not treat this as validation of emergency calls or invoke any emergency test or simulated event.
+
+The existing `ManagedLockdownController.release()` remains available solely for best-effort removal of managed policies left by previous versions, and still reports partial failures without claiming readback completeness. Future support must be a separately audited integration, not a one-line Boolean change.
+
+**Independent VPN-owner issue:** Per [Android's DevicePolicyManager documentation](https://developer.android.com/reference/android/app/admin/DevicePolicyManager#getAlwaysOnVpnPackage(android.content.ComponentName)), `getAlwaysOnVpnPackage(admin)` can return `null` both when no application VPN is configured and when the VPN is provided by the system. A null readback **cannot certify an empty slot**. The dormant managed-enable path rejects that ambiguity, requires the exact current CubeChat package and previously recorded admin provenance, and does not offer initial provisioning automatically. Legacy rollback retains its own ownership checks.
+
+**Verification:** Java 17 host-only gate tests, unchanged recovery/ownership/update models and the mocked ADB probe passed 257 offline assertions in the current local suite. The exact new gate files matched their GitHub blob SHAs. The new Android API26/35 `ManagedDeploymentGateTest` and amended real-controller/inert-Android-stub harness are source committed but **have not been executed**. No Android SDK was available in the current environment, and no physical-device or radio test occurred.
+
 ## November 18, 2026 · P0 lower-layer security boundaries and P1 offline model
 
 [P0 kernel/radio boundaries, bypass inventory and critical telephone-service matrix](RADIOGUARD_KERNEL_AND_RADIO_BOUNDARIES.md) is now the operational source for packet-path assumptions. It explicitly distinguishes the Android application / framework / kernel / vendor / baseband trust boundaries, explains why XDP alone does not cover outbound traffic, and requires verified external packet measurements before kernel enforcement can be claimed.
