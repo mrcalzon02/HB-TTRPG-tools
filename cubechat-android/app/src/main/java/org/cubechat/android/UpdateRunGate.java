@@ -2,6 +2,7 @@ package org.cubechat.android;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BooleanSupplier;
 
@@ -21,6 +22,7 @@ final class UpdateRunGate {
     static final class Permit implements Check {
         private final long revision;
         private final BooleanSupplier permission;
+        private final AtomicBoolean revoked = new AtomicBoolean();
 
         private Permit(long revision, BooleanSupplier permission) {
             this.revision = revision;
@@ -28,9 +30,17 @@ final class UpdateRunGate {
         }
 
         boolean allowed() {
-            return !Thread.currentThread().isInterrupted()
+            if (revoked.get()) return false;
+            boolean permitted = !Thread.currentThread().isInterrupted()
                     && revision == REVISION.get()
                     && permission.getAsBoolean();
+            // A negative answer latches permanently: a blocked or interrupted
+            // request must never resume on a different thread or rapid toggle.
+            if (!permitted || revision != REVISION.get()) {
+                revoked.set(true);
+                return false;
+            }
+            return !revoked.get();
         }
 
         @Override public void verify() throws IOException {
