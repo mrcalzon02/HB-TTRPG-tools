@@ -215,8 +215,11 @@ public final class FirewallSettings extends Activity {
         button(page, "Bluetooth settings", () -> open(Settings.ACTION_BLUETOOTH_SETTINGS));
         button(page, "Wi-Fi settings", () -> open(Settings.ACTION_WIFI_SETTINGS));
         if (ManagedLockdownController.isDeviceOwner(this)) {
-            text(page, "Device owner active. Managed lockdown blocks Bluetooth and Wi-Fi Direct for EVERY app, including CubeChat. Use Wi-Fi IP chat while strict managed lockdown is on. Cellular signaling is not under this controller.", 15, INK);
-            text(page, "Wi-Fi is not physically cut off. It remains under Android's driver and its current radio state is locked on Android 13+. A privileged OS exploit is still outside this guarantee.", 15, MUTED);
+            text(page, "Device-owner app detected. New managed radio restrictions are DISABLED in this build pending an independently trusted early priority-release integration. The IP VPN toggle does not turn on Bluetooth or Wi-Fi Direct blocking.", 15, DANGER);
+            ManagedLockdownController.Audit previous = ManagedLockdownController.audit(this);
+            if (previous.restrictionsReadable && previous.appliedRestrictions > 0)
+                text(page, "Previously configured device-owner restrictions are still reported. Use the Recovery tab to request ordinary removal; completion is not independently verified.", 15, DANGER);
+            text(page, "Stock Android and the vendor modem retain radio/call authority. No hardware transmission cutoff is provided by CubeChat.", 15, MUTED);
         } else {
             text(page, "Device owner unavailable. To obtain stronger radio restrictions requires deliberate fully managed device provisioning, typically during initial setup or after a factory reset. This screen cannot self-provision or silently reset the phone.", 15, MUTED);
         }
