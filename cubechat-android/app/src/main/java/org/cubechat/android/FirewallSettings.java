@@ -298,7 +298,7 @@ public final class FirewallSettings extends Activity {
             String state = recovery.getBoolean("last-release-requests-sent", false)
                     ? "Release requests sent; removal NOT independently verified"
                     : "Some release requests FAILED";
-            text(page, "Last manual release · " + time + "\\n" + state, 14,
+            text(page, "Last manual release · " + time + "\n" + state, 14,
                     recovery.getBoolean("last-release-requests-sent", false) ? MUTED : DANGER);
         } else {
             text(page, "No manual release attempt recorded on this installation.", 14, MUTED);
@@ -314,7 +314,7 @@ public final class FirewallSettings extends Activity {
         button(page, "Copy non-sensitive status summary", () -> {
             String report = snapshot.diagnostics;
             if (attemptedAt > 0)
-                report += "\\nLast manual release requests sent: "
+                report += "\nLast manual release requests sent: "
                         + (recovery.getBoolean("last-release-requests-sent", false) ? "YES" : "NO");
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             if (clipboard == null) {
