@@ -36,7 +36,7 @@ public final class UpdateCheckLockdownTest {
     }
 
     @Test public void manualUpdateIsExplainedRatherThanRequested() {
-        Activity activity = Robolectric.buildActivity(Activity.class).setup().get();
+        Activity activity = Robolectric.buildActivity(FirewallSettings.class).setup().get();
         LockdownFirewall.setArmed(app, true);
         UpdateCheck updater = new UpdateCheck(activity, new Button(activity));
         try {
@@ -55,7 +55,7 @@ public final class UpdateCheckLockdownTest {
     }
 
     @Test public void backgroundUpdaterLeavesNetworkCheckTimestampUntouched() {
-        Activity activity = Robolectric.buildActivity(Activity.class).setup().get();
+        Activity activity = Robolectric.buildActivity(FirewallSettings.class).setup().get();
         LockdownFirewall.setArmed(app, true);
         UpdateCheck updater = new UpdateCheck(activity, new Button(activity));
         try {
