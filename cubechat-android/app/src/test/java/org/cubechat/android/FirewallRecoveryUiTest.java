@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ClipboardManager;
 import android.view.View;
@@ -18,6 +19,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowAlertDialog;
 
 /**
  * Ordinary read-only Recovery UI checks. Does not enable a radio, start a
@@ -68,6 +70,25 @@ public final class FirewallRecoveryUiTest {
         assertTrue(summary.contains("Kernel / modem / hardware coverage: NOT_VERIFIED"));
         assertTrue(summary.contains("Other Android-owned VPN settings: NOT_VERIFIED"));
         assertFalse("Clipboard action must not activate lockdown", LockdownFirewall.armed(app));
+    }
+
+    @Test public void ordinaryManualReleaseRecordsOnlyRequestCompletion() {
+        FirewallSettings activity = Robolectric.buildActivity(FirewallSettings.class).setup().get();
+        View root = activity.findViewById(android.R.id.content);
+        buttonNamed(root, "Recovery").performClick();
+        Button release = buttonNamed(root, "Release all CubeChat controls");
+        assertNotNull(release);
+        release.performClick();
+        AlertDialog confirm = ShadowAlertDialog.getLatestAlertDialog();
+        assertNotNull("User-requested release requires an explicit confirmation", confirm);
+        confirm.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+        assertFalse("Ordinary manual release leaves no CubeChat request armed",
+                LockdownFirewall.armed(app));
+        assertTrue("Release attempt timestamp saved",
+                app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
+                        .contains("last-release-at"));
+        assertTrue("Result explicitly denies a verification claim",
+                hasText(root, "removal NOT independently verified"));
     }
 
     private static Button buttonNamed(View root, String label) {
