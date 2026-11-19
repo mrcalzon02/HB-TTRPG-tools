@@ -6,10 +6,6 @@ on:
         description: "Run Android 35 isolated emulator (requires KVM)"
         type: boolean
         default: true
-  # One-shot retry after Java 17 compiler fixes; remove push trigger after validation. Remove after initial run; retain manual dispatch.
-  push:
-    branches: [main]
-    paths: ['.github/workflows/cubechat-lockdown-smoke.yml']
 permissions:
   contents: read
 concurrency:
@@ -17,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   smoke:
-    if: "github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'ci(cubechat): one-shot build and smoke')"
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 55
     steps:
@@ -48,7 +44,7 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           sha256sum app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk | tee "$RUNNER_TEMP/cubechat-checksums.txt"
       - name: Android 35 emulator acceptance
-        if: github.event_name == 'push' || inputs.run_emulator
+        if: inputs.run_emulator
         shell: bash
         working-directory: cubechat-android
         run: |
