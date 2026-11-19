@@ -40,6 +40,8 @@ public final class UpdateRunGateTest {
         AtomicBoolean permitted = new AtomicBoolean(true);
         UpdateRunGate.Permit first = UpdateRunGate.enter(permitted::get);
         check(first.allowed(), "fresh request permitted");
+        check(UpdateRunGate.outstandingRequests() == 1,
+                "active permit is registered for cancellation");
         first.verify();
         FakeConnection firstSocket = new FakeConnection();
         first.track(firstSocket);
@@ -47,6 +49,8 @@ public final class UpdateRunGateTest {
 
         UpdateRunGate.invalidate();
         check(firstSocket.disconnects.get() == 1, "lockdown actively disconnects in-flight HTTP");
+        check(UpdateRunGate.outstandingRequests() == 0,
+                "invalidated permit removed without waiting on UI worker");
         check(!first.allowed(), "revoked permit unusable");
         rejects(first, "lockdown invalidate");
         permitted.set(false);
@@ -62,6 +66,8 @@ public final class UpdateRunGateTest {
         next.close();
         check(other.disconnects.get() == 0, "closed response is not disconnected a second time");
         check(!next.allowed(), "closed permit must never be reusable");
+        check(UpdateRunGate.outstandingRequests() == 0,
+                "completed update does not leave retained permits");
         rejects(next, "closed permit");
 
         UpdateRunGate.Permit denied = UpdateRunGate.enter(() -> false);
@@ -70,6 +76,8 @@ public final class UpdateRunGateTest {
         check(deniedSocket.disconnects.get() == 1, "late connection registration is rejected");
         rejects(denied, "never granted");
         denied.close();
+        check(UpdateRunGate.outstandingRequests() == 0,
+                "denied-on-entry request is never retained");
 
         UpdateRunGate.Permit replaced = UpdateRunGate.enter(() -> true);
         FakeConnection old = new FakeConnection();
@@ -126,12 +134,32 @@ public final class UpdateRunGateTest {
         check(broken.disconnects.get() == 1, "broken HTTP implementation still attempted release");
         check(healthyConn.disconnects.get() == 1, "broken connection never blocks other releases");
         check(!fragile.allowed() && !healthy.allowed(), "both permits remain revoked");
+        check(UpdateRunGate.outstandingRequests() == 0,
+                "failed vendor disconnect cannot leave a retained registration");
         fragile.close();
         healthy.close();
 
         UpdateRunGate.Permit fresh = UpdateRunGate.enter(() -> true);
         check(fresh.allowed(), "new permit allowed after explicit unlock");
         fresh.close();
+        UpdateRunGate.Permit failedPermission = UpdateRunGate.enter(() -> {
+            throw new IllegalStateException("permission query unavailable");
+        });
+        check(!failedPermission.allowed(), "permission exceptions fail closed");
+        rejects(failedPermission, "permission source unavailable");
+        check(UpdateRunGate.outstandingRequests() == 0,
+                "permission exception never retains a live request");
+
+        for (int cycle = 0; cycle < 30; cycle++) {
+            UpdateRunGate.Permit pending = UpdateRunGate.enter(() -> true);
+            FakeConnection request = new FakeConnection();
+            pending.track(request);
+            UpdateRunGate.invalidate();
+            check(!pending.allowed(), "repeated lockdown cycle " + cycle);
+            check(request.disconnects.get() == 1, "repeated cycle socket disconnect " + cycle);
+            check(UpdateRunGate.outstandingRequests() == 0,
+                    "repeated cancellation does not accumulate registrations " + cycle);
+        }
         System.out.println("UpdateRunGate: " + checks + " offline assertions passed; zero HTTP connections attempted");
     }
 }
