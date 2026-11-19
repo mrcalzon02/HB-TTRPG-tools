@@ -13,7 +13,8 @@
     p { line-height: 1.5; }
     .panel { border: 1px solid #555; border-radius: 8px; padding: 16px; margin-top: 20px; background: #181818; }
     .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    select, button { font: inherit; padding: 8px 10px; background: #222; color: #fff; border: 1px solid #666; border-radius: 4px; }
+    select, button, input { font: inherit; padding: 8px 10px; background: #222; color: #fff; border: 1px solid #666; border-radius: 4px; }
+    input { width: min(100%, 620px); }
     button { cursor: pointer; }
     button:disabled { cursor: wait; opacity: .65; }
     pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; line-height: 1.45; }
@@ -36,6 +37,12 @@
         </select>
         <button id="run" type="button">Load and self-test</button>
       </div>
+      <details>
+        <summary>Optional independent trust pins (advanced)</summary>
+        <p class="muted">Paste SHA-256 values obtained independently from a trusted checkout or signed release, not from this same site. Leave blank for internal coherence checks only.</p>
+        <p><label for="registry-pin">Trusted registry SHA-256</label><input id="registry-pin" type="text" maxlength="64" spellcheck="false" autocomplete="off" placeholder="64 lowercase hex characters"></p>
+        <p><label for="engram-pin">Trusted engram SHA-256</label><input id="engram-pin" type="text" maxlength="64" spellcheck="false" autocomplete="off" placeholder="64 lowercase hex characters"></p>
+      </details>
       <p id="summary" class="status">Not tested.</p>
       <p class="muted">The loader fails closed without the SHA-256-verified Charles engram and reciprocal registry, and accepts only registered packages, exact same-origin runtime script sets in canonical dependency order, capability-allow-listed scripts, and contract-declared operations.</p>
       <pre id="report" aria-live="polite">No report yet.</pre>
@@ -51,15 +58,21 @@
       const run = document.getElementById('run');
       const summary = document.getElementById('summary');
       const reportNode = document.getElementById('report');
+      const registryPin = document.getElementById('registry-pin');
+      const engramPin = document.getElementById('engram-pin');
 
       run.addEventListener('click', async () => {
         run.disabled = true;
         summary.textContent = 'Testing registered package…';
         reportNode.textContent = 'Loading discovery documents, package metadata, ordered runtime scripts, and deterministic tests.';
         try {
-          const report = await HBFoundrySkillLoader.loadAndTest(skill.value);
+          const report = await HBFoundrySkillLoader.loadAndTest(skill.value, {
+            expectedRegistrySha256: registryPin.value.trim() || undefined,
+            expectedEngramSha256: engramPin.value.trim() || undefined
+          });
+          const pinned = report.stages.some(stage => stage.id === 'reciprocal-skill-index' && stage.externallyPinned);
           summary.textContent = report.ready
-            ? `READY — ${report.tests.length} deterministic tests passed.`
+            ? `READY — ${report.tests.length} deterministic tests passed (${pinned ? 'independent pins matched' : 'origin not independently authenticated'}).`
             : 'NOT READY — inspect the structured report below.';
           reportNode.textContent = JSON.stringify(report, null, 2);
         } catch (error) {

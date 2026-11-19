@@ -129,8 +129,12 @@ Use `scripts/agent-skill-bundle.py` to export a selected skill or the whole skil
 ```sh
 python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output dist/foundry-discovery-engram.zip
 python3 scripts/agent-skill-bundle.py pack --all --output dist/all-skills-engram.zip
-python3 scripts/agent-skill-bundle.py verify dist/foundry-discovery-engram.zip --trusted-engram-sha256 <digest-from-trusted-checkout-or-signed-release>
+python3 scripts/agent-skill-bundle.py verify dist/foundry-discovery-engram.zip --trusted-engram-sha256 <trusted-engram-digest> --trusted-registry-sha256 <trusted-registry-digest> --trusted-bundle-sha256 <trusted-archive-digest>
 ```
+
+The packager prints both SHA-256 digests and the archive checksum for distribution. Verification accepts three **independent** optional trust pins: canonical engram (required), registry and complete ZIP (optional, strongly recommended). Never treat a checksum copied from the *same untrusted archive* as independent authentication. The browser loader also accepts `expectedEngramSha256` and `expectedRegistrySha256` through `load`, `loadMany`, `discover` and executable `inspect`/`loadAndTest`; without pins the result is internally coherent, not independently authenticated.
+
+**Offline checks** (run locally, no model/API usage): `node scripts/validate-agent-skills.mjs`, `node scripts/validate-engram-loader.mjs`, `python3 scripts/validate-engram-bundle.py`, and `python3 scripts/validate-agent-skill-projections.py`. These also run as part of the existing manually dispatched Pages workflow; no new automatic CI trigger is added.
 
 The bundle is declarative and does **not** contain or authorize a complete executable runtime for every skill. The lock detects accidental corruption and mismatched companion files; it is **not a publisher signature**. Consumers who need authenticity must pin the digest through a trusted channel or verify an independently signed release. Individual `SKILL.md` files are public, so a hostile external model can copy and ignore the rule; the enforcement claim is limited to compliant hosts, our package tool and our loader.
 

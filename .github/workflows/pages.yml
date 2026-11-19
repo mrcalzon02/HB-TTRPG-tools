@@ -59,9 +59,14 @@ jobs:
           node --check ai-skill-context-loader.js
           node --check ai-skill-loader.js
           node scripts/validate-agent-skills.mjs
+          node scripts/validate-engram-loader.mjs
+          python3 scripts/validate-agent-skill-projections.py
+          python3 scripts/validate-engram-bundle.py
           python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output "$RUNNER_TEMP/foundry-discovery-engram.zip"
           PIN="$(python3 -c 'import json; print(json.load(open("skills/index.json"))["defaultPersonality"]["integrity"]["digest"])')"
-          python3 scripts/agent-skill-bundle.py verify "$RUNNER_TEMP/foundry-discovery-engram.zip" --trusted-engram-sha256 "$PIN"
+          INDEX_PIN="$(sha256sum skills/index.json | cut -d ' ' -f1)"
+          ARCHIVE_PIN="$(sha256sum "$RUNNER_TEMP/foundry-discovery-engram.zip" | cut -d ' ' -f1)"
+          python3 scripts/agent-skill-bundle.py verify "$RUNNER_TEMP/foundry-discovery-engram.zip" --trusted-engram-sha256 "$PIN" --trusted-registry-sha256 "$INDEX_PIN" --trusted-bundle-sha256 "$ARCHIVE_PIN"
 
       - name: Check Work Shift Guide and Software catalog
         if: steps.scope.outputs.full_validation == 'false'

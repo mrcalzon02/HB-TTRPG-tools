@@ -110,6 +110,7 @@ def safe_relative(path: str) -> bool:
     pure = PurePosixPath(path)
     return (
         path != LOCK
+        and path == pure.as_posix()
         and not path.startswith("/")
         and "\\" not in path
         and all(part not in ("..", ".", "") for part in pure.parts)
@@ -176,11 +177,25 @@ def package(skill_names: list[str], output: Path) -> None:
             info.external_attr = 0o100644 << 16
             archive.writestr(info, data)
     print(f"PACKAGED: {len(names)} skill(s), {len(payload)} files, {output}")
+    print(f"BUNDLE_SHA256: {digest(output.read_bytes())}")
+    print(f"ENGRAM_SHA256: {lock['engramSha256']}")
 
 
-def verify(output: Path, trusted_sha: str) -> None:
+def verify(
+    output: Path, trusted_sha: str, *,
+    trusted_bundle_sha: str | None = None,
+    trusted_registry_sha: str | None = None
+) -> None:
     if not re.fullmatch(r"[a-f0-9]{64}", trusted_sha):
         raise ValueError("--trusted-engram-sha256 must be 64 lowercase hexadecimal characters")
+    for label, value in (
+        ("--trusted-bundle-sha256", trusted_bundle_sha),
+        ("--trusted-registry-sha256", trusted_registry_sha),
+    ):
+        if value is not None and not re.fullmatch(r"[a-f0-9]{64}", value):
+            raise ValueError(f"{label} must be 64 lowercase hexadecimal characters")
+    if trusted_bundle_sha is not None and digest(output.read_bytes()) != trusted_bundle_sha:
+        raise ValueError("Bundle archive SHA-256 disagrees with externally trusted pin")
     with ZipFile(output) as archive:
         infos = archive.infolist()
         names = [info.filename for info in infos]
@@ -188,6 +203,8 @@ def verify(output: Path, trusted_sha: str) -> None:
             raise ValueError("Empty, oversized, or duplicate-entry skill bundle")
         if any(name != LOCK and not safe_relative(name) for name in names):
             raise ValueError("Unsafe entry in skill bundle")
+        if any(((info.external_attr >> 16) & 0o170000) in (0o120000, 0o040000) for info in infos):
+            raise ValueError("Symlink or directory ZIP entry is forbidden in portable skill bundles")
         if sum(info.file_size for info in infos) > MAX_UNCOMPRESSED_BYTES:
             raise ValueError("Archive exceeds uncompressed size limit")
         payload = {name: archive.read(name) for name in names}
@@ -204,6 +221,8 @@ def verify(output: Path, trusted_sha: str) -> None:
     for name, spec in file_specs.items():
         if digest(payload[name]) != spec.get("sha256") or len(payload[name]) != spec.get("bytes"):
             raise ValueError(f"Bundle file hash or size mismatch: {name}")
+    if trusted_registry_sha is not None and digest(payload[INDEX]) != trusted_registry_sha:
+        raise ValueError("Skill index SHA-256 disagrees with externally trusted pin")
     index = load_json(payload[INDEX], INDEX)
     validate_pair(index, payload[ENGRAM], trusted_sha=trusted_sha)
     if lock.get("engramSha256") != trusted_sha:
@@ -216,6 +235,18 @@ def verify(output: Path, trusted_sha: str) -> None:
         if name not in catalogue:
             raise ValueError(f"Unregistered skill in bundle: {name}")
         validate_skill(catalogue[name], payload[f"skills/{name}/SKILL.md"])
+    allowed_roots = tuple(f"skills/{name}/" for name in skill_names)
+    if any(path not in SHARED and not path.startswith(allowed_roots) for path in file_specs):
+        raise ValueError("Bundle contains a file outside the selected skills and required companions")
+    manifest = load_json(payload[SHARED[2]], SHARED[2])
+    if not any(
+        item.get("id") == "blacklight.charles"
+        and item.get("required_skill_registry") == INDEX
+        and item.get("binding") == "bidirectional-required"
+        and item.get("optional_skills_only") is True
+        for item in manifest.get("engrams", [])
+    ):
+        raise ValueError("Bundle Charles manifest has no reciprocal skill index contract")
     for required in SHARED:
         if required not in payload:
             raise ValueError(f"Missing required shared companion: {required}")
@@ -233,6 +264,8 @@ def main() -> None:
     check = subcommands.add_parser("verify", help="Verify a ZIP against an externally trusted engram SHA-256")
     check.add_argument("archive", type=Path)
     check.add_argument("--trusted-engram-sha256", required=True)
+    check.add_argument("--trusted-registry-sha256", help="Optional independently trusted SHA-256 of skills/index.json")
+    check.add_argument("--trusted-bundle-sha256", help="Optional externally trusted SHA-256 of the full archive")
     args = parser.parse_args()
     try:
         if args.command == "pack":
@@ -240,7 +273,9 @@ def main() -> None:
             skill_names = [item["name"] for item in index["skills"]] if args.all else args.skill
             package(skill_names, args.output)
         else:
-            verify(args.archive, args.trusted_engram_sha256)
+            verify(args.archive, args.trusted_engram_sha256,
+                   trusted_bundle_sha=args.trusted_bundle_sha256,
+                   trusted_registry_sha=args.trusted_registry_sha256)
     except (OSError, ValueError, KeyError, TypeError) as error:
         parser.exit(1, f"FAIL CLOSED: {error}\n")
 

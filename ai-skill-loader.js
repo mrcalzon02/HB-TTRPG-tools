@@ -290,7 +290,7 @@
     }
   }
 
-  async function loadRequiredPersonalityContext(skillName, baseUrl) {
+  async function loadRequiredPersonalityContext(skillName, baseUrl, options = {}) {
     if (!root.HBFoundrySkillContextLoader || typeof root.HBFoundrySkillContextLoader.load !== 'function') {
       await loadScript('ai-skill-context-loader.js', baseUrl);
     }
@@ -298,14 +298,20 @@
     if (!guard || typeof guard.load !== 'function') {
       throw new Error('Required Charles engram context loader is not available. Refusing executable skill loading.');
     }
-    return guard.load(skillName, { baseUrl: baseUrl.href });
+    return guard.load(skillName, {
+      baseUrl: baseUrl.href,
+      expectedRegistrySha256: options.expectedRegistrySha256,
+      expectedEngramSha256: options.expectedEngramSha256
+    });
   }
 
   async function inspect(skillName, options = {}) {
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const boundContext = await loadRequiredPersonalityContext(skillName, baseUrl);
-    const [skillIndex, capabilityRegistry, operationContracts] = await Promise.all([
-      fetchJson('skills/index.json', baseUrl),
+    const boundContext = await loadRequiredPersonalityContext(skillName, baseUrl, options);
+    // Use the exact registry object already SHA-256-verified by the bound context;
+    // a second mutable HTTP GET would create a TOCTOU gap for trusted registry pins.
+    const skillIndex = boundContext.skillIndex;
+    const [capabilityRegistry, operationContracts] = await Promise.all([
       fetchJson('api/foundry-capabilities.json', baseUrl),
       fetchJson('api/operation-contracts.json', baseUrl)
     ]);
@@ -339,7 +345,7 @@
     try {
       const inspected = await inspect(skillName, options);
       report.capabilityId = inspected.resolved.capabilityId;
-      report.stages.push({ id: 'required-charles-engram', passed: true, sha256: inspected.boundContext.personalityBinding.integrity.digest }, { id: 'reciprocal-skill-index', passed: true });
+      report.stages.push({ id: 'required-charles-engram', passed: true, sha256: inspected.boundContext.engramSha256 }, { id: 'reciprocal-skill-index', passed: true, sha256: inspected.boundContext.registrySha256, externallyPinned: inspected.boundContext.externalTrustPinned });
       report.statuses.push(STATUS.DISCOVERABLE, STATUS.ONBOARDABLE);
       report.stages.push({ id: 'discovery', passed: true }, { id: 'manifest-valid', passed: true }, { id: 'contract-resolved', passed: true });
       if (inspected.manifest.runtime?.family !== 'javascript' || inspected.manifest.runtime?.class !== 'browser-js') {

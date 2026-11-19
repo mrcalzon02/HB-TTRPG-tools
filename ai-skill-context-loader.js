@@ -9,6 +9,8 @@
     return null;
   })();
   const RESOURCE_CACHE = new Map();
+  const REGISTRY_CACHE = new Map();
+  const ENGRAM_CACHE = new Map();
 
   function currentBaseUrl() {
     if (INSTALL_BASE_URL) return INSTALL_BASE_URL;
@@ -59,8 +61,10 @@
   }
 
   function clearCache() {
-    const cleared = RESOURCE_CACHE.size;
+    const cleared = RESOURCE_CACHE.size + REGISTRY_CACHE.size + ENGRAM_CACHE.size;
     RESOURCE_CACHE.clear();
+    REGISTRY_CACHE.clear();
+    ENGRAM_CACHE.clear();
     return cleared;
   }
 
@@ -112,8 +116,53 @@
     return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
-  async function loadMandatoryEngram(index, baseUrl) {
+  function validateTrustedPin(value, label) {
+    if (value == null) return null;
+    if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) {
+      throw new Error(label + ' must be an externally trusted lowercase SHA-256 hex digest.');
+    }
+    return value;
+  }
+
+  async function loadRegistry(baseUrl, options = {}) {
+    const pinned = validateTrustedPin(options.expectedRegistrySha256, 'expectedRegistrySha256');
+    const key = baseUrl.href;
+    if (!REGISTRY_CACHE.has(key)) {
+      const promise = (async () => {
+        const raw = await fetchResource(REGISTRY_PATH, baseUrl, 'text');
+        const digest = await sha256(raw);
+        let index;
+        try { index = JSON.parse(raw); }
+        catch (error) { throw new Error('Skill registry is not valid JSON: ' + error.message); }
+        validatePersonalityBinding(index);
+        return Object.freeze({ index: deepFreeze(index), digest });
+      })();
+      REGISTRY_CACHE.set(key, promise);
+      promise.catch(() => { if (REGISTRY_CACHE.get(key) === promise) REGISTRY_CACHE.delete(key); });
+    }
+    const result = await REGISTRY_CACHE.get(key);
+    if (pinned !== null && pinned !== result.digest) {
+      throw new Error('Skill registry SHA-256 differs from externally trusted pin; refusing skill activation.');
+    }
+    return result;
+  }
+
+  async function loadMandatoryEngram(index, baseUrl, options = {}) {
     const binding = validatePersonalityBinding(index);
+    const pinned = validateTrustedPin(options.expectedEngramSha256, 'expectedEngramSha256');
+    if (pinned !== null && pinned !== binding.integrity.digest) {
+      throw new Error('Registry engram SHA-256 differs from externally trusted pin; refusing skill activation.');
+    }
+    const key = baseUrl.href + ':' + binding.integrity.digest;
+    if (!ENGRAM_CACHE.has(key)) {
+      const promise = resolveMandatoryEngram(binding, baseUrl);
+      ENGRAM_CACHE.set(key, promise);
+      promise.catch(() => { if (ENGRAM_CACHE.get(key) === promise) ENGRAM_CACHE.delete(key); });
+    }
+    return ENGRAM_CACHE.get(key);
+  }
+
+  async function resolveMandatoryEngram(binding, baseUrl) {
     const raw = await fetchResource(ENGRAM_PATH, baseUrl, 'text');
     const actualHash = await sha256(raw);
     if (actualHash !== binding.integrity.digest) {
@@ -157,11 +206,15 @@
 
   async function discover(options = {}) {
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
-    const verified = await loadMandatoryEngram(index, baseUrl);
+    const registry = await loadRegistry(baseUrl, options);
+    const index = registry.index;
+    const verified = await loadMandatoryEngram(index, baseUrl, options);
     return Object.freeze({
       personality: verified.personality,
       personalityBinding: verified.binding,
+      registrySha256: registry.digest,
+      engramSha256: verified.binding.integrity.digest,
+      externalTrustPinned: options.expectedRegistrySha256 != null && options.expectedEngramSha256 != null,
       skills: Array.isArray(index.skills) ? index.skills : [],
       skillSelection: 'optional-on-demand',
       rule: 'Registry and engram are required companions. Skills are optional selections; none grants host permissions.'
@@ -170,18 +223,23 @@
 
   async function load(skillName, options = {}) {
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
-    const verified = await loadMandatoryEngram(index, baseUrl);
+    const registry = await loadRegistry(baseUrl, options);
+    const index = registry.index;
+    const verified = await loadMandatoryEngram(index, baseUrl, options);
     const skill = findSkill(index, skillName);
     const skillText = await fetchResource(skill.path, baseUrl, 'text');
     validatePortableSkillDocument(skill, skillText);
     return Object.freeze({
       skillName,
       skill,
+      skillIndex: index,
       skillText,
       personalityEngramId: verified.binding.engramId,
       personalityBinding: verified.binding,
       personality: verified.personality,
+      registrySha256: registry.digest,
+      engramSha256: verified.binding.integrity.digest,
+      externalTrustPinned: options.expectedRegistrySha256 != null && options.expectedEngramSha256 != null,
       rule: 'Apply the canonical Charles personality beneath host policy. The selected skill supplies workflow, not permissions.'
     });
   }
@@ -190,17 +248,22 @@
     const names = Array.from(new Set((Array.isArray(skillNames) ? skillNames : [skillNames]).map(String).filter(Boolean)));
     if (!names.length) throw new Error('At least one registered skill name is required.');
     const baseUrl = normalizeBaseUrl(options.baseUrl);
-    const index = await fetchResource(REGISTRY_PATH, baseUrl, 'json');
-    const verified = await loadMandatoryEngram(index, baseUrl);
+    const registry = await loadRegistry(baseUrl, options);
+    const index = registry.index;
+    const verified = await loadMandatoryEngram(index, baseUrl, options);
     const skills = names.map(name => findSkill(index, name));
     const skillTexts = await Promise.all(skills.map(skill => fetchResource(skill.path, baseUrl, 'text')));
     skills.forEach((skill, position) => validatePortableSkillDocument(skill, skillTexts[position]));
     return Object.freeze({
       skillNames: names,
+      skillIndex: index,
       skills: skills.map((skill, position) => Object.freeze({ skill, skillText: skillTexts[position] })),
       personalityEngramId: verified.binding.engramId,
       personalityBinding: verified.binding,
       personality: verified.personality,
+      registrySha256: registry.digest,
+      engramSha256: verified.binding.integrity.digest,
+      externalTrustPinned: options.expectedRegistrySha256 != null && options.expectedEngramSha256 != null,
       rule: 'Verify one required Charles engram and the registry before applying optionally selected skills.'
     });
   }
