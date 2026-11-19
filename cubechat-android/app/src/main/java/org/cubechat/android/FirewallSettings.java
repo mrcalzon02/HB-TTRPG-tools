@@ -508,12 +508,16 @@ public final class FirewallSettings extends Activity {
                 LockdownReleaseController.releaseAllOwnedControls(this);
         // Record only the result of issuing cleanup requests; never claim a
         // verified physical radio shutdown or removal of OS-owned policies.
-        getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE).edit()
+        // Persist the last command receipt synchronously, as with the actual
+        // firewall armed preference: a process exit must not silently discard
+        // the user's most recent cleanup outcome.
+        boolean receiptSaved = getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE).edit()
                 .putLong("last-release-at", System.currentTimeMillis())
                 .putBoolean("last-release-requests-sent", result.requestsCompleted)
                 .putString("last-release-steps", result.stepSummary)
-                .apply();
-        Toast.makeText(this, result.detail, Toast.LENGTH_LONG).show();
+                .commit();
+        Toast.makeText(this, receiptSaved ? result.detail
+                : result.detail + " Cleanup receipt could not be saved.", Toast.LENGTH_LONG).show();
         render();
     }
 
