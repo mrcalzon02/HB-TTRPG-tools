@@ -5,6 +5,7 @@
 **Authoritative repository:** `mrcalzon02/HB-TTRPG-tools` · branch `main` · app `cubechat-android/`  
 **Parent architecture:** [Radio Guardian single-APK RFC](RADIO_GUARDIAN_ARCHITECTURE.md)  
 **Non-negotiable safety policy:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md). No actual, simulated, emulated, laboratory, certified or carrier-coordinated emergency-call continuity tests, under any circumstances.
+**Absolute runtime priority:** [RADIOGUARD EMERGENCY PRIORITY YIELD](RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md): trusted early OS indication must unconditionally release every CubeChat-owned network/radio restriction, and stay disarmed until explicit user reactivation. No emergency testing or fake emergency triggers. The current app has NO proven universal early signal; only a best-effort generic manual release path is implemented.
 **Active tracking:** [CubeChat Lockdown Mode — feasibility issue #23](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/23)
 
 ## 0. Decisions to retain from the stalled "CubeChat Lockdown Mode" effort
@@ -36,6 +37,14 @@ On `main` as reviewed after commits `02c86a8` and `467c67e`:
 - `app/src/main/AndroidManifest.xml`: Android device-admin receiver is declared; the app does not automatically become device owner. Fine-location permission is capped at SDK 32, a known blocker for a later cellular observer on Android 13+.
 - `LockdownFirewallTest.java`: local Robolectric tests for arming and unprotected-socket refusal. **Not proof** of kernel or real modem enforcement, installed app compatibility, emergency behavior, reboot persistence, or packet-leak resistance.
 - Last published Android release remains `cubechat-android-v0.1.4`, build 5. Newer `main` changes are development source until built, tested and released; never conflate source commit with device validation.
+
+## Critical precondition — emergency priority before any privileged radio enforcement
+
+**Priority ordering:** `TRUSTED_PLATFORM_PRIORITY_YIELD > RADIO_GUARDIAN > STANDARD_LOCKDOWN`. On an authenticated, early indication that emergency calling is needed, release all CubeChat-owned VPN/TUN, device-owner policy, kernel/eBPF/LSM/tc/netfilter, privileged-helper and vendor-radio controls; cancel pending commands; persist a no-auto-rearm state. Do not block the system until it proves eligibility to place a call. Do not wait for a prompt or network check.
+
+The standard APK does not have a universal early emergency detector; system-only callback and emergency state broadcasts may arrive late. Never expose an unprotected remote/broadcast unlock endpoint. **Where early trusted preemption cannot be established, privileged controls that could interfere with telephone availability are not eligible for deployment.** Explicitly retain `AUTO_PRIORITY_YIELD_UNSUPPORTED` and `NOT_TESTED_BY_PROJECT`, not a success badge. The existing development VPN/manual release does not certify emergency availability.
+
+**No emergency scenario may be invoked for verification.** Ordinary generic shutdown and non-emergency network checks are in scope. See [binding safety override](RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md).
 
 ## 2. Enforce at the lowest independently verifiable boundary
 
@@ -138,6 +147,7 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 | --- | --- |
 | Toggle from NORMAL to LOCKDOWN while third-party TCP, UDP/QUIC, DNS and IPv6 flows are active | Existing disallowed flows terminate or are blocked; no unaccounted reopens; report exact coverage |
 | Reboot, app force-stop, VPN revoke and rooted helper crash | Do not claim enforcement that has stopped; selected policy persists only where separately verified; stock telephone recoverable |
+| Generic manually initiated full release (NO emergency scenario) | Attempt all CubeChat-owned enforcement removals even after a partial failure; persist disarmed state and report external Android-owned VPN policies honestly. This verifies **only** ordinary teardown, not an emergency signal/call |
 | Browser direct IP, private DNS, tethering, LAN, VPN app, secondary user/profile | Document and test each bypass. Missing visibility = uncovered, not "secure" |
 | LTE/NR changes, dual SIM, eSIM replacement, SIM swap, roaming, no-service | Correct subscriptions, source/staleness and no false high-confidence tower identity |
 | Nearby Wi-Fi/Bluetooth discovery, bonding, advertising and pre-existing links | Unsupported blocking is visibly partial; authorized CubeChat route selection does not imply all-app radio authorization |
