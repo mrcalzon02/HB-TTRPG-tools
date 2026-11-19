@@ -16,6 +16,12 @@ For real network controls, the user must separately configure Android's VPN/mana
 
 
 
+## Manual lockdown recovery and diagnostic privacy (development builds)
+
+The **Recovery** tab writes an ordinary manual release journal entry *before* attempting cleanup, then saves the outcome of each CubeChat-managed restriction, local armed-preference and VPN-stop request. If the process stops between the start and finish, reopening the screen displays **release interrupted or unconfirmed**, hides the previous operation's receipts and offers **Retry CubeChat cleanup**. It never automatically rearms lockdown. A successful command receipt is **not** independent proof that Android's own VPN or radio restrictions were removed.
+
+Both the **Recovery** and **Device** tabs offer an explicit copy action for compact diagnostics. Copied data is marked as sensitive so compatible Android versions obscure its visual clipboard preview. **It is still a normal system clipboard item:** other applications with access may read it. Copy only if you intend to share the report; neither tab automatically exports the information. The report excludes chat messages, contact identities, SIM/subscriber identifiers, network packet contents and location observations.
+
 ## Read-only RadioGuard feasibility probe (developer use)
 
 Before choosing a disposable handset for deeper kernel research, install Android Platform Tools on your computer and explicitly select **one spare phone** using `adb devices`. From the `cubechat-android` directory run:
