@@ -328,6 +328,11 @@ public final class FirewallSettings extends Activity {
                     : "Some release requests FAILED";
             text(page, "Last manual release · " + time + "\n" + state, 14,
                     recovery.getBoolean("last-release-requests-sent", false) ? MUTED : DANGER);
+            String steps = recovery.getString("last-release-steps", "");
+            if (steps != null && !steps.isEmpty())
+                text(page, steps, 14,
+                        recovery.getBoolean("last-release-requests-sent", false)
+                                ? MUTED : DANGER);
         } else {
             text(page, "No manual release attempt recorded on this installation.", 14, MUTED);
         }
@@ -341,9 +346,13 @@ public final class FirewallSettings extends Activity {
         button(page, "Android VPN settings", () -> open(Settings.ACTION_VPN_SETTINGS));
         button(page, "Copy non-sensitive status summary", () -> {
             String report = snapshot.diagnostics;
-            if (attemptedAt > 0)
+            if (attemptedAt > 0) {
                 report += "\nLast manual release requests sent: "
                         + (recovery.getBoolean("last-release-requests-sent", false) ? "YES" : "NO");
+                String steps = recovery.getString("last-release-steps", "");
+                if (steps != null && !steps.isEmpty())
+                    report += "\nLast cleanup commands (not verified removals):\n" + steps;
+            }
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             if (clipboard == null) {
                 Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_LONG).show();
@@ -502,6 +511,7 @@ public final class FirewallSettings extends Activity {
         getSharedPreferences(RECOVERY_PREFS, MODE_PRIVATE).edit()
                 .putLong("last-release-at", System.currentTimeMillis())
                 .putBoolean("last-release-requests-sent", result.requestsCompleted)
+                .putString("last-release-steps", result.stepSummary)
                 .apply();
         Toast.makeText(this, result.detail, Toast.LENGTH_LONG).show();
         render();
