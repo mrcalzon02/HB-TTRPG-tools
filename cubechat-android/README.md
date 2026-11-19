@@ -52,6 +52,16 @@ A BPF filesystem mount or available `tc` tool does **not** establish that a usab
 bash scripts/test-radioguard-readonly-probe.sh
 ```
 
+## Experimental QR artwork: luminance modulation
+
+The in-progress [QR luminance compositor](app/src/main/java/org/cubechat/android/QrLuminanceOverlay.java) can blend a valid QR matrix into an opaque picture by locally brightening its white modules and darkening its black modules, while preserving original colors as far as the RGB gamut allows. The matrix must already include a four-module quiet zone, and the rendered square must provide at least six pixels per module. An adjustment-strength parameter controls how obvious the pattern appears.
+
+**Not yet exposed as a user-facing export:** the existing black-and-white pairing QR and PNG save action are unchanged. Before enabling artwork-backed exports, CubeChat must try decoding the finished picture using its existing ZXing reader, reject an unscannable result rather than silently saving it as scan-ready, and preserve the plain QR as a fallback. Use PNG for first-party export; compression, resizing, filters, poor lighting and camera quality may destroy weak luminance patterns. Prefer an opaque image or flatten transparency before adding a QR.
+
+This is **visual camouflage, not encryption**. CubeChat pairing invites can contain key material; anyone who obtains a decodable copy of the picture can extract the invite and its associated credentials. Treat artwork-embedded key cards with the same privacy as visible QR key cards.
+
+Developer host smoke: `bash scripts/test-qr-luminance-host.sh`. Android/ZXing source regression: `QrLuminanceOverlayDecodeTest` under `app/src/test` (not yet executed on the SDK workflow). One offline textured-background smoke using the exact Java compositor and an independent OpenCV reader decoded a dummy QR at strengths 0.40–1.00 but not 0.30. These are **single synthetic-image observations**, not verified real-world phone/camera thresholds.
+
 ## Conversations and drafts
 
 Choose **Conversations → Add contact** to create another invite or scan someone else's. Scanning another card keeps your earlier chats. Scanning the same card again opens its existing conversation. Use **Rename contact** to give the current conversation a local name and **Search contacts** to find it later. The contact list shows how many outgoing messages are waiting. The current chat displays **Connected** or **Not connected**, the selected transport route and the count of locally queued messages. The Conversations picker marks only the selected conversation as potentially connected; inactive contacts say **Not selected · Open to reconnect**. A queued message has not yet been confirmed as delivered. Connection state describes the selected conversation, not a global online status for every contact.
