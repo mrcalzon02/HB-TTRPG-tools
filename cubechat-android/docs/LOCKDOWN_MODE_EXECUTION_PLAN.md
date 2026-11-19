@@ -3,7 +3,8 @@
 **Status:** Ingested planning handoff; implementation of kernel/baseband enforcement **NOT started**. Existing Android VPN and device-owner code retained as an unverified compatibility fallback. **Firewall code changes paused pending lower-layer evaluation.**  
 **Date:** 2026-11-18 (America/Sitka)  
 **Authoritative repository:** `mrcalzon02/HB-TTRPG-tools` · branch `main` · app `cubechat-android/`  
-**Parent architecture:** [Radio Guardian single-APK RFC](RADIO_GUARDIAN_ARCHITECTURE.md)
+**Parent architecture:** [Radio Guardian single-APK RFC](RADIO_GUARDIAN_ARCHITECTURE.md)  
+**Non-negotiable safety policy:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md). No actual, simulated, emulated, laboratory, certified or carrier-coordinated emergency-call continuity tests, under any circumstances.
 **Active tracking:** [CubeChat Lockdown Mode — feasibility issue #23](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/23)
 
 ## 0. Decisions to retain from the stalled "CubeChat Lockdown Mode" effort
@@ -11,7 +12,7 @@
 1. **One user-facing installable APK** is the product interface. This may include a separately installable, signed helper *payload*. A normal APK cannot elevate itself, alter the baseband, replace a kernel driver or silently provision device ownership. Hardware preparation/bootloader setup is a separate, explicit operation.
 2. **One lockdown toggle, default-deny.** When enabled, aim to allow only explicitly authorized CubeChat communications and truly indispensable phone survival/registration/emergency services. All other device data and unapproved radio discoverability are denied wherever verified enforcement exists.
 3. **Kernel-level/privileged assessment is the next priority, not more VPN UI tweaks.** IP firewall work already committed remains the fallback. A kernel IP policy is **not** a baseband cellular/RF firewall.
-4. **Normal phone first:** preserve receiving and placing ordinary calls, SIM/eSIM, IMS/VoLTE, carrier registration, Wi-Fi calling and emergency call pathways according to the device's capabilities. Treat all exceptions as measurable, with no false claim that "alive signal" is one well-defined packet or endpoint.
+4. **Normal phone first:** preserve receiving and placing **ordinary non-emergency** calls, SIM/eSIM, IMS/VoLTE, carrier registration and Wi-Fi calling. Leave platform emergency-call handling outside RadioGuard's modified or tested boundary; document potential effects as **NOT_TESTED_BY_PROJECT**. Never describe the "alive signal" as one well-defined packet or endpoint.
 5. **No false 'full lockdown' shield.** Each control reports `SUPPORTED`, `REQUESTED`, `VERIFIED_ACTIVE`, `UNVERIFIED`, `FAILED`, or `NOT_SUPPORTED` independently; overall protection cannot exceed the weakest required component.
 6. **Known-cell history is an anomaly heuristic, not a physical tower certificate.** Broadcast cellular identities are spoofable; identifying a specific rogue base station or selectively blocking it requires hardware support not yet demonstrated.
 7. **No changes to existing firewall enforcement paths** until feasibility assessment selects a device-specific approach, tests can show no unintended bypass and a recovery procedure exists. Documentation and isolated lab harnesses may proceed now.
@@ -100,7 +101,7 @@ Profiles:
 - `NORMAL`: normal Android networking.
 - `LOCKDOWN_STANDARD`: existing audited Android VPN/managed-device path, explicitly labeled partial if radio or OS coverage is unknown.
 - `LOCKDOWN_GUARDIAN`: device-specific verified kernel IP policy + verified radio restrictions; only report full coverage for each proven class.
-- `RADIO_SILENCE`: **separate high-impact user request** for supported wireless shutdown; not synonymous with ordinary lockdown, and emergency availability must be warned and recovery tested.
+- `RADIO_SILENCE`: **separate high-impact user request** for supported wireless shutdown; not synonymous with ordinary lockdown. Warn that emergency calling may be unavailable. Only **non-emergency** radio recovery may be tested; no emergency-call continuity tests.
 
 One UI toggle can request a whole policy, but activation is transactional. Show `REQUESTED` until every available component reports applied/readback; if partial, show `PARTIAL — <reason>` and enumerate blocked and unblocked traffic classes. If not possible to fulfill strict policy, refuse an unqualified "secure" state. Reboot persistence must be separately proven. In a crisis, CubeChat's own app traffic fails closed; the system telephony stack fails safe to preserve calls unless the user separately requests and confirms a radio-off mode.
 
@@ -123,11 +124,13 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 | P1: Isolated harness | YES after P0 layout | Host-only policy simulator; synthetic eBPF/netfilter packet fixture matrix; fake base-station event traces as *offline* data | Correct deny/allow, IPv4/IPv6, process kill/boot transitions; no live phone changes |
 | P2: Standard observer | YES after permission/privacy design | Read-only Connections view; encrypted local observations, age/source, dual-SIM, cellular seniority heuristics | Permission denial, stale/empty results and airplane mode remain coherent; no false tower-authentication claims |
 | P3: Elevated IP proof | **BLOCKED by test handset and privileges** | Trusted helper skeleton, authenticated local IPC, root manager packaging and host-side fault injection; native kernel packet filter on spare device | Verified deny under reboot/VPN failure, no untracked bypass, calls/SMS survive, recovery rehearsed |
-| P4: Radio adapter proof | BLOCKED by exact modem/firmware | Read-only vendor capability probing followed by minimal reversible radio controls | 2G/network-type/radio changes are measurable and reversible; no emergency-path damage |
+| P4: Radio adapter proof | BLOCKED by exact modem/firmware | Read-only vendor capability probing followed by minimal reversible radio controls | 2G/network-type/radio changes measured and reversible using **non-emergency** tests; emergency-call effects remain **NOT_TESTED_BY_PROJECT**, never inferred safe |
 | P5: Single-toggle integration | AFTER P3/P4 | Atomic policy activation, status matrix, exceptions UI, explicit user consent, independent verification | No green/full state without complete relevant proof; one-APK standard operation intact |
-| P6: Device expansion/release | AFTER physical validation | Signed reproducible APK/helper, compatibility allowlist, release notes, test evidence | Single + dual device CubeChat, telephony, emergency-path lab simulation, soak/OTA/rollback pass |
+| P6: Device expansion/release | AFTER physical validation | Signed reproducible APK/helper, compatibility allowlist, release notes, test evidence | Single + dual device CubeChat, **ordinary non-emergency** telephony, soak/OTA/rollback pass; no emergency-call simulation or validation |
 
 **No release blocking rule change:** build/launch failures and required multiplayer/updater failures block ordinary project releases; security-specific claimed enforcement functionality **must not be advertised or enabled by default** without its own hardware and negative-testing gate. Diagnostics and partial support remain accurately labeled.
+
+**Absolute prohibition:** No emergency-call continuity testing of any kind, including mock or shielded testing; review [NO_EMERGENCY_CALL_TESTING.md](NO_EMERGENCY_CALL_TESTING.md) before adding procedures. Ordinary telephony checks remain permitted. Nothing in the earlier objectives overrides this prohibition.
 
 ## 6. Acceptance tests (security invariants)
 
@@ -140,7 +143,7 @@ One UI toggle can request a whole policy, but activation is transactional. Show 
 | Nearby Wi-Fi/Bluetooth discovery, bonding, advertising and pre-existing links | Unsupported blocking is visibly partial; authorized CubeChat route selection does not imply all-app radio authorization |
 | 2G disable or cellular restriction command on supported lab hardware | Device confirms supported policy; readback and rollback successful; calls still handled appropriately |
 | Incoming/outgoing normal calls, SMS, IMS/VoLTE, Wi-Fi calling, data, alarms | Preserve agreed non-security phone behavior for each policy; document unavoidable tradeoffs |
-| Emergency-path validation | **Never auto-dial real emergency numbers**; use manufacturer/carrier-certified test mode or coordinated lab procedures |
+| Emergency-call continuity (ALL modalities) | **PROHIBITED: NEVER TEST** — no calls, simulations, emulators, shielded RF labs, test SIMs, carrier-coordinated or certified facilities. Out of scope permanently; mark **NOT_TESTED_BY_PROJECT** and make no emergency-function assurance. [Binding policy](NO_EMERGENCY_CALL_TESTING.md) |
 | Malicious/mismatched companion, untrusted app calling IPC, replayed commands | Reject before privilege operation; bound app signing identity and command generation verified |
 | OTA, baseband update, root removal, APK uninstall | Fail to safe/monitor-only mode, remove/disable helper where explicitly authorized, preserve OS boot and normal calls |
 | Clean and upgraded APK, offline P2P, attachment transfer, receipt, updater | No regression in existing CubeChat features or storage |
