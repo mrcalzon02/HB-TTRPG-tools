@@ -39,7 +39,8 @@ public final class LockdownRecoverySummaryTest {
         check(system.state == LockdownRecoverySummary.State.OS_IP_LOCKDOWN_REPORTED,
                 "only system reports OS policy");
         check(system.details.contains("does not establish"), "OS status not radio status");
-        check(system.diagnostics.contains("RESTRICTIONS_REPORTED"), "managed status present");
+        check(system.diagnostics.contains("Device-owner restrictions: 1 of 1 PRESENT"),
+                "managed status present");
 
         LockdownRecoverySummary.Snapshot leftovers = s(false, false, false, true, true);
         check(leftovers.state == LockdownRecoverySummary.State.RELEASE_INCOMPLETE,
