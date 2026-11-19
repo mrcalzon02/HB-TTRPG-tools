@@ -242,6 +242,7 @@ javac --release 17 -encoding UTF-8 -d "$tmp/classes" \
     "$tmp/src/org/cubechat/android/CubeDeviceAdmin.java" \
     "$tmp/src/org/cubechat/android/LockdownFirewall.java" \
     "$here/app/src/main/java/org/cubechat/android/ManagedVpnOwnership.java" \
+    "$here/app/src/main/java/org/cubechat/android/GuardianDeploymentGate.java" \
     "$here/app/src/main/java/org/cubechat/android/ManagedLockdownController.java" \
     "$tmp/src/org/cubechat/android/ManagedVpnControllerHostTest.java"
 java -cp "$tmp/classes" org.cubechat.android.ManagedVpnControllerHostTest
