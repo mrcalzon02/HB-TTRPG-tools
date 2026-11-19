@@ -23,3 +23,4 @@ java -cp "$classes" org.cubechat.android.GuardianTrafficPolicyTest
 java -cp "$classes" org.cubechat.android.LockdownRecoverySummaryTest
 java -cp "$classes" org.cubechat.android.GuardianDeviceInventoryTextTest
 java -cp "$classes" org.cubechat.android.UpdateRunGateTest
+bash "$here/scripts/test-radioguard-readonly-probe.sh"
