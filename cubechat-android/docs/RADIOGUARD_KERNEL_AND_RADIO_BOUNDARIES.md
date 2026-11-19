@@ -4,6 +4,7 @@
 **Primary goal:** an attacker controlling a third-party Android app (and possibly an Android framework service) cannot use ordinary internet-capable sockets outside narrowly granted CubeChat routes. We also inventory the remaining wireless data paths rather than asserting that IP controls stop all RF.
 
 **Absolute project prohibition:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md). No actual or simulated emergency-call continuity tests, ever; normal non-emergency communication testing remains permitted.
+**Priority override:** [RADIOGUARD EMERGENCY PRIORITY YIELD](RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md): trusted early platform requirement for emergency calling overrides *all* CubeChat IP/radio controls. No protocol simulation, interception of emergency calls or test triggers. This gate blocks privileged deployment until a safe early handoff is established.
 
 **Scope / trust boundary:** Below application permissions is not automatically outside the operating system. The Android Linux kernel is part of Android. eBPF, netfilter, the Radio HAL, and root daemons may resist an *app-level* exploit, but **not arbitrary kernel control**. Any defense against a kernel-compromised attacker needs a separately protected execution/power boundary proven on real hardware.
 
