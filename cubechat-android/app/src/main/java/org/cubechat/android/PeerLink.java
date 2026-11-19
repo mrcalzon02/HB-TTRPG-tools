@@ -614,6 +614,9 @@ public final class PeerLink {
             io.execute(() -> {
                 Socket socket = new Socket();
                 try {
+                    // Only an authenticated CubeChat peer connection may leave the local
+                    // drop-all VPN. Protect it before connecting; never fall back.
+                    LockdownFirewall.protectChatSocket(app, socket);
                     InetSocketAddress found = discover ? LanDiscovery.find(p.token, LanDiscovery.broadcastAddresses(), LanDiscovery.PORT) : null;
                     if (found == null && missingAddress) throw new IOException("Waiting for nearby phone");
                     InetSocketAddress endpoint = found == null ? new InetSocketAddress(address, port) : found;
