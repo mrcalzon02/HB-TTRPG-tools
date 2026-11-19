@@ -4,6 +4,16 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 18, 2026 · Radio Guardian passive observer and Lockdown smoke baseline
+
+The Firewall settings screen now includes a **Connections** tab for manual, consent-gated, read-only cellular observations and bounded process-local history. The future Guardian proof model requires independent hardware readback before displaying a full-protection state. The existing IP VPN and optional device-owner protections were left intact; **no root helper, baseband filter or tower rejection feature was implemented**.
+
+- [Full smoke results and APK SHA-256 evidence](docs/LOCKDOWN_SMOKE_REPORT_2026-11-18.md) · [passing CI #44454923448](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/44454923448).
+- Java 17 hosted tests passed 69 model/policy assertions, Gradle Android debug and instrumentation APK builds, Android unit and API 26/35 UI tests, and APK signature v2 verification.
+- An isolated Android 35 emulator passed the existing ContactStorageChecks instrumentation and launched the application. It did not exercise real tower/cellular radio interception, IP packet leakage under OS lockdown, physical phone calling, or emergency paths.
+- The Android package remains version 0.1.4 build 5 in **development source only**, with a debug signature. The published release is unchanged; **do not install the debug artifact over the signed public APK**. The new CI smoke workflow is manual-only after its one-shot validation.
+- The next gate is an expendable, documented physical handset for modem and kernel behavior, independent packet capture, permission revocation, and normal call/IMS/data preservation. Keep physical deployment blocked until those checks pass.
+
 ## November 17, 2026 · Preserve the next draft during an offline send
 
 The composer shows **Saving…** until its own outbox write finishes. A file or connection error can no longer re-enable a pending send. Typing after the tap creates a new draft, even when the text is identical. A failed local write keeps the current draft editable for retry. Once SQLite commits the message, a subsequent contact-list refresh error cannot prompt a duplicate submission.
