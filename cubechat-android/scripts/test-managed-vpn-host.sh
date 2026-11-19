@@ -138,6 +138,24 @@ public final class ManagedVpnControllerHostTest {
         check(!ManagedLockdownController.restrictionsPresent(legacy),
                 "managed restrictions cleared");
 
+        Context protectExisting = new Context();
+        protectExisting.dpm.vpn = "org.other.vpn";
+        boolean refusedReplacement = false;
+        try { ManagedLockdownController.enforce(protectExisting); }
+        catch (IllegalStateException expected) { refusedReplacement = true; }
+        check(refusedReplacement, "arming managed lockdown refuses unrelated VPN");
+        check("org.other.vpn".equals(protectExisting.dpm.vpn),
+                "third-party VPN remains installed after rejected enable");
+
+        Context legacyUserVpn = new Context();
+        legacyUserVpn.dpm.vpn = legacyUserVpn.getPackageName();
+        boolean refusedAmbiguous = false;
+        try { ManagedLockdownController.enforce(legacyUserVpn); }
+        catch (IllegalStateException expected) { refusedAmbiguous = true; }
+        check(refusedAmbiguous, "legacy same-package VPN without provenance not hijacked");
+        check(!legacyUserVpn.prefs.getBoolean("cubechat-admin-installed-vpn", false),
+                "failed preflight must not mark user VPN as admin-owned");
+
         Context foreign = new Context();
         foreign.dpm.vpn = "org.other.vpn";
         foreign.prefs.edit().putBoolean("cubechat-admin-installed-vpn", true).commit();
@@ -158,6 +176,14 @@ public final class ManagedVpnControllerHostTest {
                 "other cleanup attempted even when VPN ownership unknown");
 
         Build.VERSION.SDK_INT = 35;
+        Context modernExisting = new Context();
+        modernExisting.dpm.vpn = "org.other.vpn";
+        boolean modernRefused = false;
+        try { ManagedLockdownController.enforce(modernExisting); }
+        catch (IllegalStateException expected) { modernRefused = true; }
+        check(modernRefused && "org.other.vpn".equals(modernExisting.dpm.vpn),
+                "modern platform preflight also preserves another VPN");
+
         Context modern = new Context();
         modern.dpm.vpn = modern.getPackageName();
         ManagedLockdownController.release(modern);
