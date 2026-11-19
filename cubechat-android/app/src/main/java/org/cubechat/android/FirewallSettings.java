@@ -1,14 +1,19 @@
 package org.cubechat.android;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
+import android.telephony.CellInfo;
+import android.telephony.TelephonyManager;
 import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +24,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Lockdown has an honest status: "requested", "IP filtering" and "OS fail-closed"
  * are separate states. No in-app indicator claims radio or baseband isolation.
  */
 public final class FirewallSettings extends Activity {
-    private static final int VPN_CONSENT = 243;
+    private static final int VPN_CONSENT = 243, CELL_PERMISSION = 244;
+    private static final long MIN_CELL_REFRESH_MS = 15_000L;
+    private static final CellObservationBook CELL_HISTORY = new CellObservationBook();
     private static final int INK = 0xff17251e, MUTED = 0xff4c6157, DANGER = 0xff8c351c;
     private final Handler ui = new Handler(Looper.getMainLooper());
     // One delayed refresh allows service startup without replacing the entire
@@ -33,6 +44,11 @@ public final class FirewallSettings extends Activity {
     private LinearLayout page;
     private int tab;
     private boolean visible;
+    private List<CellObservation> observedCells = Collections.emptyList();
+    private String cellStatus = "No cellular observations requested.";
+    private boolean cellRequestRunning;
+    private long lastCellRefreshMs = -1L;
+    private int cellRequestGeneration;
 
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);
@@ -48,6 +64,11 @@ public final class FirewallSettings extends Activity {
     @Override protected void onResume() {
         super.onResume();
         visible = true;
+        if (!hasCellPermission()) {
+            observedCells = Collections.emptyList();
+            CELL_HISTORY.clear();
+            cellStatus = "Location permission not granted. No cell data is collected.";
+        }
         ui.removeCallbacks(refresh);
         ui.postDelayed(refresh, 1200);
     }
@@ -94,7 +115,7 @@ public final class FirewallSettings extends Activity {
         text(root, "CubeChat · Firewall settings", 23, INK);
         LinearLayout tabs = new LinearLayout(this);
         tabs.setOrientation(LinearLayout.HORIZONTAL);
-        String[] names = {"Lockdown", "Exceptions", "Radios"};
+        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections"};
         for (int index = 0; index < names.length; index++) {
             final int selected = index;
             Button choice = new Button(this);
@@ -103,9 +124,12 @@ public final class FirewallSettings extends Activity {
             choice.setTextSize(12);
             choice.setEnabled(tab != index);
             choice.setOnClickListener(v -> { tab = selected; render(); });
-            tabs.addView(choice, new LinearLayout.LayoutParams(0, dp(55), 1));
+            tabs.addView(choice, new LinearLayout.LayoutParams(dp(103), dp(55)));
         }
-        root.addView(tabs);
+        android.widget.HorizontalScrollView tabStrip = new android.widget.HorizontalScrollView(this);
+        tabStrip.setHorizontalScrollBarEnabled(false);
+        tabStrip.addView(tabs);
+        root.addView(tabStrip);
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
         page = col();
@@ -117,7 +141,8 @@ public final class FirewallSettings extends Activity {
         setContentView(root);
         if (tab == 0) showLockdown();
         else if (tab == 1) showExceptions();
-        else showRadios();
+        else if (tab == 2) showRadios();
+        else showConnections();
     }
 
     private void showLockdown() {
@@ -183,6 +208,147 @@ public final class FirewallSettings extends Activity {
             text(page, "Wi-Fi is not physically cut off. It remains under Android's driver and its current radio state is locked on Android 13+. A privileged OS exploit is still outside this guarantee.", 15, MUTED);
         } else {
             text(page, "Device owner unavailable. To obtain stronger radio restrictions requires deliberate fully managed device provisioning, typically during initial setup or after a factory reset. This screen cannot self-provision or silently reset the phone.", 15, MUTED);
+        }
+    }
+
+
+    /** M1: read-only cellular inventory; never requests or modifies radio registration. */
+    private void showConnections() {
+        text(page, "Cellular connections · observation only", 19, INK);
+        text(page, "Android may report a serving cell and some neighboring cells. This is NOT a complete radio scan or proof of a tower's physical identity.", 15, MUTED);
+        String ip = LockdownFirewall.systemLockdownVerified() ? "OS VPN lockdown confirmed"
+                : LockdownFirewall.running() ? "Local VPN running, OS lockdown unverified"
+                : LockdownFirewall.armed(this) ? "Lockdown requested, firewall not running" : "IP lockdown off";
+        text(page, "IP firewall: " + ip, 15, INK);
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            text(page, "No Android cellular radio is available on this device.", 16, DANGER);
+            return;
+        }
+        if (!hasCellPermission()) {
+            text(page, "No location permission · Android requires precise location permission to report cell identifiers. This tab never collects data until permission is granted AND a read is requested.", 15, DANGER);
+            button(page, "Grant cellular observation permission", () ->
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, CELL_PERMISSION));
+            return;
+        }
+        text(page, cellStatus, 15, cellRequestRunning ? DANGER : INK);
+        if (!cellRequestRunning) {
+            button(page, "Read cached cellular observations", this::readCachedCells);
+            if (Build.VERSION.SDK_INT >= 29) {
+                button(page, "Request updated cell measurements", this::requestFreshCells);
+            }
+        }
+        text(page, "Reports can be missing, stale or rate-limited. A request does not force active RF scanning. Repeated identities are only observations made during this app process.", 14, MUTED);
+        if (observedCells.isEmpty()) {
+            text(page, "No reported cells in the current snapshot.", 15, MUTED);
+        } else {
+            List<CellObservation> visible = new ArrayList<>(observedCells);
+            visible.sort((a, b) -> Boolean.compare(b.registered, a.registered));
+            text(page, "Reported cellular cells: " + visible.size(), 17, INK);
+            for (int i = 0; i < visible.size() && i < 32; i++) {
+                CellObservation item = visible.get(i);
+                String role = item.registered ? "REGISTERED / SERVING" : "OTHER REPORTED CELL";
+                text(page, role + (item.isCurrent() ? "" : " · STALE / TIMESTAMP UNKNOWN"), 15,
+                        item.isCurrent() ? INK : DANGER);
+                text(page, item.summary(), 14, MUTED);
+                CellObservationBook.Evidence evidence = CELL_HISTORY.find(item);
+                text(page, evidence == null ? "History: not enough valid samples" : evidence.label(),
+                        13, MUTED);
+            }
+            if (visible.size() > 32) text(page, "Additional entries not displayed. This view limits rendering to 32 rows.", 14, MUTED);
+        }
+        button(page, "Clear session observation history", () -> {
+            CELL_HISTORY.clear();
+            observedCells = Collections.emptyList();
+            cellStatus = "Session observations cleared; nothing was saved to disk.";
+            render();
+        });
+        text(page, "Not enabled: rogue tower verdicts, cell selection, baseband blocking, background collection, cloud uploads and persistent location history.", 14, DANGER);
+    }
+
+    private boolean hasCellPermission() {
+        return checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private TelephonyManager telephony() {
+        return (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+    }
+
+    private void readCachedCells() {
+        if (cellRequestRunning || !hasCellPermission()) return;
+        TelephonyManager tm = telephony();
+        if (tm == null) { cellStatus = "No telephony service available."; render(); return; }
+        cellRequestRunning = true;
+        cellStatus = "Reading Android's last cached cell report…";
+        int generation = ++cellRequestGeneration;
+        render();
+        new Thread(() -> {
+            try {
+                List<CellInfo> records = tm.getAllCellInfo();
+                List<CellObservation> snapshot = CellSnapshotReader.convert(records);
+                runOnUiThread(() -> finishCellRead(generation, snapshot, "Cached Android cell report"));
+            } catch (SecurityException | UnsupportedOperationException e) {
+                runOnUiThread(() -> failCellRead(generation, "Cell readings denied or unsupported by this device."));
+            } catch (RuntimeException e) {
+                runOnUiThread(() -> failCellRead(generation, "Cell report not available."));
+            }
+        }, "CubeChat passive cell metadata").start();
+    }
+
+    private void requestFreshCells() {
+        if (Build.VERSION.SDK_INT < 29 || cellRequestRunning || !hasCellPermission()) return;
+        long nowMs = SystemClock.elapsedRealtime();
+        if (lastCellRefreshMs >= 0 && nowMs - lastCellRefreshMs < MIN_CELL_REFRESH_MS) {
+            cellStatus = "Refresh deferred: please allow at least 15 seconds between modem requests.";
+            render();
+            return;
+        }
+        TelephonyManager tm = telephony();
+        if (tm == null) { cellStatus = "No telephony service available."; render(); return; }
+        lastCellRefreshMs = nowMs;
+        cellRequestRunning = true;
+        cellStatus = "Requesting measurements; Android may throttle or decline this request…";
+        int generation = ++cellRequestGeneration;
+        render();
+        try {
+            tm.requestCellInfoUpdate(getMainExecutor(), new TelephonyManager.CellInfoCallback() {
+                @Override public void onCellInfo(List<CellInfo> records) {
+                    finishCellRead(generation, CellSnapshotReader.convert(records), "Requested cell report");
+                }
+                @Override public void onError(int errorCode, Throwable detail) {
+                    failCellRead(generation, "Modem request failed or timed out (code " + errorCode + ").");
+                }
+            });
+            ui.postDelayed(() -> failCellRead(generation, "Cell observation request timed out; cached data may still be available."), 15_000L);
+        } catch (SecurityException | UnsupportedOperationException e) {
+            failCellRead(generation, "Cell update denied or unsupported.");
+        } catch (RuntimeException e) {
+            failCellRead(generation, "Cell update unavailable.");
+        }
+    }
+
+    private void finishCellRead(int generation, List<CellObservation> result, String source) {
+        if (generation != cellRequestGeneration || isFinishing()) return;
+        observedCells = result == null ? Collections.emptyList() : result;
+        CELL_HISTORY.record(observedCells, SystemClock.elapsedRealtime());
+        cellRequestRunning = false;
+        cellStatus = source + ": " + observedCells.size() + " reported cell(s); each identity is unverified.";
+        if (tab == 3) render();
+    }
+
+    private void failCellRead(int generation, String reason) {
+        if (generation != cellRequestGeneration || isFinishing() || !cellRequestRunning) return;
+        cellRequestRunning = false;
+        cellStatus = reason;
+        if (tab == 3) render();
+    }
+
+    @Override public void onRequestPermissionsResult(int request, String[] permissions, int[] results) {
+        super.onRequestPermissionsResult(request, permissions, results);
+        if (request == CELL_PERMISSION) {
+            cellStatus = hasCellPermission()
+                    ? "Location permission granted. Tap a read button to observe reported cells."
+                    : "Location permission denied. Cellular observation remains disabled.";
+            render();
         }
     }
 
