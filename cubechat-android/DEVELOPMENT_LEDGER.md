@@ -1,5 +1,8 @@
 # CubeChat Android development ledger
 
+> **Absolute safety directive:** [No Emergency Call Testing](docs/NO_EMERGENCY_CALL_TESTING.md). CubeChat/RadioGuard will **never** perform emergency-call continuity tests: not real calls, not simulations, not shielded laboratories, not manufacturer/carrier-coordinated tests, and not manual or automated procedures. All past plans mentioning emergency-call lab validation are superseded. Continue normal non-emergency calls, SMS, IMS, Wi-Fi calling and the other networking/security regressions. Emergency calling remains **NOT_TESTED_BY_PROJECT**, with no compatibility assurance.
+
+
 > **Lockdown Mode lower-layer work:** [execution and safety plan](docs/LOCKDOWN_MODE_EXECUTION_PLAN.md) · [tracking issue #23](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/23). Current VPN and device-owner changes on `main` are fallback development code, **not** proof of device-wide RF isolation. Runtime firewall changes are paused pending the kernel/radio feasibility gate.
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
