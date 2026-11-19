@@ -21,6 +21,12 @@ import java.util.concurrent.TimeUnit;
 /** An operator chooses one local CubeChat next hop. No destination, port or key comes from the caller. */
 final class RelayForwarder implements Closeable {
     static final int PORT = DirectProtocol.PORT + 2;
+    // Hook for Android VpnService.protect(); remains a no-op in plain JVM tests.
+    interface SocketProtector { void protect(Socket socket) throws IOException; }
+    private static volatile SocketProtector socketProtector = socket -> {};
+    static void setSocketProtector(SocketProtector protector) {
+        socketProtector = protector == null ? socket -> {} : protector;
+    }
     static final int MAX_HOPS = 4;
     private static final int MAGIC = 0x43435232; // CCR2
     private static final int MAX_SESSIONS = 4;
@@ -91,6 +97,8 @@ final class RelayForwarder implements Closeable {
             byte[] guestKey = new byte[size], challenge = new byte[32];
             fromClient.readFully(guestKey); DirectProtocol.publicKey(guestKey);
             fromClient.readFully(challenge);
+            // Prepare before bind/connect. No unprotected retry on VPN failure.
+            socketProtector.protect(outgoing);
             if (local != null) outgoing.bind(new InetSocketAddress(local, 0));
             outgoing.connect(new InetSocketAddress(next, nextIsRelay ? PORT : DirectProtocol.PORT), 3500);
             outgoing.setSoTimeout(9000);
