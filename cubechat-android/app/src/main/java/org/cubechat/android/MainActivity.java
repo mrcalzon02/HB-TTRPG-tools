@@ -144,6 +144,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     void openChat() {
         if (closing || security.sealed()) return;
         DisplayPrivacy.apply(this);
+        // The Java transport helpers remain Android-independent for host regressions.
+        // Only CubeChat's audited peer sockets receive VPN protection.
+        LanDiscovery.setSocketProtector(socket -> LockdownFirewall.protectChatDatagram(this, socket));
+        RelayForwarder.setSocketProtector(socket -> LockdownFirewall.protectChatSocket(this, socket));
         buildScreen();
         securityChanged();
         updates = new UpdateCheck(this, updateBanner);
@@ -1104,6 +1108,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             return true;
         });
         popup.getMenu().add("Security").setOnMenuItemClickListener(i -> { security.settings(); return true; });
+        popup.getMenu().add("Firewall settings").setOnMenuItemClickListener(i -> {
+            startActivity(new Intent(this, FirewallSettings.class)); return true;
+        });
         if (security.configured()) popup.getMenu().add("Lock now").setOnMenuItemClickListener(i -> { security.lock(); return true; });
         popup.getMenu().add("Screen privacy").setOnMenuItemClickListener(i -> { DisplayPrivacy.choose(this); return true; });
         popup.getMenu().add("Check for updates").setOnMenuItemClickListener(i -> { updates.check(true); return true; });
