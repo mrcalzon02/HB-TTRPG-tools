@@ -3,8 +3,6 @@ package org.cubechat.android;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -284,14 +282,16 @@ public final class FirewallSettings extends Activity {
         String inventory = GuardianDeviceInventory.snapshot(this);
         text(page, inventory, 14, INK);
         button(page, "Copy device inventory", () -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            if (clipboard == null) {
+            if (!DiagnosticClipboard.copy(this,
+                    "CubeChat RadioGuard device inventory", inventory)) {
                 Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_LONG).show();
                 return;
             }
-            clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat RadioGuard device inventory", inventory));
-            Toast.makeText(this, "Inventory copied · includes model and software versions", Toast.LENGTH_SHORT).show();
+            if (Build.VERSION.SDK_INT < 33)
+                Toast.makeText(this, "Inventory copied · includes device software details",
+                        Toast.LENGTH_SHORT).show();
         });
+        text(page, "Copying exposes this inventory to Android's system clipboard. A sensitive-preview flag hides previews where supported but does not prevent other applications from reading clipboard contents.", 14, MUTED);
         text(page, "No hardware access was requested, no cellular registration was changed, and no location or subscriber identifiers were collected. Physical radio and early priority-release guarantees remain unverified.", 14, DANGER);
     }
 
@@ -338,7 +338,9 @@ public final class FirewallSettings extends Activity {
         } else {
             text(page, review.label, 14, MUTED);
         }
-        button(page, "Release all CubeChat controls", () ->
+        button(page, review.state == LockdownReleaseJournal.State.INTERRUPTED_OR_UNCONFIRMED
+                || review.state == LockdownReleaseJournal.State.REQUESTS_FAILED
+                ? "Retry CubeChat cleanup" : "Release all CubeChat controls", () ->
                 new AlertDialog.Builder(this)
                         .setTitle("Release CubeChat lockdown controls?")
                         .setMessage("This attempts to remove CubeChat-owned restrictions and stop its VPN. Other applications may regain network access. Android-owned Always-on VPN settings may still need manual changes.")
@@ -356,14 +358,15 @@ public final class FirewallSettings extends Activity {
                         report += "\nLast cleanup commands (not verified removals):\n" + steps;
                 }
             }
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            if (clipboard == null) {
+            if (!DiagnosticClipboard.copy(this, "CubeChat lockdown status", report)) {
                 Toast.makeText(this, "Clipboard unavailable", Toast.LENGTH_LONG).show();
                 return;
             }
-            clipboard.setPrimaryClip(ClipData.newPlainText("CubeChat lockdown status", report));
-            Toast.makeText(this, "Status copied (no messages, peers or cell identities)", Toast.LENGTH_SHORT).show();
+            if (Build.VERSION.SDK_INT < 33)
+                Toast.makeText(this, "Status copied without messages or peer identifiers",
+                        Toast.LENGTH_SHORT).show();
         });
+        text(page, "Copied diagnostics use Android's system clipboard; other applications may access them. Preview hiding is not clipboard isolation.", 14, MUTED);
         text(page, "Automatic trusted-system priority release is NOT implemented in this standard APK. No emergency-call tests are performed. Advanced controls requiring that integration remain unavailable.", 14, DANGER);
     }
 
