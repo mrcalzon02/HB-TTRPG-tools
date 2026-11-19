@@ -34,7 +34,8 @@ public final class UpdateRunGateTest {
         rejects(first, "locked policy");
 
         unlocked.set(true);
-        check(first.allowed(), "permission alone can become available again");
+        check(!first.allowed(), "a previously denied request cannot regain authorization");
+        rejects(first, "denial persists after reopening permission");
         UpdateRunGate.invalidate();
         check(!first.allowed(), "activation epoch revokes earlier request");
         rejects(first, "stale activation epoch");
@@ -62,6 +63,22 @@ public final class UpdateRunGateTest {
         }
         check(UpdateRunGate.enter(() -> true).allowed(),
                 "later fresh manual check can proceed when explicitly permitted");
+
+        UpdateRunGate.Permit crossThread = UpdateRunGate.enter(() -> true);
+        final boolean[] rejectedOnWorker = { false };
+        Thread worker = new Thread(() -> {
+            Thread.currentThread().interrupt();
+            try {
+                crossThread.verify();
+            } catch (IOException expected) {
+                rejectedOnWorker[0] = true;
+            }
+        }, "offline-revocation-fixture");
+        worker.start();
+        worker.join();
+        check(rejectedOnWorker[0], "interrupted worker must deny permission");
+        check(!crossThread.allowed(), "worker's denial remains denied on the main thread");
+        rejects(crossThread, "cross-thread denial latch");
 
         System.out.println("UpdateRunGate: " + checks
                 + " host-only checks passed; no network connections opened");
