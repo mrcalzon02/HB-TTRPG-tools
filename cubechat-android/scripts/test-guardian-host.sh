@@ -7,7 +7,10 @@ javac -encoding UTF-8 --release 17 -d "$classes" \
   "$here/app/src/main/java/org/cubechat/android/CellObservation.java" \
   "$here/app/src/main/java/org/cubechat/android/CellObservationBook.java" \
   "$here/app/src/main/java/org/cubechat/android/GuardianPolicyGate.java" \
+  "$here/app/src/main/java/org/cubechat/android/GuardianTrafficPolicy.java" \
   "$here/tests/CellObservationBookTest.java" \
-  "$here/tests/GuardianPolicyGateTest.java"
+  "$here/tests/GuardianPolicyGateTest.java" \
+  "$here/tests/GuardianTrafficPolicyTest.java"
 java -cp "$classes" org.cubechat.android.CellObservationBookTest
 java -cp "$classes" org.cubechat.android.GuardianPolicyGateTest
+java -cp "$classes" org.cubechat.android.GuardianTrafficPolicyTest
