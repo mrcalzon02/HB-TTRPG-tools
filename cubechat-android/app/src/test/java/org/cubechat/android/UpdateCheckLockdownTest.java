@@ -67,6 +67,10 @@ public final class UpdateCheckLockdownTest {
             assertEquals("Update checks paused · Lockdown", banner.getText().toString());
 
             LockdownFirewall.setArmed(app, false);
+            // Keep this UI regression offline; it tests banner refresh, not
+            // GitHub access after a deliberately permitted unlock.
+            app.getSharedPreferences("app-updates", Context.MODE_PRIVATE)
+                    .edit().putLong("checked", System.currentTimeMillis()).commit();
             updater.check(false);
             assertEquals("Pausing must not permanently clutter normal chat",
                     View.GONE, banner.getVisibility());
