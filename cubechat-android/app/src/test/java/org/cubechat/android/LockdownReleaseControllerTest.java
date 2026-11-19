@@ -41,6 +41,12 @@ public final class LockdownReleaseControllerTest {
                 LockdownFirewall.armed(app));
         assertTrue("No device-admin or VPN service was active in this fixture",
                 release.requestsCompleted);
+        assertTrue("Individual cleanup commands are reported",
+                release.stepSummary.contains("CubeChat IP policy disarm: REQUEST_COMPLETED"));
+        assertTrue("Stopping the VPN is distinct from disarming the preference",
+                release.stepSummary.contains("CubeChat VPN stop request: REQUEST_COMPLETED"));
+        assertTrue("No unverified safety assurance",
+                release.detail.contains("NOT independent proof"));
     }
 
     @Test public void repeatedOrdinaryManualOffDoesNotRearmPolicy() {
