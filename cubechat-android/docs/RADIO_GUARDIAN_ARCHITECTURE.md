@@ -1,7 +1,8 @@
 # CubeChat Radio Guardian — single-APK architecture RFC
 
 Status: **design proposal only; not implemented, built, or device-validated**  
-**Mandatory exclusion:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md) — never test emergency-call continuity by any method, including simulations or labs.  
+**Mandatory exclusion:** [NO EMERGENCY CALL TESTING](NO_EMERGENCY_CALL_TESTING.md) — never test emergency-call continuity by any method, including simulations or labs.
+**Absolute emergency priority:** [RADIOGUARD EMERGENCY PRIORITY YIELD](RADIOGUARD_EMERGENCY_PRIORITY_YIELD.md) defines an unconditional full release of CubeChat-owned restrictions on an authenticated, early system indication, with no confirmation and no automatic rearming. No stock APK signal guarantees this; unverified privileged policies remain gated. No emergency testing.  
 Reviewed: 2026-11-18  
 Scope: CubeChat Android `org.cubechat.android`, existing local VPN lockdown, cellular/Wi-Fi/Bluetooth observation, optional device-specific elevated radio enforcement.
 
