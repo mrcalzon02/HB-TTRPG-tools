@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.ClipboardManager;
+import android.content.ClipDescription;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -54,6 +55,12 @@ public final class FirewallDeviceUiTest {
         ClipboardManager clipboard =
                 (ClipboardManager) app.getSystemService(Context.CLIPBOARD_SERVICE);
         assertNotNull(clipboard);
+        assertNotNull("Inventory copied", clipboard.getPrimaryClip());
+        assertNotNull("Inventory preview hint included",
+                clipboard.getPrimaryClip().getDescription().getExtras());
+        assertTrue("Inventory preview is marked sensitive",
+                clipboard.getPrimaryClip().getDescription().getExtras()
+                        .getBoolean(ClipDescription.EXTRA_IS_SENSITIVE));
         String value = clipboard.getPrimaryClip().getItemAt(0).coerceToText(app).toString();
         assertTrue(value.contains("read-only device inventory"));
         assertTrue(value.contains("Kernel eBPF/tc/netfilter support: NOT_VERIFIED"));
