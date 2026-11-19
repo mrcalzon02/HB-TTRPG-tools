@@ -93,6 +93,10 @@ jobs:
           adb -s "$serial" shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tr -d '\r' | tee "$result"
           grep -Fxq 'INSTRUMENTATION_RESULT: cubechat_checks=passed' "$result"
           grep -Fxq 'INSTRUMENTATION_CODE: -1' "$result"
+          # An app that passes instrumentation but cannot launch is not a usable phone app.
+          adb -s "$serial" shell am start -n org.cubechat.android/.MainActivity
+          sleep 3
+          adb -s "$serial" shell pidof org.cubechat.android
       - name: Preserve APKs and evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
