@@ -6,7 +6,7 @@ on:
         description: "Run Android 35 isolated emulator (requires KVM)"
         type: boolean
         default: true
-  # One-shot push bootstrap. Remove after initial run; retain manual dispatch.
+  # One-shot retry after Java 17 compiler fixes; remove push trigger after validation. Remove after initial run; retain manual dispatch.
   push:
     branches: [main]
     paths: ['.github/workflows/cubechat-lockdown-smoke.yml']
