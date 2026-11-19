@@ -112,6 +112,12 @@ public final class GuardianTrafficPolicyTest {
                 "192.0.2.1", 80, "wlan0", generation), "invalid uid");
         rejects(() -> flow(42, 0, Layer.IPV4, Direction.EGRESS, Protocol.TCP,
                 "192.0.2.1", 80, "wlan0", generation), "no socket identity");
+        rejects(() -> flow(42, 42, Layer.IPV4, Direction.EGRESS, Protocol.TCP,
+                "\u2003", 80, "wlan0", generation),
+                "Unicode whitespace-only destination is not a peer");
+        rejects(() -> flow(42, 42, Layer.IPV4, Direction.EGRESS, Protocol.TCP,
+                "192.0.2.1", 80, "\u2003", generation),
+                "Unicode whitespace-only interface is not an authorization");
 
         System.out.println("GuardianTrafficPolicy: " + assertions
                 + " offline model assertions passed (NOT a live firewall test)");
