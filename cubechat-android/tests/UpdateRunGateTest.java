@@ -26,8 +26,12 @@ public final class UpdateRunGateTest {
 
     private static final class FakeConnection extends HttpURLConnection {
         final AtomicInteger disconnects = new AtomicInteger();
+        boolean failDisconnect;
         FakeConnection() throws Exception { super(new URL("https://example.invalid/")); }
-        @Override public void disconnect() { disconnects.incrementAndGet(); }
+        @Override public void disconnect() {
+            disconnects.incrementAndGet();
+            if (failDisconnect) throw new IllegalStateException("fake disconnect failure");
+        }
         @Override public boolean usingProxy() { return false; }
         @Override public void connect() { throw new AssertionError("No network allowed in fixture"); }
     }
@@ -110,6 +114,20 @@ public final class UpdateRunGateTest {
         check(activeHttp.disconnects.get() == 1, "cross-thread activation disconnects HTTP");
         check(!active.allowed(), "cross-thread activation revokes gate");
         active.close();
+
+        UpdateRunGate.Permit fragile = UpdateRunGate.enter(() -> true);
+        FakeConnection broken = new FakeConnection();
+        broken.failDisconnect = true;
+        fragile.track(broken);
+        UpdateRunGate.Permit healthy = UpdateRunGate.enter(() -> true);
+        FakeConnection healthyConn = new FakeConnection();
+        healthy.track(healthyConn);
+        UpdateRunGate.invalidate();
+        check(broken.disconnects.get() == 1, "broken HTTP implementation still attempted release");
+        check(healthyConn.disconnects.get() == 1, "broken connection never blocks other releases");
+        check(!fragile.allowed() && !healthy.allowed(), "both permits remain revoked");
+        fragile.close();
+        healthy.close();
 
         UpdateRunGate.Permit fresh = UpdateRunGate.enter(() -> true);
         check(fresh.allowed(), "new permit allowed after explicit unlock");
