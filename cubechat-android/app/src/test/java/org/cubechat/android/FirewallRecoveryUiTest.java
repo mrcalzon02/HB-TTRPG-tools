@@ -50,6 +50,8 @@ public final class FirewallRecoveryUiTest {
         assertTrue("Shows ordinary recovery heading", hasText(root, "Recovery & manual controls"));
         assertTrue("Does not claim perfect shutdown", hasText(root, "NOT proof"));
         assertTrue("Shows external VPN limitation", hasText(root, "not independently checked"));
+        assertTrue("Recovery identifies when CubeChat is not device owner",
+                hasText(root, "Device owner: not provisioned"));
         assertNotNull("Manual release accessible",
                 buttonNamed(root, "Release all CubeChat controls"));
         assertFalse("Viewing status must never arm a firewall", LockdownFirewall.armed(app));
