@@ -4,6 +4,12 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 18, 2026 · RadioGuard P0 kernel boundary review and offline IP-policy tests
+
+- Added [kernel/radio packet-path and critical-service matrix](docs/RADIOGUARD_KERNEL_AND_RADIO_BOUNDARIES.md): AOSP cgroup/eBPF, netd, `tc`, netfilter, XDP ingress, offload exceptions, VPN/user-profile bypasses, Wi-Fi/Bluetooth control frames and autonomous cellular RRC/NAS/baseband signaling. Explicitly documents that a kernel-level firewall is still part of Android's kernel trust boundary.
+- Added host-only [GuardianTrafficPolicy](app/src/main/java/org/cubechat/android/GuardianTrafficPolicy.java) and [41-assertion negative test](tests/GuardianTrafficPolicyTest.java), included by `scripts/test-guardian-host.sh`. Each simulated IP flow needs an exact bounded permit; non-IP traffic is marked outside the IP firewall's coverage. A locally reconstructed Java 17-compatible model passed 41 checks. **The updated repository has not been through a fresh full Android CI run.**
+- Tracked P0 decisions in [Lockdown execution plan](docs/LOCKDOWN_MODE_EXECUTION_PLAN.md). The device-specific kernel/driver/root implementation is **still unstarted and blocked on a spare test handset and reversible boot/recovery gate**. Existing VPN/device-owner logic is unchanged; no public APK, radio kill switch, false-tower rejection or hardware security guarantee was delivered.
+
 ## November 18, 2026 · Radio Guardian passive observer and Lockdown smoke baseline
 
 The Firewall settings screen now includes a **Connections** tab for manual, consent-gated, read-only cellular observations and bounded process-local history. The future Guardian proof model requires independent hardware readback before displaying a full-protection state. The existing IP VPN and optional device-owner protections were left intact; **no root helper, baseband filter or tower rejection feature was implemented**.
