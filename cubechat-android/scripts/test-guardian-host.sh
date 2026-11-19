@@ -11,16 +11,19 @@ javac -encoding UTF-8 --release 17 -d "$classes" \
   "$here/app/src/main/java/org/cubechat/android/LockdownRecoverySummary.java" \
   "$here/app/src/main/java/org/cubechat/android/GuardianDeviceInventoryText.java" \
   "$here/app/src/main/java/org/cubechat/android/UpdateRunGate.java" \
+  "$here/app/src/main/java/org/cubechat/android/LockdownReleaseReport.java" \
   "$here/tests/CellObservationBookTest.java" \
   "$here/tests/GuardianPolicyGateTest.java" \
   "$here/tests/GuardianTrafficPolicyTest.java" \
   "$here/tests/LockdownRecoverySummaryTest.java" \
   "$here/tests/GuardianDeviceInventoryTextTest.java" \
-  "$here/tests/UpdateRunGateTest.java"
+  "$here/tests/UpdateRunGateTest.java" \
+  "$here/tests/LockdownReleaseReportTest.java"
 java -cp "$classes" org.cubechat.android.CellObservationBookTest
 java -cp "$classes" org.cubechat.android.GuardianPolicyGateTest
 java -cp "$classes" org.cubechat.android.GuardianTrafficPolicyTest
 java -cp "$classes" org.cubechat.android.LockdownRecoverySummaryTest
 java -cp "$classes" org.cubechat.android.GuardianDeviceInventoryTextTest
 java -cp "$classes" org.cubechat.android.UpdateRunGateTest
+java -cp "$classes" org.cubechat.android.LockdownReleaseReportTest
 bash "$here/scripts/test-radioguard-readonly-probe.sh"
