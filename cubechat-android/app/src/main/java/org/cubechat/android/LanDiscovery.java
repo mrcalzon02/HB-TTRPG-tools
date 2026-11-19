@@ -25,6 +25,13 @@ import javax.crypto.spec.SecretKeySpec;
 /** Only a phone holding the scanned key card can elicit or validate a host address announcement. */
 final class LanDiscovery {
     static final int PORT = DirectProtocol.PORT + 1;
+    // Optional Android VPN socket preparation. The JVM-only protocol tests use
+    // the no-op default and do not depend on any Android framework class.
+    interface SocketProtector { void protect(DatagramSocket socket) throws IOException; }
+    private static volatile SocketProtector socketProtector = socket -> {};
+    static void setSocketProtector(SocketProtector protector) {
+        socketProtector = protector == null ? socket -> {} : protector;
+    }
     private static final int QUERY = 0x43445132, REPLY = 0x43445232;
     private static final int NONCE = 16, HEADER = 4 + NONCE + 2, SIZE = HEADER + 32;
     private static Mac mac(byte[] token) throws Exception {
@@ -55,7 +62,11 @@ final class LanDiscovery {
             this.tcpPort = tcpPort;
             authenticator = mac(token);
             socket = new DatagramSocket(null);
-            try { socket.setReuseAddress(true); socket.bind(new InetSocketAddress(udpPort)); }
+            try {
+                socketProtector.protect(socket);
+                socket.setReuseAddress(true);
+                socket.bind(new InetSocketAddress(udpPort));
+            }
             catch (IOException e) { socket.close(); throw e; }
         }
         int port() { return socket.getLocalPort(); }
@@ -85,6 +96,7 @@ final class LanDiscovery {
         byte[] nonce = DirectProtocol.random(NONCE), probe = record(authenticator, QUERY, nonce, 0);
         long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(1100);
         try (DatagramSocket socket = new DatagramSocket()) {
+            socketProtector.protect(socket);
             socket.setBroadcast(true);
             for (InetAddress target : targets) {
                 try { socket.send(new DatagramPacket(probe, probe.length, target, udpPort)); }
