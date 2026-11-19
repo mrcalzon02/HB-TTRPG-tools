@@ -9,6 +9,22 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 19, 2026 · Recovery and updater quality-of-life pass
+
+The Firewall Settings screen now offers a fifth **Recovery** tab with compact horizontally scrollable navigation, a plain-language status for local VPN and device-owner restrictions, a recorded timestamp/result for user-requested full release, a separate Android VPN settings shortcut and a button to copy **non-sensitive** diagnostics. The copied summary intentionally contains no chat messages, peers, cell observations or raw packet data. Recovery explicitly labels all kernel/hardware and OS-owned-VPN coverage **unverified**. A new status class prioritizes incomplete managed-radio restrictions over a working VPN when determining the headline.
+
+The previously misleading **OFF** text now says CubeChat's own lockdown is not requested, without claiming Android's own networking must be unrestricted. Ordinary manual release still requires a user action and confirmation; a partial release is not shown as complete. The existing absolute **no emergency-call testing** rule remains unchanged; no trusted automatic emergency activation signal is implemented.
+
+The updater now **skips automatic and manual GitHub metadata checks while lockdown is requested**, keeps cached verified update offers, prevents browser download launches from the updater in that state, and explains how to resume after deliberately turning lockdown off. It adds no secret update-traffic bypass or automatic network exception.
+
+Verification and limits:
+
+- **PASS host model:** Java 17 `javac --release 17` compiled the exact committed `LockdownRecoverySummary.java` and `LockdownRecoverySummaryTest.java` Git blobs, and all **21 offline assertions passed**.
+- **Source-committed, not yet run:** Android Robolectric UI checks for Recovery status, sanitized clipboard, ordinary manual release history and updater pause on APIs 26/35. They are included by the existing manual Android Gradle test task.
+- **No APK or device validation in this pass:** The working environment has no Android SDK/build tools or connected physical handset. The Android CI workflow was not dispatched automatically. No release, retag, root helper, kernel module, radio control, emergency-call simulation or new daemon was created.
+
+Next ordinary QA: run `.github/workflows/cubechat-lockdown-smoke.yml` manually, inspect the Android API 26/35 UI/unit results, verify a clean APK build, and on an **expendable non-emergency** phone inspect the Recovery screen before/after a manual shutdown and a blocked update check. Production RF/privileged enforcement remains gated by the separate [lower-layer execution plan](docs/LOCKDOWN_MODE_EXECUTION_PLAN.md).
+
 ## November 18, 2026 · RadioGuard P0 kernel boundary review and offline IP-policy tests
 
 - Added [kernel/radio packet-path and critical-service matrix](docs/RADIOGUARD_KERNEL_AND_RADIO_BOUNDARIES.md): AOSP cgroup/eBPF, netd, `tc`, netfilter, XDP ingress, offload exceptions, VPN/user-profile bypasses, Wi-Fi/Bluetooth control frames and autonomous cellular RRC/NAS/baseband signaling. Explicitly documents that a kernel-level firewall is still part of Android's kernel trust boundary.
