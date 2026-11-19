@@ -63,23 +63,46 @@ final class ManagedLockdownController {
         dpm.addUserRestriction(admin, UserManager.DISALLOW_CONFIG_VPN);
     }
 
+    private interface ReleaseAction { void perform() throws Exception; }
+
+    private static void tryRelease(String name, ReleaseAction action,
+                                   java.util.List<String> failures) {
+        try { action.perform(); }
+        catch (Exception failure) {
+            failures.add(name + " (" + failure.getClass().getSimpleName() + ")");
+        }
+    }
+
     /**
-     * Undo only restrictions owned by this CubeChat device admin. If rollback
-     * fails, the caller must NOT disarm the VPN or report an unrestricted state.
+     * Best-effort release of ALL CubeChat-admin restrictions.
+     *
+     * A failed operation cannot prevent us from attempting the rest, especially
+     * removing our own always-on VPN. A caller must report a partial release;
+     * this does not imply emergency-call compatibility. This method is also
+     * used by the ordinary user-requested "Disable lockdown" control.
      */
     static void release(Context context) throws Exception {
         if (!isDeviceOwner(context)) return;
         DevicePolicyManager dpm = manager(context);
         ComponentName admin = admin(context);
-        // Release state restrictions before radio preferences are changed.
+        java.util.List<String> failures = new java.util.ArrayList<>();
         if (Build.VERSION.SDK_INT >= 33) {
-            dpm.clearUserRestriction(admin, UserManager.DISALLOW_CHANGE_WIFI_STATE);
-            dpm.clearUserRestriction(admin, UserManager.DISALLOW_WIFI_TETHERING);
-            dpm.clearUserRestriction(admin, UserManager.DISALLOW_WIFI_DIRECT);
+            tryRelease("Wi-Fi state restriction",
+                    () -> dpm.clearUserRestriction(admin, UserManager.DISALLOW_CHANGE_WIFI_STATE), failures);
+            tryRelease("Wi-Fi tethering restriction",
+                    () -> dpm.clearUserRestriction(admin, UserManager.DISALLOW_WIFI_TETHERING), failures);
+            tryRelease("Wi-Fi Direct restriction",
+                    () -> dpm.clearUserRestriction(admin, UserManager.DISALLOW_WIFI_DIRECT), failures);
         }
-        for (String restriction : RADIO_RESTRICTIONS) dpm.clearUserRestriction(admin, restriction);
-        dpm.clearUserRestriction(admin, UserManager.DISALLOW_CONFIG_VPN);
-        dpm.setAlwaysOnVpnPackage(admin, null, false);
+        for (String restriction : RADIO_RESTRICTIONS)
+            tryRelease(restriction, () -> dpm.clearUserRestriction(admin, restriction), failures);
+        tryRelease("VPN configuration restriction",
+                () -> dpm.clearUserRestriction(admin, UserManager.DISALLOW_CONFIG_VPN), failures);
+        tryRelease("CubeChat-owned always-on VPN",
+                () -> dpm.setAlwaysOnVpnPackage(admin, null, false), failures);
+        if (!failures.isEmpty())
+            throw new IllegalStateException("Not all managed restrictions were released: "
+                    + String.join(", ", failures));
     }
 
     static boolean restrictionsPresent(Context context) {
