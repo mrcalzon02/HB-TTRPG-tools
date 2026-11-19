@@ -1,28 +1,33 @@
 package org.cubechat.android;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 
 /**
- * Pure-Java, process-wide gate for optional update-network requests.
- *
- * Each request captures a revision. Lockdown activation invalidates every
- * older request irreversibly, even if the user switches lockdown off again
- * immediately. The caller must also supply a current permission check, since
- * an armed preference survives process restarts. No network is opened here.
+ * Process-local gate for CubeChat's optional GitHub release checks only.
+ * No app/network permission or kernel policy is granted by this class.
+ * Invalidation revokes old permits and closes their current HTTP connection;
+ * the OS may still have already transmitted data before the transition.
  */
 final class UpdateRunGate {
     private static final AtomicLong REVISION = new AtomicLong();
+    private static final Set<Permit> ACTIVE = ConcurrentHashMap.newKeySet();
 
     interface Check { void verify() throws IOException; }
 
-    static final class Permit implements Check {
+    static final class Permit implements Check, AutoCloseable {
         private final long revision;
         private final BooleanSupplier permission;
         private final AtomicBoolean revoked = new AtomicBoolean();
+        private final AtomicReference<HttpURLConnection> currentConnection =
+                new AtomicReference<>();
 
         private Permit(long revision, BooleanSupplier permission) {
             this.revision = revision;
@@ -34,26 +39,56 @@ final class UpdateRunGate {
             boolean permitted = !Thread.currentThread().isInterrupted()
                     && revision == REVISION.get()
                     && permission.getAsBoolean();
-            // A negative answer latches permanently: a blocked or interrupted
-            // request must never resume on a different thread or rapid toggle.
             if (!permitted || revision != REVISION.get()) {
-                revoked.set(true);
+                cancel();
                 return false;
             }
             return !revoked.get();
         }
 
         @Override public void verify() throws IOException {
-            if (!allowed()) throw new IOException("Update networking cancelled by lockdown or shutdown");
+            if (!allowed())
+                throw new IOException("Update networking cancelled by lockdown or shutdown");
+        }
+
+        /** Call immediately after openConnection, BEFORE getResponseCode. */
+        void track(HttpURLConnection connection) {
+            Objects.requireNonNull(connection);
+            HttpURLConnection old = currentConnection.getAndSet(connection);
+            if (old != null && old != connection) old.disconnect();
+            if (!allowed()) {
+                if (currentConnection.compareAndSet(connection, null)) connection.disconnect();
+            }
+        }
+
+        /** Unregister after request finalization (regardless of HTTP outcome). */
+        void untrack(HttpURLConnection connection) {
+            currentConnection.compareAndSet(connection, null);
+        }
+
+        private void cancel() {
+            revoked.set(true);
+            HttpURLConnection active = currentConnection.getAndSet(null);
+            if (active != null) active.disconnect();
+        }
+
+        @Override public void close() {
+            cancel();
+            ACTIVE.remove(this);
         }
     }
 
     static Permit enter(BooleanSupplier permission) {
-        return new Permit(REVISION.get(), Objects.requireNonNull(permission));
+        Permit permit = new Permit(REVISION.get(), Objects.requireNonNull(permission));
+        ACTIVE.add(permit);
+        // If invalidation races registration, the epoch check still rejects it.
+        if (!permit.allowed()) permit.close();
+        return permit;
     }
 
     static void invalidate() {
         REVISION.incrementAndGet();
+        for (Permit permit : ACTIVE) permit.cancel();
     }
 
     private UpdateRunGate() { }
