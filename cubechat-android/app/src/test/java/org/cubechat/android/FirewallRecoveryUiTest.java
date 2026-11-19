@@ -89,8 +89,11 @@ public final class FirewallRecoveryUiTest {
         assertTrue("Release attempt timestamp saved",
                 app.getSharedPreferences("cubechat-firewall-recovery", Context.MODE_PRIVATE)
                         .contains("last-release-at"));
+        // Release rerenders the Activity, replacing its previous content view.
+        // Inspect the NEW tree; a stale root can never see the updated status.
+        View refreshed = activity.findViewById(android.R.id.content);
         assertTrue("Result explicitly denies a verification claim",
-                hasText(root, "removal NOT independently verified"));
+                hasText(refreshed, "removal NOT independently verified"));
     }
 
     private static Button buttonNamed(View root, String label) {
