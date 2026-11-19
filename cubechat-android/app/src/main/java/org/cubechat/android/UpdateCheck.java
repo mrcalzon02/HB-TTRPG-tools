@@ -57,6 +57,9 @@ final class UpdateCheck {
 
     void check(boolean requested) {
         if (closed) return;
+        // Refresh the local banner when coming back from Firewall Settings,
+        // without making an HTTP request or changing cached release metadata.
+        render();
         // A release check is NOT an authorized CubeChat peer connection.
         // Skip it entirely while lockdown is requested; do not burn battery on
         // blocked HTTP timeouts or generate false "network broken" notices.
@@ -126,8 +129,15 @@ final class UpdateCheck {
     }
 
     private void render() {
-        if (offer != null) banner.setText("Update available · CubeChat " + offer.version);
-        banner.setVisibility(offer == null ? View.GONE : View.VISIBLE);
+        boolean paused = LockdownFirewall.armed(activity);
+        if (paused) {
+            banner.setText(offer == null ? "Update checks paused · Lockdown"
+                    : "Update available · " + offer.version + " · Download paused");
+        } else if (offer != null) {
+            banner.setText("Update available · CubeChat " + offer.version);
+        }
+        // When locked, show the pause reason even if no release was cached.
+        banner.setVisibility(paused || offer != null ? View.VISIBLE : View.GONE);
     }
 
     private void explainPaused() {
