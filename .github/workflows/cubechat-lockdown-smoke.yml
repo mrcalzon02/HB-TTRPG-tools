@@ -53,7 +53,12 @@ jobs:
         working-directory: cubechat-android
         run: |
           set -euo pipefail
-          test -r /dev/kvm && test -w /dev/kvm || { echo "KVM unavailable; emulator gate not passed"; exit 1; }
+          # Standard GitHub-hosted Linux runner udev permissions may hide KVM from this user.
+          if [[ -e /dev/kvm ]]; then
+            sudo chmod a+rw /dev/kvm
+          fi
+          ls -l /dev/kvm || true
+          test -r /dev/kvm && test -w /dev/kvm || { echo "KVM unavailable even after permission repair; emulator gate not passed"; exit 1; }
           sdkmanager --install 'emulator' 'system-images;android-35;google_apis;x86_64'
           export ANDROID_AVD_HOME
           ANDROID_AVD_HOME="$(mktemp -d "$RUNNER_TEMP/cubechat-security-avd.XXXXXXXX")"
