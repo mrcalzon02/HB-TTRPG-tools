@@ -66,6 +66,9 @@ public final class LockdownFirewall extends VpnService {
         if (!prefs.edit().putBoolean(ARMED, enable).commit())
             throw new IllegalStateException("Could not save CubeChat firewall preference");
         if (changed) {
+            // Once the user requests lockdown, invalidate every in-flight
+            // optional updater request. A rapid on/off cannot revive one.
+            if (enable) UpdateRunGate.invalidate();
             LockdownRadioPolicy.revokeAll();
             if (enable) PeerLink.enforceRadioPolicyForAll();
         }
