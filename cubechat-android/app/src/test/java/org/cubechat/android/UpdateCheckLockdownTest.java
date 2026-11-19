@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.View;
 import android.widget.Button;
 import org.junit.After;
 import org.junit.Before;
@@ -49,6 +50,26 @@ public final class UpdateCheckLockdownTest {
             assertFalse("No network check timestamp should be written",
                     app.getSharedPreferences("app-updates", Context.MODE_PRIVATE)
                             .contains("checked"));
+        } finally {
+            updater.close();
+        }
+    }
+
+    @Test public void mainBannerExplainsPauseAndClearsWhenDisarmed() {
+        Activity activity = Robolectric.buildActivity(FirewallSettings.class).setup().get();
+        Button banner = new Button(activity);
+        UpdateCheck updater = new UpdateCheck(activity, banner);
+        try {
+            assertEquals(View.GONE, banner.getVisibility());
+            LockdownFirewall.setArmed(app, true);
+            updater.check(false);
+            assertEquals(View.VISIBLE, banner.getVisibility());
+            assertEquals("Update checks paused · Lockdown", banner.getText().toString());
+
+            LockdownFirewall.setArmed(app, false);
+            updater.check(false);
+            assertEquals("Pausing must not permanently clutter normal chat",
+                    View.GONE, banner.getVisibility());
         } finally {
             updater.close();
         }
