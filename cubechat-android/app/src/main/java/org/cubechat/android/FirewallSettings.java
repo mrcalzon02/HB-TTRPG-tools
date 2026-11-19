@@ -202,7 +202,7 @@ public final class FirewallSettings extends Activity {
         text(page, "OS-MANAGED · Device network registration, emergency services and system connectivity checks. Android controls these; CubeChat does not have authority to define or inspect every one.", 16, MUTED);
         text(page, "DENIED · All other application IPv4/IPv6 traffic entering this VPN, including DNS, browsing, background synchronization and ordinary app updates.", 16, DANGER);
         text(page, "Extra application exceptions: NONE. The first version intentionally refuses arbitrary app allowlisting. Android VPN per-app exclusions can silently bypass a VPN when OS lockdown is absent. We will expose editable exceptions only after a verified, fail-closed forwarding/OS-policy implementation exists.", 15, MUTED);
-        text(page, "CubeChat's own online update checks are not a default exception. Peer chat traffic is not a blanket permission for every URL requested by this app.", 15, MUTED);
+        text(page, "CubeChat's online update checks and browser downloads are paused while lockdown is requested. Previously verified update information is retained; no updater traffic is an automatic exception.", 15, MUTED);
     }
 
     private void showRadios() {
