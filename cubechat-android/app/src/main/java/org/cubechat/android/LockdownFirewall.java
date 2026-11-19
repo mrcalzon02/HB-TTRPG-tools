@@ -78,7 +78,14 @@ public final class LockdownFirewall extends VpnService {
     }
 
     static void stop(Context context) {
-        context.startService(new Intent(context, LockdownFirewall.class).setAction(ACTION_STOP));
+        // Stop the currently running VPN synchronously when it belongs to this
+        // process. Starting a foreground service just to stop it can fail
+        // under Android background-start restrictions.
+        LockdownFirewall current = active;
+        if (current == null) return;
+        current.closeTunnel();
+        current.stopForeground(STOP_FOREGROUND_REMOVE);
+        current.stopSelf();
     }
 
     /** No fallback to an unprotected socket while lockdown is requested. */
