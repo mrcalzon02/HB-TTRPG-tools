@@ -31,6 +31,8 @@ jobs:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
       - name: Offline Guardian tests
         run: bash cubechat-android/scripts/test-guardian-host.sh
+      - name: Experimental QR luminance host tests
+        run: bash cubechat-android/scripts/test-qr-luminance-host.sh
       - name: Build and test Android
         working-directory: cubechat-android
         run: |
