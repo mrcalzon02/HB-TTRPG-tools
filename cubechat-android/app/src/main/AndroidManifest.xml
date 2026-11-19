@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
     <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -27,6 +29,17 @@
     </queries>
     <application android:label="CubeChat" android:icon="@drawable/cubechat_icon"
         android:allowBackup="false" android:theme="@style/CubeTheme" android:supportsRtl="true">
+        <activity android:name="org.cubechat.android.FirewallSettings" android:exported="false"/>
+        <service android:name="org.cubechat.android.LockdownFirewall"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:foregroundServiceType="specialUse">
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Local VPN firewall for user-enabled CubeChat IP lockdown"/>
+        </service>
         <activity android:name="org.cubechat.android.QrScanner" android:exported="false"
             android:screenOrientation="portrait" />
         <activity android:name="org.cubechat.android.MainActivity" android:exported="true"
