@@ -18,6 +18,8 @@ public final class GuardianDeviceInventoryTextTest {
                 "untrusted build strings cannot add new report lines");
         check(GuardianDeviceInventoryText.clean("A".repeat(120)).length() <= 101,
                 "long build strings are bounded");
+        check(GuardianDeviceInventoryText.clean("Model\u2028VERIFIED\u202e").equals("Model VERIFIED"),
+                "unicode line and bidi controls cannot spoof additional report fields");
 
         String report = GuardianDeviceInventoryText.render(
                 "Example", "Test Phone", "model_test", "15", 35, "2026-10-05",
