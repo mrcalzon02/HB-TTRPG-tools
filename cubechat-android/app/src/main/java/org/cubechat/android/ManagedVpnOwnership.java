@@ -17,7 +17,9 @@ final class ManagedVpnOwnership {
 
     static Decision decide(String ourPackage, String reportedVpnPackage,
                            int androidApi, boolean priorAdminInstallRecorded) {
-        if (ourPackage == null || ourPackage.isBlank())
+        // String.isBlank() is not a safe baseline dependency for minSdk 26
+        // without explicit core-library desugaring.
+        if (ourPackage == null || ourPackage.trim().isEmpty())
             throw new IllegalArgumentException("CubeChat package identifier required");
         if (androidApi < 24)
             return Decision.OWNERSHIP_UNVERIFIED;
