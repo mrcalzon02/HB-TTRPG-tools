@@ -38,7 +38,9 @@ final class ManagedLockdownController {
      *
      * This is NOT an emergency-path test or an emergency state detector.
      */
-    static boolean deploymentSupported() { return false; }
+    static boolean deploymentSupported() {
+        return GuardianDeploymentGate.managedDevicePolicyAllowed();
+    }
 
     private static DevicePolicyManager manager(Context context) {
         return (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
