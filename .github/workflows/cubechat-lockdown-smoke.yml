@@ -1,0 +1,101 @@
+name: CubeChat Lockdown security smoke
+on:
+  workflow_dispatch:
+    inputs:
+      run_emulator:
+        description: "Run Android 35 isolated emulator (requires KVM)"
+        type: boolean
+        default: true
+  # One-shot push bootstrap. Remove after initial run; retain manual dispatch.
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cubechat-lockdown-smoke.yml']
+permissions:
+  contents: read
+concurrency:
+  group: cubechat-security-smoke
+  cancel-in-progress: false
+jobs:
+  smoke:
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'ci(cubechat): one-shot build and smoke')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Java 17
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Android SDK 35
+        uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+      - name: Offline Guardian tests
+        run: bash cubechat-android/scripts/test-guardian-host.sh
+      - name: Build and test Android
+        working-directory: cubechat-android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
+      - name: Verify signing and SHA256
+        working-directory: cubechat-android
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          sha256sum app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk | tee "$RUNNER_TEMP/cubechat-checksums.txt"
+      - name: Android 35 emulator acceptance
+        if: github.event_name == 'push' || inputs.run_emulator
+        shell: bash
+        working-directory: cubechat-android
+        run: |
+          set -euo pipefail
+          test -r /dev/kvm && test -w /dev/kvm || { echo "KVM unavailable; emulator gate not passed"; exit 1; }
+          sdkmanager --install 'emulator' 'system-images;android-35;google_apis;x86_64'
+          export ANDROID_AVD_HOME
+          ANDROID_AVD_HOME="$(mktemp -d "$RUNNER_TEMP/cubechat-security-avd.XXXXXXXX")"
+          avd="cubechat-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          emulator_pid=""
+          cleanup() {
+            if [[ -n "$emulator_pid" ]]; then
+              kill "$emulator_pid" 2>/dev/null || true
+              wait "$emulator_pid" 2>/dev/null || true
+            fi
+            rm -rf -- "$ANDROID_AVD_HOME"
+          }
+          trap cleanup EXIT
+          avdmanager create avd -n "$avd" -k 'system-images;android-35;google_apis;x86_64' <<< no
+          "$ANDROID_HOME/emulator/emulator" -avd "$avd" -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect > "$RUNNER_TEMP/cubechat-emulator.log" 2>&1 &
+          emulator_pid=$!
+          deadline=$((SECONDS + 360))
+          serial=""
+          while ((SECONDS < deadline)) && kill -0 "$emulator_pid" 2>/dev/null; do
+            while read -r candidate; do
+              name="$(timeout 3 adb -s "$candidate" emu avd name 2>/dev/null | tr -d '\r' | head -n 1 || true)"
+              if [[ "$name" == "$avd" ]]; then serial="$candidate"; break; fi
+            done < <(adb devices | awk '$1 ~ /^emulator-[0-9]+$/ && $2 == "device" { print $1 }')
+            if [[ -n "$serial" && "$(timeout 5 adb -s "$serial" shell getprop sys.boot_completed | tr -d '\r')" == 1 ]]; then break; fi
+            serial=""
+            sleep 3
+          done
+          if [[ -z "$serial" ]]; then tail -100 "$RUNNER_TEMP/cubechat-emulator.log"; exit 1; fi
+          adb -s "$serial" install -r app/build/outputs/apk/debug/app-debug.apk
+          adb -s "$serial" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          result="$RUNNER_TEMP/cubechat-instrumentation.txt"
+          adb -s "$serial" shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tr -d '\r' | tee "$result"
+          grep -Fxq 'INSTRUMENTATION_RESULT: cubechat_checks=passed' "$result"
+          grep -Fxq 'INSTRUMENTATION_CODE: -1' "$result"
+      - name: Preserve APKs and evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cubechat-lockdown-smoke
+          path: |
+            cubechat-android/app/build/outputs/apk/debug/*.apk
+            cubechat-android/app/build/outputs/apk/androidTest/debug/*.apk
+            cubechat-android/app/build/test-results/testDebugUnitTest/**/*
+          if-no-files-found: warn
+          retention-days: 14
