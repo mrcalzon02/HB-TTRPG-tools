@@ -9,6 +9,21 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 19, 2026 · Cancel in-flight updater work on lockdown activation
+
+A previously authorized CubeChat update check no longer continues reading release metadata after a lockdown transition without checking its permission again. The `UpdateRunGate` creates a process-local revocable request token; `LockdownFirewall.setArmed(true)` invalidates all earlier tokens. Once a token is denied, its denial **latches** across threads and persists even if lockdown is quickly toggled off again. A new check needs a fresh token and must observe the current preference.
+
+`CubeChatReleases` now enforces the guard before each metadata request, before/after HTTP responses, around stream reads, after fixture-reader calls, and before returning a release result. The UI updater suppresses stale results, avoids replacing cached metadata on cancellation, and keeps nonessential release checks and updater-initiated download links paused while lockdown is requested. The main chat shows **Update checks paused · Lockdown** (or a paused cached offer), clearing the notice after disarm. The paused-update explanation explicitly distinguishes the updater from independently unverified browser/system traffic.
+
+**Verification:**
+
+- **PASS**: exact committed `UpdateRunGate.java` / `UpdateRunGateTest.java` blobs compiled with `javac --release 17`. **26/26** host assertions passed, covering persistent denial, interrupted worker, rapid on/off, and cross-thread revocation. Verified Git blob hashes `e8711e26357ad86017a37b1fb20bda81130e5b42` and `38cb2f4f674cb268d309d871c0c8026ff472cf1c`.
+- **PASS**: existing unchanged recovery **32** and device-inventory **16** host assertions; all four exact prior Git blobs matched current tracked versions. Total in this locally repeated offline batch: **74/74**. No network connections, radio interfaces or telephony actions were used in these host tests.
+- **Committed, not yet run**: Android/Robolectric API 26/35 release-reader cancellation fixtures, lockdown-to-updater integration assertion and paused banner regression. Existing pure-Java release selection fixture API remains source-compatible.
+- **No full Android SDK build or physical test** in this session. Packet shutdown cannot be guaranteed at the instant an in-flight system `HttpURLConnection` is blocked; Android Always-on VPN/OS readbacks and external packet capture remain needed for deployment claims. No APK published, no new root/kernel/modem helper and **no emergency-call testing**.
+
+The [Android README](README.md) now documents how to find lockdown controls, the update banner, cancellation semantics and practical limits. Continue the [manual security smoke workflow](../.github/workflows/cubechat-lockdown-smoke.yml) on an eligible runner before considering a signed candidate. Do not auto-trigger CI, publish artifacts as a release, or change the emergency-call prohibition.
+
 ## November 19, 2026 · Managed-policy readback and device inventory
 
 - **Recovery accuracy:** `ManagedLockdownController.audit()` now reads each CubeChat device-owner restriction individually and checks `DevicePolicyManager.getAlwaysOnVpnPackage()` for CubeChat ownership. Partial cleanup and missing readbacks are no longer conflated with a clean shutdown. The Recovery tab exposes the count and whether CubeChat's own always-on VPN is still reported. It does **not** claim that unrelated system VPN configurations are absent.
