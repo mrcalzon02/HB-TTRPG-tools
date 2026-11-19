@@ -1,1 +1,37 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inventory and Resource Tracking Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Track equipment, ammunition, currency, consumables, charges, cargo, and shared tabletop resources."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/inventory-and-resource-tracking.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"></head><body><main><section class="hero-card"><h1>Inventory and Resource Tracking</h1><p><strong>Authority:</strong> <code>skills/inventory-and-resource-tracking/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Tracks owner, stable item ID, name, quantity, state, unit, location, and notes for personal gear, party stashes, vehicle cargo, ammunition, currency, food, charges, spell components, crafting materials, fuel, and supplies.</p></section><section class="registry-section"><p>Read before mutation; preserve meaningful item states and distinct named/stateful items. Significant acquisitions, losses, transfers, and expenditures append to the campaign ledger.</p><p><a href="../skills/inventory-and-resource-tracking/SKILL.md">Authoritative SKILL.md</a></p></section></main></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inventory and Resource Tracking Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Track equipment, ammunition, currency, consumables, charges, cargo, and shared tabletop resources."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/inventory-and-resource-tracking.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
+</head><body><main><section class="hero-card"><h1>Inventory and Resource Tracking</h1><p><strong>Authority:</strong> <code>skills/inventory-and-resource-tracking/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Tracks owner, stable item ID, name, quantity, state, unit, location, and notes for personal gear, party stashes, vehicle cargo, ammunition, currency, food, charges, spell components, crafting materials, fuel, and supplies.</p><p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
+</section><section class="registry-section"><p>Read before mutation; preserve meaningful item states and distinct named/stateful items. Significant acquisitions, losses, transfers, and expenditures append to the campaign ledger.</p><p><a href="../skills/inventory-and-resource-tracking/SKILL.md">Authoritative SKILL.md</a></p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><p>Authoritative raw instructions, reproduced for restricted model browsers.</p><pre class="module-card">---
+name: inventory-and-resource-tracking
+description: Track equipment, consumables, ammunition, currency, charges, encumbrance, shared supplies, and other mutable tabletop resources.
+compatibility: Requires a host that can load Agent Skills. File-backed operations additionally require a writable sandbox/filesystem; randomness additionally requires a cryptographic RNG source.
+metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  personality-engram: blacklight.charles
+---
+
+# Inventory and Resource Tracking
+
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
+Use this skill for mutable possessions and pooled resources.
+
+Track owner, stable item ID, display name, quantity, state, unit, location, and notes in `inventory.csv`. This supports personal inventory, party stash, vehicle cargo, ammunition, currency, food, charges, spell components, crafting materials, fuel, medical supplies, and other consumables.
+
+Read before mutation. Do not allow quantity to fall below a system-valid minimum without surfacing the conflict. Preserve meaningful item state such as equipped, stowed, damaged, loaded, attuned, identified, consumed, loaned, or lost.
+
+Record campaign-significant acquisitions, losses, transfers, and expenditures in `campaign_ledger.csv`. Do not collapse distinct named or stateful items into one stack unless the user or system treats them as interchangeable.
+
+&lt;!-- CALZON_FOUNDRY_PROVENANCE_NOTICE --&gt;
+
+## Provenance, Authorship &amp; Usage Notice
+
+This Agent Skill originates in **Calzon&#x27;s TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
+
+This skill is distributed under the project&#x27;s custom **Terms of Service &amp; Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform&#x27;s source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners&#x27; rights.
+
+Keep this notice with copies of `SKILL.md`. See `PROVENANCE.md` in this skill directory and the repository root `TERMS-OF-SERVICE.md` for the complete provenance and governing terms.
+</pre></section>
+</main></body></html>

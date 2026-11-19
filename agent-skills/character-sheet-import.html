@@ -1,1 +1,52 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Character Sheet Import Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Import and normalize character sheets into system-neutral tracked state while preserving source artifacts."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/character-sheet-import.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"></head><body><main><section class="hero-card"><h1>Character Sheet Import</h1><p><strong>Authority:</strong> <code>skills/character-sheet-import/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Structured inputs such as CSV, JSON, YAML, exported text, and form data are preferred. PDF/image sheets require an actually capable host; unread fields must not be fabricated.</p></section><section class="registry-section"><h2>Workflow</h2><p>Preserve the source artifact, resolve stable identity, normalize mutable/rules-relevant fields into long-form character stats, route inventory into the inventory table when useful, preserve unfamiliar labels, record uncertainty, and append import provenance to the campaign ledger. Re-import is reconciliation rather than blind replacement: older sheets must not erase in-play changes.</p><p><a href="../skills/character-sheet-import/SKILL.md">Authoritative SKILL.md</a></p></section></main></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Character Sheet Import Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Import and normalize character sheets into system-neutral tracked state while preserving source artifacts."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/character-sheet-import.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
+</head><body><main><section class="hero-card"><h1>Character Sheet Import</h1><p><strong>Authority:</strong> <code>skills/character-sheet-import/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Structured inputs such as CSV, JSON, YAML, exported text, and form data are preferred. PDF/image sheets require an actually capable host; unread fields must not be fabricated.</p><p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
+</section><section class="registry-section"><h2>Workflow</h2><p>Preserve the source artifact, resolve stable identity, normalize mutable/rules-relevant fields into long-form character stats, route inventory into the inventory table when useful, preserve unfamiliar labels, record uncertainty, and append import provenance to the campaign ledger. Re-import is reconciliation rather than blind replacement: older sheets must not erase in-play changes.</p><p><a href="../skills/character-sheet-import/SKILL.md">Authoritative SKILL.md</a></p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><p>Authoritative raw instructions, reproduced for restricted model browsers.</p><pre class="module-card">---
+name: character-sheet-import
+description: Import character sheets and normalize their identity, stats, resources, conditions, inventory, and provenance into the shared tabletop CSV state.
+compatibility: Requires a host that can load Agent Skills. File-backed operations additionally require a writable sandbox/filesystem; randomness additionally requires a cryptographic RNG source.
+metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  personality-engram: blacklight.charles
+---
+
+# Character Sheet Import
+
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
+Use this skill when the user supplies or references a character sheet that should become usable campaign state.
+
+## Supported inputs
+
+Prefer structured inputs first: CSV, JSON, YAML, exported text, or form data. Plain Markdown and text sheets are acceptable. PDF/image sheets require a host that can actually read the file; do not pretend to have extracted fields that were not observed.
+
+## Workflow
+
+1. Preserve the original source artifact and record its filename/path.
+2. Identify character name, system, player/owner if present, and whether the sheet represents a PC, NPC, companion, creature, or other entity.
+3. Normalize identity into `characters.csv`.
+4. Normalize mutable and rules-relevant fields into long-form `character_stats.csv`; keep the source&#x27;s own labels unless a system authority provides canonical names.
+5. Route equipment and carried resources to `inventory.csv` when useful.
+6. Record uncertain or unreadable fields rather than guessing.
+7. If a value appears derived, preserve the observed value and note derivation only when known from the authoritative rules.
+8. Append a ledger entry identifying the import source and timestamp.
+
+Use `tabletop-sandbox-data-management` for persistence and `character-stat-tracking` for subsequent mutations.
+
+## Re-import
+
+A re-import is reconciliation, not blind replacement. Compare source values with tracked state, surface material conflicts, and do not erase campaign changes merely because an older sheet was imported again.
+
+&lt;!-- CALZON_FOUNDRY_PROVENANCE_NOTICE --&gt;
+
+## Provenance, Authorship &amp; Usage Notice
+
+This Agent Skill originates in **Calzon&#x27;s TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
+
+This skill is distributed under the project&#x27;s custom **Terms of Service &amp; Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform&#x27;s source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners&#x27; rights.
+
+Keep this notice with copies of `SKILL.md`. See `PROVENANCE.md` in this skill directory and the repository root `TERMS-OF-SERVICE.md` for the complete provenance and governing terms.
+</pre></section>
+</main></body></html>

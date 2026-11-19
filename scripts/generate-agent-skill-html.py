@@ -69,6 +69,7 @@ def render_skill_page(record: dict, source: str) -> str:
 <link rel="canonical" href="{canonical}">
 <link rel="alternate" type="text/markdown" href="../{skill_path}" title="Authoritative SKILL.md">
 <link rel="alternate" type="application/json" href="../skills/index.json" title="Authoritative Agent Skills Registry">
+<link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../workspace-landing.css">
 <style>pre{{white-space:pre-wrap;overflow-wrap:anywhere}}main{{max-width:1100px;margin:auto;padding:1rem}}</style>
@@ -79,6 +80,7 @@ def render_skill_page(record: dict, source: str) -> str:
 <main>
 <section class="hero-card">
 <p><strong>HTML compatibility projection.</strong> Authority remains <code>{skill_path}</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
+<p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
 <p><a class="link-button primary-action" href="../{skill_path}">Authoritative SKILL.md</a> <a class="link-button" href="{github_source}">GitHub HTML source</a></p>
 </section>
 <section class="registry-section"><h2>Registered integration metadata</h2>

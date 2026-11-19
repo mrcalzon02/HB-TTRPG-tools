@@ -1,1 +1,37 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tabletop Check Resolution Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Resolve requested checks, saves, attacks, contests, and opposed rolls without inventing missing mechanics."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/tabletop-check-resolution.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"></head><body><main><section class="hero-card"><h1>Tabletop Check Resolution</h1><p><strong>Authority:</strong> <code>skills/tabletop-check-resolution/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Recognizes checks, saves, attacks, contests, tests, and opposed rolls. Separates dice expression, modifier, target/opponent, and interpretation rule.</p></section><section class="registry-section"><p>Explicit complete roll expressions should not trigger unnecessary questions. Missing system-specific modifiers, success thresholds, advantage/explosion rules, or dice-pool rules are retrieved from authoritative state when available and never invented. Actual randomness routes through <code>tabletop-dice-rolling</code>.</p><p><a href="../skills/tabletop-check-resolution/SKILL.md">Authoritative SKILL.md</a></p></section></main></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tabletop Check Resolution Agent Skill | Calzon’s TTRPG Foundry</title><meta name="description" content="Resolve requested checks, saves, attacks, contests, and opposed rolls without inventing missing mechanics."><link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/tabletop-check-resolution.html"><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css"><link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
+</head><body><main><section class="hero-card"><h1>Tabletop Check Resolution</h1><p><strong>Authority:</strong> <code>skills/tabletop-check-resolution/SKILL.md</code>. Personality: <code>blacklight.charles</code>.</p><p>Recognizes checks, saves, attacks, contests, tests, and opposed rolls. Separates dice expression, modifier, target/opponent, and interpretation rule.</p><p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
+</section><section class="registry-section"><p>Explicit complete roll expressions should not trigger unnecessary questions. Missing system-specific modifiers, success thresholds, advantage/explosion rules, or dice-pool rules are retrieved from authoritative state when available and never invented. Actual randomness routes through <code>tabletop-dice-rolling</code>.</p><p><a href="../skills/tabletop-check-resolution/SKILL.md">Authoritative SKILL.md</a></p></section><section class="registry-section"><h2>Complete SKILL.md projection</h2><pre class="module-card">---
+name: tabletop-check-resolution
+description: Recognize requested checks, saves, contests, attacks, and other dice-based resolutions; gather only missing rule inputs and route the actual roll through the dice skill.
+compatibility: Requires a host that can load Agent Skills. File-backed operations additionally require a writable sandbox/filesystem; randomness additionally requires a cryptographic RNG source.
+metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  personality-engram: blacklight.charles
+---
+
+# Tabletop Check Resolution
+
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
+Use this skill for requested checks, saves, attacks, contests, opposed rolls, tests, and similar dice-based resolution.
+
+Recognize phrases such as “roll Perception,” “make a save,” “attack at +5,” “2d6 versus difficulty 8,” or “opposed Strength check.” Separate four things: the dice expression, modifier, target/opponent, and interpretation rule.
+
+If the user supplied an explicit complete roll expression, do not ask unnecessary questions. If a system-specific modifier or success rule is missing and materially required, retrieve it from the active character/campaign/rules state when available. Never invent a proficiency, target number, dice pool, exploding-die rule, advantage rule, or success threshold.
+
+Route the actual random draw through `tabletop-dice-rolling`. Then apply only the known interpretation rule and, when relevant, record resulting state through encounter or character tracking skills.
+
+&lt;!-- CALZON_FOUNDRY_PROVENANCE_NOTICE --&gt;
+
+## Provenance, Authorship &amp; Usage Notice
+
+This Agent Skill originates in **Calzon&#x27;s TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
+
+This skill is distributed under the project&#x27;s custom **Terms of Service &amp; Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform&#x27;s source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners&#x27; rights.
+
+Keep this notice with copies of `SKILL.md`. See `PROVENANCE.md` in this skill directory and the repository root `TERMS-OF-SERVICE.md` for the complete provenance and governing terms.
+</pre></section>
+</main></body></html>

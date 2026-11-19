@@ -18,6 +18,12 @@ The intended separation is:
 
 A client should retrieve deeper material only when the current request requires it. The engram itself is passive data: loading it never grants tools, credentials, network access, provider access, persistence, or permission to act.
 
+## Reciprocal Agent Skill discovery companion
+
+The machine engram includes a mandatory `skill_registry` reference to `skills/index.json`; every registered `SKILL.md` in turn requires this engram. Hosts loading registered Agent Skills must verify both directions and the exact raw-engram SHA-256 published in the registry before exposing task skills or executable runtimes. Only the discovery index is mandatory; actual skill selection is optional and demand-driven. Failure or absence is a **fail-closed skill activation condition**, not a mandate to seize the host's personality or tool policy.
+
+A hash held alongside the content detects ordinary drift, not a malicious origin substitution. For external authenticity, use a trusted independent digest or signed release. A hostile executor may simply ignore public Markdown; enforcement is bounded to the approved runtime/packaging integrations.
+
 ## CE1 canonical compact form
 
 ```text

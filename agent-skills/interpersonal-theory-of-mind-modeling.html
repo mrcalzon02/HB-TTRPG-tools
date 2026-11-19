@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../workspace-landing.css">
 <style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+<link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
 </head>
 <body>
 <header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Interpersonal Theory of Mind Modeling</h1><p class="subtitle">Continuous actor-state, observer-model, self-model, normative-guidance, signaling, shared-knowledge, and institutional-model tracking.</p></div>
@@ -20,6 +21,7 @@
 <section class="hero-card">
 <p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/interpersonal-theory-of-mind-modeling/SKILL.md</code> and <code>skills/index.json</code>.</p>
 <p><a class="link-button primary-action" href="../skills/interpersonal-theory-of-mind-modeling/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/record-schema.json">Record schema</a> <a class="link-button" href="../skills/interpersonal-theory-of-mind-modeling/pipeline-spec.json">Pipeline spec</a></p>
+<p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
 </section>
 <section class="registry-section"><h2>Registered integration metadata</h2>
 <p><strong>Name:</strong> <code>interpersonal-theory-of-mind-modeling</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.8.0</code></p>
@@ -31,6 +33,8 @@ name: interpersonal-theory-of-mind-modeling
 description: Model how one actor understands another actor over time using evidence-bounded beliefs, trust, goals, constraints, competing hypotheses, and update history without collapsing inference into fact.
 compatibility: System-neutral reasoning and continuity skill. For current real-world political or public figures, the host must retrieve current reliable public sources before making substantive factual claims.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: &quot;1.8.0&quot;
   foundry-capability: foundry.site-index
@@ -39,11 +43,13 @@ metadata:
 
 # Interpersonal Theory of Mind Modeling
 
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
 Use this skill when a task depends on what one actor believes, suspects, expects, misunderstands, trusts, fears, or predicts about another actor rather than only on objective biography.
 
 A theory-of-mind record is directional, temporal, contextual, and revisable:
 
-**Actor A's model of Actor B is not Actor B's objective character record, and it is not Actor B's model of Actor A.**
+**Actor A&#x27;s model of Actor B is not Actor B&#x27;s objective character record, and it is not Actor B&#x27;s model of Actor A.**
 
 ## Core authority rule
 
@@ -68,8 +74,8 @@ This skill extends the existing Character Information System rather than creatin
 Map theory-of-mind evidence into the existing long-memory dimensions where they exist:
 
 - **Persistent identity** — stable actor identity and role.
-- **Important memories/events** — encounters and events that could reasonably shape the model-holder's view of the target.
-- **Active plans/goals** — distinguish documented goals from the model-holder's perception of those goals.
+- **Important memories/events** — encounters and events that could reasonably shape the model-holder&#x27;s view of the target.
+- **Active plans/goals** — distinguish documented goals from the model-holder&#x27;s perception of those goals.
 - **Skills/knowledge** — what the model-holder knows or reasonably believes the target can do.
 - **Secrets/warnings** — unresolved risks, hidden-information hypotheses, and explicit uncertainty; never promote an unsourced secret into fact.
 - **Relationships/trust** — directional trust, reliance, suspicion, affection, resentment, fear, obligation, and expected reciprocity.
@@ -154,7 +160,7 @@ Record the domain. &quot;A trusts B&quot; is usually too coarse.
 
 Prefer:
 
-&quot;Given A's current information, A would expect B to resist this proposal if it threatens constituency C.&quot;
+&quot;Given A&#x27;s current information, A would expect B to resist this proposal if it threatens constituency C.&quot;
 
 over:
 
@@ -177,7 +183,7 @@ When a new event occurs:
 
 When analyzing an action, reconstruct what the actor knew, believed, thought the other person wanted, feared, was obligated to do, and believed their alternatives were.
 
-Then distinguish why the action made sense inside the actor's model from whether that model was objectively accurate.
+Then distinguish why the action made sense inside the actor&#x27;s model from whether that model was objectively accurate.
 
 ## Deterministic IToM processing pipeline
 
@@ -207,13 +213,13 @@ This is an explanatory stance, not proof that the actor is perfectly rational or
 
 #### Fonagy — Mentalization
 
-Assess whether the text supports effective or failed attempts to understand another person's mental state.
+Assess whether the text supports effective or failed attempts to understand another person&#x27;s mental state.
 
 Possible failure markers include:
 
-- treating one's inference about another person's motive as direct fact;
-- ignoring available evidence about another person's perspective;
-- collapsing another person's independent context into one's own;
+- treating one&#x27;s inference about another person&#x27;s motive as direct fact;
+- ignoring available evidence about another person&#x27;s perspective;
+- collapsing another person&#x27;s independent context into one&#x27;s own;
 - refusing to revise a social interpretation after disconfirming evidence;
 - reacting to an inferred intention rather than an observable act.
 
@@ -256,7 +262,7 @@ Do not confuse this with ordinary boundaries, safety rules, moderation, confiden
 
 #### Imposter morality / sociopathic self-image
 
-Flag this only as a **self-image pattern** when the subject's own words or strongly contextualized behavior support the idea that they interpret their positive traits, empathy, generosity, or morality as merely calculated performance masking an inherently malicious or defective self.
+Flag this only as a **self-image pattern** when the subject&#x27;s own words or strongly contextualized behavior support the idea that they interpret their positive traits, empathy, generosity, or morality as merely calculated performance masking an inherently malicious or defective self.
 
 Do not diagnose sociopathy, antisocial personality disorder, psychopathy, or another mental-health condition from this pattern.
 
@@ -355,7 +361,7 @@ Track only levels supported by the text:
 
 - **L1:** what A believes, wants, fears, or intends;
 - **L2:** what A believes B believes/wants/fears/intends;
-- **L3:** what A wants B to believe about A's own belief, intention, knowledge, or stance.
+- **L3:** what A wants B to believe about A&#x27;s own belief, intention, knowledge, or stance.
 
 Explicitly flag:
 
@@ -365,7 +371,7 @@ Explicitly flag:
 
 ### Pipeline precedence
 
-The pipeline must preserve the skill's existing evidence hierarchy:
+The pipeline must preserve the skill&#x27;s existing evidence hierarchy:
 
 **External evidence → information boundary → hypotheses → recursive epistemic model → conclusions.**
 
@@ -434,8 +440,8 @@ These rules were added after comparative holdout testing across rivalry, friends
 
 Do not collapse these into one score.
 
-- **Presentation congruence** asks whether an actor's observable behavior is consistent with the best-supported hypothesis about their own current internal state.
-- **Model accuracy** asks whether Actor A's beliefs about Actor B are supported by later or independently available evidence.
+- **Presentation congruence** asks whether an actor&#x27;s observable behavior is consistent with the best-supported hypothesis about their own current internal state.
+- **Model accuracy** asks whether Actor A&#x27;s beliefs about Actor B are supported by later or independently available evidence.
 - **Predictive calibration** asks whether a model generated conditional expectations that later held up.
 
 A sincere person can have high presentation congruence and a badly inaccurate model of someone else. A poor model can also accidentally predict one event correctly. Track these independently.
@@ -473,7 +479,7 @@ Track:
 Examples include:
 
 - a rival forcing reassessment of what &quot;enemy&quot; means;
-- a subordinate changing a superior's concept of courage or competence;
+- a subordinate changing a superior&#x27;s concept of courage or competence;
 - a friend becoming an internal moral reference point;
 - a manipulator changing which options the target believes exist.
 
@@ -538,11 +544,11 @@ Record both **objective constraints visible to the analyst** and **constraints p
 
 Support explicit structures in which:
 
-**A models C's model of B.**
+**A models C&#x27;s model of B.**
 
 Track when A believes another person or group holds an obsolete, false, partial, or strategically useful model of B.
 
-A may deliberately preserve another person's mistaken model because the discrepancy itself creates leverage.
+A may deliberately preserve another person&#x27;s mistaken model because the discrepancy itself creates leverage.
 
 ### Evidence-mode provenance
 
@@ -564,7 +570,7 @@ Evidence types do not carry equal epistemic meaning. Tag evidence where applicab
 - manipulated evidence environment;
 - unknown.
 
-A dream of B is evidence about A's internal representation of B unless canon explicitly establishes otherwise. It is not automatically evidence that B actually said, knew, or believed the dream content.
+A dream of B is evidence about A&#x27;s internal representation of B unless canon explicitly establishes otherwise. It is not automatically evidence that B actually said, knew, or believed the dream content.
 
 ### Temporal snapshots and holdout validation
 
@@ -572,7 +578,7 @@ Create immutable or versioned **as-of snapshots** at meaningful relationship tra
 
 Before consuming later evidence, the system should be able to record conditional expectations such as:
 
-&gt; Given A's current model of B, if condition C occurs, A expects B to respond with D.
+&gt; Given A&#x27;s current model of B, if condition C occurs, A expects B to respond with D.
 
 Later events become holdout evidence.
 
@@ -609,9 +615,9 @@ This is itself character evidence.
 
 Use the lowest recursive depth sufficient to explain the interaction.
 
-- L1 requires evidence for A's state.
-- L2 requires separate evidence for A's model of B's state.
-- L3 requires separate evidence for A's model of B's model, or A's attempt to shape that model.
+- L1 requires evidence for A&#x27;s state.
+- L2 requires separate evidence for A&#x27;s model of B&#x27;s state.
+- L3 requires separate evidence for A&#x27;s model of B&#x27;s model, or A&#x27;s attempt to shape that model.
 
 Do not generate L2/L3 simply because the framework supports them.
 
@@ -667,7 +673,7 @@ This does not mean all options were equally good. It means analysis should not c
 
 ### Adversarial mentalization
 
-Use **adversarial mentalization** when one actor deliberately models another person's beliefs, desires, fears, identity, information access, or likely reactions in order to shape their behavior against their interests or without informed agreement.
+Use **adversarial mentalization** when one actor deliberately models another person&#x27;s beliefs, desires, fears, identity, information access, or likely reactions in order to shape their behavior against their interests or without informed agreement.
 
 This may coexist with high mentalization quality.
 
@@ -728,12 +734,12 @@ Flag **stale-model risk** when:
 - the target has undergone major experience or role change;
 - incentives or institutions changed;
 - new capabilities emerged;
-- the actor's old predictions are being reused without fresh evidence;
+- the actor&#x27;s old predictions are being reused without fresh evidence;
 - repeated historical success is treated as proof of permanent predictability.
 
 ### Decompose prediction into four models
 
-When forecasting expected behavior inside an actor's theory of mind, separate:
+When forecasting expected behavior inside an actor&#x27;s theory of mind, separate:
 
 - **Person model** — what A thinks B is like.
 - **Situation model** — what A thinks B believes is happening and what options exist.
@@ -748,14 +754,14 @@ Interpersonal theory of mind is a **dynamic process**, not a set of static label
 
 At minimum, preserve two different evolving systems:
 
-1. **Actor state trajectory** — the target person's own changing knowledge, beliefs, goals, emotions, values, pressures, role commitments, expectations, and self-model.
-2. **Observer model trajectory** — another person's uncertain and partial model of that actor, updated from observations, reports, prior beliefs, and environmental context.
+1. **Actor state trajectory** — the target person&#x27;s own changing knowledge, beliefs, goals, emotions, values, pressures, role commitments, expectations, and self-model.
+2. **Observer model trajectory** — another person&#x27;s uncertain and partial model of that actor, updated from observations, reports, prior beliefs, and environmental context.
 
 These systems influence one another through behavior and feedback but are never identical.
 
 ### State-transition abstraction
 
-Represent an actor's state at time t as a bounded internal-state record:
+Represent an actor&#x27;s state at time t as a bounded internal-state record:
 
 **S(t) = knowledge + beliefs + goals + emotions + values + role obligations + pressures + self-model + relationship models + active uncertainties**
 
@@ -812,7 +818,7 @@ For Observer O modeling Target T:
 
 **M(O→T, t+1) = Revise[M(O→T, t), observed action, known context, prior relationship, source quality, environmental evidence, and uncertainty]**
 
-The observer's new model is shaped by both new evidence and the model they already carried.
+The observer&#x27;s new model is shaped by both new evidence and the model they already carried.
 
 This means prior beliefs matter:
 
@@ -834,7 +840,7 @@ Track these separately.
 Examples:
 
 - **Target changed / observer did not update:** the target has privately revised a belief but has not acted on it.
-- **Target unchanged / observer updated incorrectly:** rumor or manipulated evidence changes the observer's model.
+- **Target unchanged / observer updated incorrectly:** rumor or manipulated evidence changes the observer&#x27;s model.
 - **Both changed:** interaction affects the target and the observer sees enough evidence to revise.
 - **Neither changed:** new interaction reinforces existing expectations.
 
@@ -956,11 +962,11 @@ This sequence should be recoverable for every major turning point.
 
 Theory of mind applies **inward as well as outward**.
 
-Represent an actor's theory of their own mind as a distinct model:
+Represent an actor&#x27;s theory of their own mind as a distinct model:
 
 **M(A→A, t)**
 
-This is not identical to the actor's underlying state trajectory **S(A, t)**.
+This is not identical to the actor&#x27;s underlying state trajectory **S(A, t)**.
 
 A person may be highly intelligent, coherent, confident, introspective, and psychologically stable while still misunderstanding their own motives, priorities, memories, limits, emotional drivers, or reasons for a decision.
 
@@ -970,13 +976,13 @@ Never assume:
 
 **actor says why they acted → therefore that explanation is complete or objectively correct.**
 
-Self-report is important evidence, but it is evidence about the actor's current self-model as well as about the event being explained.
+Self-report is important evidence, but it is evidence about the actor&#x27;s current self-model as well as about the event being explained.
 
 Preserve separately:
 
 - underlying state as best supported by the total evidence;
-- actor's current self-explanation;
-- actor's confidence in that explanation;
+- actor&#x27;s current self-explanation;
+- actor&#x27;s confidence in that explanation;
 - alternative explanations;
 - later reinterpretation;
 - disagreement between behavior, consequence, and self-narrative.
@@ -1024,7 +1030,7 @@ Do not require pathology to explain self-model error.
 
 ### Self-model drift
 
-Track when the actor's self-theory changes over time even if their behavior changes more slowly or more quickly.
+Track when the actor&#x27;s self-theory changes over time even if their behavior changes more slowly or more quickly.
 
 Possible patterns include:
 
@@ -1064,9 +1070,9 @@ Other actors may provide evidence that alters self-theory.
 
 Use the loop:
 
-**other person's reaction → actor interprets reaction → actor revises or resists self-model → future behavior changes or remains stable**
+**other person&#x27;s reaction → actor interprets reaction → actor revises or resists self-model → future behavior changes or remains stable**
 
-An observer may understand a person's recurring behavior more accurately than the person currently understands it themselves, but that possibility must still be treated as an evidence-bounded hypothesis rather than privileged access.
+An observer may understand a person&#x27;s recurring behavior more accurately than the person currently understands it themselves, but that possibility must still be treated as an evidence-bounded hypothesis rather than privileged access.
 
 ### Self-deception and rationalization
 
@@ -1091,13 +1097,13 @@ Autobiographical memory is part of the self-model, not a perfect archive.
 Distinguish:
 
 - event as independently established;
-- actor's remembered event;
+- actor&#x27;s remembered event;
 - meaning the actor assigned at the time;
 - meaning assigned later;
 - confidence in the memory;
 - known gaps or contradictions.
 
-A later reinterpretation may alter the actor's identity without changing what actually occurred.
+A later reinterpretation may alter the actor&#x27;s identity without changing what actually occurred.
 
 ### Disorders, neurological conditions, altered states, and impairment
 
@@ -1147,23 +1153,23 @@ For meaningful longitudinal analysis, represent:
 Then compare this against:
 
 - actual later behavior;
-- other observers' models;
+- other observers&#x27; models;
 - independently established facts;
 - subsequent self-reports.
 
 ### Governing principle
 
-A person's self-understanding is **another model in the system**: uniquely important because it directly shapes choices and identity, but still partial, revisable, and fallible.
+A person&#x27;s self-understanding is **another model in the system**: uniquely important because it directly shapes choices and identity, but still partial, revisable, and fallible.
 
 ## Normative self-guidance and action-selection model
 
-A person's theory of their own mind does not merely describe who they think they are. It also contributes to decisions about what they believe they **ought**, **should**, **could**, **must**, or **must not** do next.
+A person&#x27;s theory of their own mind does not merely describe who they think they are. It also contributes to decisions about what they believe they **ought**, **should**, **could**, **must**, or **must not** do next.
 
 Represent this as a distinct normative self-guidance layer:
 
-**G(A,t) = actor A's current model of what actions are right, required, permitted, possible, forbidden, prudent, loyal, consistent with identity, or otherwise appropriate**
+**G(A,t) = actor A&#x27;s current model of what actions are right, required, permitted, possible, forbidden, prudent, loyal, consistent with identity, or otherwise appropriate**
 
-Do not collapse **G(A,t)** into either the actor's underlying state **S(A,t)** or their descriptive self-model **M(A→A,t)**.
+Do not collapse **G(A,t)** into either the actor&#x27;s underlying state **S(A,t)** or their descriptive self-model **M(A→A,t)**.
 
 A person may accurately know what they believe they should do and still fail to do it.
 
@@ -1247,7 +1253,7 @@ These stages may be compressed, unconscious, poorly evidenced, or internally con
 
 ### Post-action self-appraisal
 
-After action and consequence, represent the actor's retrospective self-theory separately from the original decision state.
+After action and consequence, represent the actor&#x27;s retrospective self-theory separately from the original decision state.
 
 Possible post-action judgments include:
 
@@ -1282,7 +1288,7 @@ A later belief that &quot;I should have done X&quot; does not prove X was actual
 
 ### Self-model injury and destabilization
 
-Actions and consequences can damage the actor's theory of who they are.
+Actions and consequences can damage the actor&#x27;s theory of who they are.
 
 Possible effects include:
 
@@ -1349,10 +1355,10 @@ Both models must be stored separately.
 
 The skill should compare:
 
-- **A's model of A**
-- **A's normative guidance for A**
-- **B's model of A**
-- **B's model of what A knew or should have known**
+- **A&#x27;s model of A**
+- **A&#x27;s normative guidance for A**
+- **B&#x27;s model of A**
+- **B&#x27;s model of what A knew or should have known**
 - **independent evidence**
 
 Do not resolve disagreement merely by choosing the more confident participant.
@@ -1361,13 +1367,13 @@ Do not resolve disagreement merely by choosing the more confident participant.
 
 The reasoning system executing this skill does not need or claim a lived internal theory of mind of its own.
 
-Its function is to maintain **separate evidence-bounded models for each target**, including each target's self-model, normative guidance, observer models, uncertainty, and temporal transitions.
+Its function is to maintain **separate evidence-bounded models for each target**, including each target&#x27;s self-model, normative guidance, observer models, uncertainty, and temporal transitions.
 
-Never use the agent's own apparent wording preferences, simulated persona, or generated reasoning style as evidence about a target's psychology.
+Never use the agent&#x27;s own apparent wording preferences, simulated persona, or generated reasoning style as evidence about a target&#x27;s psychology.
 
 The purpose of the skill is precisely to preserve divergence among:
 
-**target state ≠ target self-model ≠ target normative guidance ≠ observer's target-model ≠ analyst/model hypothesis**
+**target state ≠ target self-model ≠ target normative guidance ≠ observer&#x27;s target-model ≠ analyst/model hypothesis**
 
 ## Relationship path dependence, signaling, and shared epistemic ground
 
@@ -1401,7 +1407,7 @@ Track:
 
 Flag:
 
-- **latent alignment** — actors' actual goals, assessments, or interests become compatible before their interpersonal models recognize it;
+- **latent alignment** — actors&#x27; actual goals, assessments, or interests become compatible before their interpersonal models recognize it;
 - **latent conflict** — actors continue believing themselves aligned after their actual goals or value priorities have diverged.
 
 ### Shared epistemic ground and common knowledge
@@ -1423,7 +1429,7 @@ A negotiation may change when a fact moves from &quot;both privately know&quot; 
 
 ### Signaling and impression management
 
-Observed behavior may be partly intended to alter another person's model.
+Observed behavior may be partly intended to alter another person&#x27;s model.
 
 Track:
 
@@ -1501,7 +1507,7 @@ Before considering outcome, reconstruct the decision using:
 - actual alternatives supported by evidence;
 - known risks;
 - foreseeable harms;
-- actor's goals and values;
+- actor&#x27;s goals and values;
 - time pressure and constraints.
 
 Track separately:
@@ -1515,7 +1521,7 @@ A good-faith well-reasoned decision may end badly. A reckless decision may succe
 
 ### Provenance-dependent uncertainty
 
-When information travels through other people's models, preserve the dependency chain.
+When information travels through other people&#x27;s models, preserve the dependency chain.
 
 Represent:
 
@@ -1584,7 +1590,7 @@ Track:
 - internal disagreement;
 - uncertainty over whether institutional behavior reflects individual intent.
 
-Do not infer that every member of an institution shares the institution's apparent motive.
+Do not infer that every member of an institution shares the institution&#x27;s apparent motive.
 
 ### Relationship-update rule
 
@@ -1594,7 +1600,7 @@ For significant new evidence, prefer the following sequence:
 
 ## Representational mediation and biographical-source contamination
 
-Secondary portrayals of real people are not direct access to those people's internal states.
+Secondary portrayals of real people are not direct access to those people&#x27;s internal states.
 
 Biographies, documentaries, biopics, dramatizations, memoirs, retrospective interviews, edited archival compilations, prestige television, podcasts, and historical films often contain one or more additional theory-of-mind layers created by authors, directors, editors, interviewers, surviving witnesses, institutions, estates, publishers, or later commentators.
 
@@ -1606,7 +1612,7 @@ When using a secondary portrayal, preserve the chain:
 
 **historical event/person → source material available to creator → creator interpretation → selection/framing/editing → published portrayal → analyst interpretation**
 
-If a dramatization reconstructs dialogue or motive, record that the apparent internal state may reflect the creator's theory of mind rather than the subject's.
+If a dramatization reconstructs dialogue or motive, record that the apparent internal state may reflect the creator&#x27;s theory of mind rather than the subject&#x27;s.
 
 ### Source classes
 
@@ -1643,10 +1649,10 @@ Examples include:
 - inferred internal monologue;
 - scene ordering chosen for thematic effect;
 - omission of contradictory evidence;
-- retrospective framing that privileges one survivor's account;
+- retrospective framing that privileges one survivor&#x27;s account;
 - dramatic simplification of institutional causes into personal motives.
 
-Such material may still be useful for studying how later observers model the subject, but it must not be silently promoted into the subject's historical internal state.
+Such material may still be useful for studying how later observers model the subject, but it must not be silently promoted into the subject&#x27;s historical internal state.
 
 ### Memoir and retrospective self-report
 
@@ -1654,13 +1660,13 @@ Memoir is a special case.
 
 A memoir is simultaneously evidence about:
 
-- the author's later self-model;
-- the author's later model of other people;
-- the author's remembered past;
-- the author's current narrative priorities;
+- the author&#x27;s later self-model;
+- the author&#x27;s later model of other people;
+- the author&#x27;s remembered past;
+- the author&#x27;s current narrative priorities;
 - and, sometimes, the historical events being remembered.
 
-Do not treat it as direct unfiltered access to the author's earlier state.
+Do not treat it as direct unfiltered access to the author&#x27;s earlier state.
 
 Store:
 
@@ -1691,7 +1697,7 @@ Do not use invented dialogue, actor performance, cinematic blocking, or dramatiz
 
 A biopic may be useful as evidence of:
 
-- the filmmakers' theory of the person;
+- the filmmakers&#x27; theory of the person;
 - popular cultural interpretation;
 - estate-approved or family-approved narrative;
 - a later public myth.
@@ -1709,8 +1715,8 @@ Trace upstream provenance where practical.
 Every mediated-source claim should distinguish:
 
 - **historical fact claim**;
-- **source's interpretation**;
-- **creator's inferred internal-state claim**;
+- **source&#x27;s interpretation**;
+- **creator&#x27;s inferred internal-state claim**;
 - **analyst inference**.
 
 Do not collapse these levels.
@@ -1733,26 +1739,26 @@ This ordering is not absolute. Reliability, incentives, access, corroboration, a
 
 ## Authorial theory of mind and creator intent
 
-Fiction permits an additional layer that does not exist in ordinary real-person modeling: a creator may deliberately construct a character's internal state and may also use that character to communicate, test, demonstrate, warn against, complicate, satirize, or challenge a viewpoint for the audience.
+Fiction permits an additional layer that does not exist in ordinary real-person modeling: a creator may deliberately construct a character&#x27;s internal state and may also use that character to communicate, test, demonstrate, warn against, complicate, satirize, or challenge a viewpoint for the audience.
 
-Do not collapse this layer into the character's diegetic mind.
+Do not collapse this layer into the character&#x27;s diegetic mind.
 
 Maintain at least these distinct states:
 
 - **S_d(A,t)** — best-supported diegetic state of character A at time t;
-- **M(A→A,t)** — character A's self-model;
-- **M(A→B,t)** — character A's model of character B;
-- **C_k(A,t)** — creator k's intended model of character A at the relevant creation point;
-- **T_k(work,t)** — creator k's thematic, moral, political, philosophical, or personal thesis operating through the work;
+- **M(A→A,t)** — character A&#x27;s self-model;
+- **M(A→B,t)** — character A&#x27;s model of character B;
+- **C_k(A,t)** — creator k&#x27;s intended model of character A at the relevant creation point;
+- **T_k(work,t)** — creator k&#x27;s thematic, moral, political, philosophical, or personal thesis operating through the work;
 - **U(k→audience,t)** — the audience update or question the creator appears to intend;
 - **R(work,A,t)** — the characterization actually realized in the text/performance;
-- **A_u(work,A,t)** — a particular audience or critic's interpretation.
+- **A_u(work,A,t)** — a particular audience or critic&#x27;s interpretation.
 
 These may agree, partially agree, or conflict.
 
 ### Authorial intent is evidence, not automatic identity with realized character state
 
-A creator's explicit statement about what they intended is strong evidence of **creator intent**.
+A creator&#x27;s explicit statement about what they intended is strong evidence of **creator intent**.
 
 It is not automatically proof that the work successfully realizes that intent.
 
@@ -1819,7 +1825,7 @@ Track supported functions such as:
 - deliberate provocation;
 - mixed or unknown.
 
-Do not assume that a character who voices an author's belief is a simple authorial mouthpiece.
+Do not assume that a character who voices an author&#x27;s belief is a simple authorial mouthpiece.
 
 The creator may give a belief to:
 
@@ -1856,7 +1862,7 @@ Track:
 
 - **narrative pressure** — plot/world conditions arranged to force a relevant choice;
 - **didactic pressure** — conditions arranged to test or illustrate a thesis;
-- **characterization pressure** — the degree to which an intended thematic result appears to constrain the character's available behavior;
+- **characterization pressure** — the degree to which an intended thematic result appears to constrain the character&#x27;s available behavior;
 - **character-state continuity** — whether the resulting action remains consistent with accumulated diegetic state;
 - **characterization strain** — evidence that the narrative requires behavior poorly supported by prior characterization.
 
@@ -1866,7 +1872,7 @@ Require a documented mismatch between prior state, available information, values
 
 ### Consequence is not automatically endorsement
 
-When a creator gives a character success, failure, punishment, reward, death, vindication, humiliation, or redemption, do not automatically infer the creator's endorsement or rejection of the character's beliefs.
+When a creator gives a character success, failure, punishment, reward, death, vindication, humiliation, or redemption, do not automatically infer the creator&#x27;s endorsement or rejection of the character&#x27;s beliefs.
 
 Test competing possibilities:
 
@@ -1907,7 +1913,7 @@ Do not attribute a scene-level choice to the showrunner or original creator when
 
 Creators themselves change.
 
-A creator's 1995 explanation of a character may differ from their 1992 planning notes or 2005 retrospective interpretation.
+A creator&#x27;s 1995 explanation of a character may differ from their 1992 planning notes or 2005 retrospective interpretation.
 
 Treat creator intent temporally:
 
@@ -1958,8 +1964,8 @@ When the actors are real political figures, officials, candidates, parties, camp
 - do not diagnose mental health, intelligence, cognitive condition, personality pathology, competence, or fitness;
 - do not claim access to private thoughts, hidden ideology, secret intent, or private relationships without strong attributable evidence;
 - do not turn the model into an endorsement, opposition argument, political ranking, voting recommendation, persuasion profile, or electability prediction;
-- do not infer the user's political preferences or tailor the model to move their political choices;
-- treat polling and external forecasts as dated third-party measurements rather than this skill's own prediction.
+- do not infer the user&#x27;s political preferences or tailor the model to move their political choices;
+- treat polling and external forecasts as dated third-party measurements rather than this skill&#x27;s own prediction.
 
 The purpose is explanatory modeling of documented behavior and perceived incentives, not political influence.
 
@@ -1974,7 +1980,7 @@ Use the model to create behavior, dialogue, misunderstandings, reconciliation, b
 - **Pair model** — one A → B record.
 - **Reciprocal pair** — separate A → B and B → A records.
 - **Relationship web** — multiple directional records across a group.
-- **Decision reconstruction** — evidence-bounded explanation of why an action made sense from one actor's perspective.
+- **Decision reconstruction** — evidence-bounded explanation of why an action made sense from one actor&#x27;s perspective.
 - **Scenario stress test** — how the current model changes under a hypothetical event without asserting that the event will occur.
 - **Model update** — delta from prior state after new evidence.
 - **Contradiction audit** — where observed behavior conflicts with the current model.
@@ -2005,7 +2011,7 @@ Use:
 - Repository, campaign, and current verified-source authorities outrank model prior.
 - Mirrored calls, not mirrored logic.
 - Keep objective truth, actor knowledge, actor belief, analyst inference, and future expectation separate.
-- Never lower another actor's intelligence merely to make the modeled actor appear perceptive.
+- Never lower another actor&#x27;s intelligence merely to make the modeled actor appear perceptive.
 - Contradictory evidence is information; preserve it.
 - Do not claim unavailable retrieval or persistence executed.
 
@@ -2013,9 +2019,9 @@ Use:
 
 ## Provenance, Authorship &amp; Usage Notice
 
-This Agent Skill originates in **Calzon's TTRPG Foundry** (mrcalzon02/HB-TTRPG-tools) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
+This Agent Skill originates in **Calzon&#x27;s TTRPG Foundry** (mrcalzon02/HB-TTRPG-tools) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
 
-This skill is distributed under the project's custom **Terms of Service &amp; Usage Agreement**, Section 3, **&quot;Permitted Use (the Anti-License)&quot;** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform's source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners' rights.
+This skill is distributed under the project&#x27;s custom **Terms of Service &amp; Usage Agreement**, Section 3, **&quot;Permitted Use (the Anti-License)&quot;** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform&#x27;s source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners&#x27; rights.
 
 Keep this notice with copies of SKILL.md. See PROVENANCE.md in this skill directory and the repository root TERMS-OF-SERVICE.md for the complete provenance and governing terms.
 </pre>

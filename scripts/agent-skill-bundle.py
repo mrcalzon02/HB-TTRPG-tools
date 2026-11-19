@@ -225,7 +225,7 @@ def verify(output: Path, trusted_sha: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     subcommands = parser.add_subparsers(dest="command", required=True)
-    pack = subcommands.add_parser("pack", help="Build a reproducible self-contained declarative skill/enrgam companion ZIP")
+    pack = subcommands.add_parser("pack", help="Build a reproducible self-contained declarative skill/engram companion ZIP")
     selected = pack.add_mutually_exclusive_group(required=True)
     selected.add_argument("--skill", action="append", help="Package one or more named registered skills")
     selected.add_argument("--all", action="store_true", help="Package all registered skills")

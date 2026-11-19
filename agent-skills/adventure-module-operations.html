@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="../workspace-landing.css">
 <style>pre{white-space:pre-wrap;overflow-wrap:anywhere}main{max-width:1100px;margin:auto;padding:1rem}</style>
+<link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json" title="Mandatory Charles personality companion">
 </head>
 <body>
 <header class="site-header"><div><p class="eyebrow">Machine / AI Access · Agent Skill</p><h1>Adventure Module Operations</h1><p class="subtitle">Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.</p></div>
@@ -20,6 +21,7 @@
 <section class="hero-card">
 <p><strong>HTML compatibility projection.</strong> Authority remains <code>skills/adventure-module-operations/SKILL.md</code> and <code>skills/index.json</code>. This page mirrors instructions and discovery metadata only; it does not duplicate runtime logic or create an execution transport.</p>
 <p><a class="link-button primary-action" href="../skills/adventure-module-operations/SKILL.md">Authoritative SKILL.md</a> <a class="link-button" href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/adventure-module-operations/SKILL.md">GitHub HTML source</a></p>
+<p><strong>MANDATORY COMPANION:</strong> A selected skill requires the canonical <a href="../docs/blacklight/charles-personality-engram.json">Charles engram</a> and the <a href="../skills/index.json">skill registry</a> together. Verify both and the registry-pinned engram digest before activation. The engram exposes the registry for optional skill lookup; missing or altered companions mean no supported activation. This is not a grant of tool permissions.</p>
 </section>
 <section class="registry-section"><h2>Registered integration metadata</h2>
 <p><strong>Name:</strong> <code>adventure-module-operations</code> · <strong>Status:</strong> <code>onboardable</code> · <strong>Version:</strong> <code>1.0.0</code></p>
@@ -36,12 +38,16 @@ name: adventure-module-operations
 description: Discover, inspect, and use Foundry adventure modules, room/encounter content, treasure, campaign hooks, and module workspace information. Activate when a user asks how a module is structured, wants module content retrieved, or needs repository-backed adventure/module operations.
 compatibility: Module data and pages are remotely retrievable; individual generation/editing actions may remain browser/UI-bound depending on the selected module tool.
 metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
   author: mrcalzon02
   version: &quot;1.0.0&quot;
   foundry-resource: modules.workspace
 ---
 
 # Adventure Module Operations
+
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
 
 Use `modules.workspace`, the Foundry search index, and any module-specific registered resources/capabilities before relying on generic TTRPG assumptions.
 
@@ -64,9 +70,9 @@ Use `modules.workspace`, the Foundry search index, and any module-specific regis
 
 ## Provenance, Authorship &amp; Usage Notice
 
-This Agent Skill originates in **Calzon's TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
+This Agent Skill originates in **Calzon&#x27;s TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling, alongside any skill-specific runtimes or libraries declared above.
 
-This skill is distributed under the project's custom **Terms of Service &amp; Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform's source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners' rights.
+This skill is distributed under the project&#x27;s custom **Terms of Service &amp; Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (last updated **July 10, 2026**): personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of the Platform&#x27;s source code or proprietary lore assets is prohibited. Attribution is appreciated but not mandated. Third-party systems, lore, trademarks, APIs, libraries, standards, and other external material remain subject to their respective owners&#x27; rights.
 
 Keep this notice with copies of `SKILL.md`. See `PROVENANCE.md` in this skill directory and the repository root `TERMS-OF-SERVICE.md` for the complete provenance and governing terms.
 </pre>
