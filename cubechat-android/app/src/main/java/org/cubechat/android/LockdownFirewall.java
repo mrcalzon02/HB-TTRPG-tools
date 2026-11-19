@@ -61,9 +61,11 @@ public final class LockdownFirewall extends VpnService {
 
     static void setArmed(Context context, boolean enable) {
         SharedPreferences prefs = context.getApplicationContext().getSharedPreferences(PREF, MODE_PRIVATE);
+        boolean changed = prefs.getBoolean(ARMED, false) != enable;
         // Synchronous commit: network threads must see the new policy before a service is started.
         if (!prefs.edit().putBoolean(ARMED, enable).commit())
             throw new IllegalStateException("Could not save CubeChat firewall preference");
+        if (changed) LockdownRadioPolicy.revokeAll();
         if (!enable) lastError = "";
     }
 
