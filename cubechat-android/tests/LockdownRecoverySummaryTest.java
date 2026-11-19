@@ -54,13 +54,67 @@ public final class LockdownRecoverySummaryTest {
         LockdownRecoverySummary.Snapshot unknown = s(true, true, false, true, false);
         check(unknown.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
                 "managed restrictions have priority over partial VPN confidence");
-        check(unknown.diagnostics.contains("Device-owner policy: NOT_CONFIRMED"),
+        check(unknown.diagnostics.contains("Device-owner restrictions: 0 of 1 PRESENT"),
                 "missing managed restrictions not reported as complete");
         check(unknown.diagnostics.contains("No radio traffic or peer identifiers"),
                 "diagnostic is metadata-only");
         LockdownRecoverySummary.Snapshot managedVpn = s(true, true, true, true, false);
         check(managedVpn.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
                 "even OS VPN readback cannot hide missing managed radio restrictions");
+
+        // Full readback is intentionally stricter than the old boolean API:
+        // any leftover managed restriction is a failed ordinary manual release.
+        LockdownRecoverySummary.Snapshot partlyReleased =
+                LockdownRecoverySummary.inspect(false, false, false,
+                        true, 2, 7, true, false, true);
+        check(partlyReleased.state == LockdownRecoverySummary.State.RELEASE_INCOMPLETE,
+                "partial release must never be described as clear");
+        check(partlyReleased.diagnostics.contains("2 of 7 PRESENT"),
+                "report partial count without sensitive package names");
+
+        LockdownRecoverySummary.Snapshot lingeringOwnedVpn =
+                LockdownRecoverySummary.inspect(false, false, false,
+                        true, 0, 7, true, true, true);
+        check(lingeringOwnedVpn.state == LockdownRecoverySummary.State.RELEASE_INCOMPLETE,
+                "owner VPN remains even with zero radio restrictions");
+        check(lingeringOwnedVpn.diagnostics.contains("always-on VPN: REPORTED_ACTIVE"),
+                "owned VPN readback must be visible");
+
+        LockdownRecoverySummary.Snapshot unreadable =
+                LockdownRecoverySummary.inspect(false, false, false,
+                        true, 0, 7, false, false, false);
+        check(unreadable.state == LockdownRecoverySummary.State.READBACK_UNAVAILABLE,
+                "unavailable managed readback must not mean released");
+        check(unreadable.diagnostics.contains("Device-owner restrictions: UNKNOWN"),
+                "show explicit unavailable state");
+
+        LockdownRecoverySummary.Snapshot confirmedOff =
+                LockdownRecoverySummary.inspect(false, false, false,
+                        true, 0, 7, true, false, true);
+        check(confirmedOff.state == LockdownRecoverySummary.State.NOT_REQUESTED,
+                "no owned policy and clean reads permit ordinary off status");
+
+        LockdownRecoverySummary.Snapshot partialActive =
+                LockdownRecoverySummary.inspect(true, true, true,
+                        true, 6, 7, true, true, true);
+        check(partialActive.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
+                "OS VPN status must not conceal one missing radio policy");
+        LockdownRecoverySummary.Snapshot missingOwnedVpn =
+                LockdownRecoverySummary.inspect(true, true, true,
+                        true, 7, 7, true, false, true);
+        check(missingOwnedVpn.state == LockdownRecoverySummary.State.MANAGED_POLICY_UNVERIFIED,
+                "OS VPN status does not confirm ownership when device owner is present");
+
+        LockdownRecoverySummary.Snapshot inconsistentOff =
+                LockdownRecoverySummary.inspect(false, false, true,
+                        false, 0, 0, false, false, false);
+        check(inconsistentOff.state == LockdownRecoverySummary.State.RELEASE_INCOMPLETE,
+                "reported OS lockdown is inconsistent with clean off");
+        LockdownRecoverySummary.Snapshot unreleasedUnverifiedVpn =
+                LockdownRecoverySummary.inspect(false, false, false,
+                        true, 0, 7, true, false, false);
+        check(unreleasedUnverifiedVpn.state == LockdownRecoverySummary.State.READBACK_UNAVAILABLE,
+                "unknown VPN owner state cannot imply clean shutdown");
 
         System.out.println("LockdownRecoverySummary: " + checks
                 + " offline UI-model assertions passed; no device controls exercised");
