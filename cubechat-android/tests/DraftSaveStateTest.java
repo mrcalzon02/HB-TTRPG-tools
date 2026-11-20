@@ -21,6 +21,8 @@ public final class DraftSaveStateTest {
         check(first != null && first.contactId == 7 && first.text.equals("hello"),
                 "ticket binds exact contact and snapshot");
         check(!editor.isDirty(), "queued write is awaiting acknowledgement");
+        check(editor.isCurrent(first, 7, "hello"), "successful callback belongs to current edit");
+        check(!editor.isCurrent(first, 9, "hello"), "success cannot cross contacts");
         check(!editor.failed(first, 7, "hello", null), "successful acknowledgement is not failure");
         check(!editor.isDirty(), "successful write keeps editor clean");
         check(editor.begin(7, "hello") == null, "unchanged draft not resent automatically");
@@ -40,6 +42,8 @@ public final class DraftSaveStateTest {
         editor.edited();
         check(!editor.failed(old, 7, "same words", "Old failure"),
                 "old edit cannot invalidate identical new text");
+        check(!editor.isCurrent(old, 7, "same words"),
+                "old successful acknowledgement also cannot validate a new same-text edit");
         check(editor.isDirty(), "new same-text edit remains dirty");
         DraftSaveState.Ticket current = editor.begin(7, "same words");
         check(current != null && current.revision != old.revision,
@@ -62,6 +66,8 @@ public final class DraftSaveStateTest {
         editor.retry();
         DraftSaveState.Ticket pending = editor.begin(7, "switching");
         editor.reset();
+        check(!editor.isCurrent(pending, 7, "switching"),
+                "profile lock invalidates old successful acknowledgements");
         check(!editor.failed(pending, 7, "switching", "locked"),
                 "profile lock discards stale reply");
         check(!editor.isDirty(), "locked view does not retain dirty state");
