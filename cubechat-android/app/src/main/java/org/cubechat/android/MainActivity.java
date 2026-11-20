@@ -788,7 +788,8 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 renderedId, draft.getText().toString());
         if (ticket == null) return;
         link.saveDraft(ticket.contactId, ticket.text, error -> {
-            if (!chatOpen() || draft == null || renderedId != ticket.contactId) return;
+            if (!chatOpen() || draft == null || status == null
+                    || renderedId != ticket.contactId) return;
             String editing = draft.getText().toString();
             if (error != null) {
                 if (draftSaveState.failed(ticket, renderedId, editing, error)) {
