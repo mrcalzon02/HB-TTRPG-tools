@@ -761,6 +761,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 // The sent text was committed to the outbox, not saved as a
                 // draft. Invalidate any pending editor-only save receipt.
                 draftSaveState.reset();
+                if (UNSAVED_DRAFT_NOTICE.equals(lastProblem)) {
+                    lastProblem = "";
+                    status.setText(link.snapshot().status);
+                    status.setTextColor(MUTED);
+                }
             }
             forgetClearedDraft();
             refreshSend();
