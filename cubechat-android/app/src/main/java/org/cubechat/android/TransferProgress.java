@@ -16,12 +16,11 @@ final class TransferProgress {
     /** A percentage is unavailable for zero-length/invalid file sizes. */
     static int percent(long progress, long size) {
         if (size <= 0) return -1;
-        // Divide before multiplying to avoid overflowing long when stale
-        // transfer records contain unreasonable values.
+        // Floating-point arithmetic avoids overflow when an unexpectedly
+        // large, stale transfer size reaches the UI. It is a display-only
+        // percentage, not an authorization or data-integrity check.
         long done = boundedBytes(progress, size);
-        long whole = (done / size) * 100;
-        long fraction = (done % size) * 100 / size;
-        return (int) Math.min(100, whole + fraction);
+        return Math.max(0, Math.min(100, (int) (100.0 * done / size)));
     }
 
     /** Accepted is not COMPLETE even after the last byte has been received. */
