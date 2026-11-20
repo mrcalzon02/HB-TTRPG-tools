@@ -15,6 +15,8 @@ const fixturePaths = [
   'docs/blacklight/charles-personality-engram.json',
   'skills/foundry-discovery/SKILL.md',
   'skills/fmpl-asset-production/SKILL.md',
+  'skills/model-context-and-budget-manager/SKILL.md',
+  'skills/task-focus-orchestration/SKILL.md',
   'skills/module-map-generation/SKILL.md',
   'skills/module-map-generation/manifest.json',
   'skills/module-map-generation/self-test.json',
@@ -83,6 +85,16 @@ await check('shared personality object, not only shared fetch', async () => {
   assert.equal(discovery.skills.length, index.skills.length);
   assert.equal(h.reads.filter(name => name.endsWith('charles-personality-engram.json')).length, 1);
 });
+await check('new public checkpoint skills share the required engram', async () => {
+  const host = makeHost();
+  const handoff = await host.client.loadMany(
+    ['model-context-and-budget-manager', 'task-focus-orchestration'], options
+  );
+  assert.equal(handoff.skills.length, 2);
+  assert.equal(handoff.personality.engram_id, 'blacklight.charles');
+  assert.equal(handoff.personality.runtime.state_owner, 'host');
+  assert.equal(handoff.personality.capability_boundary.grants_persistent_storage, false);
+});
 await check('parallel loads share a single in-flight engram', async () => {
   const h = makeHost();
   const [left, right] = await Promise.all([
@@ -129,6 +141,30 @@ await check('registered skill missing reciprocal metadata fails closed', async (
   const path = 'skills/foundry-discovery/SKILL.md';
   const h = makeHost({ [path]: fixtures[path].replace('required-skill-index: skills/index.json', 'required-skill-index: skills/evil.json') });
   await assert.rejects(h.client.load('foundry-discovery', options), /lacks mandatory reciprocal/);
+});
+await check('self-consistent malicious engram cannot grant credentials', async () => {
+  const altered = JSON.parse(rawEngram);
+  altered.capability_boundary.grants_credentials = true;
+  const mutatedRaw = JSON.stringify(altered);
+  const mutatedIndex = structuredClone(index);
+  mutatedIndex.defaultPersonality.integrity.digest = createHash('sha256').update(mutatedRaw, 'utf8').digest('hex');
+  const h = makeHost({
+    'docs/blacklight/charles-personality-engram.json': mutatedRaw,
+    'skills/index.json': JSON.stringify(mutatedIndex)
+  });
+  await assert.rejects(h.client.load('foundry-discovery', { baseUrl: ORIGIN }), /authority contract/);
+});
+await check('self-consistent malicious engram cannot overwrite host memory', async () => {
+  const altered = JSON.parse(rawEngram);
+  altered.runtime.write_back_to_engram = true;
+  const mutatedRaw = JSON.stringify(altered);
+  const mutatedIndex = structuredClone(index);
+  mutatedIndex.defaultPersonality.integrity.digest = createHash('sha256').update(mutatedRaw, 'utf8').digest('hex');
+  const h = makeHost({
+    'docs/blacklight/charles-personality-engram.json': mutatedRaw,
+    'skills/index.json': JSON.stringify(mutatedIndex)
+  });
+  await assert.rejects(h.client.load('foundry-discovery', { baseUrl: ORIGIN }), /authority contract/);
 });
 await check('invalid registry JSON fails closed', async () => {
   const h = makeHost({ 'skills/index.json': 'invalid-json' });

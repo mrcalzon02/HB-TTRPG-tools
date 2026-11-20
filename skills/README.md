@@ -34,6 +34,17 @@ Personality is not capability: loading Charles does not grant tools, permissions
 
 A local public-manifest guard is provided at `scripts/validate-public-ai-boundary.py`, with negative tests at `tests/test_public_ai_boundary.py`. See [the public/private security boundary](../docs/ai-access/html-compatibility-and-remote-execution.md). These checks cannot independently audit private infrastructure.
 
+## Lower-context handoffs and task-focus workflows
+
+Two optional, non-privileged skills now share a portable checkpoint format:
+
+- [`model-context-and-budget-manager`](model-context-and-budget-manager/SKILL.md) — assemble minimal source-grounded context and remove only optional background to fit a character budget, never required companions or evidence.
+- [`task-focus-orchestration`](task-focus-orchestration/SKILL.md) — track a single task's step status, blockers, next action and self-declared evidence without inventing completion or scheduling work.
+
+Shared JSON Schema: [`hb-agent-handoff/1`](../api/ai/agent-handoff.schema.json) · [synthetic example](../api/ai/examples/agent-handoff.json). When either handoff skill is selected for a portable ZIP, the packager includes these two resources and `scripts/agent-handoff.mjs` as locked conditional companions; ordinary skill bundles remain minimal. Optional local-only validator: `node scripts/agent-handoff.mjs validate api/ai/examples/agent-handoff.json` or `node scripts/agent-handoff.mjs compact api/ai/examples/agent-handoff.json 8000`. Regression: `node --test tests/agent-handoff.test.mjs`.
+
+**No new execution authority:** the handoff does not persist data, invoke tools, enroll memory, dispatch runners, publish secrets or grant access across the public/private boundary. A declared evidence record is not an independently observed result.
+
 ## Charles orchestration
 
 Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.

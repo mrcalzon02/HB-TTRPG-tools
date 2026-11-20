@@ -79,6 +79,26 @@ def main() -> None:
         mod.verify(one, pin, trusted_registry_sha=index_pin, trusted_bundle_sha=digest(one.read_bytes()))
         print("PASS [bundle] selected skill with all independently pinned hashes")
 
+        handoff = tmp / "handoff.zip"
+        mod.package(["model-context-and-budget-manager", "task-focus-orchestration"], handoff)
+        mod.verify(handoff, pin, trusted_registry_sha=index_pin, trusted_bundle_sha=digest(handoff.read_bytes()))
+        with ZipFile(handoff) as archive:
+            for asset in mod.HANDOFF_ASSETS:
+                assert asset in archive.namelist(), f"Checkpoint bundle missing {asset}"
+        with ZipFile(one) as archive:
+            assert all(asset not in archive.namelist() for asset in mod.HANDOFF_ASSETS), "Unselected checkpoint assets leaked into ordinary bundle"
+        print("PASS [bundle] checkpoint skills have complete conditional portable companions")
+
+        with ZipFile(handoff) as archive:
+            altered_lock = json.loads(archive.read(mod.LOCK))
+        omitted_asset = mod.HANDOFF_ASSETS[0]
+        altered_lock["files"].pop(omitted_asset)
+        edited_lock = (json.dumps(altered_lock, indent=2, sort_keys=True) + "\n").encode()
+        omission = remix_check(handoff, tmp, "missing-conditional-schema",
+                               updates={mod.LOCK: edited_lock}, remove={omitted_asset})
+        must_reject("checkpoint skill missing schema despite coherent inventory",
+                    lambda: mod.verify(omission, pin))
+
         must_reject("wrong engram trust pin", lambda: mod.verify(one, "0" * 64))
         must_reject("wrong registry trust pin", lambda: mod.verify(one, pin, trusted_registry_sha="0" * 64))
         must_reject("wrong archive trust pin", lambda: mod.verify(one, pin, trusted_bundle_sha="0" * 64))
@@ -118,6 +138,14 @@ def main() -> None:
         mutated = json.loads(index_raw)
         mutated["defaultPersonality"]["required"] = False
         must_reject("registry drops required engram", lambda: mod.validate_pair(mutated, (ROOT / mod.ENGRAM).read_bytes()))
+        changed_engram = json.loads((ROOT / mod.ENGRAM).read_bytes())
+        changed_engram["capability_boundary"]["grants_network_access"] = True
+        changed_raw = json.dumps(changed_engram).encode()
+        rehashed_index = json.loads(index_raw)
+        rehashed_index["defaultPersonality"]["integrity"]["digest"] = digest(changed_raw)
+        must_reject("self-consistent engram privilege escalation",
+                    lambda: mod.validate_pair(rehashed_index, changed_raw))
+
 
     print("PASS [bundle] all offline packaging, tamper and safety checks passed")
 

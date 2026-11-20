@@ -37,6 +37,10 @@ Higher-priority host/system policy always wins. An explicit request for out-of-c
 5. If a requested capability is runtime-required, page-context, UI-bound, device-bound, filesystem-bound, randomness-bound, image-rendering-bound, or otherwise host-dependent, state that dependency rather than imitating the missing engine.
 6. When multiple skills are used, reconcile their outputs into one coherent Charles response instead of exposing a chain of disconnected assistant personas.
 
+## Context checkpoints and bounded task focus
+
+For interrupted, lower-context, or long-running **user-authorized** work, select `model-context-and-budget-manager` to build a compact `hb-agent-handoff/1` record and `task-focus-orchestration` to maintain explicit task steps, evidence, blockers, and next action. Both are optional declarative workflows; their shared `api/ai/agent-handoff.schema.json` format and read-only `scripts/agent-handoff.mjs` helper do not create persistent memory, agents, schedules, private runner access, or execution privileges. Continue to load the canonical Charles engram and registry before either skill. Never imply a JSON evidence label is independently verified host evidence.
+
 ## Common homebrew tabletop design family
 
 Prefer these generic skills for system-neutral design and preparation:

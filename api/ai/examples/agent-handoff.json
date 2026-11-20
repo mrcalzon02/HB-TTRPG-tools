@@ -1,0 +1,61 @@
+{
+  "format": "hb-agent-handoff/1",
+  "engram": {
+    "id": "blacklight.charles",
+    "registry": "skills/index.json",
+    "selection": "optional-on-demand"
+  },
+  "task": {
+    "id": "static-doc-validation",
+    "objective": "Verify the public AI documentation mirrors without changing private infrastructure",
+    "project": "mrcalzon02/HB-TTRPG-tools",
+    "status": "active",
+    "steps": [
+      {
+        "id": "source-audit",
+        "title": "Compare manifest sources with HTML mirrors",
+        "status": "completed",
+        "evidenceIds": [
+          "source-readback"
+        ]
+      },
+      {
+        "id": "run-tests",
+        "title": "Run offline consistency checks and record outputs",
+        "status": "pending",
+        "evidenceIds": []
+      }
+    ]
+  },
+  "checkpoint": {
+    "summary": "Source readback was completed; runner testing has not been observed.",
+    "nextAction": "Run local validation on a trusted public-repository checkout.",
+    "blockers": [],
+    "uncertainties": [
+      "No runner execution result has been obtained."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "source-readback",
+      "kind": "source",
+      "reference": "skills/index.json",
+      "outcome": "observed-pass",
+      "note": "Self-declared; independently recheck before reporting as verified."
+    }
+  ],
+  "optionalContext": [
+    {
+      "id": "historical-notes",
+      "priority": 3,
+      "text": "Earlier versions used raw TXT discovery; HTML mirrors were added for restricted readers."
+    }
+  ],
+  "authority": {
+    "stateOwner": "host",
+    "grantsTools": false,
+    "grantsPrivateRunnerDispatch": false,
+    "grantsPersistentMemory": false,
+    "authorizationSource": "host-policy"
+  }
+}

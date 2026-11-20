@@ -224,6 +224,12 @@ If the engram and an authoritative current repository source conflict, the repos
 
 If a consumer does not understand the transport schema, it should fall back to the compact or expanded semantic form rather than guessing unknown field semantics.
 
+## Optional, host-owned context handoffs
+
+Two optional public Agent Skills, `model-context-and-budget-manager` and `task-focus-orchestration`, can describe a compact task checkpoint for smaller-context agents. They use the versioned `api/ai/agent-handoff.schema.json` contract and its read-only `scripts/agent-handoff.mjs` validator. The **canonical Charles CE1.1 engram is unchanged**: neither skill may rewrite its identity, change its rules, grant persistence, enable private runner dispatch, or supersede host/system authority.
+
+An agent handoff keeps the engram/index reference, task steps, blockers, self-declared evidence and next action while pruning only explicitly optional context. A JSON record labeled `observed-pass` is not verified host evidence by itself; follow the actual commit, test or source readback before declaring work complete. If required data cannot fit the requested character budget, fail with `BUDGET_TOO_SMALL` instead of dropping authority.
+
 ## Conformance and drift control
 
 Different reasoning engines do not have to produce identical wording. They do need to preserve the same behavioral contract.

@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/agent-handoff.schema.json",
+  "title": "Host-owned, engram-bound agent task handoff (public declarative format)",
+  "description": "Deterministic portable task/checkpoint context. It is not persistent memory, an authorization token, a tool result, or access to private runners.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "engram",
+    "task",
+    "checkpoint",
+    "evidence",
+    "optionalContext",
+    "authority"
+  ],
+  "properties": {
+    "format": {
+      "const": "hb-agent-handoff/1"
+    },
+    "engram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "registry",
+        "selection"
+      ],
+      "properties": {
+        "id": {
+          "const": "blacklight.charles"
+        },
+        "registry": {
+          "const": "skills/index.json"
+        },
+        "selection": {
+          "const": "optional-on-demand"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "objective",
+        "project",
+        "status",
+        "steps"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "project": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "active",
+            "blocked",
+            "completed"
+          ]
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "title",
+              "status",
+              "evidenceIds"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 280
+              },
+              "status": {
+                "enum": [
+                  "pending",
+                  "active",
+                  "blocked",
+                  "completed"
+                ]
+              },
+              "evidenceIds": {
+                "type": "array",
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "summary",
+        "nextAction",
+        "blockers",
+        "uncertainties"
+      ],
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "nextAction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "blockers": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "uncertainties": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "reference",
+          "outcome"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+          },
+          "kind": {
+            "enum": [
+              "source",
+              "git-commit",
+              "test-result",
+              "host-observation"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "outcome": {
+            "enum": [
+              "observed-pass",
+              "observed-fail",
+              "unverified"
+            ]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "optionalContext": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "priority",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3,
+            "description": "0 highest importance; 3 first to omit when compacting."
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stateOwner",
+        "grantsTools",
+        "grantsPrivateRunnerDispatch",
+        "grantsPersistentMemory",
+        "authorizationSource"
+      ],
+      "properties": {
+        "stateOwner": {
+          "const": "host"
+        },
+        "grantsTools": {
+          "const": false
+        },
+        "grantsPrivateRunnerDispatch": {
+          "const": false
+        },
+        "grantsPersistentMemory": {
+          "const": false
+        },
+        "authorizationSource": {
+          "const": "host-policy"
+        }
+      }
+    }
+  },
+  "x-hb-contract": {
+    "mandatoryPair": [
+      "docs/blacklight/charles-personality-engram.json",
+      "skills/index.json"
+    ],
+    "compactRule": "Only optionalContext entries may be dropped, lowest priority first; never omit task, evidence, engram, checkpoint, or authority.",
+    "evidenceRule": "Evidence references are self-declared until externally verified against the host; document shape validation is not proof of execution.",
+    "privacyRule": "Never publish or paste private details, credentials, signing keys, or protected runner information into a public handoff.",
+    "execution": "none"
+  }
+}

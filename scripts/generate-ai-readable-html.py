@@ -30,6 +30,8 @@ AUTHORITIES = (
     ("onboarding", "Agent Skill onboarding", "api/ai/skill-onboarding.json", "Onboarding and external-model compatibility guidance"),
     ("status", "Capability status vocabulary", "api/ai/status-vocabulary.json", "Meaning of discovery, compatibility and readiness statuses"),
     ("skills", "Registered Agent Skills index", "skills/index.json", "All registered optional skills, engram binding and requirements"),
+    ("handoff-schema", "Agent checkpoint handoff schema", "api/ai/agent-handoff.schema.json", "Portable source-grounded task checkpoint contract; no privileges or persistence"),
+    ("handoff-example", "Agent checkpoint handoff example", "api/ai/examples/agent-handoff.json", "Synthetic checkpoint example with no private data or execution authority"),
     ("capabilities", "Foundry capability registry", "api/foundry-capabilities.json", "Canonical capability identifiers and runtime details"),
     ("contracts", "Operation contracts", "api/operation-contracts.json", "Exact allowed operation signatures and constraints"),
     ("resources", "Resource collections", "api/resource-collections.json", "Canonical static and lore resource identities"),

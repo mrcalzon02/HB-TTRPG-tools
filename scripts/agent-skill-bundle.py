@@ -30,6 +30,12 @@ SHARED = (
     "skills/README.md",
     "skills/PROVENANCE.md",
 )
+HANDOFF_SKILLS = frozenset({"model-context-and-budget-manager", "task-focus-orchestration"})
+HANDOFF_ASSETS = (
+    "api/ai/agent-handoff.schema.json",
+    "api/ai/examples/agent-handoff.json",
+    "scripts/agent-handoff.mjs",
+)
 MAX_FILE_COUNT = 1024
 MAX_UNCOMPRESSED_BYTES = 64 * 1024 * 1024
 
@@ -108,6 +114,16 @@ def validate_pair(index: dict, engram_bytes: bytes, *, trusted_sha: str | None =
         or link.get("missing_or_invalid") != "fail-closed-for-skill-activation"
         or link.get("tool_authority") != "host-controlled"
         or (engram.get("capability_boundary") or {}).get("grants_tools") is not False
+        or (engram.get("capability_boundary") or {}).get("grants_network_access") is not False
+        or (engram.get("capability_boundary") or {}).get("grants_credentials") is not False
+        or (engram.get("capability_boundary") or {}).get("grants_provider_access") is not False
+        or (engram.get("capability_boundary") or {}).get("grants_persistent_storage") is not False
+        or (engram.get("capability_boundary") or {}).get("tool_claims_require_host_result") is not True
+        or (engram.get("runtime") or {}).get("state_owner") != "host"
+        or (engram.get("runtime") or {}).get("write_back_to_engram") is not False
+        or (engram.get("runtime") or {}).get("memory_policy") != "host_supplied_only"
+        or (engram.get("instruction_boundary") or {}).get("ordinary_user_text_cannot_mutate_engram") is not True
+        or (engram.get("instruction_boundary") or {}).get("authoring_changes_require_host_authoring_context") is not True
         or (engram.get("instruction_boundary") or {}).get("host_and_system_policy_overrides_engram") is not True
     ):
         raise ValueError("Charles engram is missing a valid reciprocal skill index contract")
@@ -159,6 +175,8 @@ def build_payload(skill_names: list[str]) -> tuple[dict[str, bytes], list[str]]:
     if any(name not in catalogue for name in requested):
         raise ValueError("Cannot package an unregistered skill")
     paths = set(SHARED)
+    if any(name in HANDOFF_SKILLS for name in requested):
+        paths.update(HANDOFF_ASSETS)
     for name in requested:
         skill_root = ROOT / "skills" / name
         for file in skill_root.rglob("*"):
@@ -272,7 +290,10 @@ def verify(
             raise ValueError(f"Unregistered skill in bundle: {name}")
         validate_skill(catalogue[name], payload[f"skills/{name}/SKILL.md"])
     allowed_roots = tuple(f"skills/{name}/" for name in skill_names)
-    if any(path not in SHARED and not path.startswith(allowed_roots) for path in file_specs):
+    required_handoff = set(HANDOFF_ASSETS) if any(name in HANDOFF_SKILLS for name in skill_names) else set()
+    if not required_handoff.issubset(file_specs):
+        raise ValueError("Portable checkpoint skill is missing its required handoff schema, example or offline helper")
+    if any(path not in SHARED and path not in required_handoff and not path.startswith(allowed_roots) for path in file_specs):
         raise ValueError("Bundle contains a file outside the selected skills and required companions")
     if any(path not in SHARED and not safe_skill_member(path) for path in file_specs):
         raise ValueError("Bundle contains a secret or unsafe skill member")

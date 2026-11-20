@@ -62,6 +62,8 @@ jobs:
           node --check ai-skill-loader.js
           python3 -c 'import ast,pathlib; paths=("scripts/agent-skill-bundle.py","scripts/agent-skill-release-signature.py","scripts/agent-skill-install.py","scripts/validate-engram-bundle.py","scripts/validate-engram-release-signature.py","scripts/validate-engram-install.py"); [ast.parse(pathlib.Path(p).read_text(encoding="utf-8"),filename=p) for p in paths]'
           node scripts/validate-agent-skills.mjs
+          node --check scripts/agent-handoff.mjs
+          node --test tests/agent-handoff.test.mjs
           python3 scripts/generate-ai-readable-html.py --check
           python3 scripts/validate-ai-readable-html.py
           python3 scripts/validate-public-ai-boundary.py

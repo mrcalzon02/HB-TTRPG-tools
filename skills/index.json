@@ -45,6 +45,8 @@
       "laboratoryIds": [],
       "orchestratesSkillIds": [
         "foundry-discovery",
+        "model-context-and-budget-manager",
+        "task-focus-orchestration",
         "campaign-lore-retrieval",
         "adventure-module-operations",
         "module-map-generation",
@@ -124,6 +126,44 @@
         "enumerate generators",
         "find campaign resources",
         "inspect operation contracts"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ]
+    },
+    {
+      "name": "model-context-and-budget-manager",
+      "path": "skills/model-context-and-budget-manager/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "compact context handoff",
+        "select minimum skill context",
+        "enforce context budget",
+        "carry source evidence without invented memory",
+        "handoff to smaller models"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ]
+    },
+    {
+      "name": "task-focus-orchestration",
+      "path": "skills/task-focus-orchestration/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "bounded task checkpoints",
+        "task focus",
+        "resume interrupted authorized work",
+        "track evidence and blockers",
+        "reject unverified completion"
       ],
       "personalityPolicy": "inherit-default",
       "personalityEngramIds": [

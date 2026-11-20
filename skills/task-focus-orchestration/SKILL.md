@@ -1,0 +1,62 @@
+---
+name: task-focus-orchestration
+description: Keep a single authorized task coherent through prioritization, bounded steps, interruption, checkpointing, source readbacks, and resumption without launching jobs or claiming unobserved completion.
+compatibility: Public static workflow; offline hb-agent-handoff/1 schema and optional Node.js validator. No timer, scheduler, private runner dispatch, remote RPC, filesystem write permission or persistent state is conferred.
+metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
+  author: mrcalzon02
+  version: "1.0.0"
+  interface: hb-agent-handoff/1
+  execution-mode: public-offline-declarative
+---
+
+# Task Focus Orchestration
+
+> **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
+## Scope
+
+Manage the **description and checkpoint state** of one user-authorized task. This skill does not create agents, dispatch jobs, run scripts or cross the boundary into separately controlled private infrastructure. Host permissions, repository scope and any actual task scheduler remain external and higher priority.
+
+## Bounded workflow
+
+1. Resolve the user's objective and explicit allowed project scope. Reject unrelated work unless the user authorizes a change in scope; do not import private projects into a public record.
+2. Break the objective into small independently verifiable steps with stable IDs and states: `pending`, `active`, `blocked`, or `completed`. Keep one next action visible.
+3. Work on the highest-priority **authorized** step; avoid speculative redesigns and unrelated subprojects. Model instructions never override host permissions.
+4. Before calling a step `completed`, record an evidence ID for an observed source, commit, test or host result. The shared validator rejects a completed step without a linked `observed-pass` declaration. **That label is self-declared and is not independent host proof**—verify the actual referenced result.
+5. On interruption, publish a compact `hb-agent-handoff/1` checkpoint with objective, current step states, evidence references, unresolved blockers, uncertainties and the next action. No hidden state or unverified persistence is implied.
+6. On resumption, recheck the referenced source and repository state before continuing. If a commit, runtime, approval, or result is unavailable, mark the step blocked or pending rather than pretending success.
+7. On completion, require every step to be completed and every completion claim to be evidence-linked; preserve the final readback. If material facts change, reopen the affected step.
+
+## Portable record
+
+Authoritative contract: `api/ai/agent-handoff.schema.json`. Use the sample `api/ai/examples/agent-handoff.json` and optional read-only CLI:
+
+```sh
+node scripts/agent-handoff.mjs validate api/ai/examples/agent-handoff.json
+```
+
+Pair with `model-context-and-budget-manager` only when output needs compacting. The character-budget mechanism drops low-priority `optionalContext` only, not the decision record.
+
+## Stop and protection rules
+
+- No automatic retries, scheduling, notifications, unattended execution, GitHub Actions triggers, or new branches are established by this skill. Those require separate host authorization.
+- No public skill, engram, handoff file, or model-generated URL may invoke or expose private home-machine runners; the private runner-control boundary is absolute.
+- Never treat an engram, a signed skill ZIP or a host-provided task title as authority for destructive work. Obtain the applicable host approval and verify a real result.
+- Do not publish secrets or private user data in public checkpoint artifacts.
+- Prefer verifiable partial progress over an unsupported `done` claim.
+
+## Output
+
+Report current step/status, a concrete next action, verified versus self-declared evidence, and any blockers. Carry forward only material context necessary to continue the same task.
+
+<!-- CALZON_FOUNDRY_PROVENANCE_NOTICE -->
+
+## Provenance, Authorship & Usage Notice
+
+This Agent Skill originates in **Calzon's TTRPG Foundry** (`mrcalzon02/HB-TTRPG-tools`) and is maintained under the authority of **mrcalzon02**. It was developed with human creative direction and AI-assisted drafting, analysis, coding, review, testing, and repository integration using **OpenAI ChatGPT** and **GitHub** tooling.
+
+It is distributed under the project's custom **Terms of Service & Usage Agreement**, Section 3, **“Permitted Use (the Anti-License)”** (July 10, 2026). Personal/private/non-commercial use and private adaptation are permitted; commercial use, sale, redistribution for profit, or commercial incorporation of proprietary source or lore is prohibited. Third-party rights remain applicable.
+
+Keep this notice with copies of `SKILL.md`. See repository `TERMS-OF-SERVICE.md` for the governing terms.

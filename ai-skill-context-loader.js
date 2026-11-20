@@ -186,6 +186,16 @@
         link.missing_or_invalid !== 'fail-closed-for-skill-activation' ||
         link.tool_authority !== 'host-controlled' ||
         personality.capability_boundary?.grants_tools !== false ||
+        personality.capability_boundary?.grants_network_access !== false ||
+        personality.capability_boundary?.grants_credentials !== false ||
+        personality.capability_boundary?.grants_provider_access !== false ||
+        personality.capability_boundary?.grants_persistent_storage !== false ||
+        personality.capability_boundary?.tool_claims_require_host_result !== true ||
+        personality.runtime?.state_owner !== 'host' ||
+        personality.runtime?.write_back_to_engram !== false ||
+        personality.runtime?.memory_policy !== 'host_supplied_only' ||
+        personality.instruction_boundary?.ordinary_user_text_cannot_mutate_engram !== true ||
+        personality.instruction_boundary?.authoring_changes_require_host_authoring_context !== true ||
         personality.instruction_boundary?.host_and_system_policy_overrides_engram !== true) {
       throw new Error('Charles engram does not satisfy the reciprocal registry and authority contract.');
     }

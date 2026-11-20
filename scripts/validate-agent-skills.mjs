@@ -44,6 +44,16 @@ function verifyReciprocalEngram(registry, raw) {
       engram.skill_registry?.missing_or_invalid !== 'fail-closed-for-skill-activation' ||
       engram.skill_registry?.tool_authority !== 'host-controlled' ||
       engram.capability_boundary?.grants_tools !== false ||
+      engram.capability_boundary?.grants_network_access !== false ||
+      engram.capability_boundary?.grants_credentials !== false ||
+      engram.capability_boundary?.grants_provider_access !== false ||
+      engram.capability_boundary?.grants_persistent_storage !== false ||
+      engram.capability_boundary?.tool_claims_require_host_result !== true ||
+      engram.runtime?.state_owner !== 'host' ||
+      engram.runtime?.write_back_to_engram !== false ||
+      engram.runtime?.memory_policy !== 'host_supplied_only' ||
+      engram.instruction_boundary?.ordinary_user_text_cannot_mutate_engram !== true ||
+      engram.instruction_boundary?.authoring_changes_require_host_authoring_context !== true ||
       engram.instruction_boundary?.host_and_system_policy_overrides_engram !== true) {
     throw new Error('Charles engram reciprocal discovery/authority contract invalid');
   }
@@ -74,6 +84,39 @@ mustRejectBrokenPair('wrong digest', { ...index, defaultPersonality: { ...index.
 const brokenEngram = JSON.parse(rawEngram);
 brokenEngram.skill_registry.registry_path = 'skills/rogue-index.json';
 mustRejectBrokenPair('altered reciprocal index', index, JSON.stringify(brokenEngram));
+
+const policyEscalations = [
+  ['network-access', engram => { engram.capability_boundary.grants_network_access = true; }],
+  ['credential-access', engram => { engram.capability_boundary.grants_credentials = true; }],
+  ['provider-access', engram => { engram.capability_boundary.grants_provider_access = true; }],
+  ['persistent-storage', engram => { engram.capability_boundary.grants_persistent_storage = true; }],
+  ['unverified-tool-claims', engram => { engram.capability_boundary.tool_claims_require_host_result = false; }],
+  ['memory-write-back', engram => { engram.runtime.write_back_to_engram = true; }],
+  ['runtime-state-ownership', engram => { engram.runtime.state_owner = 'engram'; }],
+  ['untrusted-memory', engram => { engram.runtime.memory_policy = 'auto-write'; }],
+  ['user-persona-mutation', engram => { engram.instruction_boundary.ordinary_user_text_cannot_mutate_engram = false; }],
+  ['unapproved-authoring', engram => { engram.instruction_boundary.authoring_changes_require_host_authoring_context = false; }]
+];
+for (const [label, mutate] of policyEscalations) {
+  const engram = JSON.parse(rawEngram);
+  mutate(engram);
+  const alteredRaw = JSON.stringify(engram);
+  const alteredBinding = { ...index.defaultPersonality, integrity: { algorithm: 'sha256', digest: createHash('sha256').update(alteredRaw).digest('hex') } };
+  mustRejectBrokenPair('self-consistent privilege escalation: ' + label,
+    { ...index, defaultPersonality: alteredBinding }, alteredRaw);
+}
+
+const handoffSchema = readJson('api/ai/agent-handoff.schema.json');
+const handoffExample = readJson('api/ai/examples/agent-handoff.json');
+if (handoffSchema.properties?.format?.const !== 'hb-agent-handoff/1' ||
+    handoffSchema.properties?.engram?.properties?.id?.const !== 'blacklight.charles' ||
+    handoffSchema.properties?.engram?.properties?.registry?.const !== 'skills/index.json' ||
+    handoffSchema.properties?.authority?.properties?.grantsPrivateRunnerDispatch?.const !== false ||
+    handoffSchema.properties?.authority?.properties?.grantsPersistentMemory?.const !== false ||
+    handoffExample.engram?.registry !== 'skills/index.json' ||
+    handoffExample.authority?.grantsPrivateRunnerDispatch !== false) {
+  fail('Agent handoff contract cannot omit mandatory engram, host authority or private runner isolation.');
+}
 
 const manifest = readJson('api/foundry-capabilities.json');
 const collections = readJson('api/resource-collections.json');
