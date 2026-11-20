@@ -649,6 +649,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     @Override public void changed() {
         if (!chatOpen() || link == null) return;
         PeerLink.Snapshot next = link.snapshot();
+        // A new invite for the same conversation invalidates old artwork,
+        // just as switching contacts does. Never display stale pairing keys.
+        if (artworkQr != null && !artworkQr.validForCurrentPairing())
+            artworkQr.close();
         if (files != null) files.changed(next);
         boolean paired = !next.role.isEmpty();
         boolean switched = next.activeId != renderedId;
