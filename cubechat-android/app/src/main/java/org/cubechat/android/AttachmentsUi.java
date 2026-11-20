@@ -547,8 +547,8 @@ final class AttachmentsUi {
         progress.setVisibility(moving ? View.VISIBLE : View.GONE);
         detailBytes.setVisibility(moving ? View.VISIBLE : View.GONE);
         if (moving) {
-            progress.setProgress(f.size <= 0 ? 0
-                    : (int) (10 * TransferProgress.percent(f.progress, f.size)));
+            progress.setProgress(Math.max(0,
+                    TransferProgress.progressPermille(f.progress, f.size)));
             detailBytes.setText(size(TransferProgress.boundedBytes(f.progress, f.size))
                     + " / " + size(Math.max(0, f.size))
                     + (f.size > 0 && f.progress >= f.size
