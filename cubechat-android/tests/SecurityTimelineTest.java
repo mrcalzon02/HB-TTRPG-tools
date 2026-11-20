@@ -34,11 +34,29 @@ public final class SecurityTimelineTest {
         invalid(() -> SecurityTimeline.decode("v1\n" + now + ",-1,0,0,0,0,0,-1\n", now));
         invalid(() -> SecurityTimeline.decode("v1\n" + now + ",1,0,0,0,0,0,-1\n" + now + ",1,0,0,0,0,0,-1\n", now));
         invalid(() -> SecurityTimeline.decode("garbage", now));
+        // A persisted snapshot can contain at most MAX_BUCKETS data rows. An
+        // extra valid-looking row must not be silently dropped on restart.
+        StringBuilder fullWire = new StringBuilder("v1\n");
+        for (int i = 0; i < SecurityTimeline.MAX_BUCKETS; i++) {
+            fullWire.append(i * SecurityTimeline.BUCKET_MS)
+                    .append(",1,5,0,0,0,0,-1\n");
+        }
+        long newest = (SecurityTimeline.MAX_BUCKETS - 1L) * SecurityTimeline.BUCKET_MS;
+        check(SecurityTimeline.decode(fullWire.toString(), newest)
+                .snapshot(newest, SecurityTimeline.MAX_AGE_MS).size()
+                == SecurityTimeline.MAX_BUCKETS, "full legitimate history survives restore");
+        String excess = fullWire + String.valueOf(SecurityTimeline.MAX_BUCKETS * SecurityTimeline.BUCKET_MS)
+                + ",1,5,0,0,0,0,-1\n";
+        long excessNow = SecurityTimeline.MAX_BUCKETS * SecurityTimeline.BUCKET_MS;
+        invalid(() -> SecurityTimeline.decode(excess, excessNow));
+        invalid(() -> SecurityTimeline.decode(excess.substring(0, excess.length() - 1), excessNow));
         invalid(() -> t.recordCellReport(now, 2, 3, 0, -90));
         invalid(() -> t.recordCellReport(now, 2, 1, 1, -161));
         invalid(() -> t.recordDrops(now, -1, 0));
         invalid(() -> t.snapshot(now, 60_000));
         check(SecurityTimeline.validRetention(6 * SecurityTimeline.HOUR_MS), "6h retention");
+        check(SecurityTimeline.validRetention(24 * SecurityTimeline.HOUR_MS), "24h retention");
+        check(SecurityTimeline.validRetention(72 * SecurityTimeline.HOUR_MS), "3d retention");
         check(SecurityTimeline.validRetention(SecurityTimeline.MAX_AGE_MS), "7d retention");
         t.recordDrops(now - 80 * SecurityTimeline.HOUR_MS, 15, 1500);
         check(t.snapshot(now, 72 * SecurityTimeline.HOUR_MS).size() == 1, "72h expiry");
