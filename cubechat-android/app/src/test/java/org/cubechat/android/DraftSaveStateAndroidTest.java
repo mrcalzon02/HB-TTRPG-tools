@@ -22,11 +22,18 @@ public final class DraftSaveStateAndroidTest {
         DraftSaveState.Ticket queued = state.begin(7, "Unsent draft");
         assertNotNull(queued);
         assertFalse(state.isDirty());
+        assertTrue(state.isAwaiting());
         assertTrue(state.failed(queued, 7, "Unsent draft", "Disk full"));
         assertTrue(state.isDirty());
+        assertTrue(state.hadFailure());
+        assertFalse(state.isAwaiting());
         DraftSaveState.Ticket retry = state.begin(7, "Unsent draft");
         assertNotNull(retry);
+        assertTrue(state.isAwaiting());
+        assertFalse(state.hadFailure());
         assertFalse(state.failed(retry, 7, "Unsent draft", null));
+        assertTrue(state.succeeded(retry, 7, "Unsent draft"));
+        assertFalse(state.isAwaiting());
         assertFalse(state.isDirty());
     }
 
@@ -36,12 +43,14 @@ public final class DraftSaveStateAndroidTest {
         DraftSaveState.Ticket old = state.begin(4, "identical");
         state.edited();
         assertFalse(state.isCurrent(old, 4, "identical"));
+        assertFalse(state.succeeded(old, 4, "identical"));
         assertFalse(state.failed(old, 4, "identical", "old callback"));
         assertTrue(state.isDirty());
         DraftSaveState.Ticket fresh = state.begin(4, "identical");
         state.reset();
         assertFalse(state.failed(fresh, 4, "identical", "locked"));
         assertFalse(state.isCurrent(fresh, 4, "identical"));
+        assertFalse(state.isAwaiting());
         assertFalse(state.isDirty());
     }
 }
