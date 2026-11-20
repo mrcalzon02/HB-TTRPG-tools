@@ -6,7 +6,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: "1.0.0"
+  version: "1.1.0"
   interface: hb-production-plan/1
   execution-mode: public-offline-declarative
 ---
@@ -39,6 +39,17 @@ node --test skills/multimodal-production-routing/tests/plan.test.mjs
 ```
 
 The optional `--trusted-engram-sha256` pin must come from an **independent trusted channel**, not the inventory, request or the same public index. Without it, the planner checks only internal engram/index consistency. The catalog and examples ship in the selected portable ZIP. Its host inventory is synthetic and advertises **no installed tooling**.
+
+## Read-only local asset inspection utility
+
+The optional `scripts/inspect.mjs` is a **real, offline Node.js tool**, unlike the capability planner. It inspects the file structure and SHA-256 hash of local PNG, GIF, WebP, JPEG and WAV inputs. It reports image dimensions, applicable GIF frame counts/delays and audio metadata; it never invokes a renderer, image model, Blender, microphone, speech engine or game. Only read files explicitly named within a selected local root; no network is used, and no files are written.
+
+```sh
+node skills/multimodal-production-routing/scripts/inspect.mjs --root path/to/assets standard.png north.gif
+node --test skills/multimodal-production-routing/tests/inspect.test.mjs
+```
+
+It accepts at most 16 files of at most 32 MiB each, refuses absolute paths, escaping the selected root and direct symlinks, and rejects malformed/unsupported media headers. Structural inspection is **not** full media decoding, visual comparison, copyright verification, animation playback, game load testing or production acceptance. Output explicitly sets `visualProofProvided: false` and `gameRuntimeAcceptanceVerified: false`. Publishing actual visual proof remains a separate authorized operation.
 
 ## Security and status requirements
 

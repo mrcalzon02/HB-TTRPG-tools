@@ -55,6 +55,8 @@ The optional [`multimodal-production-routing`](multimodal-production-routing/SKI
 
 Run `node skills/multimodal-production-routing/scripts/plan.mjs skills/multimodal-production-routing/examples/request.json skills/multimodal-production-routing/examples/host-inventory.json`, and check with `node --test skills/multimodal-production-routing/tests/plan.test.mjs`. The bundled sample inventory is empty, and private LCI runners remain completely outside the public repository and skill surface.
 
+The same skill now bundles a **read-only local media metadata inspector** at `scripts/inspect.mjs` (PNG, GIF, WebP, JPEG, WAV). Run `node skills/multimodal-production-routing/scripts/inspect.mjs --root path/to/assets example.png`, then `node --test skills/multimodal-production-routing/tests/inspect.test.mjs`. It reports hashes and technical metadata, not actual visual proof, source rights, or an in-game acceptance result.
+
 ## Charles orchestration
 
 Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.
