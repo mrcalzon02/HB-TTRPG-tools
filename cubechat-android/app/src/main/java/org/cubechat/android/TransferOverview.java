@@ -87,12 +87,8 @@ final class TransferOverview extends BaseAdapter {
                 if (!selected || !connected) return "Queued offer";
                 return fileCapable ? "Awaiting acceptance" : "Waiting for file support";
             case AttachmentStore.ACCEPTED:
-                if (f.paused) return "Paused";
-                if (f.peerPaused) return "Paused by contact";
-                if (!selected) return "Open conversation to resume";
-                if (!connected) return "Waiting for connection";
-                if (!fileCapable) return "Waiting for file support";
-                return f.outgoing ? "Sending" : "Receiving";
+                return TransferProgress.acceptedStatus(f.outgoing, selected, connected,
+                        fileCapable, f.paused, f.peerPaused, f.progress, f.size);
             case AttachmentStore.COMPLETE: return f.outgoing ? "Delivered" : "Verified";
             case AttachmentStore.DECLINED: return "Declined";
             case AttachmentStore.CANCELED: return "Canceled";
@@ -111,7 +107,8 @@ final class TransferOverview extends BaseAdapter {
         TextView title = row.findViewById(android.R.id.text1);
         title.setText(f.name);
         String detail = status(f, item.contactId == previous.activeId, previous.connected, previous.fileCapable);
-        String percent = AttachmentStore.ACCEPTED.equals(f.status) && f.size > 0 ? " · " + (100L * f.progress / f.size) + "%" : "";
+        String percent = AttachmentStore.ACCEPTED.equals(f.status)
+                ? TransferProgress.percentSuffix(f.progress, f.size) : "";
         TextView subtitle = row.findViewById(android.R.id.text2);
         subtitle.setSingleLine(false);
         subtitle.setText(names.getOrDefault(item.contactId, "Conversation " + item.contactId)
