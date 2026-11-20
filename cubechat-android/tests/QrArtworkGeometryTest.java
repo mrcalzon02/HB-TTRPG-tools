@@ -29,7 +29,7 @@ public final class QrArtworkGeometryTest {
         expect(wide.side + 2 * wide.left <= 1500, "landscape horizontal bound");
         expect(wide.side + 2 * wide.top <= 900, "landscape vertical bound");
 
-        QrArtworkGeometry.Placement tall = QrArtworkGeometry.centered(900, 1600, 89);
+        QrArtworkGeometry.Placement tall = QrArtworkGeometry.centered(900, 1500, 89);
         expect(tall.side == wide.side, "rotation does not change module size");
         expect(tall.left == wide.top && tall.top == wide.left, "rotation centers");
 
