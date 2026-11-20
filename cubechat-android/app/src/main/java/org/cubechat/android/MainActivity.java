@@ -101,6 +101,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private boolean wasConnected;
     private Messages adapter;
     private AlertDialog inviteDialog, shareDialog;
+    private QrArtworkUi artworkQr;
     private boolean wantsInvite, closing;
     private String lastProblem = "", exportCode;
     private PendingSend submitted;
@@ -218,6 +219,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         chatDialogs.clear();
         inviteDialog = null;
+        if (artworkQr != null) { artworkQr.close(); artworkQr = null; }
         exportCode = null;
         retained = null;
         forgetClearedDraft();
@@ -419,6 +421,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (updates != null) updates.close();
         if (files != null) files.closeDialogs();
         if (inviteDialog != null) inviteDialog.dismiss();
+        if (artworkQr != null) { artworkQr.close(); artworkQr = null; }
         if (shareDialog != null) shareDialog.dismiss();
         ui.removeCallbacks(writeDraft);
         if (bluetooth != null) bluetooth.stop();
@@ -1198,6 +1201,19 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             create.putExtra(Intent.EXTRA_TITLE, "CubeChat-key-card.png");
             startActivityForResult(create, SAVE_QR);
         }));
+        content.addView(button("Blend QR into a photo", true, v -> {
+            if (!chatOpen() || link == null || artworkQr != null) return;
+            final long contact = renderedId;
+            final String expected = code;
+            QrArtworkUi artwork = new QrArtworkUi(this, expected,
+                    () -> chatOpen() && link != null
+                            && link.snapshot().activeId == contact
+                            && expected.equals(Pairing.HTTPS_PREFIX + link.snapshot().invite),
+                    () -> artworkQr = null);
+            artworkQr = artwork;
+            if (inviteDialog != null) inviteDialog.dismiss();
+            artwork.chooseImage();
+        }));
         TextView privateCode = label(code, 13, INK, false);
         privateCode.setTextIsSelectable(true);
         privateCode.setVisibility(View.GONE);
@@ -1342,6 +1358,12 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void handleResult(int request, int result, Intent data) {
         if (!chatOpen()) return;
+        if (request == QrArtworkUi.PICK_IMAGE || request == QrArtworkUi.SAVE_IMAGE) {
+            if (artworkQr != null) artworkQr.consume(request, result, data);
+            else Toast.makeText(this, "Reopen the pairing invite to edit artwork",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         if (files != null && files.result(request, result, data)) return;
         if ((request == 732 || request == 733) && bluetooth != null) {
             bluetooth.onActivityResult(request, result);
