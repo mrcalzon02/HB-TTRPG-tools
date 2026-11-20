@@ -276,12 +276,45 @@ public final class PeerLink {
         command(() -> { ready(); store.rename(id, name); contacts = store.contacts(); publish(); });
     }
     public void saveDraft(long id, String text) {
-        command(() -> {
-            ready();
-            if (id == 0) return;
-            store.saveDraft(id, text);
-            if (id == activeId) draft = text;
+        saveDraft(id, text, error -> {
+            if (error != null) listener.problem("Could not save draft: " + error);
         });
+    }
+
+    /**
+     * Complete a local draft write on the main thread only after the actual
+     * encrypted SQLite transaction returns. A queued write is not yet saved.
+     * Callbacks carry no plaintext draft content.
+     */
+    public synchronized void saveDraft(long id, String text, Consumer<String> result) {
+        if (result == null) throw new IllegalArgumentException("Draft result callback required");
+        if (closed || concealed) {
+            main.post(() -> { if (!closed) result.accept("Vault is locked or unavailable"); });
+            return;
+        }
+        try {
+            lane.execute(() -> {
+                String failure = null;
+                try {
+                    ready();
+                    if (closed || concealed) throw new IOException("Vault is locked");
+                    if (id <= 0) throw new IOException("No selected conversation");
+                    store.saveDraft(id, text);
+                    if (id == activeId) draft = text;
+                } catch (Exception e) {
+                    // No database error messages or draft contents in callbacks.
+                    failure = "Local write failed (" + e.getClass().getSimpleName() + ")";
+                }
+                String outcome = failure;
+                main.post(() -> {
+                    if (!closed && !concealed) result.accept(outcome);
+                });
+            });
+        } catch (RuntimeException rejected) {
+            main.post(() -> {
+                if (!closed && !concealed) result.accept("Draft worker unavailable");
+            });
+        }
     }
     public void createInvite() { requestInvite(null, false); }
     public void createInvite(String bundleJson) { requestInvite(bundleJson, bundleJson != null); }
