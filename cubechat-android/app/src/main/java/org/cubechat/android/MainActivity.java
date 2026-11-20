@@ -628,13 +628,15 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void afterTextChanged(Editable e) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                refreshSend();
                 if (!loadingDraft && renderedId != 0) {
                     if (submitted != null) submitted.edited = true;
                     draftSaveState.edited();
                     ui.removeCallbacks(writeDraft);
                     ui.postDelayed(writeDraft, 350);
                 }
+                // Update the badge after the revision advances so one keystroke
+                // cannot temporarily look like a completed saved draft.
+                refreshSend();
             }
         });
         root.addView(composerRow);
@@ -756,6 +758,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 loadingDraft = true;
                 draft.setText("");
                 loadingDraft = false;
+                // The sent text was committed to the outbox, not saved as a
+                // draft. Invalidate any pending editor-only save receipt.
+                draftSaveState.reset();
             }
             forgetClearedDraft();
             refreshSend();
@@ -787,6 +792,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         DraftSaveState.Ticket ticket = draftSaveState.begin(
                 renderedId, draft.getText().toString());
         if (ticket == null) return;
+        refreshSend();
         link.saveDraft(ticket.contactId, ticket.text, error -> {
             if (!chatOpen() || draft == null || status == null
                     || renderedId != ticket.contactId) return;
@@ -797,7 +803,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                     status.setText(lastProblem);
                     status.setTextColor(0xff8c351c);
                 }
-            } else if (draftSaveState.isCurrent(ticket, renderedId, editing)) {
+            } else if (draftSaveState.succeeded(ticket, renderedId, editing)) {
                 if (UNSAVED_DRAFT_NOTICE.equals(lastProblem)) {
                     lastProblem = "";
                     status.setText(link.snapshot().status);
@@ -806,6 +812,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 if (explicit)
                     Toast.makeText(this, "Draft saved locally", Toast.LENGTH_SHORT).show();
             }
+            refreshSend();
         });
     }
 
@@ -1010,9 +1017,19 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (!action.contentEquals(send.getText())) send.setText(action);
         send.setEnabled(link != null && renderedId != 0 && submitted == null && !over && !text.trim().isEmpty());
         if (draftLength != null) {
-            draftLength.setVisibility(renderedId != 0 && (bytes >= 3072 || over) ? View.VISIBLE : View.GONE);
-            draftLength.setText(bytes + " / 4096 bytes" + (over ? " · Message too long" : ""));
-            draftLength.setTextColor(over ? 0xff8c351c : MUTED);
+            boolean pending = draftSaveState.isAwaiting();
+            boolean failed = draftSaveState.hadFailure();
+            boolean unsaved = draftSaveState.isDirty();
+            boolean visible = renderedId != 0
+                    && (!text.isEmpty() || pending || failed || unsaved);
+            draftLength.setVisibility(visible ? View.VISIBLE : View.GONE);
+            String phase = over ? " · Message too long"
+                    : failed ? " · Draft not saved · Retry in Draft ⋮"
+                    : pending ? " · Saving locally…"
+                    : unsaved ? " · Unsaved changes"
+                    : text.isEmpty() ? "" : " · Saved locally";
+            draftLength.setText(bytes + " / 4096 bytes" + phase);
+            draftLength.setTextColor(over || failed ? 0xff8c351c : MUTED);
         }
     }
 
