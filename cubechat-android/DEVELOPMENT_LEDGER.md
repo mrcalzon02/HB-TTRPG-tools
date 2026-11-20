@@ -9,6 +9,33 @@
 
 This ledger tracks the work from the single-conversation Android APK to a messenger with attachments, selectable delivery routes, local profiles, conversation retention controls, and organization forums. The starting point is [Android 0.1.1, build 2](https://github.com/mrcalzon02/HB-TTRPG-tools/releases/tag/cubechat-android-v0.1.1).
 
+## November 20, 2026 · On-device encrypted security telemetry, time-series graphs and PURGE
+
+- Added 5-minute aggregate-only security history (SecurityTimeline, SecurityTelemetryStore),
+  bounded at 2,016 buckets, default 72-hour retention and selectable 6-hour, 24-hour,
+  3-day and 7-day expiry. The local History tab displays TUN-discard packet/byte counts,
+  requested cellular measurement counts, and independent packet/signal graphs with
+  genuine missing-sample gaps and local-time axes.
+- The VPN's existing discard loop increments **only packet and byte counters** with
+  atomic in-memory operations; a background writer checkpoints approximately every
+  30 seconds. No packet payload, peer address, message, cell identity, location,
+  subscriber identifier, or app identifier enters the stored telemetry. Cell summaries
+  are recorded only after the pre-existing manual, permission-gated observation.
+- Stored aggregate rows are AES/GCM-encrypted with a dedicated AndroidKeyStore key.
+  An unreadable/missing key disables history recording rather than writing plaintext
+  or affecting the firewall. Manual erase clears rows and the key. The local PURGE
+  path explicitly freezes the writer, removes the key and history, clears session
+  identity evidence, and then attempts the existing Android app-data reset. This is
+  not an attestation of low-level flash erasure or of remote copies.
+- The new pure-Java codec/retention regression was **executed on the staged exact
+  source/test blobs**, with **26/26** assertions passing via Java 17. The host Guardian
+  regression script now includes it. Android API 26/35 UI coverage is committed,
+  **not executed**. Full APK build, AndroidKeyStore lifecycle, process-death retention,
+  handset graph rendering and actual PURGE verification remain open release gates.
+- No networking policy was changed, no privileged radio control was enabled, and
+  **no emergency-call test or simulation was performed**. No public APK/release
+  was changed; the source integration is not hardware security certification.
+
 ## November 19, 2026 · Live composer save-status visibility and stale-receipt hardening
 
 - **Practical UI improvement:** The composer now displays its exact UTF-8 byte count for nonempty drafts along with **Unsaved changes → Saving locally… → Saved locally**, or **Draft not saved · Retry in Draft ⋮** if the active encrypted SQLite write fails. Warnings and over-4096-byte limits use the existing error color; the byte count correctly handles emoji and other multibyte characters. An empty clean draft hides the line; clearing a draft shows the save-in-progress state until it is acknowledged. The label expressly describes **local draft persistence**, never peer delivery.

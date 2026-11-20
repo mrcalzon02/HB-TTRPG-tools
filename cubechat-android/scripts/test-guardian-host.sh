@@ -6,6 +6,7 @@ trap 'rm -rf "$classes"' EXIT
 javac -encoding UTF-8 --release 17 -d "$classes" \
   "$here/app/src/main/java/org/cubechat/android/CellObservation.java" \
   "$here/app/src/main/java/org/cubechat/android/CellObservationBook.java" \
+  "$here/app/src/main/java/org/cubechat/android/SecurityTimeline.java" \
   "$here/app/src/main/java/org/cubechat/android/GuardianPolicyGate.java" \
   "$here/app/src/main/java/org/cubechat/android/GuardianTrafficPolicy.java" \
   "$here/app/src/main/java/org/cubechat/android/LockdownRecoverySummary.java" \
@@ -16,6 +17,7 @@ javac -encoding UTF-8 --release 17 -d "$classes" \
   "$here/app/src/main/java/org/cubechat/android/ManagedVpnOwnership.java" \
   "$here/app/src/main/java/org/cubechat/android/GuardianDeploymentGate.java" \
   "$here/tests/CellObservationBookTest.java" \
+  "$here/tests/SecurityTimelineTest.java" \
   "$here/tests/GuardianPolicyGateTest.java" \
   "$here/tests/GuardianTrafficPolicyTest.java" \
   "$here/tests/LockdownRecoverySummaryTest.java" \
@@ -26,6 +28,7 @@ javac -encoding UTF-8 --release 17 -d "$classes" \
   "$here/tests/ManagedVpnOwnershipTest.java" \
   "$here/tests/GuardianDeploymentGateTest.java"
 java -cp "$classes" org.cubechat.android.CellObservationBookTest
+java -cp "$classes" org.cubechat.android.SecurityTimelineTest
 java -cp "$classes" org.cubechat.android.GuardianPolicyGateTest
 java -cp "$classes" org.cubechat.android.GuardianTrafficPolicyTest
 java -cp "$classes" org.cubechat.android.LockdownRecoverySummaryTest

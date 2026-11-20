@@ -4,9 +4,42 @@ Open the [Android installation page](https://cubechat-android.lankytangerine2.ch
 
 The [Android development ledger](DEVELOPMENT_LEDGER.md) tracks planned features, their dependencies and the tests for each milestone.
 
+## Security history (development source; not in the published APK)
+
+In **Pairing → Firewall settings → History**, CubeChat can show two local graphs: VPN TUN
+packets discarded over time and Android-reported *serving-cell signal* from explicit
+cell reads. Summary counters also display TUN bytes and the number of manual cell
+reports. The reporting source is limited: an empty graph never proves the network was
+safe, and a measured cell identity never proves physical tower authenticity.
+
+Statistics are aggregated into 5-minute buckets, capped at 2,016 buckets. The default
+retention is **3 days**, configurable to **6 hours, 24 hours, 3 days, or 7 days**.
+Collection is on by default for *aggregate counters only*: packet counts are collected
+only while the existing CubeChat VPN actually receives packets, and cellular reports
+are collected **only when the user explicitly requests a read with Android permission**.
+There is no polling of cellular radios, packet content capture, background cell scan,
+tower blacklist, or remote transmission. History is stored in application-private
+preferences as AES-GCM ciphertext using an AndroidKeyStore key, and the manifest
+already disables Android Auto Backup. Store/key failure stops statistics recording,
+**not the firewall**, and never falls back to unencrypted history.
+
+**Clear saved security statistics** erases the ciphertext and the dedicated key; it
+also resets session-only cell identity observations. Changing to shorter retention
+prunes older buckets. PURGE stops the statistics writer, clears the history/key,
+and then performs the existing Android application-data reset. This is cryptographic/
+application-data deletion, **not proof of physical flash sanitization or erasure of
+other devices' data**. Android's app-data reset and full APK behavior still require
+hands-on validation. Up to 30 seconds of recent packet counts can be lost on a crash.
+System clock changes may affect historical ordering.
+
+The core pure-Java SecurityTimelineTest has passed 26 assertions against exact
+source blobs. SecurityHistoryUiTest for API 26/35 is staged in the Android test
+suite but has **not yet been run**. No signed APK, Android emulator security proof,
+or hardware certification is claimed by this source change.
+
 ## Lockdown and update-check behavior (development builds)
 
-Under **Pairing → Firewall settings**, the **Lockdown**, **Exceptions**, **Radios**, **Connections**, **Recovery**, and **Device** tabs separate current Android capabilities from planned hardware-level enforcement. Lockdown is not a verified radio kill switch. The Recovery screen can request ordinary release of CubeChat-owned restrictions and report incomplete readback. It now records the **managed-policy, local armed-preference, and VPN-stop command outcomes separately** and stores the most recent manual-release receipt synchronously. A command returning successfully is **not** proof that an Android-owned VPN or radio policy was removed. No universal early automatic emergency release exists in this build. [Emergency-call testing of any kind is prohibited](docs/NO_EMERGENCY_CALL_TESTING.md).
+Under **Pairing → Firewall settings**, the **Lockdown**, **Exceptions**, **Radios**, **Connections**, **History**, **Recovery**, and **Device** tabs separate current Android capabilities from planned hardware-level enforcement. Lockdown is not a verified radio kill switch. The Recovery screen can request ordinary release of CubeChat-owned restrictions and report incomplete readback. It now records the **managed-policy, local armed-preference, and VPN-stop command outcomes separately** and stores the most recent manual-release receipt synchronously. A command returning successfully is **not** proof that an Android-owned VPN or radio policy was removed. No universal early automatic emergency release exists in this build. [Emergency-call testing of any kind is prohibited](docs/NO_EMERGENCY_CALL_TESTING.md).
 
 While CubeChat's IP lockdown is requested, it **does not initiate GitHub update checks or open its APK download link**. The main screen shows **Update checks paused · Lockdown**, or marks a previously verified update as **Download paused**. Cached release information is retained. After deliberately turning lockdown off, a fresh update check may be requested; turning lockdown off does **not** resurrect a check invalidated by an earlier lockdown activation.
 

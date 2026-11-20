@@ -170,12 +170,17 @@ public final class LockdownFirewall extends VpnService {
     }
 
     private void discard(ParcelFileDescriptor fd) {
+        // Aggregates only packet lengths; the byte[] is never recorded or inspected.
+        SecurityTelemetryStore telemetry = null;
+        try { telemetry = SecurityTelemetryStore.get(this); }
+        catch (RuntimeException ignored) { /* Firewall must work without telemetry. */ }
         byte[] packet = new byte[32768];
         try (FileInputStream input = new FileInputStream(fd.getFileDescriptor())) {
             while (!stopping && active == this) {
                 int bytes = input.read(packet);
                 if (bytes < 0) break;
                 // Intentionally discard all data without forwarding or logging content.
+                if (bytes > 0 && telemetry != null) telemetry.droppedPacket(bytes);
             }
         } catch (IOException error) {
             if (!stopping) lastError = "VPN interface stopped: " + error.getMessage();
@@ -191,6 +196,8 @@ public final class LockdownFirewall extends VpnService {
 
     private synchronized void closeTunnel() {
         stopping = true;
+        try { SecurityTelemetryStore.get(this).flushNow(); }
+        catch (RuntimeException ignored) { /* Metrics never block VPN shutdown. */ }
         if (active == this) active = null;
         ParcelFileDescriptor fd = tunnel;
         tunnel = null;

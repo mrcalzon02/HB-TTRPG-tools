@@ -37,6 +37,7 @@ public final class FirewallSettings extends Activity {
     private static final String RECOVERY_PREFS = "cubechat-firewall-recovery";
     private static final long MIN_CELL_REFRESH_MS = 15_000L;
     private static final CellObservationBook CELL_HISTORY = new CellObservationBook();
+    static void clearSessionObservationOnPurge() { CELL_HISTORY.clear(); }
     private static final int INK = 0xff17251e, MUTED = 0xff4c6157, DANGER = 0xff8c351c;
     private final Handler ui = new Handler(Looper.getMainLooper());
     private boolean visible;
@@ -116,7 +117,7 @@ public final class FirewallSettings extends Activity {
         text(root, "CubeChat · Firewall settings", 23, INK);
         LinearLayout tabs = new LinearLayout(this);
         tabs.setOrientation(LinearLayout.HORIZONTAL);
-        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections", "Recovery", "Device"};
+        String[] names = {"Lockdown", "Exceptions", "Radios", "Connections", "History", "Recovery", "Device"};
         for (int index = 0; index < names.length; index++) {
             final int selected = index;
             Button choice = new Button(this);
@@ -146,7 +147,8 @@ public final class FirewallSettings extends Activity {
         else if (tab == 1) showExceptions();
         else if (tab == 2) showRadios();
         else if (tab == 3) showConnections();
-        else if (tab == 4) showRecovery();
+        else if (tab == 4) showHistory();
+        else if (tab == 5) showRecovery();
         else showDevice();
     }
 
@@ -251,7 +253,7 @@ public final class FirewallSettings extends Activity {
                 button(page, "Request updated cell measurements", this::requestFreshCells);
             }
         }
-        text(page, "Reports can be missing, stale or rate-limited. A request does not force active RF scanning. Repeated identities are only observations made during this app process.", 14, MUTED);
+        text(page, "Reports can be missing, stale or rate-limited. A request does not force active RF scanning. Repeated identities are only observations made during this app process. When local History recording is enabled, only aggregate counts and signal readings are saved; no cell identifiers are saved.", 14, MUTED);
         if (observedCells.isEmpty()) {
             text(page, "No reported cells in the current snapshot.", 15, MUTED);
         } else {
@@ -273,10 +275,99 @@ public final class FirewallSettings extends Activity {
         button(page, "Clear session observation history", () -> {
             CELL_HISTORY.clear();
             observedCells = Collections.emptyList();
-            cellStatus = "Session observations cleared; nothing was saved to disk.";
+            cellStatus = "Session cell identities cleared. Stored aggregate counts can be erased separately under History." ;
             render();
         });
         text(page, "Not enabled: rogue tower verdicts, cell selection, baseband blocking, background collection, cloud uploads and persistent location history.", 14, DANGER);
+    }
+
+
+    /** Aggregate-only diagnostic history. No raw packets, tower identity, or location is persisted. */
+    private void showHistory() {
+        text(page, "Security history · this phone only", 19, INK);
+        text(page, "Five-minute buckets shown in local device time. AndroidKeyStore AES-GCM encrypts aggregate history; no cloud uploads or backups. No message text, addresses, peer identities, cell IDs, coordinates or packet payloads are stored.", 14, MUTED);
+        SecurityTelemetryStore telemetry = SecurityTelemetryStore.get(this);
+        if (telemetry.error() != null) text(page, telemetry.error(), 15, DANGER);
+
+        Switch recording = new Switch(this);
+        recording.setText("Record local security statistics");
+        recording.setTextSize(16);
+        recording.setChecked(telemetry.enabled());
+        recording.setOnCheckedChangeListener((control, value) -> {
+            try { telemetry.setEnabled(value); }
+            catch (RuntimeException failure) {
+                Toast.makeText(this, "Statistics preference could not be saved", Toast.LENGTH_LONG).show();
+            }
+            render();
+        });
+        page.addView(recording);
+
+        long interval = telemetry.retentionMs();
+        long[] periods = {6 * SecurityTimeline.HOUR_MS, 24 * SecurityTimeline.HOUR_MS,
+                72 * SecurityTimeline.HOUR_MS, SecurityTimeline.MAX_AGE_MS};
+        String[] names = {"6 hours", "24 hours", "3 days", "7 days"};
+        int selected = 2;
+        for (int i = 0; i < periods.length; i++) if (periods[i] == interval) selected = i;
+        final int choice = selected;
+        button(page, "Keep local history · " + names[selected], () ->
+                new AlertDialog.Builder(this).setTitle("Security history retention")
+                        .setSingleChoiceItems(names, choice, (dialog, which) -> {
+                            dialog.dismiss();
+                            try { telemetry.setRetention(periods[which]); }
+                            catch (RuntimeException failure) {
+                                Toast.makeText(this, "Retention preference could not be saved", Toast.LENGTH_LONG).show();
+                            }
+                            render();
+                        }).setNegativeButton("Cancel", null).show());
+
+        List<SecurityTimeline.Bucket> rows = telemetry.history();
+        long packets = 0, bytes = 0, reports = 0;
+        int lastSignal = SecurityTimeline.UNKNOWN_SIGNAL, lastCells = -1;
+        for (SecurityTimeline.Bucket row : rows) {
+            packets = boundedAdd(packets, row.droppedPackets);
+            bytes = boundedAdd(bytes, row.droppedBytes);
+            reports = boundedAdd(reports, row.cellReports);
+            if (row.cellReports > 0) {
+                lastCells = row.reportedCells;
+                if (row.servingDbm != SecurityTimeline.UNKNOWN_SIGNAL) lastSignal = row.servingDbm;
+            }
+        }
+        text(page, "VPN TUN packets discarded: " + packets, 16, INK);
+        text(page, "VPN TUN bytes discarded: " + bytes, 16, INK);
+        text(page, "Manual cellular reports: " + reports
+                + (lastCells < 0 ? "" : " · latest reported cells: " + lastCells), 16, INK);
+        text(page, "Last recorded serving signal: "
+                + (lastSignal == SecurityTimeline.UNKNOWN_SIGNAL ? "not measured"
+                : lastSignal + " dBm (historical, unverified)"), 15, MUTED);
+        text(page, "VPN packets discarded over time", 16, INK);
+        page.addView(new SecurityHistoryGraph(this, rows,
+                        SecurityHistoryGraph.Metric.DROPPED_PACKETS, interval),
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(172)));
+        text(page, "Serving-cell signal over time · dBm", 16, INK);
+        page.addView(new SecurityHistoryGraph(this, rows,
+                        SecurityHistoryGraph.Metric.SERVING_SIGNAL, interval),
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(172)));
+        text(page, "Only traffic actually read from CubeChat's VPN TUN is counted, not every device packet. Cells appear only after a manual, permission-granted read; missing times are not zero signal or a confirmed safe state. No continuous cellular scan or threat verdict exists.", 14, MUTED);
+        text(page, "A 30-second write interval means a crash can lose the most recent counters. Android's system clock changes can also affect chart ordering. Shorter retention immediately removes older history on the next store update.", 14, MUTED);
+
+        button(page, "Clear saved security statistics", () ->
+                new AlertDialog.Builder(this).setTitle("Erase local security history?")
+                        .setMessage("Erase encrypted aggregate statistics, their AndroidKeyStore key, and the session-only cell observations? VPN filtering remains unchanged. New statistics will accumulate if recording remains enabled.")
+                        .setNegativeButton("Cancel", null)
+                        .setPositiveButton("Erase history", (dialog, which) -> {
+                            CELL_HISTORY.clear();
+                            observedCells = Collections.emptyList();
+                            cellStatus = "Session observations cleared.";
+                            boolean ok = telemetry.clearHistory();
+                            Toast.makeText(this, ok ? "Local security history cleared"
+                                    : "History clear incomplete; see status", Toast.LENGTH_LONG).show();
+                            render();
+                        }).show());
+        text(page, "PURGE also disables collection, erases the telemetry key and saved history, and invokes Android's application-data reset. Flash-level sanitization or deletion of external copies is not claimed.", 14, DANGER);
+    }
+
+    private static long boundedAdd(long a, long b) {
+        return a > Long.MAX_VALUE - b ? Long.MAX_VALUE : a + b;
     }
 
     /**
@@ -442,6 +533,8 @@ public final class FirewallSettings extends Activity {
         if (generation != cellRequestGeneration || isFinishing()) return;
         observedCells = result == null ? Collections.emptyList() : result;
         CELL_HISTORY.record(observedCells, SystemClock.elapsedRealtime());
+        try { SecurityTelemetryStore.get(this).cellReport(observedCells); }
+        catch (RuntimeException ignored) { /* Statistics must never obstruct a cellular read. */ }
         cellRequestRunning = false;
         cellStatus = source + ": " + observedCells.size() + " reported cell(s); each identity is unverified.";
         if (tab == 3) render();

@@ -319,6 +319,13 @@ final class LocalVault {
                 removeAlias(wrappingAlias(namespace));
                 removeAlias(legacyAlias(namespace));
             } finally {
+                // PURGE is stronger than manual history clearing: halt writers before Android
+                // clears app data, and retire the independent encrypted telemetry key.
+                // Failure here must never prevent the app-data reset attempt.
+                try { SecurityTelemetryStore.purge(context); }
+                catch (RuntimeException ignored) { }
+                try { FirewallSettings.clearSessionObservationOnPurge(); }
+                catch (RuntimeException ignored) { }
                 ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
                 if (am == null || !am.clearApplicationUserData())
                     throw new IOException("Android could not clear CubeChat. Reopen it to retry.");
