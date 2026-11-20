@@ -1015,26 +1015,17 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void refreshSend() {
         if (send == null || draft == null) return;
-        String text = draft.getText().toString();
-        int bytes = text.getBytes(StandardCharsets.UTF_8).length;
-        boolean over = bytes > 4096;
+        DraftStatusText.Summary draftStatus = DraftStatusText.describe(
+                draft.getText().toString(), renderedId != 0,
+                draftSaveState.isAwaiting(), draftSaveState.hadFailure(),
+                draftSaveState.isDirty());
         String action = submitted == null ? "Send" : "Saving…";
         if (!action.contentEquals(send.getText())) send.setText(action);
-        send.setEnabled(link != null && renderedId != 0 && submitted == null && !over && !text.trim().isEmpty());
+        send.setEnabled(link != null && submitted == null && draftStatus.sendable);
         if (draftLength != null) {
-            boolean pending = draftSaveState.isAwaiting();
-            boolean failed = draftSaveState.hadFailure();
-            boolean unsaved = draftSaveState.isDirty();
-            boolean visible = renderedId != 0
-                    && (!text.isEmpty() || pending || failed || unsaved);
-            draftLength.setVisibility(visible ? View.VISIBLE : View.GONE);
-            String phase = over ? " · Message too long"
-                    : failed ? " · Draft not saved · Retry in Draft ⋮"
-                    : pending ? " · Saving locally…"
-                    : unsaved ? " · Unsaved changes"
-                    : text.isEmpty() ? "" : " · Saved locally";
-            draftLength.setText(bytes + " / 4096 bytes" + phase);
-            draftLength.setTextColor(over || failed ? 0xff8c351c : MUTED);
+            draftLength.setVisibility(draftStatus.visible ? View.VISIBLE : View.GONE);
+            draftLength.setText(draftStatus.label);
+            draftLength.setTextColor(draftStatus.problem ? 0xff8c351c : MUTED);
         }
     }
 
