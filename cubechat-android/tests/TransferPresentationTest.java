@@ -104,10 +104,36 @@ public final class TransferPresentationTest {
                 "filename cannot end with half a surrogate pair");
     }
 
+    private static void notificationTransitions() {
+        check(!TransferEventText.shouldNotify(false, null, "DECLINED", false,
+                "not_enough_storage"), "opening a mailbox does not replay historical failures");
+        check(TransferEventText.shouldNotify(true, null, "DECLINED", false,
+                "not_enough_storage"), "new preflight refusal is visible even without OFFERED state");
+        check(!TransferEventText.shouldNotify(true, null, "DECLINED", true,
+                "not_enough_storage"), "new outgoing history does not invent an alert");
+        check(!TransferEventText.shouldNotify(true, null, "DECLINED", false,
+                "user_declined"), "new ordinary declined history does not invent an alert");
+        check(!TransferEventText.shouldNotify(true, null, "COMPLETE", false, ""),
+                "newly loaded old completion does not trigger alert");
+        check(TransferEventText.shouldNotify(true, "OFFERED", "DECLINED", true,
+                "not_enough_storage"), "existing outgoing offer rejection is surfaced");
+        check(TransferEventText.shouldNotify(true, "ACCEPTED", "COMPLETE", false,
+                ""), "completed active transfer creates a notification");
+        check(TransferEventText.shouldNotify(true, "OFFERED", "CANCELED", false,
+                ""), "canceled offer creates a notification");
+        check(!TransferEventText.shouldNotify(true, "DECLINED", "DECLINED", false,
+                "not_enough_storage"), "unchanged refused transfer does not repeat notification");
+        check(!TransferEventText.shouldNotify(true, "OFFERED", "ACCEPTED", false,
+                ""), "acceptance alone is not a terminal notification");
+        check(!TransferEventText.shouldNotify(true, "ACCEPTED", "UNKNOWN", false,
+                ""), "unrecognized state cannot announce terminal result");
+    }
+
     public static void main(String[] args) {
         progress();
         status();
         events();
+        notificationTransitions();
         System.out.println("TransferPresentation: " + checks
                 + " offline checks passed (no network, files or device actions)");
     }
