@@ -296,8 +296,11 @@ public final class PeerLink {
             lane.execute(() -> {
                 String failure = null;
                 try {
+                    // Admission was checked before enqueue. A profile lock or
+                    // shutdown can set concealed/closed before this task runs,
+                    // but their vault-closing work is queued AFTER this save.
+                    // Let admitted writes commit in order before vault teardown.
                     ready();
-                    if (closed || concealed) throw new IOException("Vault is locked");
                     if (id <= 0) throw new IOException("No selected conversation");
                     store.saveDraft(id, text);
                     if (id == activeId) draft = text;
