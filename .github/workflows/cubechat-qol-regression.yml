@@ -40,6 +40,9 @@ jobs:
       - name: Offline conversation search regression
         run: bash cubechat-android/scripts/test-message-search-host.sh
 
+      - name: Offline conversation picker regression
+        run: bash cubechat-android/scripts/test-contact-picker-host.sh
+
       - name: Offline transfer-status and notification regression
         run: bash cubechat-android/scripts/test-transfer-presentation-host.sh
 
