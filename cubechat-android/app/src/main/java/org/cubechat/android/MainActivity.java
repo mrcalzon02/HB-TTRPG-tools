@@ -109,7 +109,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     private String clearedDraft;
     private long clearedDraftContact;
     private long renderedId, inviteFrom = -1;
-    private boolean draftDirty, loadingDraft, shareSelecting;
+    private final DraftSaveState draftSaveState = new DraftSaveState();
+    private boolean loadingDraft, shareSelecting;
+    private static final String UNSAVED_DRAFT_NOTICE =
+            "Draft not saved · Draft ⋮ → Save draft now to retry.";
     private final Handler ui = new Handler(Looper.getMainLooper());
     private final Runnable writeDraft = this::flushDraft;
     private final Runnable expireDraftUndo = this::forgetClearedDraft;
@@ -229,7 +232,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         loadingDraft = true;
         if (draft != null) draft.setText("");
         loadingDraft = false;
-        draftDirty = false;
+        draftSaveState.reset();
         if (adapter != null) { adapter.items = Collections.emptyList(); adapter.notifyDataSetChanged(); }
         if (subtitle != null) subtitle.setText("");
         if (contactName != null) contactName.setText("");
@@ -628,7 +631,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 refreshSend();
                 if (!loadingDraft && renderedId != 0) {
                     if (submitted != null) submitted.edited = true;
-                    draftDirty = true;
+                    draftSaveState.edited();
                     ui.removeCallbacks(writeDraft);
                     ui.postDelayed(writeDraft, 350);
                 }
@@ -660,6 +663,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (switched) {
             forgetClearedDraft();
             flushDraft();
+            draftSaveState.reset();
             if (renderedId != 0) leaveRadio();
             renderedId = next.activeId;
             submitted = null;
@@ -675,7 +679,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             draft.setText(saved);
             draft.setSelection(draft.length());
             loadingDraft = false;
-            if (!TextUtils.equals(saved, next.draft)) { draftDirty = true; flushDraft(); }
+            if (!TextUtils.equals(saved, next.draft)) {
+                draftSaveState.edited();
+                flushDraft();
+            }
             retained = null;
         }
         int queuedHere = 0;
@@ -772,11 +779,33 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
 
     private void beginAction() { lastProblem = ""; }
 
-    private void flushDraft() {
+    private void flushDraft() { flushDraft(false); }
+
+    private void flushDraft(boolean explicit) {
         ui.removeCallbacks(writeDraft);
-        if (!draftDirty || renderedId == 0 || link == null) return;
-        link.saveDraft(renderedId, draft.getText().toString());
-        draftDirty = false;
+        if (renderedId == 0 || link == null || draft == null) return;
+        DraftSaveState.Ticket ticket = draftSaveState.begin(
+                renderedId, draft.getText().toString());
+        if (ticket == null) return;
+        link.saveDraft(ticket.contactId, ticket.text, error -> {
+            if (!chatOpen() || draft == null || renderedId != ticket.contactId) return;
+            String editing = draft.getText().toString();
+            if (error != null) {
+                if (draftSaveState.failed(ticket, renderedId, editing, error)) {
+                    lastProblem = UNSAVED_DRAFT_NOTICE;
+                    status.setText(lastProblem);
+                    status.setTextColor(0xff8c351c);
+                }
+            } else if (draftSaveState.isCurrent(ticket, renderedId, editing)) {
+                if (UNSAVED_DRAFT_NOTICE.equals(lastProblem)) {
+                    lastProblem = "";
+                    status.setText(link.snapshot().status);
+                    status.setTextColor(MUTED);
+                }
+                if (explicit)
+                    Toast.makeText(this, "Draft saved locally", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void selectContact(long id) {
@@ -920,12 +949,17 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         if (!chatOpen() || renderedId == 0 || draft == null || submitted != null) return;
         long contactId = renderedId;
         PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add("Save draft now").setEnabled(
+                draft.length() > 0 || draftSaveState.isDirty());
         menu.getMenu().add("Copy draft").setEnabled(draft.length() > 0);
         menu.getMenu().add("Clear draft").setEnabled(draft.length() > 0);
         menu.setOnMenuItemClickListener(item -> {
             if (!chatOpen() || draft == null || renderedId != contactId || submitted != null) return true;
             String contents = draft.getText().toString();
-            if ("Copy draft".contentEquals(item.getTitle())) {
+            if ("Save draft now".contentEquals(item.getTitle())) {
+                draftSaveState.retry();
+                flushDraft(true);
+            } else if ("Copy draft".contentEquals(item.getTitle())) {
                 copyPrivateText("CubeChat draft", contents, "Draft copied");
             } else if ("Clear draft".contentEquals(item.getTitle()) && !contents.isEmpty()) {
                 forgetClearedDraft();
