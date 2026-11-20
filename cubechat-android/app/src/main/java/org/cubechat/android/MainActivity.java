@@ -1144,14 +1144,18 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             popup.getMenu().add("Find in conversation").setOnMenuItemClickListener(i -> {
                 List<PeerLink.Message> items = state.messages;
                 FindMessages.show(this, items, index -> {
-                    if (renderedId == state.activeId && index >= 0 && index < items.size()) {
-                        PeerLink.Message match = items.get(index);
-                        for (int pos = 0; pos < adapter.getCount(); pos++) {
-                            PeerLink.Message visible = adapter.getItem(pos);
-                            if (visible.time == match.time && visible.outgoing == match.outgoing && visible.text.equals(match.text)) {
-                                history.setSelection(pos); break;
-                            }
-                        }
+                    if (!chatOpen() || renderedId != state.activeId
+                            || adapter == null || history == null) return;
+                    int position = MessageJump.locate(items, index, adapter.items,
+                            (original, visible) -> original != null && visible != null
+                                    && original.time == visible.time
+                                    && original.outgoing == visible.outgoing
+                                    && original.text.equals(visible.text));
+                    if (position >= 0) {
+                        history.setSelection(position);
+                    } else {
+                        Toast.makeText(this, "That message moved or is no longer in recent history. Search again.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
                 return true;
