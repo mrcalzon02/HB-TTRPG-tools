@@ -7,11 +7,13 @@ Ed25519, real skill packager/ZIP verifier, and a temporary private key.
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
+from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLER = ROOT / "scripts/agent-skill-bundle.py"
@@ -85,9 +87,28 @@ def main() -> None:
         print("PASS [engram-signature] rejected modified attestation")
         orig_bundle = bundle.read_bytes()
         bundle.write_bytes(orig_bundle + b" ")
-        command(*args, good=False)
+        rejected_archive = command(*args, good=False)
+        assert "before ZIP decompression" in rejected_archive.stderr, (
+            "ZIP signature hash must fail before any archive member decompression"
+        )
         bundle.write_bytes(orig_bundle)
-        print("PASS [engram-signature] rejected modified archive")
+        print("PASS [engram-signature] rejected modified archive before ZIP decompression")
+        spec = importlib.util.spec_from_file_location("signer_smoke", SIGNER)
+        assert spec is not None and spec.loader is not None
+        signer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(signer)
+        oversized = root / "oversized-member.zip"
+        with ZipFile(oversized, "w", ZIP_DEFLATED) as test_zip:
+            test_zip.writestr("bundle-lock.json", "{}")
+            test_zip.writestr("skills/index.json", b" " * (4 * 1024 * 1024 + 1))
+            test_zip.writestr("docs/blacklight/charles-personality-engram.json", "{}")
+        try:
+            signer.read_bundle_pins(oversized)
+        except ValueError as error:
+            assert "oversized" in str(error)
+        else:
+            raise AssertionError("Oversized ZIP metadata member was accepted")
+        print("PASS [engram-signature] oversized ZIP member refused before decompression")
         other = root / "other-private.pem"
         command(openssl, "genpkey", "-algorithm", "Ed25519", "-out", other)
         command(PYTHON, SIGNER, "sign", "--bundle", bundle, "--private-key", other,

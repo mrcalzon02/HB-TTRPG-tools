@@ -9,23 +9,44 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import stat
 import importlib.util
 import json
 from pathlib import Path
 import re
 import shutil
 import subprocess
-from zipfile import ZipFile
+from zipfile import ZipFile, BadZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "hb-engram-skill-release/1"
 OWNER = "mrcalzon02/HB-TTRPG-tools"
 HEX64 = re.compile(r"[a-f0-9]{64}\Z")
 COMMIT40 = re.compile(r"[a-f0-9]{40}\Z")
+MAX_ARCHIVE_BYTES = 80 * 1024 * 1024
+MAX_ZIP_ENTRIES = 1024
+MAX_ZIP_UNCOMPRESSED = 64 * 1024 * 1024
+MEMBER_CAPS = {"bundle-lock.json": 2 * 1024 * 1024,
+               "skills/index.json": 4 * 1024 * 1024,
+               "docs/blacklight/charles-personality-engram.json": 256 * 1024}
 
 
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(file: Path) -> str:
+    if file.is_symlink() or not file.is_file() or file.stat().st_size > MAX_ARCHIVE_BYTES:
+        raise ValueError("Archive is missing, a symlink, or exceeds 80 MiB")
+    digest = hashlib.sha256()
+    consumed = 0
+    with file.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            consumed += len(chunk)
+            if consumed > MAX_ARCHIVE_BYTES:
+                raise ValueError("Archive grew beyond 80 MiB while hashing")
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def run_openssl(openssl: str, *args: str) -> bytes:
@@ -45,20 +66,37 @@ def private_public_der(openssl: str, private: Path) -> bytes:
     return run_openssl(openssl, "pkey", "-in", str(private), "-pubout", "-outform", "DER")
 
 
-def read_bundle_pins(bundle: Path) -> dict[str, str]:
+def read_bundle_pins(bundle: Path, *, verified_archive_sha: str | None = None) -> dict[str, str]:
+    archive_sha = sha256_file(bundle)
+    if verified_archive_sha is not None and archive_sha != verified_archive_sha:
+        raise ValueError("Archive SHA-256 disagrees with signed attestation; rejecting before ZIP decompression")
     try:
         with ZipFile(bundle) as archive:
+            members = archive.infolist()
+            if (not members or len(members) > MAX_ZIP_ENTRIES
+                or sum(item.file_size for item in members) > MAX_ZIP_UNCOMPRESSED):
+                raise ValueError("Archive exceeds entry count or uncompressed size limits")
+            for name, maximum in MEMBER_CAPS.items():
+                matching = [item for item in members if item.filename == name]
+                if (len(matching) != 1 or matching[0].file_size > maximum
+                    or ((matching[0].external_attr >> 16) & 0o170000) not in (0, 0o100000)):
+                    raise ValueError("Required archive member is missing, duplicated, oversized or not a regular file: " + name)
             lock = json.loads(archive.read("bundle-lock.json"))
             registry_raw = archive.read("skills/index.json")
             engram_raw = archive.read("docs/blacklight/charles-personality-engram.json")
         registry = json.loads(registry_raw)
-    except (OSError, ValueError, KeyError, TypeError) as exc:
-        raise ValueError("Could not inspect required engram-bound bundle files") from exc
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError, BadZipFile, EOFError) as exc:
+        raise ValueError("Could not safely inspect required engram-bound bundle files") from exc
+    if not isinstance(lock, dict) or not isinstance(registry, dict):
+        raise ValueError("Archive lock and registry must be JSON objects")
+    binding = registry.get("defaultPersonality")
+    integrity = binding.get("integrity") if isinstance(binding, dict) else None
     if (lock.get("bundleFormat") != "hb-engram-bound-skill-bundle/1"
         or lock.get("engramSha256") != sha256(engram_raw)
-        or registry.get("defaultPersonality", {}).get("integrity", {}).get("digest") != sha256(engram_raw)):
+        or not isinstance(integrity, dict)
+        or integrity.get("digest") != sha256(engram_raw)):
         raise ValueError("Archive does not contain a coherent canonical engram binding")
-    return {"bundleSha256": sha256(bundle.read_bytes()),
+    return {"bundleSha256": archive_sha,
             "registrySha256": sha256(registry_raw),
             "engramSha256": sha256(engram_raw)}
 
@@ -107,7 +145,11 @@ def sign(args: argparse.Namespace) -> None:
     ensure_parent_new(sig_file)
     # Detached signatures bind canonical attestation bytes, not a model prompt.
     try:
-        att_file.write_bytes(raw)
+        with att_file.open("xb") as stream:
+            stream.write(raw)
+        # Reserve the signature output exclusively to prevent concurrent clobber.
+        with sig_file.open("xb"):
+            pass
         run_openssl(args.openssl, "pkeyutl", "-sign", "-rawin", "-inkey", str(args.private_key),
                     "-in", str(att_file), "-out", str(sig_file))
         if len(sig_file.read_bytes()) != 64:
@@ -126,13 +168,14 @@ def verify(args: argparse.Namespace) -> None:
     key_id = sha256(public_der(args.openssl, args.public_key))
     if key_id != args.trusted_key_sha256:
         raise ValueError("Publisher public key does not match independently trusted fingerprint")
-    if key_id in args.revoked_key or sha256(args.bundle.read_bytes()) in args.revoked_bundle:
+    if key_id in args.revoked_key or sha256_file(args.bundle) in args.revoked_bundle:
         raise ValueError("Publisher key or exact bundle digest has been revoked by host policy")
     for block in [*args.revoked_key, *args.revoked_bundle]:
         if not HEX64.fullmatch(block):
             raise ValueError("Revocation entries must be lowercase SHA-256 digests")
-    if args.attestation.stat().st_size > 16 * 1024:
-        raise ValueError("Attestation exceeds 16 KiB limit")
+    if (args.attestation.is_symlink() or not args.attestation.is_file()
+        or args.attestation.stat().st_size > 16 * 1024):
+        raise ValueError("Attestation is missing, symlinked or exceeds 16 KiB")
     raw = args.attestation.read_bytes()
     try:
         att = json.loads(raw)
@@ -151,13 +194,18 @@ def verify(args: argparse.Namespace) -> None:
         or not isinstance(att["sourceCommit"], str)
         or not COMMIT40.fullmatch(att["sourceCommit"])):
         raise ValueError("Attestation identity or Git reference is invalid")
+    if not all(isinstance(att[field], str) and HEX64.fullmatch(att[field])
+               for field in ("bundleSha256", "registrySha256", "engramSha256")):
+        raise ValueError("Signed artifact digest fields must be lowercase SHA-256 hex strings")
     if args.expected_source_commit is not None and att["sourceCommit"] != args.expected_source_commit:
         raise ValueError("Signed source commit differs from independently expected commit")
-    if len(args.signature.read_bytes()) != 64:
-        raise ValueError("Ed25519 signature must contain exactly 64 bytes")
+    if (args.signature.is_symlink() or not args.signature.is_file()
+        or args.signature.stat().st_size != 64):
+        raise ValueError("Ed25519 signature must be an ordinary 64-byte file")
     run_openssl(args.openssl, "pkeyutl", "-verify", "-rawin", "-pubin", "-inkey",
                 str(args.public_key), "-sigfile", str(args.signature), "-in", str(args.attestation))
-    pins = read_bundle_pins(args.bundle)
+    # Verify the complete signed ZIP digest BEFORE reading any ZIP members.
+    pins = read_bundle_pins(args.bundle, verified_archive_sha=att["bundleSha256"])
     for field, expected in pins.items():
         if att[field] != expected:
             raise ValueError(f"Signed {field} differs from the supplied bundle")

@@ -12,6 +12,9 @@ FMPL shared library: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-lib
 FMPL browsing: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html#fmpl-library
 FMPL AI skill: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/fmpl-asset-production/SKILL.md
 Agent Skills registry: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
+Signed-release guide (offline host enforcement): https://mrcalzon02.github.io/HB-TTRPG-tools/docs/ai-access/engram-signed-releases.md
+Trusted host installation guide (manual, never automatic): https://mrcalzon02.github.io/HB-TTRPG-tools/docs/ai-access/engram-host-installation.md
+Installed host skill resolution: invoke `agent-skill-install.py resolve --skill NAME` (or --list) with a host-owned trust policy; never treat raw SKILL.md as a verified runtime context.
 HTML skill directory: https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html
 Human AI access: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html

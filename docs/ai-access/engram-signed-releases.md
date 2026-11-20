@@ -71,6 +71,10 @@ The signing regression generates a disposable Ed25519 keypair in a temporary dir
 
 The existing `pages.yml` workflow includes these checks in its **manual** full-validation path. No new workflows, automatic triggers, or unconditional release/promote steps are introduced.
 
+## Host-owned installation and rollback
+
+After signature verification, use [the host installation guide](engram-host-installation.md) for initial trust-policy bootstrap, no-write preflight, staged extraction, explicit activation, safe rollback, retired/revoked-key treatment, and the read-only `resolve` interface that binds the personality engram to optional skill content for cooperating agents. The installer **does not trust a bundled public key**; the operator supplies an independently pinned publisher identity. No local service automatically installs a new release.
+
 ## Portable-skill limits
 
 Only the canonical, mutually required engram and index are mandatory in conforming loader contexts. Individual skills remain optional and selected on demand. A verified personality or skill bundle cannot grant filesystem access, network access, privileges, arbitrary tool execution, credentials or authority over host policy. Public skill source cannot be made literally impossible for a hostile external executor to copy or disregard.

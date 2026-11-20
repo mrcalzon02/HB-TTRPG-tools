@@ -55,14 +55,18 @@ jobs:
       - name: Validate engram-bound Agent Skills and portable bundle
         if: steps.scope.outputs.full_validation == 'true'
         shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
         run: |
           node --check ai-skill-context-loader.js
           node --check ai-skill-loader.js
+          python3 -c 'import ast,pathlib; paths=("scripts/agent-skill-bundle.py","scripts/agent-skill-release-signature.py","scripts/agent-skill-install.py","scripts/validate-engram-bundle.py","scripts/validate-engram-release-signature.py","scripts/validate-engram-install.py"); [ast.parse(pathlib.Path(p).read_text(encoding="utf-8"),filename=p) for p in paths]'
           node scripts/validate-agent-skills.mjs
           node scripts/validate-engram-loader.mjs
           python3 scripts/validate-agent-skill-projections.py
           python3 scripts/validate-engram-bundle.py
           python3 scripts/validate-engram-release-signature.py
+          python3 scripts/validate-engram-install.py
           python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output "$RUNNER_TEMP/foundry-discovery-engram.zip"
           PIN="$(python3 -c 'import json; print(json.load(open("skills/index.json"))["defaultPersonality"]["integrity"]["digest"])')"
           INDEX_PIN="$(sha256sum skills/index.json | cut -d ' ' -f1)"
