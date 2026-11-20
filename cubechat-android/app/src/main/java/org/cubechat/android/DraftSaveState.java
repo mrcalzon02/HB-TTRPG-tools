@@ -62,6 +62,12 @@ final class DraftSaveState {
         return true;
     }
 
+    /** The result still belongs to the current displayed edit. */
+    boolean isCurrent(Ticket ticket, long currentContactId, String currentText) {
+        return ticket != null && ticket.contactId == currentContactId
+                && ticket.revision == revision && Objects.equals(ticket.text, currentText);
+    }
+
     /** Explicit user-requested retry, including when no pending write exists. */
     void retry() {
         revision++;
