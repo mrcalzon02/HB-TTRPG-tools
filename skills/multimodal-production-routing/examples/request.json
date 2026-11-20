@@ -1,0 +1,5 @@
+{
+  "format": "hb-production-request/1",
+  "goal": "Create and validate a game-ready 3D machine sprite from authorized native sources",
+  "needs": ["mesh.author", "material.author", "mesh.render", "sprite.export", "visual.proof", "game.smoke"]
+}

@@ -64,6 +64,8 @@ jobs:
           node scripts/validate-agent-skills.mjs
           node --check scripts/agent-handoff.mjs
           node --test tests/agent-handoff.test.mjs
+          node --check skills/multimodal-production-routing/scripts/plan.mjs
+          node --test skills/multimodal-production-routing/tests/plan.test.mjs
           python3 scripts/generate-ai-readable-html.py --check
           python3 scripts/validate-ai-readable-html.py
           python3 scripts/validate-public-ai-boundary.py

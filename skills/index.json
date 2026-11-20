@@ -47,6 +47,7 @@
         "foundry-discovery",
         "model-context-and-budget-manager",
         "task-focus-orchestration",
+        "multimodal-production-routing",
         "campaign-lore-retrieval",
         "adventure-module-operations",
         "module-map-generation",
@@ -168,6 +169,31 @@
       "personalityPolicy": "inherit-default",
       "personalityEngramIds": [
         "blacklight.charles"
+      ]
+    },
+    {
+      "name": "multimodal-production-routing",
+      "path": "skills/multimodal-production-routing/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "image generation and editing",
+        "3D modeling and Blender asset routing",
+        "texture and material production",
+        "sprite animation export",
+        "audio and video production",
+        "host tool readiness diagnosis",
+        "visual proof and game integration"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
+      ],
+      "executionRequirements": [
+        "Node.js 20+ for optional offline diagnostic CLI",
+        "Separate host-authorized modality tools and host-verified acceptance"
       ]
     },
     {

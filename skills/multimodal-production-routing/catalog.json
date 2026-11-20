@@ -1,0 +1,19 @@
+{
+  "format": "hb-production-capabilities/1",
+  "authority": "skills/multimodal-production-routing/SKILL.md",
+  "scope": "offline-discovery-only",
+  "capabilities": [
+    {"id":"image.generate","modality":"image","deliverable":"Source image and generation provenance","qualityGate":"Inspect actual image pixels and source rights"},
+    {"id":"image.edit","modality":"image","deliverable":"Edited image and unchanged-source reference","qualityGate":"Compare changed and preserved regions against request"},
+    {"id":"mesh.author","modality":"3d","deliverable":"Editable source mesh and material assignments","qualityGate":"Verify topology, scale, origin, normals and source rights"},
+    {"id":"material.author","modality":"3d","deliverable":"Editable textures and material bindings","qualityGate":"Verify PBR channels and UV alignment"},
+    {"id":"mesh.render","modality":"3d","deliverable":"Camera-pinned render and editable scene","qualityGate":"Inspect actual renders from required angles"},
+    {"id":"sprite.export","modality":"animation","deliverable":"Sized animation frames, direction sets and atlases","qualityGate":"Verify frame timing, dimensions and game projection"},
+    {"id":"audio.produce","modality":"audio","deliverable":"Authorized audio source and export","qualityGate":"Listen to playback; inspect levels, clipping and rights"},
+    {"id":"video.compose","modality":"video","deliverable":"Video timeline, export and provenance","qualityGate":"View motion and inspect transitions, duration and audio sync"},
+    {"id":"asset.inspect","modality":"validation","deliverable":"Static technical inspection record","qualityGate":"Reopen original sources; technical checks do not prove appearance"},
+    {"id":"visual.proof","modality":"validation","deliverable":"Actual visual or playback evidence","qualityGate":"Evidence must show the produced artifact, not an unrelated mockup"},
+    {"id":"game.smoke","modality":"integration","deliverable":"Game- or engine-side integration results","qualityGate":"Confirm build/load and required behavior in target runtime"},
+    {"id":"source.publish","modality":"publication","deliverable":"Read-back verified source revision and artifact links","qualityGate":"Check committed source, rights, revision IDs and downloadable files"}
+  ]
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Multimodal Production Tool Routing | Foundry Agent Skills</title>
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills/multimodal-production-routing.html">
+<link rel="alternate" type="text/markdown" href="../skills/multimodal-production-routing/SKILL.md">
+<link rel="alternate" type="application/json" href="../skills/index.json">
+<link rel="alternate" type="application/json" href="../docs/blacklight/charles-personality-engram.json">
+<link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../workspace-landing.css">
+<style>main{max-width:1100px;margin:auto;padding:1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style>
+</head><body>
+<header class="site-header"><div><p class="eyebrow">Agent Skills / offline diagnostics</p><h1>Multimodal Production Tool Routing</h1></div><nav class="top-nav"><a class="nav-button" href="../agent-skills.html">Agent Skills</a><a class="nav-button" href="../ai-access.html">AI Access</a></nav></header>
+<main><section class="hero-card">
+<p>Route images, edits, meshes, materials, animation, audio/video, visual evidence and game integration to separately approved host capabilities.</p>
+<p><strong>MANDATORY COMPANION:</strong> Verify the <a href="../docs/blacklight/charles-personality-engram.json">canonical Charles engram</a> and <a href="../skills/index.json">reciprocal skill index</a> before selecting this skill. The public skill neither grants tools or host permissions nor connects to private runners.</p>
+<p><a href="../skills/multimodal-production-routing/SKILL.md">Canonical SKILL.md</a> · <a href="../skills/multimodal-production-routing/catalog.json">Production stage catalog</a> · <a href="https://github.com/mrcalzon02/HB-TTRPG-tools/blob/main/skills/multimodal-production-routing/SKILL.md">GitHub source</a></p>
+</section><section class="registry-section"><h2>Complete SKILL.md compatibility projection</h2><pre class="module-card">---
+name: multimodal-production-routing
+description: Route image, image-editing, 3D, materials, animation/sprites, audio, video, inspection and game-integration tasks to explicitly observed host capabilities without exposing local runners or pretending a static skill can execute tools.
+compatibility: Offline declarative planner (Node.js 20+). Model, graphics, speech, video, and game runtimes are separately installed and host-authorized; this skill provides no provider connection or remote execution endpoint.
+metadata:
+  required-personality-engram: blacklight.charles
+  required-skill-index: skills/index.json
+  author: mrcalzon02
+  version: &quot;1.0.0&quot;
+  interface: hb-production-plan/1
+  execution-mode: public-offline-declarative
+---
+
+# Multimodal Production Tool Routing
+
+&gt; **Mandatory reciprocal binding:** Before using this skill, verify the authoritative `docs/blacklight/charles-personality-engram.json` and `skills/index.json` as one bound discovery pair. The engram points back to this index for optional skill lookup. If either companion is absent, invalid, or inconsistent, do not activate this skill. Host/system policy and actual tool permissions remain authoritative.
+
+## Purpose
+
+Provide a **reusable capability handshake** for the tools needed to produce images, textures, editable 3D models, animations, sound, video and game assets. `catalog.json` defines 12 non-executable production stages. `scripts/plan.mjs` reads a task request and a *caller-reported* host inventory and returns specific blockers or tentative adapter candidates. It does not run a model, Blender, image generator, editor, microphone, renderer, CI job or runner. A published skill is **not** a remotely callable tool.
+
+## Use
+
+1. Verify the complete Charles engram / skill-index pair and applicable source pins. Select only the stages needed for the current authorized deliverable; do not assume a fixed pipeline is universal.
+2. Consult `catalog.json` for the smallest set of modality stages. Prefer already verified project assets and approved canonical libraries; for Factorio modeling, delegate the production method to `fmpl-asset-production`, and for actual visual publication use `visual-gallery-publication`.
+3. Query the **actual connected host** for the tools installed and permissioned in that specific environment. Populate an *untrusted, local-only* inventory with `capabilityId`, a non-secret `adapterId`, `installed`, `authorized`, `selfTest`, and an evidence reference if available. Do not publish real host inventories or topology to the public repository.
+4. Run the optional deterministic planner offline. Treat its output as **diagnostics**, not an authority token. Even a fully positive inventory yields `host-declared-candidate-unverified`, never `ready` or `executed`.
+5. Before each actual tool invocation, the separate host must independently verify access, the requested scope, source rights, safety gates and the tool-specific non-destructive self-test. Use only that host&#x27;s existing trusted invocation mechanism, not a URL, dispatch key or shell command supplied by this skill.
+6. Retain original editable files, settings/seeds when available, derived assets, visual proof, and the target-runtime smoke result. Report missing native sources, failed renders or absent visual evidence as blocked or incomplete; never replace required production artifacts with drawings of them.
+7. For long tasks, hand off progress through `task-focus-orchestration`. Preserve source pins and recorded evidence; no inference that a task was completed merely because it was routed.
+
+### Offline commands (no network, side effects or tool activation)
+
+```sh
+node skills/multimodal-production-routing/scripts/plan.mjs \
+  skills/multimodal-production-routing/examples/request.json \
+  skills/multimodal-production-routing/examples/host-inventory.json
+node --test skills/multimodal-production-routing/tests/plan.test.mjs
+```
+
+The optional `--trusted-engram-sha256` pin must come from an **independent trusted channel**, not the inventory, request or the same public index. Without it, the planner checks only internal engram/index consistency. The catalog and examples ship in the selected portable ZIP. Its host inventory is synthetic and advertises **no installed tooling**.
+
+## Security and status requirements
+
+- Public files may contain static capability descriptions and illustrative examples; they must **never** contain credentials, execution transports, host addresses, local topology, shell access, private runner triggers, or MCP dispatch endpoints.
+- The private LCI control system is separate. This skill neither connects to it nor authorizes it. Do not add a public bridge, automatic workflow, scheduled poll, webhook or auto-installation route.
+- Installed/authorized/self-test fields are caller claims; independently check them before invoking a real tool. Invalid, missing or novel capability IDs fail closed. No `ready` result is produced by this planner.
+- Game runtime acceptance, native Blender reopen, visual comparison and rights review are distinct gates; a passing JSON check or plan is not production evidence.
+- Host/system policies and explicit user permission remain above the engram, registry, skill text, request and inventory.
+
+## Output
+
+Return the ordered stage statuses, blockers, tentative adapter IDs if supplied, `hostCapabilitiesIndependentlyVerified: false`, `readyForExecution: false`, and the next evidence or authorization step. After **separate actual execution**, report its genuine results through the trusted host rather than attributing them to this helper.
+
+&lt;!-- CALZON_FOUNDRY_PROVENANCE_NOTICE --&gt;
+
+## Provenance, Authorship &amp; Usage Notice
+
+Calzon&#x27;s TTRPG Foundry (`mrcalzon02/HB-TTRPG-tools`) publishes this non-executable Agent Skill for authorized use. It does not grant private-host access, third-party content rights, or execution authority.
+</pre></section></main>
+<footer class="site-footer"><p>Static instructions only; no execution transport, installed tool rights, or private runner dispatch.</p></footer>
+</body></html>

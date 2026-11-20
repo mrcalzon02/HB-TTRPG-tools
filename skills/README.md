@@ -49,6 +49,12 @@ New read-only CLI modes are `diagnose` (mandatory versus optional character budg
 
 **No new execution authority:** the handoff does not persist data, invoke tools, enroll memory, dispatch runners, publish secrets or grant access across the public/private boundary. A declared evidence record is not an independently observed result.
 
+## Multimodal production capability routing
+
+The optional [`multimodal-production-routing`](multimodal-production-routing/SKILL.md) skill provides a bounded, offline production-stage catalog for image generation and edits, native 3D modeling, PBR materials, rendering, animation/sprite export, audio, video, source inspection, visual proof, game-runtime smoke tests, and publication. The local planner compares a task's requested stages with a caller-supplied host inventory; it cannot install, connect, invoke, or independently certify a tool. Even positive declarations are unverified candidates, **never** permission or proof of completion. The canonical FMPL asset skill and visual-gallery publication skill remain the domain-specific workflow authorities.
+
+Run `node skills/multimodal-production-routing/scripts/plan.mjs skills/multimodal-production-routing/examples/request.json skills/multimodal-production-routing/examples/host-inventory.json`, and check with `node --test skills/multimodal-production-routing/tests/plan.test.mjs`. The bundled sample inventory is empty, and private LCI runners remain completely outside the public repository and skill surface.
+
 ## Charles orchestration
 
 Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.
