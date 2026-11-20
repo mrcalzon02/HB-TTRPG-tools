@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow">
 <meta name="description" content="Synthetic checkpoint example with no private data or execution authority">
-<meta name="hb-projection-sha256" content="d50a2bd164dbeb1846e0508757a40776e31deeab458d7a9b2054f2a20a8238db">
+<meta name="hb-projection-sha256" content="5bc9b4f5e0e944d8dafeddebbb9e4c5ae47a9b240c1ff61717f104facd1e05af">
 <meta name="hb-source-path" content="api/ai/examples/agent-handoff.json">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/handoff-example.html">
 <title>Agent checkpoint handoff example — Foundry AI-readable mirror</title>
@@ -26,10 +26,10 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
 </header>
 <main>
 <p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/examples/agent-handoff.json"><code>api/ai/examples/agent-handoff.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
-<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>d50a2bd164dbeb1846e0508757a40776e31deeab458d7a9b2054f2a20a8238db</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>5bc9b4f5e0e944d8dafeddebbb9e4c5ae47a9b240c1ff61717f104facd1e05af</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
 <p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
 <h2>Complete canonical source projection</h2>
-<pre id="canonical-source" data-projection-sha256="d50a2bd164dbeb1846e0508757a40776e31deeab458d7a9b2054f2a20a8238db">{
+<pre id="canonical-source" data-projection-sha256="5bc9b4f5e0e944d8dafeddebbb9e4c5ae47a9b240c1ff61717f104facd1e05af">{
   &quot;format&quot;: &quot;hb-agent-handoff/1&quot;,
   &quot;engram&quot;: {
     &quot;id&quot;: &quot;blacklight.charles&quot;,
@@ -63,7 +63,8 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
     &quot;nextAction&quot;: &quot;Run local validation on a trusted public-repository checkout.&quot;,
     &quot;blockers&quot;: [],
     &quot;uncertainties&quot;: [
-      &quot;No runner execution result has been obtained.&quot;
+      &quot;No runner execution result has been obtained.&quot;,
+      &quot;Pinned engram revision has not been independently rechecked for freshness in this handoff.&quot;
     ]
   },
   &quot;evidence&quot;: [
@@ -88,7 +89,15 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
     &quot;grantsPrivateRunnerDispatch&quot;: false,
     &quot;grantsPersistentMemory&quot;: false,
     &quot;authorizationSource&quot;: &quot;host-policy&quot;
-  }
+  },
+  &quot;sourcePins&quot;: [
+    {
+      &quot;id&quot;: &quot;charles-engram&quot;,
+      &quot;reference&quot;: &quot;docs/blacklight/charles-personality-engram.json&quot;,
+      &quot;algorithm&quot;: &quot;sha256&quot;,
+      &quot;revision&quot;: &quot;85e4884dedf58522574c041c63ed678c803bd5d54dde616ff33fc022b4f57ec7&quot;
+    }
+  ]
 }
 </pre>
 </main>

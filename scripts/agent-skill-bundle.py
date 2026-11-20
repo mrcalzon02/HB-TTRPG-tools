@@ -34,6 +34,7 @@ HANDOFF_SKILLS = frozenset({"model-context-and-budget-manager", "task-focus-orch
 HANDOFF_ASSETS = (
     "api/ai/agent-handoff.schema.json",
     "api/ai/examples/agent-handoff.json",
+    "api/ai/examples/agent-source-observations.json",
     "scripts/agent-handoff.mjs",
 )
 MAX_FILE_COUNT = 1024

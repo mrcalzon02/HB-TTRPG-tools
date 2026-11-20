@@ -114,7 +114,14 @@ if (handoffSchema.properties?.format?.const !== 'hb-agent-handoff/1' ||
     handoffSchema.properties?.authority?.properties?.grantsPrivateRunnerDispatch?.const !== false ||
     handoffSchema.properties?.authority?.properties?.grantsPersistentMemory?.const !== false ||
     handoffExample.engram?.registry !== 'skills/index.json' ||
-    handoffExample.authority?.grantsPrivateRunnerDispatch !== false) {
+    handoffExample.authority?.grantsPrivateRunnerDispatch !== false ||
+    !handoffSchema.properties?.sourcePins?.items?.properties?.algorithm?.enum?.includes('sha256') ||
+    !handoffSchema.properties?.sourcePins?.items?.properties?.algorithm?.enum?.includes('git-sha1') ||
+    !handoffExample.sourcePins?.some(item =>
+      item.id === 'charles-engram' &&
+      item.reference === engramPath &&
+      item.algorithm === 'sha256' &&
+      item.revision === index.defaultPersonality.integrity.digest)) {
   fail('Agent handoff contract cannot omit mandatory engram, host authority or private runner isolation.');
 }
 

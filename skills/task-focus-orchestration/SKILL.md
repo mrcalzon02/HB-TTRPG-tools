@@ -6,7 +6,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: "1.0.0"
+  version: "1.1.0"
   interface: hb-agent-handoff/1
   execution-mode: public-offline-declarative
 ---
@@ -26,8 +26,9 @@ Manage the **description and checkpoint state** of one user-authorized task. Thi
 3. Work on the highest-priority **authorized** step; avoid speculative redesigns and unrelated subprojects. Model instructions never override host permissions.
 4. Before calling a step `completed`, record an evidence ID for an observed source, commit, test or host result. The shared validator rejects a completed step without a linked `observed-pass` declaration. **That label is self-declared and is not independent host proof**—verify the actual referenced result.
 5. On interruption, publish a compact `hb-agent-handoff/1` checkpoint with objective, current step states, evidence references, unresolved blockers, uncertainties and the next action. No hidden state or unverified persistence is implied.
-6. On resumption, recheck the referenced source and repository state before continuing. If a commit, runtime, approval, or result is unavailable, mark the step blocked or pending rather than pretending success.
-7. On completion, require every step to be completed and every completion claim to be evidence-linked; preserve the final readback. If material facts change, reopen the affected step.
+6. On resumption, **compare** the previous handoff with the candidate handoff before proceeding. The read-only `reconcile` command rejects changes to task ID, project or objective, missing/renamed steps, overwritten evidence and silent completed-step regressions. A source revision change is flagged for independent recheck, not silently accepted as proof of freshness.
+7. Independently recheck referenced files, commits and test results. Optional `sourcePins` carry expected SHA-256 or Git revisions; `compare-sources` compares them against a separately supplied observation file but never fetches, authenticates, or certifies either value.
+8. On completion, require every step to be completed and every completion claim to be evidence-linked; preserve the final readback. When completed work must be reopened after material facts change, prepare an explicitly reviewed new task version; the helper refuses silent historical alteration.
 
 ## Portable record
 
@@ -35,9 +36,14 @@ Authoritative contract: `api/ai/agent-handoff.schema.json`. Use the sample `api/
 
 ```sh
 node scripts/agent-handoff.mjs validate api/ai/examples/agent-handoff.json
+node scripts/agent-handoff.mjs diagnose api/ai/examples/agent-handoff.json 8000
+node scripts/agent-handoff.mjs reconcile previous-handoff.json candidate-handoff.json
+node scripts/agent-handoff.mjs compare-sources api/ai/examples/agent-handoff.json api/ai/examples/agent-source-observations.json
 ```
 
 Pair with `model-context-and-budget-manager` only when output needs compacting. The character-budget mechanism drops low-priority `optionalContext` only, not the decision record.
+
+Reconciliation does not approve new work or perform any source retrieval. Matching source hashes are caller-supplied equality observations, not independently verified freshness. Both records remain unchanged; the caller must establish a trusted source readback before declaring a new step completed.
 
 ## Stop and protection rules
 

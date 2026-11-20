@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow">
 <meta name="description" content="Portable source-grounded task checkpoint contract; no privileges or persistence">
-<meta name="hb-projection-sha256" content="d5a57007f23319e54873778f6cf7649312b8764e14b7a9704e2eeda23e4a38f6">
+<meta name="hb-projection-sha256" content="53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c">
 <meta name="hb-source-path" content="api/ai/agent-handoff.schema.json">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/handoff-schema.html">
 <title>Agent checkpoint handoff schema — Foundry AI-readable mirror</title>
@@ -26,14 +26,14 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
 </header>
 <main>
 <p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/agent-handoff.schema.json"><code>api/ai/agent-handoff.schema.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
-<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>d5a57007f23319e54873778f6cf7649312b8764e14b7a9704e2eeda23e4a38f6</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
 <p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
 <h2>Complete canonical source projection</h2>
-<pre id="canonical-source" data-projection-sha256="d5a57007f23319e54873778f6cf7649312b8764e14b7a9704e2eeda23e4a38f6">{
+<pre id="canonical-source" data-projection-sha256="53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c">{
   &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
   &quot;$id&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/agent-handoff.schema.json&quot;,
   &quot;title&quot;: &quot;Host-owned, engram-bound agent task handoff (public declarative format)&quot;,
-  &quot;description&quot;: &quot;Deterministic portable task/checkpoint context. It is not persistent memory, an authorization token, a tool result, or access to private runners.&quot;,
+  &quot;description&quot;: &quot;Deterministic portable task/checkpoint context. It is not persistent memory, an authorization token, a tool result, or access to private runners. Optional SHA-256/Git revision pins enable comparison-only freshness diagnostics; caller observations are not independently authenticated.&quot;,
   &quot;type&quot;: &quot;object&quot;,
   &quot;additionalProperties&quot;: false,
   &quot;required&quot;: [
@@ -288,6 +288,83 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
           &quot;const&quot;: &quot;host-policy&quot;
         }
       }
+    },
+    &quot;sourcePins&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;maxItems&quot;: 64,
+      &quot;uniqueItems&quot;: false,
+      &quot;description&quot;: &quot;Optional pinned source revisions; retained during compaction. These are self-declared assertions, not proof of freshness.&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;additionalProperties&quot;: false,
+        &quot;required&quot;: [
+          &quot;id&quot;,
+          &quot;reference&quot;,
+          &quot;algorithm&quot;,
+          &quot;revision&quot;
+        ],
+        &quot;properties&quot;: {
+          &quot;id&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+          },
+          &quot;reference&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;minLength&quot;: 1,
+            &quot;maxLength&quot;: 500
+          },
+          &quot;algorithm&quot;: {
+            &quot;enum&quot;: [
+              &quot;sha256&quot;,
+              &quot;git-sha1&quot;
+            ]
+          },
+          &quot;revision&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;pattern&quot;: &quot;^[a-f0-9]{40}([a-f0-9]{24})?$&quot;
+          }
+        },
+        &quot;allOf&quot;: [
+          {
+            &quot;if&quot;: {
+              &quot;properties&quot;: {
+                &quot;algorithm&quot;: {
+                  &quot;const&quot;: &quot;sha256&quot;
+                }
+              },
+              &quot;required&quot;: [
+                &quot;algorithm&quot;
+              ]
+            },
+            &quot;then&quot;: {
+              &quot;properties&quot;: {
+                &quot;revision&quot;: {
+                  &quot;pattern&quot;: &quot;^[a-f0-9]{64}$&quot;
+                }
+              }
+            }
+          },
+          {
+            &quot;if&quot;: {
+              &quot;properties&quot;: {
+                &quot;algorithm&quot;: {
+                  &quot;const&quot;: &quot;git-sha1&quot;
+                }
+              },
+              &quot;required&quot;: [
+                &quot;algorithm&quot;
+              ]
+            },
+            &quot;then&quot;: {
+              &quot;properties&quot;: {
+                &quot;revision&quot;: {
+                  &quot;pattern&quot;: &quot;^[a-f0-9]{40}$&quot;
+                }
+              }
+            }
+          }
+        ]
+      }
     }
   },
   &quot;x-hb-contract&quot;: {
@@ -295,10 +372,12 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
       &quot;docs/blacklight/charles-personality-engram.json&quot;,
       &quot;skills/index.json&quot;
     ],
-    &quot;compactRule&quot;: &quot;Only optionalContext entries may be dropped, lowest priority first; never omit task, evidence, engram, checkpoint, or authority.&quot;,
+    &quot;compactRule&quot;: &quot;Only optionalContext entries may be dropped, lowest priority first; never omit task, evidence, sourcePins (when supplied), engram, checkpoint, or authority.&quot;,
     &quot;evidenceRule&quot;: &quot;Evidence references are self-declared until externally verified against the host; document shape validation is not proof of execution.&quot;,
     &quot;privacyRule&quot;: &quot;Never publish or paste private details, credentials, signing keys, or protected runner information into a public handoff.&quot;,
-    &quot;execution&quot;: &quot;none&quot;
+    &quot;execution&quot;: &quot;none&quot;,
+    &quot;sourceRule&quot;: &quot;Pinned revisions and externally supplied observations are comparison inputs only; freshnessVerified is always false without independent host evidence. No networking is performed.&quot;,
+    &quot;reconcileRule&quot;: &quot;Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution.&quot;
   }
 }
 </pre>

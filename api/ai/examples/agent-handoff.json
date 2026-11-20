@@ -32,7 +32,8 @@
     "nextAction": "Run local validation on a trusted public-repository checkout.",
     "blockers": [],
     "uncertainties": [
-      "No runner execution result has been obtained."
+      "No runner execution result has been obtained.",
+      "Pinned engram revision has not been independently rechecked for freshness in this handoff."
     ]
   },
   "evidence": [
@@ -57,5 +58,13 @@
     "grantsPrivateRunnerDispatch": false,
     "grantsPersistentMemory": false,
     "authorizationSource": "host-policy"
-  }
+  },
+  "sourcePins": [
+    {
+      "id": "charles-engram",
+      "reference": "docs/blacklight/charles-personality-engram.json",
+      "algorithm": "sha256",
+      "revision": "85e4884dedf58522574c041c63ed678c803bd5d54dde616ff33fc022b4f57ec7"
+    }
+  ]
 }
