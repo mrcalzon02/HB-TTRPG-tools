@@ -28,6 +28,12 @@ Individual skills may point to `blacklight.charles` for discoverability, but the
 
 Personality is not capability: loading Charles does not grant tools, permissions, credentials, network access, provider access, persistent storage, filesystem access, a random source, image rendering, runtime compatibility, or evidence that an operation succeeded.
 
+## Public/private execution isolation
+
+**Public Agent Skills do not grant private execution.** This registry, its engram, public HTML mirrors, portable bundles and browser tests are public documentation/workflow assets, not dispatch credentials or a bridge to private home-machine runners. Do not add an MCP endpoint, webhook, runner-control URL, GitHub Actions dispatch adapter, or secret to any public skill or discovery manifest. The independent private control system is outside this repository's scope and must never be invoked implicitly by public skill consumption.
+
+A local public-manifest guard is provided at `scripts/validate-public-ai-boundary.py`, with negative tests at `tests/test_public_ai_boundary.py`. See [the public/private security boundary](../docs/ai-access/html-compatibility-and-remote-execution.md). These checks cannot independently audit private infrastructure.
+
 ## Charles orchestration
 
 Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.

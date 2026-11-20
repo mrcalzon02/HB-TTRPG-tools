@@ -64,6 +64,8 @@ jobs:
           node scripts/validate-agent-skills.mjs
           python3 scripts/generate-ai-readable-html.py --check
           python3 scripts/validate-ai-readable-html.py
+          python3 scripts/validate-public-ai-boundary.py
+          python3 tests/test_public_ai_boundary.py
           node scripts/validate-engram-loader.mjs
           python3 scripts/validate-agent-skill-projections.py
           python3 scripts/validate-engram-bundle.py
