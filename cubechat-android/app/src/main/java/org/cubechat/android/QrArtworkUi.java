@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,6 +44,8 @@ final class QrArtworkUi {
     private final BooleanSupplier stillCurrent;
     private final Runnable onClosed;
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Runnable deferredPreview = this::requestRender;
     private boolean closed;
     private volatile int generation;
     private int[] background;
@@ -109,10 +113,12 @@ final class QrArtworkUi {
             percentage = label("Visibility 78% · release slider to verify", 15);
             content.addView(percentage);
             visibility = new SeekBar(host);
+            visibility.setContentDescription("QR artwork contrast visibility");
             visibility.setMax(100);
             visibility.setProgress(78);
             content.addView(visibility);
             status = label("Reading image locally…", 14);
+            status.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
             content.addView(status);
             Button replace = new Button(host);
             replace.setText("Choose a different image");
@@ -135,11 +141,16 @@ final class QrArtworkUi {
                         generation++;
                         verifiedOutput = null;
                         save.setEnabled(false);
-                        status.setText("Not verified at this brightness.");
+                        status.setText("Verifying this brightness…");
+                        mainHandler.removeCallbacks(deferredPreview);
+                        mainHandler.postDelayed(deferredPreview, 180L);
                     }
                 }
                 @Override public void onStartTrackingTouch(SeekBar bar) { }
-                @Override public void onStopTrackingTouch(SeekBar bar) { requestRender(); }
+                @Override public void onStopTrackingTouch(SeekBar bar) {
+                    mainHandler.removeCallbacks(deferredPreview);
+                    requestRender();
+                }
             });
             ScrollView scroll = new ScrollView(host);
             scroll.addView(content);
@@ -190,6 +201,7 @@ final class QrArtworkUi {
         save.setEnabled(false);
         status.setText("Verifying composed QR locally…");
         worker.execute(() -> {
+            if (closed || ticket != generation) return;
             try {
                 QrArtworkRender.Result result =
                         QrArtworkRender.render(photo, w, h, matrix, invite, strength);
@@ -354,6 +366,7 @@ final class QrArtworkUi {
         if (closed) return;
         closed = true;
         generation++;
+        mainHandler.removeCallbacks(deferredPreview);
         worker.shutdownNow();
         background = null;
         verifiedOutput = null;
