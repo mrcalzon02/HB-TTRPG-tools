@@ -101,7 +101,9 @@ final class AttachmentsUi {
                     } else if ("DECLINED".equals(f.status) || "CANCELED".equals(f.status)) {
                         latestFileEventId = f.id;
                         if (AttachmentStore.STORAGE_REASON.equals(f.reason))
-                            latestFileEventText = "File rejected: not enough storage on recipient";
+                            latestFileEventText = f.outgoing
+                                    ? "File rejected: recipient has insufficient storage"
+                                    : "Incoming file rejected: insufficient local storage";
                         else latestFileEventText = ("DECLINED".equals(f.status) ? "File declined: " : "Transfer canceled: ") + f.name;
                     }
                 }
@@ -312,7 +314,9 @@ final class AttachmentsUi {
             AttachmentStore.Transfer selected = find(state.files, item.file.id);
             if (selected != null) showDetail(state, selected);
         } else {
-            listDialog.dismiss();
+            // Overview can outlive its parent Files dialog. Do not crash when
+            // changing conversations from that still-open overview.
+            if (listDialog != null) listDialog.dismiss();
             openTransferContact = item.contactId;
             openTransferId = item.file.id;
             link.selectContact(item.contactId);
@@ -485,7 +489,8 @@ final class AttachmentsUi {
             TextView title = row.findViewById(android.R.id.text1);
             title.setSingleLine(); title.setEllipsize(TextUtils.TruncateAt.END);
             title.setText(f.name);
-            String percent = "ACCEPTED".equals(f.status) && f.size > 0 ? " · " + (100L * f.progress / f.size) + "%" : "";
+            String percent = AttachmentStore.ACCEPTED.equals(f.status)
+                    ? TransferProgress.percentSuffix(f.progress, f.size) : "";
             ((TextView)row.findViewById(android.R.id.text2)).setText((f.outgoing ? "Outgoing" : "Incoming") +
                     " · " + size(f.size) + " · " + stateLabel(f) + percent);
             return row;
@@ -542,8 +547,12 @@ final class AttachmentsUi {
         progress.setVisibility(moving ? View.VISIBLE : View.GONE);
         detailBytes.setVisibility(moving ? View.VISIBLE : View.GONE);
         if (moving) {
-            progress.setProgress(f.size == 0 ? 0 : (int)(1000 * Math.min(f.progress, f.size) / f.size));
-            detailBytes.setText(size(f.progress) + " / " + size(f.size));
+            progress.setProgress(f.size <= 0 ? 0
+                    : (int) (10 * TransferProgress.percent(f.progress, f.size)));
+            detailBytes.setText(size(TransferProgress.boundedBytes(f.progress, f.size))
+                    + " / " + size(Math.max(0, f.size))
+                    + (f.size > 0 && f.progress >= f.size
+                            ? " · Awaiting confirmation" : ""));
         }
         boolean offline = !link.snapshot().connected;
         String buttons = f.status + "/" + f.paused + "/" + offline;
