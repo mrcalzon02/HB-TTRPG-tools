@@ -32,6 +32,7 @@ import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -996,58 +997,94 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
     }
 
     private void conversations() {
+        if (link == null || !chatOpen()) return;
         PeerLink.Snapshot current = link.snapshot();
         LinearLayout content = column();
         pad(content, 16, 0, 0);
-        content.setFocusableInTouchMode(true);
+
         EditText search = new EditText(this);
         search.setHint("Search contacts");
-        search.setSingleLine();
+        search.setSingleLine(true);
+        search.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        search.setImeOptions(EditorInfo.IME_ACTION_SEARCH
+                | EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
+        search.setFilters(new InputFilter[]{new InputFilter.LengthFilter(96)});
         search.setSaveEnabled(false);
         content.addView(search);
+
+        CheckBox queuedOnly = new CheckBox(this);
+        queuedOnly.setText("Conversations with queued messages only");
+        queuedOnly.setTextSize(15);
+        content.addView(queuedOnly);
+
+        TextView summary = label("", 13, MUTED, false);
+        summary.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
+        content.addView(summary);
+
         FrameLayout results = new FrameLayout(this);
-        content.addView(results, new LinearLayout.LayoutParams(MATCH, WRAP));
+        // A bounded list remains scrollable on narrow Android screens instead
+        // of expanding the AlertDialog past its visible buttons.
+        int maxListHeight = Math.max(dp(120), Math.min(dp(320),
+                getResources().getDisplayMetrics().heightPixels / 2));
+        content.addView(results, new LinearLayout.LayoutParams(MATCH, maxListHeight));
         ListView choices = new ListView(this);
+        choices.setSaveEnabled(false);
+        choices.setContentDescription("Conversations, current then queued first");
+        results.addView(choices, new FrameLayout.LayoutParams(MATCH, MATCH));
         TextView empty = label("No matching contacts", 15, MUTED, false);
         pad(empty, 12, 16, 12);
-        results.addView(choices);
-        results.addView(empty);
+        results.addView(empty, new FrameLayout.LayoutParams(MATCH, MATCH));
         choices.setEmptyView(empty);
-        ArrayAdapter<ChatStore.Contact> rows = new ArrayAdapter<ChatStore.Contact>(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1) {
+
+        List<ConversationPickerModel.Entry> contacts = new ArrayList<>();
+        for (ChatStore.Contact contact : current.contacts)
+            contacts.add(new ConversationPickerModel.Entry(
+                    contact.id, contact.name, contact.pending));
+        ArrayAdapter<ConversationPickerModel.Entry> rows =
+                new ArrayAdapter<ConversationPickerModel.Entry>(this,
+                        android.R.layout.simple_list_item_2, android.R.id.text1) {
             @Override public View getView(int position, View recycled, ViewGroup parent) {
                 View view = super.getView(position, recycled, parent);
-                ChatStore.Contact contact = getItem(position);
-                TextView name = view.findViewById(android.R.id.text1);
-                name.setText(contact.name);
-                String detail;
-                if (contact.id == current.activeId)
-                    detail = current.connected ? "Selected · Connected" : "Selected · Not connected";
-                else detail = "Not selected · Open to reconnect";
-                if (contact.pending > 0)
-                    detail += " · " + contact.pending + (contact.pending == 1 ? " queued message" : " queued messages");
+                ConversationPickerModel.Entry contact = getItem(position);
+                ((TextView) view.findViewById(android.R.id.text1)).setText(contact.name);
+                String detail = contact.id == current.activeId
+                        ? (current.connected ? "Current · Connected" : "Current · Not connected")
+                        : "Tap to open";
+                if (contact.queued > 0)
+                    detail += " · " + contact.queued
+                            + (contact.queued == 1 ? " queued message" : " queued messages");
                 else detail += " · No queued messages";
                 ((TextView) view.findViewById(android.R.id.text2)).setText(detail);
                 return view;
             }
         };
+        rows.setNotifyOnChange(false);
         choices.setAdapter(rows);
-        rows.addAll(current.contacts);
+        Runnable refresh = () -> {
+            List<ConversationPickerModel.Entry> filtered = ConversationPickerModel.choose(
+                    contacts, current.activeId, search.getText().toString(),
+                    queuedOnly.isChecked());
+            rows.clear();
+            rows.addAll(filtered);
+            rows.notifyDataSetChanged();
+            summary.setText(filtered.size() + " of " + contacts.size()
+                    + " conversations · "
+                    + ConversationPickerModel.queuedConversations(contacts)
+                    + " with queued messages");
+            empty.setText(queuedOnly.isChecked()
+                    ? "No matching conversations with queued messages."
+                    : "No matching contacts.");
+        };
         search.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void afterTextChanged(Editable e) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String query = s.toString().trim().toLowerCase(Locale.ROOT);
-                rows.setNotifyOnChange(false);
-                rows.clear();
-                for (ChatStore.Contact contact : current.contacts) {
-                    if (contact.name.toLowerCase(Locale.ROOT).contains(query)) rows.add(contact);
-                }
-                rows.notifyDataSetChanged();
-            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable e) { refresh.run(); }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
-        AlertDialog.Builder builder = DisplayPrivacy.dialog(this).setTitle("Conversations").setView(content)
-                .setNegativeButton("Close", null)
+        queuedOnly.setOnCheckedChangeListener((button, checked) -> refresh.run());
+        refresh.run();
+
+        AlertDialog.Builder builder = DisplayPrivacy.dialog(this).setTitle("Conversations")
+                .setView(content).setNegativeButton("Close", null)
                 .setPositiveButton("Add contact", (d, w) -> addContact());
         for (ChatStore.Contact contact : current.contacts) if (contact.id == current.activeId) {
             builder.setNeutralButton("Rename contact", (d, w) -> renameContact(contact));
@@ -1055,9 +1092,15 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }
         AlertDialog dialog = builder.create();
         choices.setOnItemClickListener((parent, view, position, id) -> {
-            ChatStore.Contact selected = rows.getItem(position);
+            ConversationPickerModel.Entry selected = rows.getItem(position);
             dialog.dismiss();
             if (selected != null) selectContact(selected.id);
+        });
+        dialog.setOnDismissListener(d -> {
+            // Keep contact queries out of saved state/keyboard personalization,
+            // and release references held by the dialog adapter on close.
+            search.setText("");
+            rows.clear();
         });
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
