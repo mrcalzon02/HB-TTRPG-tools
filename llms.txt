@@ -16,8 +16,13 @@ Signed-release guide (offline host enforcement): https://mrcalzon02.github.io/HB
 Trusted host installation guide (manual, never automatic): https://mrcalzon02.github.io/HB-TTRPG-tools/docs/ai-access/engram-host-installation.md
 Installed host skill resolution: invoke `agent-skill-install.py resolve --skill NAME` (or --list) with a host-owned trust policy; never treat raw SKILL.md as a verified runtime context.
 HTML skill directory: https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html
+Full HTML machine documentation fallback: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html
 Human AI access: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
 Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
+
+## Restricted browser HTML fallback
+
+If a model/browser cannot retrieve raw JSON, TXT or Markdown, read https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html first. Each linked page embeds canonical machine source as static initial HTML text and its source SHA-256. For large operation contracts, use per-capability pages linked from the directory. The original source wins if a mirror is stale. HTML text enables discovery only; it does not prove installed tools, authenticated MCP/REST transport or execution.
 
 ## Routing rule
 

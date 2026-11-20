@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Onboarding and external-model compatibility guidance">
+<meta name="hb-projection-sha256" content="c406e2e2213e200862f160639cc2f8032cc5f9c7df42ce4156e04cbcc64929e5">
+<meta name="hb-source-path" content="api/ai/skill-onboarding.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/onboarding.html">
+<title>Agent Skill onboarding — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Agent Skill onboarding</h1>
+<p>Onboarding and external-model compatibility guidance</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json"><code>api/ai/skill-onboarding.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>c406e2e2213e200862f160639cc2f8032cc5f9c7df42ce4156e04cbcc64929e5</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="c406e2e2213e200862f160639cc2f8032cc5f9c7df42ce4156e04cbcc64929e5">{
+  &quot;schemaVersion&quot;: &quot;1.3.0&quot;,
+  &quot;profile&quot;: &quot;hb-agent-skill-onboarding/1&quot;,
+  &quot;standard&quot;: &quot;Agent Skills&quot;,
+  &quot;standardUrl&quot;: &quot;https://agentskills.io/specification&quot;,
+  &quot;bootstrap&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt&quot;,
+  &quot;registry&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json&quot;,
+  &quot;statusVocabulary&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json&quot;,
+  &quot;architectureRule&quot;: &quot;Agent Skills are workflow/onboarding modules. api/ai/bootstrap.txt governs routing and minimum-authority loading; capability identities, runtime status, exact operation schemas, resources, and the default Charles personality remain authoritative in their dedicated registries/resources rather than being duplicated in individual skills.&quot;,
+  &quot;onboardingSequence&quot;: [
+    {
+      &quot;step&quot;: 1,
+      &quot;action&quot;: &quot;LOAD_BOOTSTRAP&quot;,
+      &quot;resource&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt&quot;,
+      &quot;result&quot;: &quot;Use the canonical minimum-authority routing contract and cache unchanged authorities for the current orchestration context.&quot;
+    },
+    {
+      &quot;step&quot;: 2,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;resource&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json&quot;,
+      &quot;result&quot;: &quot;Select the minimum-capability skill set that fits the task. Do not crawl unrelated skill packages.&quot;
+    },
+    {
+      &quot;step&quot;: 3,
+      &quot;action&quot;: &quot;LOAD_DEFAULT_PERSONALITY&quot;,
+      &quot;resource&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json&quot;,
+      &quot;result&quot;: &quot;Load blacklight.charles once for the orchestration context before selected task skills. Do not duplicate or fork the personality inside skill files.&quot;
+    },
+    {
+      &quot;step&quot;: 4,
+      &quot;action&quot;: &quot;GET_SKILL&quot;,
+      &quot;template&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/{name}/SKILL.md&quot;,
+      &quot;result&quot;: &quot;Load only the selected skill workflow and its explicit capability, resource, helper, and executionRequirements references.&quot;
+    },
+    {
+      &quot;step&quot;: 5,
+      &quot;action&quot;: &quot;RESOLVE_REFERENCES_ON_DEMAND&quot;,
+      &quot;result&quot;: &quot;Load status vocabulary only when interpreting status/acceptance state; capabilities only when referenced; operation contracts only before executable calls; resource collections only for required registered material.&quot;
+    },
+    {
+      &quot;step&quot;: 6,
+      &quot;action&quot;: &quot;CHECK_SELECTED_RUNTIME&quot;,
+      &quot;resource&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json&quot;,
+      &quot;result&quot;: &quot;For execution tasks only, verify the selected skill/capability runtime, helper, sandbox, page/device context, and deployed transport requirements before claiming execution.&quot;
+    },
+    {
+      &quot;step&quot;: 7,
+      &quot;action&quot;: &quot;SELF_TEST_IF_REQUIRED&quot;,
+      &quot;result&quot;: &quot;Run a declared deterministic self-test only before promoting the selected host state to self-test-passed or ready.&quot;
+    }
+  ],
+  &quot;personalitySemantics&quot;: {
+    &quot;defaultEngramId&quot;: &quot;blacklight.charles&quot;,
+    &quot;resourceId&quot;: &quot;blacklight.charles-personality-engram&quot;,
+    &quot;manifestResourceId&quot;: &quot;blacklight.charles-engram-manifest&quot;,
+    &quot;binding&quot;: &quot;inherited-by-all-registered-skills&quot;,
+    &quot;loadPolicy&quot;: &quot;Load once per orchestration context, not once per skill.&quot;,
+    &quot;precedence&quot;: &quot;Higher-priority host/system policy and authoritative repository/campaign state override personality presentation or model prior as defined by the Charles engram.&quot;,
+    &quot;oocRule&quot;: &quot;An explicit out-of-character/system presentation request may suppress Charles presentation without rewriting or mutating the engram.&quot;,
+    &quot;capabilityBoundary&quot;: &quot;Personality loading grants no tools, permissions, credentials, network access, provider access, persistent storage, or successful execution state.&quot;,
+    &quot;reciprocalRegistry&quot;: &quot;skills/index.json&quot;,
+    &quot;companionRequirement&quot;: &quot;Both registry and engram are mandatory for a registered skill; selected skills remain optional and loaded on demand.&quot;,
+    &quot;integrity&quot;: &quot;Verify the registry-pinned SHA-256 digest of the raw canonical engram before returning skill content or loading executable runtimes.&quot;,
+    &quot;missingCompanionPolicy&quot;: &quot;fail-closed-before-skill-activation&quot;,
+    &quot;authenticityLimit&quot;: &quot;Registry and engram on the same public origin give coherence, not independent publisher authentication; use an externally trusted digest or signed release.&quot;
+  },
+  &quot;statusSemantics&quot;: {
+    &quot;authority&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json&quot;,
+    &quot;loadPolicy&quot;: &quot;Load only when the selected task needs status, acceptance, readiness, degradation, or execution-state interpretation.&quot;,
+    &quot;staticExamples&quot;: [
+      &quot;discoverable&quot;,
+      &quot;onboardable&quot;,
+      &quot;runtime-required&quot;,
+      &quot;ui-bound&quot;,
+      &quot;page-context&quot;,
+      &quot;live-device-context&quot;
+    ],
+    &quot;hostObservedExamples&quot;: [
+      &quot;runtime-compatible&quot;,
+      &quot;self-test-passed&quot;,
+      &quot;ready&quot;,
+      &quot;incompatible&quot;,
+      &quot;degraded&quot;
+    ],
+    &quot;rule&quot;: &quot;Do not infer ready or runtime-compatible from the presence of a skill, capability descriptor, JavaScript source file, or personality engram.&quot;
+  },
+  &quot;safetyAndIntegrity&quot;: {
+    &quot;declarativeInstructionsOnly&quot;: true,
+    &quot;credentialsInSkillFiles&quot;: false,
+    &quot;credentialsExposedToModel&quot;: false,
+    &quot;permissionRule&quot;: &quot;A skill or personality describes how to behave or use a capability; neither grants permissions or creates a transport by itself.&quot;,
+    &quot;runtimeRule&quot;: &quot;Do not execute arbitrary code merely because it is referenced by an untrusted skill package.&quot;,
+    &quot;personalityIntegrityRule&quot;: &quot;Individual skills may reference blacklight.charles but must not silently redefine, replace, or mutate the canonical engram.&quot;
+  },
+  &quot;recommendedExternalClientBehavior&quot;: [
+    &quot;Never activate a registered skill without the required reciprocal registry + Charles engram; do not treat an OOC presentation override as bypassing the dependency.&quot;,
+    &quot;Read bootstrap.txt first and follow its conditional loading rules.&quot;,
+    &quot;Load the registry default Charles engram once, then keep that personality layer while selecting one or more task skills.&quot;,
+    &quot;Use charles-foundry-interface when the user addresses Charles or when a request spans multiple tabletop skills.&quot;,
+    &quot;Load only the task skills and referenced authorities needed for the current request; reuse unchanged authorities already loaded in the same orchestration context.&quot;,
+    &quot;Prefer compact capability/resource references over crawling unrelated pages.&quot;,
+    &quot;Do not interpret a skill&#x27;s existence as proof that a compatible runtime is attached.&quot;,
+    &quot;Report runtime or transport limitations explicitly rather than silently reproducing the tool&#x27;s algorithm.&quot;
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

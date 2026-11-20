@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for spatial.module-map.generate">
+<meta name="hb-projection-sha256" content="255d004d5fc15b9e49e666325d7739fed4ca35c23932fe16bc6f59dddce90be2">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/spatial-module-map-generate.html">
+<title>Operation contract: spatial.module-map.generate — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: spatial.module-map.generate</h1>
+<p>Canonical contract slice for spatial.module-map.generate</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>255d004d5fc15b9e49e666325d7739fed4ca35c23932fe16bc6f59dddce90be2</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="255d004d5fc15b9e49e666325d7739fed4ca35c23932fe16bc6f59dddce90be2">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;spatial.module-map.generate&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;single-object&quot;,
+    &quot;operation&quot;: &quot;generate&quot;,
+    &quot;validatedAgainst&quot;: {
+      &quot;date&quot;: &quot;2026-09-08&quot;,
+      &quot;sources&quot;: {
+        &quot;module-map-generator.js&quot;: &quot;7946756583c16b531bca6ecd948e0cc66f73d7ac&quot;,
+        &quot;semantic-spatial-engine.js&quot;: &quot;a21aad5405120063e53cd54cbad2790ac33a2cb5&quot;,
+        &quot;semantic-content-populator.js&quot;: &quot;d21050da045fc1f7ccc9cda534e1c3786e43ef89&quot;
+      }
+    },
+    &quot;arguments&quot;: [
+      {
+        &quot;name&quot;: &quot;input&quot;,
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: false,
+        &quot;description&quot;: &quot;Semantic site generation request. Omission generates the canonical generic site with dynamic default seed/module profile behavior.&quot;,
+        &quot;fields&quot;: {
+          &quot;seed&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Deterministic generation seed. When omitted, the module generator derives module-map:&lt;normalized archetype&gt; for topology/site-profile generation.&quot;
+          },
+          &quot;locationArchetype&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;generic&quot;,
+            &quot;enum&quot;: [
+              &quot;generic&quot;,
+              &quot;mansion&quot;,
+              &quot;tomb&quot;,
+              &quot;sewer&quot;,
+              &quot;fortress&quot;,
+              &quot;school&quot;,
+              &quot;arcane_university&quot;,
+              &quot;guildhall&quot;,
+              &quot;temple&quot;,
+              &quot;warehouse&quot;,
+              &quot;laboratory&quot;,
+              &quot;bunkhouse_compound&quot;,
+              &quot;prison&quot;,
+              &quot;hospital&quot;,
+              &quot;mine&quot;,
+              &quot;industrial_facility&quot;,
+              &quot;hideout&quot;,
+              &quot;civic_building&quot;,
+              &quot;manor&quot;
+            ],
+            &quot;description&quot;: &quot;Canonical site program. Unknown values normalize to generic; documented aliases are accepted by the runtime.&quot;
+          },
+          &quot;archetype&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for locationArchetype.&quot;
+          },
+          &quot;locationType&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for locationArchetype.&quot;
+          },
+          &quot;decks&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;&gt;=1&quot;,
+            &quot;description&quot;: &quot;Override the archetype/layered deck count.&quot;
+          },
+          &quot;width&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;grid cells&quot;,
+            &quot;description&quot;: &quot;Requested topology grid width. Baseline is 72 before semantic capacity expansion; layout.gridWidth, when supplied, has final precedence over this top-level value.&quot;
+          },
+          &quot;height&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;grid cells&quot;,
+            &quot;description&quot;: &quot;Requested topology grid height. Baseline is 56 before semantic capacity expansion; layout.gridHeight, when supplied, has final precedence over this top-level value.&quot;
+          },
+          &quot;deck&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0,
+            &quot;range&quot;: &quot;&gt;=0&quot;,
+            &quot;description&quot;: &quot;Deck rendered into the returned editor cell map; full multi-deck layout remains in spatialLayout.&quot;
+          },
+          &quot;roles&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Explicit semantic room-role program. When non-empty it replaces archetype default roles before topology generation.&quot;,
+            &quot;itemFields&quot;: {
+              &quot;id&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;role&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;Semantic role; type is an alias used by the spatial engine.&quot;
+              },
+              &quot;type&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;Alias for role.&quot;
+              },
+              &quot;label&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;count&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 1,
+                &quot;range&quot;: &quot;&gt;=1&quot;
+              },
+              &quot;deck&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;range&quot;: &quot;&gt;=0&quot;
+              },
+              &quot;width&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;height&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;minWidth&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;maxWidth&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;minHeight&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;maxHeight&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;protected&quot;: {
+                &quot;type&quot;: &quot;boolean&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: true
+              },
+              &quot;tags&quot;: {
+                &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;pressureZone&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;metadata&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: false
+              }
+            }
+          },
+          &quot;adjacency&quot;: {
+            &quot;type&quot;: &quot;array&lt;[string,string]|object&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Semantic adjacency constraints. Two-item arrays mean required a/b links; object constraints may use a/b or from/to plus optional id, kind, and required=false.&quot;
+          },
+          &quot;applySiteLayersToCustomRoles&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: false,
+            &quot;description&quot;: &quot;Custom-role policy switch. false keeps custom roles/adjacency and applies site layers as context only; true permits full semantic site-layer mutation of the custom program.&quot;
+          },
+          &quot;semanticMutationEnabled&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: true,
+            &quot;description&quot;: &quot;For built-in archetype programs, false disables layered semantic role mutations while retaining resolved site context. Custom-role programs use applySiteLayersToCustomRoles as the authoritative mutation switch.&quot;
+          },
+          &quot;siteScale&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Semantic site scale. Alias pair with scale; values come from the canonical site option catalog.&quot;
+          },
+          &quot;scale&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for siteScale.&quot;
+          },
+          &quot;originCulture&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Original construction/cultural influence from the canonical site option catalog.&quot;
+          },
+          &quot;culturalInfluence&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for originCulture.&quot;
+          },
+          &quot;controller&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Current site controller/occupant authority from the canonical site option catalog.&quot;
+          },
+          &quot;currentController&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for controller; also used as a faction fallback for content population.&quot;
+          },
+          &quot;occupancyState&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Current occupancy state from the canonical site option catalog.&quot;
+          },
+          &quot;biome&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Biome from the canonical site option catalog.&quot;
+          },
+          &quot;climate&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Climate from the canonical site option catalog.&quot;
+          },
+          &quot;season&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Season from the canonical site option catalog.&quot;
+          },
+          &quot;weather&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Weather from the canonical site option catalog.&quot;
+          },
+          &quot;ecology&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Ecology from the canonical site option catalog.&quot;
+          },
+          &quot;wealth&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Wealth/resource condition from the canonical site option catalog.&quot;
+          },
+          &quot;security&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Security posture from the canonical site option catalog.&quot;
+          },
+          &quot;age&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Site age from the canonical site option catalog.&quot;
+          },
+          &quot;condition&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Structural/site condition from the canonical site option catalog.&quot;
+          },
+          &quot;magicTech&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Magic/technology profile from the canonical site option catalog.&quot;
+          },
+          &quot;lighting&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Lighting condition from the canonical site option catalog.&quot;
+          },
+          &quot;waterState&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Water/moisture condition from the canonical site option catalog.&quot;
+          },
+          &quot;verticality&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Vertical organization from the canonical site option catalog.&quot;
+          },
+          &quot;secretDensity&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Secret-space density from the canonical site option catalog.&quot;
+          },
+          &quot;traffic&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Traffic/activity level from the canonical site option catalog.&quot;
+          },
+          &quot;socialMode&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Social-use mode from the canonical site option catalog.&quot;
+          },
+          &quot;resourceProfile&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Dominant site resource profile from the canonical site option catalog.&quot;
+          },
+          &quot;maintenance&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Maintenance state from the canonical site option catalog.&quot;
+          },
+          &quot;contamination&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Contamination state from the canonical site option catalog.&quot;
+          },
+          &quot;defenseDoctrine&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Defense doctrine from the canonical site option catalog.&quot;
+          },
+          &quot;narrativeTone&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Narrative/social tone from the canonical site option catalog.&quot;
+          },
+          &quot;creatureFamilies&quot;: {
+            &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Explicit creature-family set. Values come from the canonical site option catalog.&quot;
+          },
+          &quot;hazardFamilies&quot;: {
+            &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Explicit hazard-family set. Values come from the canonical site option catalog.&quot;
+          },
+          &quot;materials&quot;: {
+            &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Explicit material palette. Values come from the canonical site option catalog.&quot;
+          },
+          &quot;creatureDensity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..10&quot;,
+            &quot;description&quot;: &quot;Creature-population intensity; omitted values are deterministically resolved from the site-profile seed.&quot;
+          },
+          &quot;hazardIntensity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..10&quot;,
+            &quot;description&quot;: &quot;Site-profile hazard intensity; omitted values are deterministically resolved from the site-profile seed and also inform content danger when dangerLevel is omitted.&quot;
+          },
+          &quot;treasureDensity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..10&quot;,
+            &quot;description&quot;: &quot;Treasure/resource discovery density; omitted values are deterministically resolved from the site-profile seed.&quot;
+          },
+          &quot;socialDensity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..10&quot;,
+            &quot;description&quot;: &quot;Social encounter/activity density; omitted values are deterministically resolved from the site-profile seed.&quot;
+          },
+          &quot;preferences&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Axis-keyed site-profile preferences. Each axis preference may contain include, exclude, and preferred arrays; preferred values are weighted rather than mandatory.&quot;
+          },
+          &quot;sitePreferences&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for preferences.&quot;
+          },
+          &quot;explicit&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Advanced axis-keyed explicit override object consumed by the canonical site-profile resolver.&quot;
+          },
+          &quot;layout&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Shared semantic spatial-engine placement overrides. gridWidth/gridHeight override top-level width/height when both are supplied.&quot;,
+            &quot;fields&quot;: {
+              &quot;gridWidth&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;units&quot;: &quot;grid cells&quot;
+              },
+              &quot;gridHeight&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;units&quot;: &quot;grid cells&quot;
+              },
+              &quot;margin&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 2
+              },
+              &quot;roomGap&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 2
+              },
+              &quot;maxPlacementAttempts&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 220
+              },
+              &quot;minRoomWidth&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 5
+              },
+              &quot;maxRoomWidth&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 11
+              },
+              &quot;minRoomHeight&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 5
+              },
+              &quot;maxRoomHeight&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 10
+              },
+              &quot;pruneDeadEnds&quot;: {
+                &quot;type&quot;: &quot;boolean&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: true,
+                &quot;description&quot;: &quot;Layout-level pruning gate; either top-level or layout-level false disables pruning.&quot;
+              }
+            }
+          },
+          &quot;extraEdgeChance&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..1 recommended&quot;,
+            &quot;description&quot;: &quot;Additional same-deck topology edge probability. When omitted, the layered site-profile value is used; its baseline is 0.18 and semantic layers may adjust it.&quot;
+          },
+          &quot;pruneDeadEnds&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: true,
+            &quot;description&quot;: &quot;Dead-end pruning is enabled unless explicitly false. layout.pruneDeadEnds=false also disables pruning.&quot;
+          },
+          &quot;strict&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: true,
+            &quot;description&quot;: &quot;Strict spatial validation is enabled unless explicitly false. Validation failure throws before a result is returned.&quot;
+          },
+          &quot;contentSeed&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Optional independent deterministic seed for semantic content population. When omitted, the topology seed is reused when present.&quot;
+          },
+          &quot;dangerLevel&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..10 recommended&quot;,
+            &quot;description&quot;: &quot;Content-population danger context; hazardIntensity/site context is used when omitted.&quot;
+          },
+          &quot;faction&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Faction context for populated content. Falls back through currentController/controller/site profile.&quot;
+          },
+          &quot;adventurePurpose&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;exploration&quot;,
+            &quot;description&quot;: &quot;Adventure/scene purpose used by content population and semantic objectives.&quot;
+          },
+          &quot;damageState&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Damage/access condition string used by content population. The canonical content layer string-normalizes this value; structured damage objects are not part of this public contract.&quot;
+          },
+          &quot;rulesTarget&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;open_d20&quot;,
+            &quot;enum&quot;: [
+              &quot;open_d20&quot;,
+              &quot;world_of_darkness&quot;,
+              &quot;blacklight_continuum&quot;,
+              &quot;kaysender&quot;
+            ],
+            &quot;description&quot;: &quot;Canonical compatibility target for populated content. Known human-readable aliases are normalized by the content authority; unknown values fall back to open_d20.&quot;
+          },
+          &quot;compatibilityTarget&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias/fallback for rulesTarget.&quot;
+          },
+          &quot;system&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias/fallback for rulesTarget.&quot;
+          },
+          &quot;title&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;Procedural semantic module map&quot;,
+            &quot;description&quot;: &quot;Returned editor-map title.&quot;
+          }
+        }
+      }
+    ],
+    &quot;returns&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;description&quot;: &quot;Module-map editor record containing schemaVersion/tool/generator, width/height/tileSize/cells, seed/deck/deckCount, full spatialLayout with validation, semanticProgram, resolved siteProfile, populated content, compatibility, provenance, title, and notes.&quot;
+    },
+    &quot;example&quot;: {
+      &quot;seed&quot;: &quot;estate-17&quot;,
+      &quot;locationArchetype&quot;: &quot;mansion&quot;,
+      &quot;originCulture&quot;: &quot;human&quot;,
+      &quot;controller&quot;: &quot;noble-house&quot;,
+      &quot;occupancyState&quot;: &quot;active&quot;,
+      &quot;dangerLevel&quot;: 5,
+      &quot;adventurePurpose&quot;: &quot;investigation&quot;,
+      &quot;rulesTarget&quot;: &quot;open_d20&quot;,
+      &quot;strict&quot;: true
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

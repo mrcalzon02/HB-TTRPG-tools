@@ -1,0 +1,3221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Exact allowed operation signatures and constraints">
+<meta name="hb-projection-sha256" content="4657ebe3eb32b6b7fdcd0977dc19ca44e0607e101f306ee130925803b5d6dbe1">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts.html">
+<title>Operation contracts — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contracts</h1>
+<p>Exact allowed operation signatures and constraints</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>4657ebe3eb32b6b7fdcd0977dc19ca44e0607e101f306ee130925803b5d6dbe1</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="4657ebe3eb32b6b7fdcd0977dc19ca44e0607e101f306ee130925803b5d6dbe1">{
+  &quot;schemaVersion&quot;: &quot;1.0.0&quot;,
+  &quot;generatedAgainst&quot;: &quot;2026-08-21&quot;,
+  &quot;purpose&quot;: &quot;Machine-readable operational argument documentation for HB Foundry capabilities. These contracts describe the canonical existing functions; they do not reimplement them.&quot;,
+  &quot;convention&quot;: {
+    &quot;singleObject&quot;: &quot;For global-method capabilities the facade passes the documented input object as the single function argument.&quot;,
+    &quot;dispatcher&quot;: &quot;For global-dispatch capabilities call HBFoundryAPI.invoke(capabilityId, {operation, args:[...]}); args are positional in the exact documented order.&quot;,
+    &quot;argumentFields&quot;: [
+      &quot;name&quot;,
+      &quot;type&quot;,
+      &quot;required&quot;,
+      &quot;default&quot;,
+      &quot;units&quot;,
+      &quot;enum&quot;,
+      &quot;range&quot;,
+      &quot;description&quot;,
+      &quot;fields&quot;
+    ],
+    &quot;unknownFields&quot;: &quot;Object operations may accept additional fields used by the canonical engine. Documented fields are the supported public integration surface; adapters should not invent undocumented values.&quot;,
+    &quot;returns&quot;: &quot;Return descriptions identify the canonical output class and important fields, not a replacement implementation schema.&quot;
+  },
+  &quot;capabilities&quot;: {
+    &quot;spatial.module-map.generate&quot;: {
+      &quot;callStyle&quot;: &quot;single-object&quot;,
+      &quot;operation&quot;: &quot;generate&quot;,
+      &quot;validatedAgainst&quot;: {
+        &quot;date&quot;: &quot;2026-09-08&quot;,
+        &quot;sources&quot;: {
+          &quot;module-map-generator.js&quot;: &quot;7946756583c16b531bca6ecd948e0cc66f73d7ac&quot;,
+          &quot;semantic-spatial-engine.js&quot;: &quot;a21aad5405120063e53cd54cbad2790ac33a2cb5&quot;,
+          &quot;semantic-content-populator.js&quot;: &quot;d21050da045fc1f7ccc9cda534e1c3786e43ef89&quot;
+        }
+      },
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;input&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;description&quot;: &quot;Semantic site generation request. Omission generates the canonical generic site with dynamic default seed/module profile behavior.&quot;,
+          &quot;fields&quot;: {
+            &quot;seed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Deterministic generation seed. When omitted, the module generator derives module-map:&lt;normalized archetype&gt; for topology/site-profile generation.&quot;
+            },
+            &quot;locationArchetype&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;generic&quot;,
+              &quot;enum&quot;: [
+                &quot;generic&quot;,
+                &quot;mansion&quot;,
+                &quot;tomb&quot;,
+                &quot;sewer&quot;,
+                &quot;fortress&quot;,
+                &quot;school&quot;,
+                &quot;arcane_university&quot;,
+                &quot;guildhall&quot;,
+                &quot;temple&quot;,
+                &quot;warehouse&quot;,
+                &quot;laboratory&quot;,
+                &quot;bunkhouse_compound&quot;,
+                &quot;prison&quot;,
+                &quot;hospital&quot;,
+                &quot;mine&quot;,
+                &quot;industrial_facility&quot;,
+                &quot;hideout&quot;,
+                &quot;civic_building&quot;,
+                &quot;manor&quot;
+              ],
+              &quot;description&quot;: &quot;Canonical site program. Unknown values normalize to generic; documented aliases are accepted by the runtime.&quot;
+            },
+            &quot;archetype&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for locationArchetype.&quot;
+            },
+            &quot;locationType&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for locationArchetype.&quot;
+            },
+            &quot;decks&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;&gt;=1&quot;,
+              &quot;description&quot;: &quot;Override the archetype/layered deck count.&quot;
+            },
+            &quot;width&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Requested topology grid width. Baseline is 72 before semantic capacity expansion; layout.gridWidth, when supplied, has final precedence over this top-level value.&quot;
+            },
+            &quot;height&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Requested topology grid height. Baseline is 56 before semantic capacity expansion; layout.gridHeight, when supplied, has final precedence over this top-level value.&quot;
+            },
+            &quot;deck&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0,
+              &quot;range&quot;: &quot;&gt;=0&quot;,
+              &quot;description&quot;: &quot;Deck rendered into the returned editor cell map; full multi-deck layout remains in spatialLayout.&quot;
+            },
+            &quot;roles&quot;: {
+              &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Explicit semantic room-role program. When non-empty it replaces archetype default roles before topology generation.&quot;,
+              &quot;itemFields&quot;: {
+                &quot;id&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;role&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Semantic role; type is an alias used by the spatial engine.&quot;
+                },
+                &quot;type&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Alias for role.&quot;
+                },
+                &quot;label&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;count&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 1,
+                  &quot;range&quot;: &quot;&gt;=1&quot;
+                },
+                &quot;deck&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;range&quot;: &quot;&gt;=0&quot;
+                },
+                &quot;width&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;height&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;minWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;maxWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;minHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;maxHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;protected&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: true
+                },
+                &quot;tags&quot;: {
+                  &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;pressureZone&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;metadata&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            },
+            &quot;adjacency&quot;: {
+              &quot;type&quot;: &quot;array&lt;[string,string]|object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Semantic adjacency constraints. Two-item arrays mean required a/b links; object constraints may use a/b or from/to plus optional id, kind, and required=false.&quot;
+            },
+            &quot;applySiteLayersToCustomRoles&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: false,
+              &quot;description&quot;: &quot;Custom-role policy switch. false keeps custom roles/adjacency and applies site layers as context only; true permits full semantic site-layer mutation of the custom program.&quot;
+            },
+            &quot;semanticMutationEnabled&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;For built-in archetype programs, false disables layered semantic role mutations while retaining resolved site context. Custom-role programs use applySiteLayersToCustomRoles as the authoritative mutation switch.&quot;
+            },
+            &quot;siteScale&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Semantic site scale. Alias pair with scale; values come from the canonical site option catalog.&quot;
+            },
+            &quot;scale&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for siteScale.&quot;
+            },
+            &quot;originCulture&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Original construction/cultural influence from the canonical site option catalog.&quot;
+            },
+            &quot;culturalInfluence&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for originCulture.&quot;
+            },
+            &quot;controller&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Current site controller/occupant authority from the canonical site option catalog.&quot;
+            },
+            &quot;currentController&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for controller; also used as a faction fallback for content population.&quot;
+            },
+            &quot;occupancyState&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Current occupancy state from the canonical site option catalog.&quot;
+            },
+            &quot;biome&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Biome from the canonical site option catalog.&quot;
+            },
+            &quot;climate&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Climate from the canonical site option catalog.&quot;
+            },
+            &quot;season&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Season from the canonical site option catalog.&quot;
+            },
+            &quot;weather&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Weather from the canonical site option catalog.&quot;
+            },
+            &quot;ecology&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Ecology from the canonical site option catalog.&quot;
+            },
+            &quot;wealth&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Wealth/resource condition from the canonical site option catalog.&quot;
+            },
+            &quot;security&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Security posture from the canonical site option catalog.&quot;
+            },
+            &quot;age&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Site age from the canonical site option catalog.&quot;
+            },
+            &quot;condition&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Structural/site condition from the canonical site option catalog.&quot;
+            },
+            &quot;magicTech&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Magic/technology profile from the canonical site option catalog.&quot;
+            },
+            &quot;lighting&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Lighting condition from the canonical site option catalog.&quot;
+            },
+            &quot;waterState&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Water/moisture condition from the canonical site option catalog.&quot;
+            },
+            &quot;verticality&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Vertical organization from the canonical site option catalog.&quot;
+            },
+            &quot;secretDensity&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Secret-space density from the canonical site option catalog.&quot;
+            },
+            &quot;traffic&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Traffic/activity level from the canonical site option catalog.&quot;
+            },
+            &quot;socialMode&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Social-use mode from the canonical site option catalog.&quot;
+            },
+            &quot;resourceProfile&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Dominant site resource profile from the canonical site option catalog.&quot;
+            },
+            &quot;maintenance&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Maintenance state from the canonical site option catalog.&quot;
+            },
+            &quot;contamination&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Contamination state from the canonical site option catalog.&quot;
+            },
+            &quot;defenseDoctrine&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Defense doctrine from the canonical site option catalog.&quot;
+            },
+            &quot;narrativeTone&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Narrative/social tone from the canonical site option catalog.&quot;
+            },
+            &quot;creatureFamilies&quot;: {
+              &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Explicit creature-family set. Values come from the canonical site option catalog.&quot;
+            },
+            &quot;hazardFamilies&quot;: {
+              &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Explicit hazard-family set. Values come from the canonical site option catalog.&quot;
+            },
+            &quot;materials&quot;: {
+              &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Explicit material palette. Values come from the canonical site option catalog.&quot;
+            },
+            &quot;creatureDensity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10&quot;,
+              &quot;description&quot;: &quot;Creature-population intensity; omitted values are deterministically resolved from the site-profile seed.&quot;
+            },
+            &quot;hazardIntensity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10&quot;,
+              &quot;description&quot;: &quot;Site-profile hazard intensity; omitted values are deterministically resolved from the site-profile seed and also inform content danger when dangerLevel is omitted.&quot;
+            },
+            &quot;treasureDensity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10&quot;,
+              &quot;description&quot;: &quot;Treasure/resource discovery density; omitted values are deterministically resolved from the site-profile seed.&quot;
+            },
+            &quot;socialDensity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10&quot;,
+              &quot;description&quot;: &quot;Social encounter/activity density; omitted values are deterministically resolved from the site-profile seed.&quot;
+            },
+            &quot;preferences&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Axis-keyed site-profile preferences. Each axis preference may contain include, exclude, and preferred arrays; preferred values are weighted rather than mandatory.&quot;
+            },
+            &quot;sitePreferences&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for preferences.&quot;
+            },
+            &quot;explicit&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Advanced axis-keyed explicit override object consumed by the canonical site-profile resolver.&quot;
+            },
+            &quot;layout&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Shared semantic spatial-engine placement overrides. gridWidth/gridHeight override top-level width/height when both are supplied.&quot;,
+              &quot;fields&quot;: {
+                &quot;gridWidth&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;units&quot;: &quot;grid cells&quot;
+                },
+                &quot;gridHeight&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;units&quot;: &quot;grid cells&quot;
+                },
+                &quot;margin&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 2
+                },
+                &quot;roomGap&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 2
+                },
+                &quot;maxPlacementAttempts&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 220
+                },
+                &quot;minRoomWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 5
+                },
+                &quot;maxRoomWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 11
+                },
+                &quot;minRoomHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 5
+                },
+                &quot;maxRoomHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 10
+                },
+                &quot;pruneDeadEnds&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: true,
+                  &quot;description&quot;: &quot;Layout-level pruning gate; either top-level or layout-level false disables pruning.&quot;
+                }
+              }
+            },
+            &quot;extraEdgeChance&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..1 recommended&quot;,
+              &quot;description&quot;: &quot;Additional same-deck topology edge probability. When omitted, the layered site-profile value is used; its baseline is 0.18 and semantic layers may adjust it.&quot;
+            },
+            &quot;pruneDeadEnds&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Dead-end pruning is enabled unless explicitly false. layout.pruneDeadEnds=false also disables pruning.&quot;
+            },
+            &quot;strict&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Strict spatial validation is enabled unless explicitly false. Validation failure throws before a result is returned.&quot;
+            },
+            &quot;contentSeed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Optional independent deterministic seed for semantic content population. When omitted, the topology seed is reused when present.&quot;
+            },
+            &quot;dangerLevel&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10 recommended&quot;,
+              &quot;description&quot;: &quot;Content-population danger context; hazardIntensity/site context is used when omitted.&quot;
+            },
+            &quot;faction&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Faction context for populated content. Falls back through currentController/controller/site profile.&quot;
+            },
+            &quot;adventurePurpose&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;exploration&quot;,
+              &quot;description&quot;: &quot;Adventure/scene purpose used by content population and semantic objectives.&quot;
+            },
+            &quot;damageState&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Damage/access condition string used by content population. The canonical content layer string-normalizes this value; structured damage objects are not part of this public contract.&quot;
+            },
+            &quot;rulesTarget&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;open_d20&quot;,
+              &quot;enum&quot;: [
+                &quot;open_d20&quot;,
+                &quot;world_of_darkness&quot;,
+                &quot;blacklight_continuum&quot;,
+                &quot;kaysender&quot;
+              ],
+              &quot;description&quot;: &quot;Canonical compatibility target for populated content. Known human-readable aliases are normalized by the content authority; unknown values fall back to open_d20.&quot;
+            },
+            &quot;compatibilityTarget&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias/fallback for rulesTarget.&quot;
+            },
+            &quot;system&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias/fallback for rulesTarget.&quot;
+            },
+            &quot;title&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;Procedural semantic module map&quot;,
+              &quot;description&quot;: &quot;Returned editor-map title.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;description&quot;: &quot;Module-map editor record containing schemaVersion/tool/generator, width/height/tileSize/cells, seed/deck/deckCount, full spatialLayout with validation, semanticProgram, resolved siteProfile, populated content, compatibility, provenance, title, and notes.&quot;
+      },
+      &quot;example&quot;: {
+        &quot;seed&quot;: &quot;estate-17&quot;,
+        &quot;locationArchetype&quot;: &quot;mansion&quot;,
+        &quot;originCulture&quot;: &quot;human&quot;,
+        &quot;controller&quot;: &quot;noble-house&quot;,
+        &quot;occupancyState&quot;: &quot;active&quot;,
+        &quot;dangerLevel&quot;: 5,
+        &quot;adventurePurpose&quot;: &quot;investigation&quot;,
+        &quot;rulesTarget&quot;: &quot;open_d20&quot;,
+        &quot;strict&quot;: true
+      }
+    },
+    &quot;spatial.alien-vessel.generate&quot;: {
+      &quot;callStyle&quot;: &quot;single-object&quot;,
+      &quot;operation&quot;: &quot;generate&quot;,
+      &quot;validatedAgainst&quot;: {
+        &quot;date&quot;: &quot;2026-09-17&quot;,
+        &quot;sources&quot;: {
+          &quot;alien-vessel-generator.js&quot;: &quot;92bad88eda72e1f65ca02879ff3033bd28d8448d&quot;,
+          &quot;vessel-condition-model.js&quot;: &quot;5f2715f5358067da548e3c1a70025840c3f07073&quot;,
+          &quot;semantic-spatial-engine.js&quot;: &quot;a21aad5405120063e53cd54cbad2790ac33a2cb5&quot;,
+          &quot;vessel-hull-envelope.js&quot;: &quot;81320099033a856a7574a75c58e9ea707c285f2f&quot;
+        }
+      },
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;input&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;description&quot;: &quot;Alien vessel generation request. Intact topology is generated or imported first and retained as referenceVessel authority; lifecycle condition is applied afterward without rewriting the reference geometry.&quot;,
+          &quot;fields&quot;: {
+            &quot;seed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Deterministic vessel seed. When omitted the generator derives alien-vessel:&lt;requested profile&gt;.&quot;
+            },
+            &quot;profile&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;recon&quot;,
+              &quot;enum&quot;: [
+                &quot;recon&quot;,
+                &quot;damaged_recon&quot;,
+                &quot;science&quot;,
+                &quot;freighter&quot;,
+                &quot;command_cruiser&quot;,
+                &quot;carrier&quot;
+              ],
+              &quot;description&quot;: &quot;Semantic vessel program. damaged_recon is a compatibility alias for recon topology with DAMAGED condition when no explicit condition is supplied.&quot;
+            },
+            &quot;vesselType&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Returned vessel-type label. Defaults to the selected profile&#x27;s canonical label.&quot;
+            },
+            &quot;faction&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Faction/civilization ownership label.&quot;
+            },
+            &quot;species&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Simple species label fallback when speciesProfile is not supplied.&quot;
+            },
+            &quot;technologyBasis&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Simple technology-basis label fallback when technologyProfile is not supplied.&quot;
+            },
+            &quot;speciesProfile&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Species architectural context. May supply name/id, bodyPlan, requiredRoles, adjacency, architectureTags, layout biases, or extraEdgeChance.&quot;
+            },
+            &quot;civilizationProfile&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Civilization/organization architectural context. May supply requiredRoles, adjacency, architectureTags, layout biases, or extraEdgeChance.&quot;
+            },
+            &quot;technologyProfile&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Technology architectural context. May supply name/basis, requiredRoles, adjacency, architectureTags, and layout biases.&quot;
+            },
+            &quot;sourceLayout&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Existing HBSemanticSpatialEngine-compatible layout to preserve as intact reference geometry instead of generating new topology.&quot;
+            },
+            &quot;sourceHull&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Existing hull envelope paired with sourceLayout. When omitted the canonical hull adapter wraps the imported reference layout.&quot;
+            },
+            &quot;conditionTemplate&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;OPERATIONAL&quot;,
+              &quot;enum&quot;: [
+                &quot;NEWLY_MANUFACTURED&quot;,
+                &quot;PARTIALLY_COMPLETED&quot;,
+                &quot;COMMISSIONING&quot;,
+                &quot;OPERATIONAL&quot;,
+                &quot;WORN_SERVICE&quot;,
+                &quot;PARTIALLY_TORN_DOWN&quot;,
+                &quot;MOTHBALLED&quot;,
+                &quot;ABANDONED&quot;,
+                &quot;PARTIALLY_SALVAGED&quot;,
+                &quot;DAMAGED&quot;,
+                &quot;CRIPPLED&quot;,
+                &quot;WRECKED&quot;,
+                &quot;DESTROYED&quot;
+              ],
+              &quot;description&quot;: &quot;Named post-generation lifecycle template aligned with Black Light EXO vessel condition vocabulary.&quot;
+            },
+            &quot;condition&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for conditionTemplate.&quot;
+            },
+            &quot;conditionAxes&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Overrides named template percentages without changing intact topology. Supported axes match the EXO condition vocabulary: constructionCompletionPercent, commissioningCompletionPercent, operationalReadinessPercent, structuralDamagePercent, systemDamagePercent, salvageRemovalPercent, decommissioningPercent, maintenanceDebtPercent, fuelLoadPercent, coolantLoadPercent, atmosphereIntegrityPercent, contaminationPercent, crewAvailabilityPercent, dataIntegrityPercent, destructionPercent.&quot;
+            },
+            &quot;destructionPercent&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..100&quot;,
+              &quot;description&quot;: &quot;Top-level override for destructionPercent.&quot;
+            },
+            &quot;salvageRemovalPercent&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..100&quot;,
+              &quot;description&quot;: &quot;Top-level override for salvageRemovalPercent.&quot;
+            },
+            &quot;contaminationPercent&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..100&quot;,
+              &quot;description&quot;: &quot;Top-level override for contaminationPercent.&quot;
+            },
+            &quot;damageSeverity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..1&quot;,
+              &quot;description&quot;: &quot;Legacy compatibility input. When positive and no named condition is supplied it selects DAMAGED and raises structural/system/destruction axes deterministically.&quot;
+            },
+            &quot;decks&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;&gt;=1&quot;,
+              &quot;description&quot;: &quot;Override deck count for generated topology. Imported sourceLayout keeps its own deckCount.&quot;
+            },
+            &quot;width&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 84,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Requested topology width before layout overrides.&quot;
+            },
+            &quot;height&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 60,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Requested topology height before layout overrides.&quot;
+            },
+            &quot;additionalRoles&quot;: {
+              &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Additional semantic compartments appended to profile/species/civilization/technology roles before topology generation.&quot;
+            },
+            &quot;adjacency&quot;: {
+              &quot;type&quot;: &quot;array&lt;[string,string]|object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Additional semantic adjacency constraints appended before topology generation.&quot;
+            },
+            &quot;layout&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Shared spatial-engine placement overrides applied after profile/species/technology/civilization layout biases.&quot;
+            },
+            &quot;extraEdgeChance&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..1 recommended&quot;,
+              &quot;description&quot;: &quot;Additional same-deck topology edge probability; explicit input has highest precedence.&quot;
+            },
+            &quot;pruneDeadEnds&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Dead-end pruning gate for generated topology.&quot;
+            },
+            &quot;strict&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Reject invalid generated/imported spatial layouts or hull envelopes unless false.&quot;
+            },
+            &quot;hullShape&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;connected-skin&quot;,
+              &quot;enum&quot;: [
+                &quot;connected-skin&quot;,
+                &quot;oval&quot;,
+                &quot;capsule&quot;,
+                &quot;rectangle&quot;,
+                &quot;square&quot;,
+                &quot;circle&quot;
+              ],
+              &quot;description&quot;: &quot;Canonical hull-envelope shape.&quot;
+            },
+            &quot;shape&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for hullShape.&quot;
+            },
+            &quot;hullTightness&quot;: {
+              &quot;type&quot;: &quot;string|number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;standard&quot;,
+              &quot;description&quot;: &quot;Canonical hull clearance selector or numeric adapter input.&quot;
+            },
+            &quot;tightness&quot;: {
+              &quot;type&quot;: &quot;string|number&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Alias for hullTightness.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;description&quot;: &quot;Alien vessel record schema 2.0.0 containing architecture context, immutable referenceVessel authority, conditioned spatialLayout, condition and conditionHistory records, salvage candidates and surviving graph, legacy damage compatibility annotations, hull, provenance, semantic summary, and combined spatial/hull/condition validation.&quot;
+      },
+      &quot;example&quot;: {
+        &quot;seed&quot;: &quot;kharvaxi-command-cruiser-01&quot;,
+        &quot;profile&quot;: &quot;command_cruiser&quot;,
+        &quot;faction&quot;: &quot;Kharvaxi&quot;,
+        &quot;speciesProfile&quot;: {
+          &quot;name&quot;: &quot;Kharvaxi&quot;,
+          &quot;bodyPlan&quot;: &quot;arachnid&quot;,
+          &quot;architectureTags&quot;: [
+            &quot;arachnid-access&quot;,
+            &quot;factional-compartmentation&quot;
+          ]
+        },
+        &quot;technologyProfile&quot;: {
+          &quot;name&quot;: &quot;quantum crystalline strand&quot;,
+          &quot;architectureTags&quot;: [
+            &quot;quantum-fiber&quot;,
+            &quot;crystal-compute&quot;
+          ]
+        },
+        &quot;conditionTemplate&quot;: &quot;WRECKED&quot;,
+        &quot;salvageRemovalPercent&quot;: 20,
+        &quot;hullShape&quot;: &quot;connected-skin&quot;,
+        &quot;strict&quot;: true
+      }
+    },
+    &quot;kaysender.airship.generate&quot;: {
+      &quot;callStyle&quot;: &quot;single-object&quot;,
+      &quot;operation&quot;: &quot;generate&quot;,
+      &quot;validatedAgainst&quot;: {
+        &quot;date&quot;: &quot;2026-09-08&quot;,
+        &quot;sources&quot;: {
+          &quot;kaysender-airship-generator.js&quot;: &quot;8ef6a7bc96fc10e05943bea3e0d93f552353972f&quot;,
+          &quot;semantic-spatial-engine.js&quot;: &quot;a21aad5405120063e53cd54cbad2790ac33a2cb5&quot;,
+          &quot;semantic-content-populator.js&quot;: &quot;d21050da045fc1f7ccc9cda534e1c3786e43ef89&quot;,
+          &quot;vessel-hull-envelope.js&quot;: &quot;81320099033a856a7574a75c58e9ea707c285f2f&quot;
+        }
+      },
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;input&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;description&quot;: &quot;Kaysender airship generation request. Vessel class and hull culture select canonical size/deck/room/hull defaults; textual mission, cargo, armament, defense, condition, legal, core, crew, and faction fields add semantic compartments and content context.&quot;,
+          &quot;fields&quot;: {
+            &quot;seed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Deterministic topology seed. When omitted the generator derives kaysender:&lt;name-or-vesselClass-or-airship&gt;:&lt;cultureKey&gt;.&quot;
+            },
+            &quot;name&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;Unnamed Skyship&quot;,
+              &quot;description&quot;: &quot;Returned vessel name and, when seed is omitted, the preferred seed-name component.&quot;
+            },
+            &quot;vesselClass&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;frigate patrol craft&quot;,
+              &quot;description&quot;: &quot;Class text selects default deck count, map size, cargo-room multiplicity, and berth baseline. dreadnought -&gt; 4 decks/108x78; galleon/cruiser/destroyer -&gt; 3/96x70; frigate/liner/salvage barge -&gt; 3/88x64; corvette/merchant sloop/pirate raider -&gt; 2/80x58; other -&gt; 2/72x52.&quot;
+            },
+            &quot;hullCulture&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;human hybrid practical hull&quot;,
+              &quot;description&quot;: &quot;Culture text normalizes to dwarven, elven, dragon_kin, gnomish, human, halfling, pirate, guild, military, or ancient. The culture adds canonical rooms/adjacency and supplies default hull shape, room-size bounds, and extra-edge probability.&quot;
+            },
+            &quot;coreType&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;human hybrid steam-arcane core&quot;,
+              &quot;description&quot;: &quot;Core text may add fuel-handling, ritual/attunement, elemental-control, calibration, quarantine, or concealed-bypass compartments.&quot;
+            },
+            &quot;purpose&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;escort and patrol&quot;,
+              &quot;description&quot;: &quot;Operational purpose influences mission/cargo specialist spaces and is the content adventure-purpose fallback when currentMission is absent.&quot;
+            },
+            &quot;currentMission&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Specific current mission used as the preferred content-population adventure purpose; it does not replace the returned purpose field.&quot;
+            },
+            &quot;crewScale&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;standard crew 12-25&quot;,
+              &quot;description&quot;: &quot;Crew text adjusts habitation berth multiplicity: 120+ -&gt; 4; 50-120/25-50/overcrowded -&gt; 3; 12-25 -&gt; 2; otherwise class baseline.&quot;
+            },
+            &quot;cargoProfile&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;mixed trade goods&quot;,
+              &quot;description&quot;: &quot;Cargo text may add cistern, passenger/evacuee, salvage-processing, contraband, medical, or ordnance specialist compartments.&quot;
+            },
+            &quot;armament&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;light cannon and swivel guns&quot;,
+              &quot;description&quot;: &quot;Unarmed text suppresses the armory. Cannon/ballista/lance/torpedo/siege/gun/boarding text additionally creates a weapons station.&quot;
+            },
+            &quot;defenseSystem&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;reinforced hull braces&quot;,
+              &quot;description&quot;: &quot;Shielded-core/bulkhead/ward/counter-boarding/armored text adds a defense-control compartment.&quot;
+            },
+            &quot;condition&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;worn but serviceable&quot;,
+              &quot;description&quot;: &quot;Condition text drives deterministic damage severity and default content danger. Severity mapping: pristine/well maintained=0; worn=.15; battle=.35; storm=.45; patched=.5; sputtering=.55; fatigue/unsafe/miraculously=.65; other=.2. Damage-state role insertion uses the damaged-condition text family.&quot;
+            },
+            &quot;legalStatus&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;licensed merchant vessel&quot;,
+              &quot;description&quot;: &quot;Forged/pirate/wanted/secret/impounded/unregistered text adds a concealed registry cache; naval/mercenary text adds an orders/security room.&quot;
+            },
+            &quot;factionAffiliation&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Preferred faction context. Non-local-merchant faction text may add a secure faction-liaison compartment; also used for content population and returned affiliation.&quot;
+            },
+            &quot;factionEntanglement&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Fallback faction context when factionAffiliation is absent.&quot;
+            },
+            &quot;decks&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;&gt;=1&quot;,
+              &quot;description&quot;: &quot;Override class-derived deck count. Culture-specific built-in roles are clamped to the class deck count before this override; custom additional role deck values are not automatically rewritten.&quot;
+            },
+            &quot;width&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Override class-derived topology width before layout overrides. layout.gridWidth has final precedence.&quot;
+            },
+            &quot;height&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;grid cells&quot;,
+              &quot;description&quot;: &quot;Override class-derived topology height before layout overrides. layout.gridHeight has final precedence.&quot;
+            },
+            &quot;additionalRoles&quot;: {
+              &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Additional semantic compartments appended after class/culture/program roles.&quot;,
+              &quot;itemFields&quot;: {
+                &quot;id&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;role&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Semantic role; type is an alias used by the spatial engine.&quot;
+                },
+                &quot;type&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;label&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;count&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 1,
+                  &quot;range&quot;: &quot;&gt;=1&quot;
+                },
+                &quot;deck&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;range&quot;: &quot;&gt;=0&quot;
+                },
+                &quot;width&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;height&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;minWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;maxWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;minHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;maxHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;protected&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: true
+                },
+                &quot;tags&quot;: {
+                  &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;pressureZone&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;metadata&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            },
+            &quot;adjacency&quot;: {
+              &quot;type&quot;: &quot;array&lt;[string,string]|object&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Additional semantic adjacency constraints appended after class/culture/program adjacency. Two-item arrays mean required links; engine object constraints may use a/b or from/to.&quot;
+            },
+            &quot;layout&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Shared spatial-engine placement overrides applied after class/culture defaults and therefore given final precedence.&quot;,
+              &quot;fields&quot;: {
+                &quot;gridWidth&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;units&quot;: &quot;grid cells&quot;
+                },
+                &quot;gridHeight&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;units&quot;: &quot;grid cells&quot;
+                },
+                &quot;margin&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 2
+                },
+                &quot;roomGap&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 2
+                },
+                &quot;maxPlacementAttempts&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 220
+                },
+                &quot;minRoomWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Culture-derived default: dwarven 6, elven 7, dragon_kin 6, gnomish 5, human 6, halfling 7, pirate 5, guild 6, military 5, ancient 6.&quot;
+                },
+                &quot;maxRoomWidth&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Culture-derived default: dwarven 12, elven 13, dragon_kin 13, gnomish 11, human 12, halfling 14, pirate 12, guild 12, military 11, ancient 14.&quot;
+                },
+                &quot;minRoomHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Culture-derived default: dwarven 5, elven 6, dragon_kin 5, gnomish 5, human 5, halfling 6, pirate 5, guild 5, military 5, ancient 5.&quot;
+                },
+                &quot;maxRoomHeight&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Culture-derived default: dwarven 10, elven 11, dragon_kin 10, gnomish 9, human 10, halfling 11, pirate 10, guild 10, military 9, ancient 11.&quot;
+                },
+                &quot;pruneDeadEnds&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: true
+                }
+              }
+            },
+            &quot;extraEdgeChance&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..1 recommended&quot;,
+              &quot;description&quot;: &quot;Override culture-derived additional edge probability. Culture defaults: dwarven .08, elven .22, dragon_kin .10, gnomish .27, human .16, halfling .24, pirate .25, guild .14, military .06, ancient .20.&quot;
+            },
+            &quot;pruneDeadEnds&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Dead-end pruning is enabled unless explicitly false; layout.pruneDeadEnds=false also disables pruning.&quot;
+            },
+            &quot;strict&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: true,
+              &quot;description&quot;: &quot;Passed to the shared spatial engine; spatial validation is strict unless explicitly false. The Kaysender adapter reports hull validation in the returned validation object rather than adding Alien Vessel&#x27;s separate strict hull throw.&quot;
+            },
+            &quot;hullShape&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Override culture-derived hull shape. Culture defaults: dwarven rectangle, elven oval, dragon_kin capsule, gnomish connected-skin, human capsule, halfling oval, pirate connected-skin, guild rectangle, military rectangle, ancient connected-skin. Hull adapter aliases normalize as documented by its authority.&quot;
+            },
+            &quot;hullTightness&quot;: {
+              &quot;type&quot;: &quot;string|number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;standard&quot;,
+              &quot;description&quot;: &quot;Hull clearance selector passed to the canonical hull adapter. This adapter uses hullTightness || standard, so falsy values including numeric 0 fall back to standard. Named and numeric normalization otherwise follows vessel-hull-envelope.js.&quot;
+            },
+            &quot;contentSeed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Independent content-population seed. When omitted, the original input seed is passed; if both are absent, the content authority uses its own deterministic default rather than the derived topology seed.&quot;
+            },
+            &quot;dangerLevel&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;range&quot;: &quot;0..10 recommended&quot;,
+              &quot;description&quot;: &quot;Content-population danger override. When omitted, canonical condition severity derives max(3,min(9,4+round(severity*6))); worn default resolves to 5.&quot;
+            },
+            &quot;profileType&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;airship-profile&quot;,
+              &quot;description&quot;: &quot;Provenance label stored as sourceProfileType.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;description&quot;: &quot;Kaysender airship record containing schemaVersion/generator/version, final deterministic seed, identity/profile fields, normalized cultureKey, deckCount, semanticSummary, full spatialLayout with attached Kaysender semanticProgram, canonical hull envelope, deterministic condition-driven damage annotations, populated Kaysender content, compatibility, provenance including adapter/sourceProfileType, and combined spatial/hull validation.&quot;
+      },
+      &quot;example&quot;: {
+        &quot;seed&quot;: &quot;relay-runner-7&quot;,
+        &quot;name&quot;: &quot;Relay Runner Seven&quot;,
+        &quot;vesselClass&quot;: &quot;frigate patrol craft&quot;,
+        &quot;hullCulture&quot;: &quot;dwarven&quot;,
+        &quot;coreType&quot;: &quot;dwarven combustion core&quot;,
+        &quot;purpose&quot;: &quot;relay escort&quot;,
+        &quot;currentMission&quot;: &quot;escort the northern relay convoy&quot;,
+        &quot;condition&quot;: &quot;battle-scarred&quot;,
+        &quot;legalStatus&quot;: &quot;licensed merchant vessel&quot;,
+        &quot;factionAffiliation&quot;: &quot;Relay Guild&quot;,
+        &quot;strict&quot;: true
+      }
+    },
+    &quot;signals.configuration.analyze&quot;: {
+      &quot;callStyle&quot;: &quot;single-object&quot;,
+      &quot;operation&quot;: &quot;analyzeConfiguration&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;config&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: true,
+          &quot;fields&quot;: {
+            &quot;sourceHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            &quot;distanceM&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;m&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            &quot;txPowerDbm&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;dBm&quot;
+            },
+            &quot;txGainDb&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;dB&quot;,
+              &quot;default&quot;: 0
+            },
+            &quot;rxGainDb&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;dB&quot;,
+              &quot;default&quot;: 0
+            },
+            &quot;extraLossDb&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;dB&quot;,
+              &quot;default&quot;: 0
+            },
+            &quot;receiverCenterHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            &quot;receiverBandwidthHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            &quot;noiseFigureDb&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;dB&quot;,
+              &quot;default&quot;: 0
+            },
+            &quot;antenna&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;resistanceOhm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;ohm&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;inductanceH&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;H&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;capacitanceF&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;F&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;feedOhm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;ohm&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 50
+                },
+                &quot;q&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 8
+                },
+                &quot;resonantHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            },
+            &quot;localOscillatorHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            &quot;carrierHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            &quot;carrierAmplitude&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 1
+            },
+            &quot;sourceAmplitude&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0.1
+            },
+            &quot;coupling&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0.02,
+              &quot;range&quot;: &quot;0..1&quot;
+            },
+            &quot;nonlinearity&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0.02,
+              &quot;range&quot;: &quot;&gt;=0&quot;
+            },
+            &quot;observedHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;default&quot;: 0
+            },
+            &quot;sweepMinHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            &quot;sweepMaxHz&quot;: {
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;description&quot;: &quot;Must exceed sweepMinHz.&quot;
+            },
+            &quot;sweepPoints&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 256,
+              &quot;range&quot;: &quot;16..1024&quot;
+            },
+            &quot;environment&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;RF map environment. If omitted, canonical defaults are constructed from sourceHz/txPowerDbm.&quot;
+            },
+            &quot;experiments&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Experiment-suite settings. If omitted, canonical defaults are derived from the environment.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;description&quot;: &quot;Frozen analysis with direct reception, heterodyne products, adjacent-carrier probe, antenna sweep, inferred candidates, range scenarios, environment map, experiment suite, and source field strength.&quot;
+      }
+    },
+    &quot;signals.utilities&quot;: {
+      &quot;callStyle&quot;: &quot;dispatcher&quot;,
+      &quot;operations&quot;: {
+        &quot;wavelength&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;units&quot;: &quot;m&quot;
+          }
+        },
+        &quot;resonantFrequency&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;inductanceH&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;H&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;capacitanceF&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;F&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;units&quot;: &quot;Hz&quot;
+          }
+        },
+        &quot;seriesRlcImpedance&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;resistanceOhm&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;ohm&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;inductanceH&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;H&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;capacitanceF&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;F&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;resistance&quot;,
+              &quot;reactance&quot;,
+              &quot;magnitude&quot;,
+              &quot;phaseDeg&quot;
+            ]
+          }
+        },
+        &quot;mismatch&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;antenna&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;RLC antenna object with resistanceOhm, inductanceH, capacitanceF and optional feedOhm.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;reflectionMagnitude&quot;,
+              &quot;acceptedPowerFraction&quot;,
+              &quot;returnLossDb&quot;
+            ]
+          }
+        },
+        &quot;resonanceTransfer&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;centerHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;q&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 8
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;description&quot;: &quot;Voltage transfer fraction.&quot;
+          }
+        },
+        &quot;bandpassTuningResponse&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;centerHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;q&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 8
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;frequencyHz&quot;,
+              &quot;centerHz&quot;,
+              &quot;q&quot;,
+              &quot;voltageTransfer&quot;,
+              &quot;responseDb&quot;
+            ]
+          }
+        },
+        &quot;antennaResponse&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;antenna&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;RLC antenna with resistanceOhm, inductanceH, capacitanceF, q, feedOhm and optional resonantHz.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;resonantHz&quot;,
+              &quot;resonance&quot;,
+              &quot;mismatch&quot;,
+              &quot;voltageTransfer&quot;,
+              &quot;responseDb&quot;
+            ]
+          }
+        },
+        &quot;freeSpacePathLossDb&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;frequencyHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;distanceM&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;m&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;units&quot;: &quot;dB&quot;
+          }
+        },
+        &quot;planeWaveFieldVPerM&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;txPowerDbm&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;dBm&quot;
+            },
+            {
+              &quot;name&quot;: &quot;txGainDb&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0,
+              &quot;units&quot;: &quot;dB&quot;
+            },
+            {
+              &quot;name&quot;: &quot;distanceM&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;m&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;units&quot;: &quot;V/m&quot;
+          }
+        },
+        &quot;thermalNoiseFloorDbm&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;bandwidthHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;noiseFigureDb&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0,
+              &quot;units&quot;: &quot;dB&quot;
+            },
+            {
+              &quot;name&quot;: &quot;temperatureK&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 290,
+              &quot;units&quot;: &quot;K&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;units&quot;: &quot;dBm&quot;
+          }
+        },
+        &quot;directReception&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;frequencyHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;distanceM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;txPowerDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;txGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;rxGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;extraLossDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;antenna&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receiverCenterHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receiverBandwidthHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;noiseFigureDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;temperatureK&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;K&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 290
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;response&quot;,
+              &quot;fsplDb&quot;,
+              &quot;freeSpaceDbm&quot;,
+              &quot;receiverInputDbm&quot;,
+              &quot;noiseFloorDbm&quot;,
+              &quot;snrDb&quot;,
+              &quot;inReceiverBand&quot;
+            ]
+          }
+        },
+        &quot;heterodyneProducts&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;signalHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;localOscillatorHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;signalHz&quot;,
+              &quot;localOscillatorHz&quot;,
+              &quot;differenceHz&quot;,
+              &quot;sumHz&quot;
+            ]
+          }
+        },
+        &quot;intermodulationProducts&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;f1Hz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;f2Hz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;maximumOrder&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 3,
+              &quot;range&quot;: &quot;2..5&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Sorted unique intermodulation products with frequencyHz, order, m, n, expression.&quot;
+          }
+        },
+        &quot;adjacentCarrierProbe&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;carrierHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;sourceHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receiverCenterHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receiverBandwidthHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;coupling&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 0.02,
+                  &quot;range&quot;: &quot;0..1&quot;
+                },
+                &quot;nonlinearity&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 0.02
+                },
+                &quot;carrierAmplitude&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 1
+                },
+                &quot;sourceAmplitude&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 0.1
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;carrierHz&quot;,
+              &quot;sourceHz&quot;,
+              &quot;beatHz&quot;,
+              &quot;modulationIndex&quot;,
+              &quot;estimatedSidebandAmplitude&quot;,
+              &quot;products&quot;,
+              &quot;inBandProducts&quot;
+            ]
+          }
+        },
+        &quot;inferSourceCandidates&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;observedHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;localOscillatorHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;carrierHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Frequency candidates with mechanism and equation.&quot;
+          }
+        },
+        &quot;estimateRangeScenarios&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;frequencyHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receivedDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;txPowersDbm&quot;: {
+                  &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: [
+                    -10,
+                    0,
+                    10,
+                    20,
+                    30,
+                    40,
+                    50
+                  ]
+                },
+                &quot;txGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;rxGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;extraLossDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;fields&quot;: [
+              &quot;txPowerDbm&quot;,
+              &quot;allowedPathLossDb&quot;,
+              &quot;distanceM&quot;
+            ]
+          }
+        },
+        &quot;logarithmicSweep&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;minHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;range&quot;: &quot;&gt;0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;maxHz&quot;,
+              &quot;type&quot;: &quot;number&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;,
+              &quot;description&quot;: &quot;Must exceed minHz.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;points&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 256,
+              &quot;range&quot;: &quot;16..1024&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+            &quot;units&quot;: &quot;Hz&quot;
+          }
+        },
+        &quot;sweepAntenna&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;minHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;maxHz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;points&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 256
+                },
+                &quot;antenna&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Frequency sweep rows with responseDb, impedanceMagnitudeOhm, phaseDeg, returnLossDb.&quot;
+          }
+        },
+        &quot;environmentPoint&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;source&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true,
+                  &quot;description&quot;: &quot;x,y,z,frequencyHz,txPowerDbm and antenna orientation/type/gain context.&quot;
+                },
+                &quot;receiver&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true,
+                  &quot;description&quot;: &quot;x,y,z and optional gainDb.&quot;
+                },
+                &quot;environment&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;surfaces&quot;: {
+                  &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;reflectors&quot;: {
+                  &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Alias/fallback surface list.&quot;
+                },
+                &quot;coherence&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;range&quot;: &quot;0..1&quot;
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;powerDbm&quot;,
+              &quot;directDbm&quot;,
+              &quot;coherentDbm&quot;,
+              &quot;incoherentDbm&quot;,
+              &quot;penetrationLossDb&quot;,
+              &quot;paths&quot;,
+              &quot;surfaceInteractions&quot;
+            ]
+          }
+        },
+        &quot;buildEnvironmentMap&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;widthM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;heightM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;resolutionX&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 48,
+                  &quot;range&quot;: &quot;12..128&quot;
+                },
+                &quot;resolutionY&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Defaults to resolutionX; clamped 12..128.&quot;
+                },
+                &quot;sampleHeightM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 1.2
+                },
+                &quot;source&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;receiverGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;coherence&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;range&quot;: &quot;0..1&quot;
+                },
+                &quot;surfaces&quot;: {
+                  &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;reflectors&quot;: {
+                  &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;label&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;RF map summary with Float64Array values and geometry/statistics metadata.&quot;
+          }
+        },
+        &quot;progressiveEnvironmentMaps&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Same fields as buildEnvironmentMap plus resolutions array.&quot;,
+              &quot;fields&quot;: {
+                &quot;resolutions&quot;: {
+                  &quot;type&quot;: &quot;array&lt;integer&gt;&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: [
+                    24,
+                    48,
+                    80
+                  ]
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Environment maps at each requested resolution.&quot;
+          }
+        },
+        &quot;mapStatistics&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;map&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Canonical environment map.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;fields&quot;: {
+                &quot;thresholdDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: -90
+                },
+                &quot;gradientThresholdDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 3
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;thresholdDbm&quot;,
+              &quot;detectableAreaFraction&quot;,
+              &quot;meanNeighborGradientDb&quot;,
+              &quot;steepGradientFraction&quot;,
+              &quot;peakDbm&quot;,
+              &quot;meanDbm&quot;,
+              &quot;fadeDepthDb&quot;
+            ]
+          }
+        },
+        &quot;compareMaps&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;reference&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;candidate&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Must have same sample count as reference.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;mapStatistics threshold options.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;RMS, absolute, mean, peak, fade-depth, detectable-area, and gradient-density deltas.&quot;
+          }
+        },
+        &quot;resolutionDiagnostics&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;map&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;frequenciesHz&quot;,
+              &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+              &quot;required&quot;: true,
+              &quot;units&quot;: &quot;Hz&quot;
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;fields&quot;: {
+                &quot;snrDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;default&quot;: 20
+                },
+                &quot;coherence&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;range&quot;: &quot;0..1&quot;,
+                  &quot;default&quot;: 1
+                },
+                &quot;q&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;default&quot;: 8
+                },
+                &quot;modelFidelity&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;range&quot;: &quot;0..1&quot;,
+                  &quot;default&quot;: 0.72
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Sampling/wavelength diagnostics and effective confidence with reasons.&quot;
+          }
+        },
+        &quot;adaptiveEnvironmentSamples&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;widthM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;heightM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;source&quot;: {
+                  &quot;type&quot;: &quot;object&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;surfaces&quot;: {
+                  &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;coherence&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;range&quot;: &quot;0..1&quot;,
+                  &quot;default&quot;: 0.85
+                },
+                &quot;sampleHeightM&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;m&quot;,
+                  &quot;default&quot;: 1.2
+                },
+                &quot;receiverGainDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;required&quot;: false
+                },
+                &quot;startResolution&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;default&quot;: 12,
+                  &quot;range&quot;: &quot;4..32&quot;
+                },
+                &quot;maxResolution&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;default&quot;: 64,
+                  &quot;range&quot;: &quot;startResolution..128&quot;
+                },
+                &quot;gradientThresholdDb&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dB&quot;,
+                  &quot;default&quot;: 3
+                },
+                &quot;snrStopDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;default&quot;: -105
+                },
+                &quot;maxCells&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;default&quot;: 4096,
+                  &quot;range&quot;: &quot;startResolution^2..16384&quot;
+                },
+                &quot;frequenciesHz&quot;: {
+                  &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;Defaults to source.frequencyHz.&quot;
+                },
+                &quot;wavelengthDriven&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;default&quot;: false
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Adaptive leaf cells, refinement/sample counts, resolution limits, shortest wavelength, and surfaces.&quot;
+          }
+        },
+        &quot;wifiPreset&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;name&quot;,
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;wifi-2.4&quot;,
+              &quot;enum&quot;: [
+                &quot;wifi-2.4&quot;,
+                &quot;wifi-5&quot;,
+                &quot;wifi-6&quot;,
+                &quot;custom&quot;
+              ]
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;fields&quot;: [
+              &quot;label&quot;,
+              &quot;frequencyHz&quot;,
+              &quot;txPowerDbm&quot;
+            ]
+          }
+        },
+        &quot;interfrequencyExperiment&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;fields&quot;: {
+                &quot;f1Hz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;f2Hz&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;Hz&quot;,
+                  &quot;required&quot;: true
+                },
+                &quot;f1PowerDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;default&quot;: 20
+                },
+                &quot;f2PowerDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;default&quot;: 17
+                },
+                &quot;coupling&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;range&quot;: &quot;0..1&quot;,
+                  &quot;default&quot;: 0.05
+                },
+                &quot;nonlinearity&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;range&quot;: &quot;0..1&quot;,
+                  &quot;default&quot;: 0.03
+                },
+                &quot;maximumOrder&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;range&quot;: &quot;2..5&quot;,
+                  &quot;default&quot;: 3
+                },
+                &quot;productFloorDbm&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;units&quot;: &quot;dBm&quot;,
+                  &quot;default&quot;: -120
+                },
+                &quot;productMode&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;default&quot;: &quot;difference&quot;,
+                  &quot;enum&quot;: [
+                    &quot;difference&quot;,
+                    &quot;sum&quot;,
+                    &quot;im3-lower&quot;,
+                    &quot;im3-upper&quot;
+                  ]
+                },
+                &quot;mechanism&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;default&quot;: &quot;receiver-front-end&quot;,
+                  &quot;enum&quot;: [
+                    &quot;receiver-front-end&quot;,
+                    &quot;source-nonlinearity&quot;
+                  ]
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Intermodulation products, selected product, modeled strength, and physical interpretation.&quot;
+          }
+        },
+        &quot;buildReceiverMixingMap&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;primaryMap&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;secondaryMap&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Must match primary map geometry.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;experiment&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Result of interfrequencyExperiment.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;label&quot;,
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;Receiver mixing response&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Detector-response map; explicitly non-propagating.&quot;
+          }
+        },
+        &quot;buildPropagatingProductMap&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;environment&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;primarySource&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;experiment&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Result of interfrequencyExperiment; returns null unless selected product exists and mechanism is source-nonlinearity.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object|null&quot;,
+            &quot;description&quot;: &quot;Environment map for source-generated selected product.&quot;
+          }
+        },
+        &quot;buildExperimentSuite&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;config&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Full Signals experiment config with environment and experiments.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;baseMap&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Canonical baseline environment map.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Tuning responses, secondary carrier, interfrequency products/maps, comparisons, statistics, resolution diagnostics, and adaptive sampling.&quot;
+          }
+        },
+        &quot;experimentCatalog&quot;: {
+          &quot;arguments&quot;: [],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Canonical experiment definitions and assumptions.&quot;
+          }
+        },
+        &quot;buildExperimentDataLayout&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;config&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;analysis&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Result from analyzeConfiguration.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Experiment catalog augmented with current input/output data fields and provenance.&quot;
+          }
+        },
+        &quot;buildExperimentRunRecord&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;config&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;analysis&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;fields&quot;: {
+                &quot;timestampUtc&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;description&quot;: &quot;ISO-8601 timestamp; defaults to current time.&quot;
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Structured hb-ttrpg-signals-laboratory-run-record.&quot;
+          }
+        },
+        &quot;serializeExperimentRunRecord&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;config&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;analysis&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Same options as buildExperimentRunRecord.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;Pretty-printed JSON run record.&quot;
+          }
+        }
+      }
+    },
+    &quot;shadowrun.binary-cube&quot;: {
+      &quot;callStyle&quot;: &quot;dispatcher&quot;,
+      &quot;securityClassification&quot;: &quot;experimental-ttrpg-obfuscation-not-production-cryptography&quot;,
+      &quot;sharedTypes&quot;: {
+        &quot;rawKey&quot;: &quot;Canonical key object or JSON string in hb-ttrpg-shadowrun-binary-cube-key schema.&quot;,
+        &quot;rawPackage&quot;: &quot;Canonical encrypted package object or JSON string in hb-ttrpg-shadowrun-binary-cube-package schema.&quot;,
+        &quot;binary&quot;: &quot;String containing only 0/1 and optional whitespace.&quot;,
+        &quot;face&quot;: &quot;One of top, bottom, front, back, left, right.&quot;,
+        &quot;quarterTurns&quot;: &quot;Integer-like value normalized modulo 4.&quot;
+      },
+      &quot;operations&quot;: {
+        &quot;createKey&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;fields&quot;: {
+                &quot;gridSize&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 4,
+                  &quot;range&quot;: &quot;3..1024&quot;
+                },
+                &quot;seed&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: &quot;shadowrun-cube-key&quot;
+                },
+                &quot;inputFace&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: &quot;top&quot;,
+                  &quot;enum&quot;: [
+                    &quot;top&quot;,
+                    &quot;bottom&quot;,
+                    &quot;front&quot;,
+                    &quot;back&quot;,
+                    &quot;left&quot;,
+                    &quot;right&quot;
+                  ]
+                },
+                &quot;outputFace&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: &quot;front&quot;,
+                  &quot;description&quot;: &quot;Must be perpendicular to inputFace; same/opposite face is rejected.&quot;
+                },
+                &quot;inputQuarterTurns&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 0,
+                  &quot;description&quot;: &quot;Normalized modulo 4.&quot;
+                },
+                &quot;outputQuarterTurns&quot;: {
+                  &quot;type&quot;: &quot;integer&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 0,
+                  &quot;description&quot;: &quot;Normalized modulo 4.&quot;
+                },
+                &quot;maskDensity&quot;: {
+                  &quot;type&quot;: &quot;number&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: 1,
+                  &quot;range&quot;: &quot;0.01..1&quot;,
+                  &quot;description&quot;: &quot;Payload-cell fraction; exact deterministic mask retained in key.&quot;
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Validated canonical key with permutations, mask, keyId, SHA-256 key digest metadata, and collision-free invariant.&quot;
+          },
+          &quot;example&quot;: {
+            &quot;operation&quot;: &quot;createKey&quot;,
+            &quot;args&quot;: [
+              {
+                &quot;gridSize&quot;: 16,
+                &quot;seed&quot;: &quot;run-echo&quot;,
+                &quot;inputFace&quot;: &quot;top&quot;,
+                &quot;outputFace&quot;: &quot;front&quot;,
+                &quot;maskDensity&quot;: 0.75
+              }
+            ]
+          }
+        },
+        &quot;validateKey&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Normalized validated canonical key; throws on format, digest, permutation, mask, or invariant failure.&quot;
+          }
+        },
+        &quot;validatePackage&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawPackage&quot;,
+              &quot;type&quot;: &quot;rawPackage&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Normalized validated encrypted package bound to the supplied key.&quot;
+          }
+        },
+        &quot;buildPoints&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Canonical cube point field for every x/y input coordinate.&quot;
+          }
+        },
+        &quot;buildPointsById&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;pointIds&quot;,
+              &quot;type&quot;: &quot;iterable&lt;integer&gt;&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Point IDs in canonical 0..gridSize^2-1 domain.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Requested canonical point records.&quot;
+          }
+        },
+        &quot;pointDepth&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;x&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true,
+              &quot;range&quot;: &quot;0..gridSize-1&quot;
+            },
+            {
+              &quot;name&quot;: &quot;y&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true,
+              &quot;range&quot;: &quot;0..gridSize-1&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;description&quot;: &quot;Canonical z/depth coordinate.&quot;
+          }
+        },
+        &quot;faceCell&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;point&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Point with x, y, z integer coordinates.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;face&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;size&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true,
+              &quot;range&quot;: &quot;&gt;=1&quot;
+            },
+            {
+              &quot;name&quot;: &quot;quarterTurns&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;[integer,integer]&quot;,
+            &quot;description&quot;: &quot;[row,column] projection cell.&quot;
+          }
+        },
+        &quot;faceOrder&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;points&quot;,
+              &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;face&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;size&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;quarterTurns&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;description&quot;: &quot;Projection-ordered point array; throws on collisions or empty cells.&quot;
+          }
+        },
+        &quot;projectionOrder&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;face&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;quarterTurns&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;Int32Array&quot;,
+            &quot;description&quot;: &quot;Point ID at each projected face cell.&quot;
+          }
+        },
+        &quot;transformBlock&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;block&quot;,
+              &quot;type&quot;: &quot;binary&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Exactly one gridSize^2-cell block.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;fromFace&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;fromTurns&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;toFace&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;toTurns&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;Transformed binary block.&quot;
+          }
+        },
+        &quot;deterministicFiller&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;blockIndex&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: true,
+              &quot;range&quot;: &quot;&gt;=0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;cellCount&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;gridSize^2&quot;,
+              &quot;range&quot;: &quot;&gt;=1&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+            &quot;description&quot;: &quot;Deterministic padding bits for the block.&quot;
+          }
+        },
+        &quot;traceEncryptBlock&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;binary&quot;,
+              &quot;type&quot;: &quot;binary&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;blockIndex&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 0,
+              &quot;range&quot;: &quot;&gt;=0&quot;
+            },
+            {
+              &quot;name&quot;: &quot;sourceOffset&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Optional source-bit offset; canonical default is derived from blockIndex and payload capacity.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Canonical transformation trace with framing, projections, phases, point assignments, and validation metadata.&quot;
+          }
+        },
+        &quot;validateTransformationTrace&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawTrace&quot;,
+              &quot;type&quot;: &quot;object|string&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Transformation-trace object or JSON string.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Validated canonical transformation trace.&quot;
+          }
+        },
+        &quot;projectionDiagnostics&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Per-face projection diagnostics plus algebraic collision invariant.&quot;
+          }
+        },
+        &quot;assertProjectionUniqueness&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawPointsOrKey&quot;,
+              &quot;type&quot;: &quot;array&lt;object&gt;|rawKey&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Either an explicit point array or canonical key.&quot;
+            },
+            {
+              &quot;name&quot;: &quot;size&quot;,
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Required when first argument is an explicit point array.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;boolean|object&quot;,
+            &quot;description&quot;: &quot;Asserts collision-free face projections; throws on conflict.&quot;
+          }
+        },
+        &quot;encryptBinary&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;binary&quot;,
+              &quot;type&quot;: &quot;binary&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Canonical encrypted package containing ciphertext, framing metadata, key identity, and corruption checksum.&quot;
+          },
+          &quot;example&quot;: {
+            &quot;operation&quot;: &quot;encryptBinary&quot;,
+            &quot;args&quot;: [
+              &quot;0100100001101001&quot;,
+              {
+                &quot;$ref&quot;: &quot;createKey result&quot;
+              }
+            ]
+          }
+        },
+        &quot;decryptBinary&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawPackage&quot;,
+              &quot;type&quot;: &quot;rawPackage&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;Recovered original binary payload.&quot;
+          }
+        },
+        &quot;diagnosePackage&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawPackage&quot;,
+              &quot;type&quot;: &quot;rawPackage&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Key identity, grid, point-field diagnostics, payload/ciphertext sizes, checksum information, first-block face projections, and omnidirectional invariant.&quot;
+          }
+        },
+        &quot;packageChecksum&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;payload&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Canonical package-like payload containing checksum framing material.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;FNV-1a 32-bit corruption-detection checksum as eight hex characters.&quot;
+          }
+        },
+        &quot;sha256Hex&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;value&quot;,
+              &quot;type&quot;: &quot;string|coercible&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;SHA-256 lowercase hexadecimal digest.&quot;
+          }
+        },
+        &quot;keyIdentityMaterial&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;key&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Canonical key-shaped object.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;Stable canonical key identity material used for key fingerprint/digest.&quot;
+          }
+        },
+        &quot;keyDigest&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;key&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Canonical key-shaped object.&quot;
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;description&quot;: &quot;SHA-256 digest of canonical key identity material.&quot;
+          }
+        },
+        &quot;legalOutputFaces&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;inputFace&quot;,
+              &quot;type&quot;: &quot;face&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+            &quot;description&quot;: &quot;The four perpendicular legal output faces.&quot;
+          }
+        },
+        &quot;algebraicInvariant&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Algebraic bijection/collision-free invariant without mandatory exhaustive six-face enumeration.&quot;
+          }
+        },
+        &quot;assertOmnidirectionalNonConflict&quot;: {
+          &quot;arguments&quot;: [
+            {
+              &quot;name&quot;: &quot;rawKey&quot;,
+              &quot;type&quot;: &quot;rawKey&quot;,
+              &quot;required&quot;: true
+            },
+            {
+              &quot;name&quot;: &quot;options&quot;,
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: false,
+              &quot;fields&quot;: {
+                &quot;exhaustive&quot;: {
+                  &quot;type&quot;: &quot;boolean&quot;,
+                  &quot;required&quot;: false,
+                  &quot;default&quot;: false,
+                  &quot;description&quot;: &quot;When true, additionally performs explicit exhaustive projection diagnostics.&quot;
+                }
+              }
+            }
+          ],
+          &quot;returns&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;description&quot;: &quot;Collision-free invariant; includes exhaustive diagnostics when requested; throws on failure.&quot;
+          }
+        }
+      }
+    },
+    &quot;blacklight.exo.jump.calculate&quot;: {
+      &quot;callStyle&quot;: &quot;single-object&quot;,
+      &quot;operation&quot;: &quot;calculate&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;input&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: true,
+          &quot;fields&quot;: {
+            &quot;startSeed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Departure system seed from initialized EXO cluster spatial context.&quot;
+            },
+            &quot;endSeed&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: true,
+              &quot;description&quot;: &quot;Destination system seed from initialized EXO cluster spatial context; must differ from startSeed.&quot;
+            },
+            &quot;familyKey&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;metric-envelope&quot;,
+              &quot;description&quot;: &quot;FTL family key known to BlacklightExoFTL.&quot;
+            },
+            &quot;pathLevelKey&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: &quot;p4&quot;,
+              &quot;description&quot;: &quot;FTL path-level key known to BlacklightExoFTL.&quot;
+            }
+          }
+        }
+      ],
+      &quot;contextRequirements&quot;: [
+        &quot;BlacklightExoClusterSpatial initialized with systems&quot;,
+        &quot;BlacklightExoFTL initialized&quot;,
+        &quot;BlacklightExoJumpCalculator loaded&quot;
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;description&quot;: &quot;In-universe engineering route estimate with start/end systems, geometry, effective distance, rating, range, timing, energy, certainty, status, corrections, and explicit fictional-FTL warning.&quot;
+      },
+      &quot;example&quot;: {
+        &quot;startSeed&quot;: &quot;system-a&quot;,
+        &quot;endSeed&quot;: &quot;system-b&quot;,
+        &quot;familyKey&quot;: &quot;metric-envelope&quot;,
+        &quot;pathLevelKey&quot;: &quot;p4&quot;
+      }
+    },
+    &quot;blacklight.random-character&quot;: {
+      &quot;callStyle&quot;: &quot;browser-ui-pending-core-extraction&quot;,
+      &quot;operation&quot;: &quot;generate character&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;browser controls/state&quot;,
+          &quot;type&quot;: &quot;UI state&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Current authoritative generator still reads archetype, frame, pronouns, player name, seed/counters, and related generation state from the Blacklight random-character page. Do not fabricate a headless function signature until the pure core is extracted.&quot;
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;browser character state&quot;,
+        &quot;description&quot;: &quot;Authoritative generated character assembled from Blacklight rules/content resources.&quot;
+      },
+      &quot;headlessCallable&quot;: false
+    },
+    &quot;foundry.site-index&quot;: {
+      &quot;callStyle&quot;: &quot;resource&quot;,
+      &quot;operation&quot;: &quot;retrieve/search&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;query&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: false,
+          &quot;description&quot;: &quot;When using HBFoundryAPI.siteIndex({query}), all whitespace-separated terms must occur in indexed id/title/workspace/description/keywords.&quot;
+        }
+      ],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+        &quot;description&quot;: &quot;Matching site-index records or the full index when query is omitted.&quot;
+      }
+    },
+    &quot;charles.interactive-resource-gateway&quot;: {
+      &quot;callStyle&quot;: &quot;resource&quot;,
+      &quot;operation&quot;: &quot;retrieve policy / interact through browser context&quot;,
+      &quot;headlessCallable&quot;: false,
+      &quot;arguments&quot;: [],
+      &quot;returns&quot;: {
+        &quot;type&quot;: &quot;static resource or browser gateway state&quot;,
+        &quot;description&quot;: &quot;HBFoundryAPI.invoke retrieves the registered static authority; real interactive access checks require CharlesResourceGateway.requestAccess({operation,humanGrant,clientContext}) within a compatible browser runtime. Static origin cannot prevent direct public-file retrieval.&quot;
+      },
+      &quot;runtimeRequirements&quot;: [
+        &quot;Direct resource retrieval requires HTTP GET access to the registered policy.&quot;,
+        &quot;Protected requestAccess operations require a running browser gateway, and a human grant or configured trusted automation verifier.&quot;
+      ],
+      &quot;source&quot;: [
+        &quot;api/charles-interactive-resource-gateway.json&quot;,
+        &quot;charles-resource-gateway.js&quot;,
+        &quot;charles-interactive-resource-gateway.html&quot;
+      ]
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

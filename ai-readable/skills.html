@@ -1,0 +1,1424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="All registered optional skills, engram binding and requirements">
+<meta name="hb-projection-sha256" content="be0e9b1d353d3ea2da19fd0199bc8d2444c744a6b8e3c27a1e712b1349641e4b">
+<meta name="hb-source-path" content="skills/index.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/skills.html">
+<title>Registered Agent Skills index — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Registered Agent Skills index</h1>
+<p>All registered optional skills, engram binding and requirements</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json"><code>skills/index.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>be0e9b1d353d3ea2da19fd0199bc8d2444c744a6b8e3c27a1e712b1349641e4b</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="be0e9b1d353d3ea2da19fd0199bc8d2444c744a6b8e3c27a1e712b1349641e4b">{
+  &quot;schemaVersion&quot;: &quot;1.6.0&quot;,
+  &quot;standard&quot;: &quot;Agent Skills&quot;,
+  &quot;standardUrl&quot;: &quot;https://agentskills.io/specification&quot;,
+  &quot;architectureRule&quot;: &quot;Mirrored calls, not mirrored logic.&quot;,
+  &quot;statusVocabulary&quot;: &quot;../api/ai/status-vocabulary.json&quot;,
+  &quot;basePath&quot;: &quot;skills/&quot;,
+  &quot;defaultPersonality&quot;: {
+    &quot;engramId&quot;: &quot;blacklight.charles&quot;,
+    &quot;resourceId&quot;: &quot;blacklight.charles-personality-engram&quot;,
+    &quot;manifestResourceId&quot;: &quot;blacklight.charles-engram-manifest&quot;,
+    &quot;profileResourceId&quot;: &quot;blacklight.charles-personality-profile&quot;,
+    &quot;authorityPath&quot;: &quot;docs/blacklight/charles-personality-engram.json&quot;,
+    &quot;personalityVersion&quot;: &quot;CE1.1&quot;,
+    &quot;binding&quot;: &quot;inherited&quot;,
+    &quot;scope&quot;: &quot;all-registered-skills&quot;,
+    &quot;loadPolicy&quot;: &quot;load-once-before-selected-skills&quot;,
+    &quot;presentationOverride&quot;: &quot;Higher-priority host/system policy or an explicit out-of-character/system presentation request may suppress Charles presentation without mutating the engram.&quot;,
+    &quot;capabilityBoundary&quot;: &quot;The personality engram grants no tools, permissions, credentials, network access, or execution state.&quot;,
+    &quot;required&quot;: true,
+    &quot;integrity&quot;: {
+      &quot;algorithm&quot;: &quot;sha256&quot;,
+      &quot;digest&quot;: &quot;85e4884dedf58522574c041c63ed678c803bd5d54dde616ff33fc022b4f57ec7&quot;
+    },
+    &quot;reciprocalRegistryPath&quot;: &quot;skills/index.json&quot;,
+    &quot;missingCompanionPolicy&quot;: &quot;fail-closed-before-skill-activation&quot;,
+    &quot;optionalSkillDiscovery&quot;: true
+  },
+  &quot;skills&quot;: [
+    {
+      &quot;name&quot;: &quot;charles-foundry-interface&quot;,
+      &quot;path&quot;: &quot;skills/charles-foundry-interface/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.agent-skills&quot;,
+        &quot;charles.interactive-resource-gateway&quot;,
+        &quot;blacklight.charles-engram-manifest&quot;,
+        &quot;blacklight.charles-personality-engram&quot;,
+        &quot;blacklight.charles-personality-profile&quot;,
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;orchestratesSkillIds&quot;: [
+        &quot;foundry-discovery&quot;,
+        &quot;campaign-lore-retrieval&quot;,
+        &quot;adventure-module-operations&quot;,
+        &quot;module-map-generation&quot;,
+        &quot;npc-and-faction-development&quot;,
+        &quot;interpersonal-theory-of-mind-modeling&quot;,
+        &quot;encounter-design&quot;,
+        &quot;creature-and-monster-design&quot;,
+        &quot;item-and-loot-design&quot;,
+        &quot;settlement-and-location-development&quot;,
+        &quot;quest-and-adventure-development&quot;,
+        &quot;procedural-story-directive-computation&quot;,
+        &quot;rules-and-balance-review&quot;,
+        &quot;campaign-continuity&quot;,
+        &quot;session-preparation&quot;,
+        &quot;spell-creation&quot;,
+        &quot;blacklight-character-creation&quot;,
+        &quot;alien-vessel-generation&quot;,
+        &quot;kaysender-airship-generation&quot;,
+        &quot;kaysender-npc-and-crew&quot;,
+        &quot;kaysender-crafting-and-modules&quot;,
+        &quot;blacklight-exo-navigation&quot;,
+        &quot;blacklight-helm-operations&quot;,
+        &quot;blacklight-navigation-operations&quot;,
+        &quot;blacklight-gunnery-operations&quot;,
+        &quot;blacklight-engineering-operations&quot;,
+        &quot;blacklight-science-operations&quot;,
+        &quot;blacklight-comms-operations&quot;,
+        &quot;scientific-laboratory-workflows&quot;,
+        &quot;signals-laboratory-analysis&quot;,
+        &quot;binary-cube-laboratory&quot;,
+        &quot;barotrauma-encounter-workflow&quot;,
+        &quot;tabletop-dice-rolling&quot;,
+        &quot;tabletop-sandbox-data-management&quot;,
+        &quot;character-sheet-import&quot;,
+        &quot;character-stat-tracking&quot;,
+        &quot;party-and-npc-roster-management&quot;,
+        &quot;encounter-state-and-initiative&quot;,
+        &quot;inventory-and-resource-tracking&quot;,
+        &quot;campaign-ledger-management&quot;,
+        &quot;random-table-and-oracle-resolution&quot;,
+        &quot;tabletop-check-resolution&quot;,
+        &quot;tabletop-battlespace-visualization&quot;,
+        &quot;environment-production&quot;,
+        &quot;privacy-exposure-remediation&quot;,
+        &quot;professional-presence-development&quot;,
+        &quot;visual-gallery-publication&quot;
+      ],
+      &quot;useFor&quot;: [
+        &quot;Charles&quot;,
+        &quot;Charles assistant&quot;,
+        &quot;cross-skill routing&quot;,
+        &quot;homebrew tabletop assistant&quot;,
+        &quot;persona-aware Foundry workflows&quot;,
+        &quot;multi-skill orchestration&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;foundry-discovery&quot;,
+      &quot;path&quot;: &quot;skills/foundry-discovery/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.search-index&quot;,
+        &quot;foundry.operation-contracts&quot;,
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;discover tools&quot;,
+        &quot;find repository capabilities&quot;,
+        &quot;enumerate generators&quot;,
+        &quot;find campaign resources&quot;,
+        &quot;inspect operation contracts&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;module-map-generation&quot;,
+      &quot;path&quot;: &quot;skills/module-map-generation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;spatial.module-map.generate&quot;
+      ],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;module maps&quot;,
+        &quot;dungeons&quot;,
+        &quot;buildings&quot;,
+        &quot;location generation&quot;,
+        &quot;encounter spaces&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;alien-vessel-generation&quot;,
+      &quot;path&quot;: &quot;skills/alien-vessel-generation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;spatial.alien-vessel.generate&quot;
+      ],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;alien ships&quot;,
+        &quot;vessel interiors&quot;,
+        &quot;multi-deck maps&quot;,
+        &quot;damaged vessels&quot;,
+        &quot;abandoned ships&quot;,
+        &quot;wrecked alien ships&quot;,
+        &quot;salvage relics&quot;,
+        &quot;command cruisers&quot;,
+        &quot;carriers&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;kaysender-airship-generation&quot;,
+      &quot;path&quot;: &quot;skills/kaysender-airship-generation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;kaysender.airship.generate&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;kaysender.wiki-index&quot;,
+        &quot;kaysender.tools-registry&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Kaysender airships&quot;,
+        &quot;skyships&quot;,
+        &quot;crew spaces&quot;,
+        &quot;airship encounters&quot;,
+        &quot;vessel generation&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;kaysender-npc-and-crew&quot;,
+      &quot;path&quot;: &quot;skills/kaysender-npc-and-crew/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;kaysender.tools-registry&quot;,
+        &quot;kaysender.wiki-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Kaysender NPCs&quot;,
+        &quot;crew generation&quot;,
+        &quot;population bands&quot;,
+        &quot;civilians&quot;,
+        &quot;airship crew&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;kaysender-crafting-and-modules&quot;,
+      &quot;path&quot;: &quot;skills/kaysender-crafting-and-modules/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;kaysender.tools-registry&quot;,
+        &quot;kaysender.wiki-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Kaysender crafting&quot;,
+        &quot;equipment&quot;,
+        &quot;gadgets&quot;,
+        &quot;ship modules&quot;,
+        &quot;ship weapons&quot;,
+        &quot;airship cores&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;spell-creation&quot;,
+      &quot;path&quot;: &quot;skills/spell-creation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;spell creator&quot;,
+        &quot;Hypertext d20 spells&quot;,
+        &quot;spell design&quot;,
+        &quot;spell balance&quot;,
+        &quot;spell JSON&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;signals-laboratory-analysis&quot;,
+      &quot;path&quot;: &quot;skills/signals-laboratory-analysis/SKILL.md&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;signals.configuration.analyze&quot;,
+        &quot;signals.utilities&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.operation-contracts&quot;
+      ],
+      &quot;laboratoryIds&quot;: [
+        &quot;signals-laboratory&quot;
+      ],
+      &quot;useFor&quot;: [
+        &quot;RF analysis&quot;,
+        &quot;signals laboratory&quot;,
+        &quot;antenna calculations&quot;,
+        &quot;propagation&quot;,
+        &quot;heterodyne&quot;,
+        &quot;interfrequency&quot;,
+        &quot;environment maps&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;binary-cube-laboratory&quot;,
+      &quot;path&quot;: &quot;skills/binary-cube-laboratory/SKILL.md&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;shadowrun.binary-cube&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.operation-contracts&quot;
+      ],
+      &quot;laboratoryIds&quot;: [
+        &quot;binary-cube-laboratory&quot;
+      ],
+      &quot;useFor&quot;: [
+        &quot;Binary Cube Laboratory&quot;,
+        &quot;cube encryption&quot;,
+        &quot;TTRPG obfuscation&quot;,
+        &quot;projection diagnostics&quot;,
+        &quot;transformation traces&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;scientific-laboratory-workflows&quot;,
+      &quot;path&quot;: &quot;skills/scientific-laboratory-workflows/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;signals.configuration.analyze&quot;,
+        &quot;signals.utilities&quot;,
+        &quot;shadowrun.binary-cube&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.operation-contracts&quot;
+      ],
+      &quot;laboratoryIds&quot;: [
+        &quot;signals-laboratory&quot;,
+        &quot;binary-cube-laboratory&quot;,
+        &quot;live-signals-laboratory&quot;,
+        &quot;audio-laboratory&quot;,
+        &quot;steganalysis-laboratory&quot;,
+        &quot;double-slit-laboratory&quot;,
+        &quot;interstellar-media-collisions-laboratory&quot;
+      ],
+      &quot;useFor&quot;: [
+        &quot;scientific laboratories&quot;,
+        &quot;laboratory routing&quot;,
+        &quot;live signals&quot;,
+        &quot;audio laboratory&quot;,
+        &quot;steganalysis&quot;,
+        &quot;double slit&quot;,
+        &quot;interstellar collisions&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-exo-navigation&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-exo-navigation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;page-context&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;blacklight.exo.jump.calculate&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight EXO jump&quot;,
+        &quot;FTL route&quot;,
+        &quot;EXO navigation&quot;,
+        &quot;cluster travel&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-helm-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-helm-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight helm&quot;,
+        &quot;piloting&quot;,
+        &quot;maneuvers&quot;,
+        &quot;docking&quot;,
+        &quot;evasion&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-navigation-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-navigation-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight navigation station&quot;,
+        &quot;transfer solutions&quot;,
+        &quot;dead reckoning&quot;,
+        &quot;rendezvous&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-gunnery-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-gunnery-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight gunnery&quot;,
+        &quot;fire control&quot;,
+        &quot;weapon systems&quot;,
+        &quot;engagement procedures&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-engineering-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-engineering-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight engineering&quot;,
+        &quot;power systems&quot;,
+        &quot;breakers&quot;,
+        &quot;coolant&quot;,
+        &quot;damage control&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-science-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-science-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight science station&quot;,
+        &quot;sensors&quot;,
+        &quot;scanning&quot;,
+        &quot;contact analysis&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-comms-operations&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-comms-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.crew-operations&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight comms&quot;,
+        &quot;hailing&quot;,
+        &quot;secure links&quot;,
+        &quot;distress&quot;,
+        &quot;signal routing&quot;,
+        &quot;crew operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;blacklight-character-creation&quot;,
+      &quot;path&quot;: &quot;skills/blacklight-character-creation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;blacklight.random-character&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;blacklight.character-options&quot;,
+        &quot;blacklight.character-creation&quot;,
+        &quot;blacklight.random-character-content&quot;,
+        &quot;blacklight.complete-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Blacklight character creation&quot;,
+        &quot;random character&quot;,
+        &quot;archetypes&quot;,
+        &quot;equipment&quot;,
+        &quot;supernatural options&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;campaign-lore-retrieval&quot;,
+      &quot;path&quot;: &quot;skills/campaign-lore-retrieval/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;,
+        &quot;kaysender.wiki-index&quot;,
+        &quot;blacklight.complete-lore-index&quot;,
+        &quot;warhammer.lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;campaign lore&quot;,
+        &quot;setting research&quot;,
+        &quot;factions&quot;,
+        &quot;rules references&quot;,
+        &quot;wiki search&quot;,
+        &quot;cross-setting retrieval&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;barotrauma-encounter-workflow&quot;,
+      &quot;path&quot;: &quot;skills/barotrauma-encounter-workflow/SKILL.md&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [
+        &quot;barotrauma.encounter-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Barotrauma encounters&quot;,
+        &quot;lethality profiles&quot;,
+        &quot;encounter templates&quot;,
+        &quot;Europa operations&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;adventure-module-operations&quot;,
+      &quot;path&quot;: &quot;skills/adventure-module-operations/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;modules.workspace&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;adventure modules&quot;,
+        &quot;module usage&quot;,
+        &quot;encounters&quot;,
+        &quot;treasure&quot;,
+        &quot;rooms&quot;,
+        &quot;campaign hooks&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;npc-and-faction-development&quot;,
+      &quot;path&quot;: &quot;skills/npc-and-faction-development/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;NPC creation&quot;,
+        &quot;NPC development&quot;,
+        &quot;factions&quot;,
+        &quot;organizations&quot;,
+        &quot;relationships&quot;,
+        &quot;motives&quot;,
+        &quot;rosters&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;interpersonal-theory-of-mind-modeling&quot;,
+      &quot;path&quot;: &quot;skills/interpersonal-theory-of-mind-modeling/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;interpersonal theory of mind&quot;,
+        &quot;theory of mind modeling&quot;,
+        &quot;relationship modeling&quot;,
+        &quot;actor perception models&quot;,
+        &quot;knowledge belief behavior separation&quot;,
+        &quot;trust modeling&quot;,
+        &quot;competing motive hypotheses&quot;,
+        &quot;decision reconstruction&quot;,
+        &quot;political figure modeling&quot;,
+        &quot;public figure behavior analysis&quot;,
+        &quot;character relationship webs&quot;,
+        &quot;self theory of mind&quot;,
+        &quot;self model drift&quot;,
+        &quot;self understanding&quot;,
+        &quot;self prediction&quot;,
+        &quot;rationalization analysis&quot;,
+        &quot;self narrative&quot;,
+        &quot;introspective accuracy&quot;,
+        &quot;normative self guidance&quot;,
+        &quot;action selection gap&quot;,
+        &quot;counterfactual self model&quot;,
+        &quot;post action self appraisal&quot;,
+        &quot;self decision modeling&quot;,
+        &quot;relationship hysteresis&quot;,
+        &quot;latent alignment&quot;,
+        &quot;latent conflict&quot;,
+        &quot;shared epistemic ground&quot;,
+        &quot;common knowledge modeling&quot;,
+        &quot;signaling analysis&quot;,
+        &quot;costly signal analysis&quot;,
+        &quot;relationship repair&quot;,
+        &quot;value hierarchy&quot;,
+        &quot;outcome bias analysis&quot;,
+        &quot;provenance dependent uncertainty&quot;,
+        &quot;metacognitive calibration&quot;,
+        &quot;memory salience&quot;,
+        &quot;institutional theory of mind&quot;,
+        &quot;biography provenance analysis&quot;,
+        &quot;documentary source mediation&quot;,
+        &quot;biopic source contamination&quot;,
+        &quot;memoir retrospective modeling&quot;,
+        &quot;creator theory of mind&quot;,
+        &quot;authorial theory of mind&quot;,
+        &quot;creator intent modeling&quot;,
+        &quot;character as ideological instrument&quot;,
+        &quot;intended audience update&quot;,
+        &quot;narrative characterization pressure&quot;,
+        &quot;collaborative authorship analysis&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;schemaPaths&quot;: [
+        &quot;skills/interpersonal-theory-of-mind-modeling/record-schema.json&quot;,
+        &quot;skills/interpersonal-theory-of-mind-modeling/pipeline-spec.json&quot;
+      ],
+      &quot;conditionalRequirements&quot;: [
+        &quot;current reliable public-source retrieval for current real-world political/public-figure modeling&quot;,
+        &quot;writable authoritative Character Information System for persistence&quot;
+      ],
+      &quot;pipelineSpec&quot;: &quot;skills/interpersonal-theory-of-mind-modeling/pipeline-spec.json&quot;
+    },
+    {
+      &quot;name&quot;: &quot;encounter-design&quot;,
+      &quot;path&quot;: &quot;skills/encounter-design/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;,
+        &quot;modules.workspace&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;encounters&quot;,
+        &quot;combat encounters&quot;,
+        &quot;social encounters&quot;,
+        &quot;exploration encounters&quot;,
+        &quot;encounter pacing&quot;,
+        &quot;difficulty review&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;creature-and-monster-design&quot;,
+      &quot;path&quot;: &quot;skills/creature-and-monster-design/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;creature creation&quot;,
+        &quot;monster design&quot;,
+        &quot;enemy archetypes&quot;,
+        &quot;ecology&quot;,
+        &quot;abilities&quot;,
+        &quot;bosses&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;item-and-loot-design&quot;,
+      &quot;path&quot;: &quot;skills/item-and-loot-design/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;,
+        &quot;modules.workspace&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;items&quot;,
+        &quot;loot&quot;,
+        &quot;treasure&quot;,
+        &quot;equipment&quot;,
+        &quot;artifacts&quot;,
+        &quot;rewards&quot;,
+        &quot;drop tables&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;settlement-and-location-development&quot;,
+      &quot;path&quot;: &quot;skills/settlement-and-location-development/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;,
+        &quot;spatial.module-map.generate&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;settlements&quot;,
+        &quot;towns&quot;,
+        &quot;cities&quot;,
+        &quot;villages&quot;,
+        &quot;locations&quot;,
+        &quot;districts&quot;,
+        &quot;location development&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;quest-and-adventure-development&quot;,
+      &quot;path&quot;: &quot;skills/quest-and-adventure-development/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;,
+        &quot;modules.workspace&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;quests&quot;,
+        &quot;adventures&quot;,
+        &quot;campaign hooks&quot;,
+        &quot;objectives&quot;,
+        &quot;branches&quot;,
+        &quot;clues&quot;,
+        &quot;adventure structure&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;procedural-story-directive-computation&quot;,
+      &quot;path&quot;: &quot;skills/procedural-story-directive-computation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;story continuation&quot;,
+        &quot;procedural story assembly&quot;,
+        &quot;story directive computation&quot;,
+        &quot;scene directive compiler&quot;,
+        &quot;chapter planning&quot;,
+        &quot;dependency-valid narrative continuation&quot;,
+        &quot;continuity-safe fiction writing&quot;,
+        &quot;story beat assembly&quot;,
+        &quot;narrative obligation frontier&quot;,
+        &quot;post-write story reconciliation&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;schemaPaths&quot;: [
+        &quot;skills/procedural-story-directive-computation/directive-schema.json&quot;,
+        &quot;skills/procedural-story-directive-computation/pipeline-spec.json&quot;
+      ],
+      &quot;pipelineSpec&quot;: &quot;skills/procedural-story-directive-computation/pipeline-spec.json&quot;
+    },
+    {
+      &quot;name&quot;: &quot;rules-and-balance-review&quot;,
+      &quot;path&quot;: &quot;skills/rules-and-balance-review/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;homebrew rules&quot;,
+        &quot;mechanics review&quot;,
+        &quot;balance&quot;,
+        &quot;probability review&quot;,
+        &quot;edge cases&quot;,
+        &quot;rules consistency&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;campaign-continuity&quot;,
+      &quot;path&quot;: &quot;skills/campaign-continuity/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;campaign continuity&quot;,
+        &quot;canon tracking&quot;,
+        &quot;timeline&quot;,
+        &quot;state reconciliation&quot;,
+        &quot;consequences&quot;,
+        &quot;callbacks&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;session-preparation&quot;,
+      &quot;path&quot;: &quot;skills/session-preparation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;foundry.site-index&quot;
+      ],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.campaign-lore-index&quot;,
+        &quot;modules.workspace&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;session prep&quot;,
+        &quot;GM preparation&quot;,
+        &quot;recaps&quot;,
+        &quot;scene planning&quot;,
+        &quot;contingencies&quot;,
+        &quot;session packets&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;tabletop-dice-rolling&quot;,
+      &quot;path&quot;: &quot;skills/tabletop-dice-rolling/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;dice rolling&quot;,
+        &quot;roll dice&quot;,
+        &quot;dice notation&quot;,
+        &quot;2d2&quot;,
+        &quot;d20&quot;,
+        &quot;10D100&quot;,
+        &quot;random roll&quot;,
+        &quot;/roll&quot;,
+        &quot;roll command&quot;,
+        &quot;dice parser&quot;,
+        &quot;cumulative dice&quot;,
+        &quot;individual total&quot;,
+        &quot;per die&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;portablePackage&quot;: &quot;skills/tabletop-dice-rolling/manifest.json&quot;,
+      &quot;helperPaths&quot;: [
+        &quot;skills/tabletop-dice-rolling/scripts/secure_dice.py&quot;,
+        &quot;skills/tabletop-dice-rolling/scripts/secure-dice.js&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;cryptographic-rng&quot;
+      ],
+      &quot;rollModes&quot;: [
+        &quot;cumulative&quot;,
+        &quot;individual total&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;tabletop-sandbox-data-management&quot;,
+      &quot;path&quot;: &quot;skills/tabletop-sandbox-data-management/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;CSV sandbox&quot;,
+        &quot;tabletop state&quot;,
+        &quot;CSV management&quot;,
+        &quot;sandbox data&quot;,
+        &quot;campaign data files&quot;,
+        &quot;persistent session files&quot;,
+        &quot;battlespace state&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;helperPaths&quot;: [
+        &quot;skills/tabletop-sandbox-data-management/scripts/tabletop_state.py&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox&quot;,
+        &quot;csv-file-io&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;character-sheet-import&quot;,
+      &quot;path&quot;: &quot;skills/character-sheet-import/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;character sheet import&quot;,
+        &quot;import character&quot;,
+        &quot;character PDF&quot;,
+        &quot;character CSV&quot;,
+        &quot;character JSON&quot;,
+        &quot;sheet parsing&quot;,
+        &quot;sheet normalization&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;character-stat-tracking&quot;,
+      &quot;path&quot;: &quot;skills/character-stat-tracking/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;character stats&quot;,
+        &quot;HP tracking&quot;,
+        &quot;resource tracking&quot;,
+        &quot;conditions&quot;,
+        &quot;wounds&quot;,
+        &quot;stress&quot;,
+        &quot;character state&quot;,
+        &quot;stat changes&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;party-and-npc-roster-management&quot;,
+      &quot;path&quot;: &quot;skills/party-and-npc-roster-management/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;party roster&quot;,
+        &quot;NPC roster&quot;,
+        &quot;companions&quot;,
+        &quot;hirelings&quot;,
+        &quot;party management&quot;,
+        &quot;character roster&quot;,
+        &quot;NPC management&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;encounter-state-and-initiative&quot;,
+      &quot;path&quot;: &quot;skills/encounter-state-and-initiative/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;initiative&quot;,
+        &quot;encounter tracker&quot;,
+        &quot;combat tracker&quot;,
+        &quot;round tracking&quot;,
+        &quot;turn order&quot;,
+        &quot;conditions&quot;,
+        &quot;encounter state&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;inventory-and-resource-tracking&quot;,
+      &quot;path&quot;: &quot;skills/inventory-and-resource-tracking/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;inventory&quot;,
+        &quot;equipment tracking&quot;,
+        &quot;ammo&quot;,
+        &quot;currency&quot;,
+        &quot;consumables&quot;,
+        &quot;charges&quot;,
+        &quot;supplies&quot;,
+        &quot;encumbrance&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;campaign-ledger-management&quot;,
+      &quot;path&quot;: &quot;skills/campaign-ledger-management/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;campaign ledger&quot;,
+        &quot;change log&quot;,
+        &quot;campaign state&quot;,
+        &quot;state history&quot;,
+        &quot;audit trail&quot;,
+        &quot;session changes&quot;,
+        &quot;continuity ledger&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;writable-sandbox-for-persistence&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;random-table-and-oracle-resolution&quot;,
+      &quot;path&quot;: &quot;skills/random-table-and-oracle-resolution/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;random tables&quot;,
+        &quot;oracle&quot;,
+        &quot;loot table&quot;,
+        &quot;encounter table&quot;,
+        &quot;weighted table&quot;,
+        &quot;procedural roll&quot;,
+        &quot;random selection&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;tabletop-check-resolution&quot;,
+      &quot;path&quot;: &quot;skills/tabletop-check-resolution/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;skill check&quot;,
+        &quot;saving throw&quot;,
+        &quot;attack roll&quot;,
+        &quot;contest&quot;,
+        &quot;opposed roll&quot;,
+        &quot;check resolution&quot;,
+        &quot;roll with modifier&quot;,
+        &quot;difficulty check&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;tabletop-battlespace-visualization&quot;,
+      &quot;path&quot;: &quot;skills/tabletop-battlespace-visualization/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;battlefield&quot;,
+        &quot;battlespace&quot;,
+        &quot;5 foot grid&quot;,
+        &quot;five foot grid&quot;,
+        &quot;tactical grid&quot;,
+        &quot;token positions&quot;,
+        &quot;relative positioning&quot;,
+        &quot;distance&quot;,
+        &quot;range&quot;,
+        &quot;proximity&quot;,
+        &quot;area of effect&quot;,
+        &quot;AoE&quot;,
+        &quot;Pillow preview&quot;,
+        &quot;one pixel per cell&quot;,
+        &quot;virtual tabletop&quot;,
+        &quot;VTT&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;portablePackage&quot;: &quot;skills/tabletop-battlespace-visualization/manifest.json&quot;,
+      &quot;helperPaths&quot;: [
+        &quot;skills/tabletop-battlespace-visualization/scripts/battlespace.py&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;python3&quot;,
+        &quot;pillow&quot;,
+        &quot;writable-sandbox&quot;,
+        &quot;csv-file-io&quot;
+      ],
+      &quot;renderModes&quot;: [
+        &quot;1-pixel-per-cell&quot;,
+        &quot;nearest-neighbor-scaled&quot;
+      ],
+      &quot;stateTables&quot;: [
+        &quot;battlefield_maps.csv&quot;,
+        &quot;battlefield_tokens.csv&quot;,
+        &quot;battlefield_terrain.csv&quot;,
+        &quot;battlefield_effects.csv&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;environment-production&quot;,
+      &quot;path&quot;: &quot;skills/environment-production/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [
+        &quot;foundry.environment-production&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;iterative map development&quot;,
+        &quot;terrain and desquareification&quot;,
+        &quot;environment model refinement&quot;,
+        &quot;visual verification&quot;,
+        &quot;map quality gates&quot;,
+        &quot;environment evidence packet&quot;,
+        &quot;production handoff&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;portablePackage&quot;: &quot;skills/environment-production/manifest.json&quot;,
+      &quot;helperPaths&quot;: [
+        &quot;skills/environment-production/scripts/production.py&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;python3.10+&quot;,
+        &quot;writable-sandbox&quot;,
+        &quot;project-specific-engine-adapters&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;privacy-exposure-remediation&quot;,
+      &quot;path&quot;: &quot;skills/privacy-exposure-remediation/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;data broker opt out&quot;,
+        &quot;private information removal&quot;,
+        &quot;people search exposure&quot;,
+        &quot;digital footprint privacy&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;professional-presence-development&quot;,
+      &quot;path&quot;: &quot;skills/professional-presence-development/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;professional identity visibility&quot;,
+        &quot;creator portfolio&quot;,
+        &quot;public project indexing&quot;,
+        &quot;release publicity&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;visual-gallery-publication&quot;,
+      &quot;path&quot;: &quot;skills/visual-gallery-publication/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;publish generated images to GitHub galleries&quot;,
+        &quot;commit game model render turntables&quot;,
+        &quot;archive original image generation assets&quot;,
+        &quot;synchronize visual gallery source and GitHub revisions&quot;,
+        &quot;validate image gallery GIF frames, hashes, and visible links&quot;,
+        &quot;record visual development activity and honest preview provenance&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;authorized GitHub repository write connection&quot;,
+        &quot;readable generated visual assets&quot;,
+        &quot;gallery verifier or equivalent image-hash checks&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;fmpl-asset-production&quot;,
+      &quot;path&quot;: &quot;skills/fmpl-asset-production/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [
+        &quot;fmpl.asset-production-library&quot;
+      ],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;Find existing FMPL Blender model parts&quot;,
+        &quot;Reuse Factorio PBR and machine geometry&quot;,
+        &quot;Classify greeble modules&quot;,
+        &quot;Build and refine process machinery&quot;,
+        &quot;Produce Factorio 45-degree sprite atlases&quot;,
+        &quot;Verify native fluid ports and geometry&quot;,
+        &quot;Pin shared FMPL assets across repositories&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;Access to a consumer-pinned canonical FMPL checkout&quot;,
+        &quot;Authorized local Python and Blender or existing self-hosted runner for execution&quot;,
+        &quot;Actual source rights, measurements and validation evidence&quot;
+      ]
+    }
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

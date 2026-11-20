@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for charles.interactive-resource-gateway">
+<meta name="hb-projection-sha256" content="f8a9b3afe0c52b33eb85c5339c130b723fda8faf64a9b348f48a5ec525803cdb">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/charles-interactive-resource-gateway.html">
+<title>Operation contract: charles.interactive-resource-gateway — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: charles.interactive-resource-gateway</h1>
+<p>Canonical contract slice for charles.interactive-resource-gateway</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>f8a9b3afe0c52b33eb85c5339c130b723fda8faf64a9b348f48a5ec525803cdb</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="f8a9b3afe0c52b33eb85c5339c130b723fda8faf64a9b348f48a5ec525803cdb">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;charles.interactive-resource-gateway&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;resource&quot;,
+    &quot;operation&quot;: &quot;retrieve policy / interact through browser context&quot;,
+    &quot;headlessCallable&quot;: false,
+    &quot;arguments&quot;: [],
+    &quot;returns&quot;: {
+      &quot;type&quot;: &quot;static resource or browser gateway state&quot;,
+      &quot;description&quot;: &quot;HBFoundryAPI.invoke retrieves the registered static authority; real interactive access checks require CharlesResourceGateway.requestAccess({operation,humanGrant,clientContext}) within a compatible browser runtime. Static origin cannot prevent direct public-file retrieval.&quot;
+    },
+    &quot;runtimeRequirements&quot;: [
+      &quot;Direct resource retrieval requires HTTP GET access to the registered policy.&quot;,
+      &quot;Protected requestAccess operations require a running browser gateway, and a human grant or configured trusted automation verifier.&quot;
+    ],
+    &quot;source&quot;: [
+      &quot;api/charles-interactive-resource-gateway.json&quot;,
+      &quot;charles-resource-gateway.js&quot;,
+      &quot;charles-interactive-resource-gateway.html&quot;
+    ]
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

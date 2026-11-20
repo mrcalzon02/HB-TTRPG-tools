@@ -61,6 +61,13 @@
       const registryPin = document.getElementById('registry-pin');
       const engramPin = document.getElementById('engram-pin');
 
+      // Human-only prefill: whitelist the existing select values; never auto-execute.
+      const requestedSkill = new URLSearchParams(window.location.search).get('skill');
+      if (requestedSkill && Array.from(skill.options).some(option => option.value === requestedSkill)) {
+        skill.value = requestedSkill;
+        summary.textContent = 'Skill selected from URL. Click Load and self-test when ready.';
+      }
+
       run.addEventListener('click', async () => {
         run.disabled = true;
         summary.textContent = 'Testing registered package…';

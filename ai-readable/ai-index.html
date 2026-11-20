@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="AI routing, transport classes and declarations">
+<meta name="hb-projection-sha256" content="e281b7cbedec46f107815160b83f6c074480f1aaba332290d8a0b10c07181171">
+<meta name="hb-source-path" content="api/ai/index.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/ai-index.html">
+<title>AI integration index — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>AI integration index</h1>
+<p>AI routing, transport classes and declarations</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json"><code>api/ai/index.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>e281b7cbedec46f107815160b83f6c074480f1aaba332290d8a0b10c07181171</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="e281b7cbedec46f107815160b83f6c074480f1aaba332290d8a0b10c07181171">{
+  &quot;schemaVersion&quot;: &quot;1.10.0&quot;,
+  &quot;protocol&quot;: &quot;hb-ai-discovery/1&quot;,
+  &quot;service&quot;: &quot;Calzon&#x27;s TTRPG Foundry&quot;,
+  &quot;canonicalUrl&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/&quot;,
+  &quot;authority&quot;: {
+    &quot;capabilities&quot;: &quot;../foundry-capabilities.json&quot;,
+    &quot;operations&quot;: &quot;../operation-contracts.json&quot;,
+    &quot;resources&quot;: &quot;../resource-collections.json&quot;,
+    &quot;skills&quot;: &quot;../../skills/index.json&quot;,
+    &quot;statusVocabulary&quot;: &quot;status-vocabulary.json&quot;,
+    &quot;defaultPersonality&quot;: &quot;../../docs/blacklight/charles-personality-engram.json&quot;,
+    &quot;fmplLibrary&quot;: &quot;fmpl-library.json&quot;
+  },
+  &quot;absoluteAuthorities&quot;: {
+    &quot;capabilities&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json&quot;,
+    &quot;operations&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json&quot;,
+    &quot;resources&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json&quot;,
+    &quot;skills&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json&quot;,
+    &quot;statusVocabulary&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json&quot;,
+    &quot;defaultPersonality&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json&quot;,
+    &quot;fmplLibrary&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json&quot;
+  },
+  &quot;discovery&quot;: {
+    &quot;wellKnown&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json&quot;,
+    &quot;bootstrap&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt&quot;,
+    &quot;staticHtmlMachineDocs&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html&quot;,
+    &quot;openapi&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json&quot;,
+    &quot;skillOnboarding&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json&quot;,
+    &quot;externalModelAcceptanceTests&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/external-model-acceptance-tests.json&quot;,
+    &quot;agentSkillsHtml&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html&quot;,
+    &quot;charlesSkillInterface&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/charles-foundry-interface/SKILL.md&quot;,
+    &quot;statusVocabulary&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json&quot;,
+    &quot;portableSkillTest&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-test.html&quot;,
+    &quot;portableSkillLoader&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-loader.js&quot;,
+    &quot;llms&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt&quot;,
+    &quot;human&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html&quot;,
+    &quot;skillContextLoader&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/ai-skill-context-loader.js&quot;,
+    &quot;psxEditorReference&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-reference.json&quot;,
+    &quot;psxAssetImportReference&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json&quot;,
+    &quot;psxReferenceBatch&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-reference-ingestion-2026-10-30.json&quot;,
+    &quot;psxManipulationContract&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json&quot;,
+    &quot;psxNpcAiAuthoringReference&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-npc-ai-authoring.json&quot;,
+    &quot;devAiMatchAdminObserverPlan&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/dev-match-admin-observer-contract.json&quot;,
+    &quot;fmplLibrary&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json&quot;
+  },
+  &quot;bootstrapRule&quot;: &quot;api/ai/bootstrap.txt is the canonical compact routing contract. Start there, load only the authorities required by the selected task, and reuse unchanged authorities already loaded in the current orchestration context. Current referenced machine authorities govern capability facts, statuses, contracts, resources, and skill definitions when they change.&quot;,
+  &quot;canonicalRule&quot;: &quot;Do not duplicate generator, calculator, laboratory, campaign, encryption, personality, randomness, tabletop-state, or battlespace logic in AI adapters. Discover and invoke or load the authoritative implementation/resource/helper.&quot;,
+  &quot;compatibilityRule&quot;: &quot;HTML compatibility views may mirror discovery metadata for restricted model browsers, but authoritative JSON registries, Charles engram resources, helper scripts, and SKILL.md files remain the source of truth.&quot;,
+  &quot;personalityBinding&quot;: {
+    &quot;engramId&quot;: &quot;blacklight.charles&quot;,
+    &quot;resource&quot;: &quot;../../docs/blacklight/charles-personality-engram.json&quot;,
+    &quot;registryField&quot;: &quot;defaultPersonality&quot;,
+    &quot;scope&quot;: &quot;all-registered-skills&quot;,
+    &quot;loadPolicy&quot;: &quot;load-once-before-selected-skills&quot;,
+    &quot;orchestratorSkill&quot;: &quot;charles-foundry-interface&quot;,
+    &quot;capabilityBoundary&quot;: &quot;Loading Charles does not imply tools, permissions, filesystem access, randomness, rendering, runtime compatibility, persistence, or successful execution.&quot;
+  },
+  &quot;runtimeClasses&quot;: {
+    &quot;static-resource&quot;: &quot;Remotely readable with ordinary HTTP GET when the current host permits the resource content type. Invocation may mean retrieving the registered authoritative resource.&quot;,
+    &quot;browser-js&quot;: &quot;Executable only in a JavaScript-capable host after loading the runtime scripts declared by the capability.&quot;,
+    &quot;browser-page-context&quot;: &quot;Executable only after the capability&#x27;s declared page context and dependencies are initialized.&quot;,
+    &quot;browser-ui&quot;: &quot;Authoritative behavior is still coupled to page controls; do not claim a headless API.&quot;,
+    &quot;live-sensor-browser-context&quot;: &quot;Requires browser/device sensor context and cannot be represented as a static remote RPC.&quot;,
+    &quot;host-sandbox&quot;: &quot;Workflow can use local helper scripts and files only when the consuming host exposes the declared sandbox/runtime. Repository presence alone is not execution evidence.&quot;
+  },
+  &quot;transport&quot;: {
+    &quot;staticGet&quot;: {
+      &quot;status&quot;: &quot;ready&quot;,
+      &quot;hostConstraint&quot;: &quot;Some model browsing environments restrict direct JSON, text, or Markdown retrieval even when the resource is publicly hosted.&quot;
+    },
+    &quot;browserJavaScript&quot;: {
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;hostPromotionSequence&quot;: [
+        &quot;runtime-compatible&quot;,
+        &quot;self-test-passed&quot;,
+        &quot;ready&quot;
+      ],
+      &quot;proofHarness&quot;: &quot;../../ai-skill-test.html&quot;
+    },
+    &quot;hostSandbox&quot;: {
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;notes&quot;: &quot;Tabletop CSV persistence requires writable filesystem/sandbox access. Secure dice helpers require an actual cryptographic RNG. Battlespace preview rendering additionally requires Python 3 and Pillow.&quot;
+    },
+    &quot;remoteMcp&quot;: {
+      &quot;status&quot;: &quot;not-deployed&quot;,
+      &quot;endpoint&quot;: null
+    },
+    &quot;remoteRpc&quot;: {
+      &quot;status&quot;: &quot;not-deployed&quot;,
+      &quot;endpoint&quot;: null
+    },
+    &quot;openapi&quot;: {
+      &quot;status&quot;: &quot;discovery-only&quot;,
+      &quot;document&quot;: &quot;openapi.json&quot;
+    }
+  },
+  &quot;quickStart&quot;: [
+    {
+      &quot;step&quot;: 1,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;target&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json&quot;,
+      &quot;purpose&quot;: &quot;Confirm machine-discovery entrypoints and transport status.&quot;
+    },
+    {
+      &quot;step&quot;: 2,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;target&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt&quot;,
+      &quot;purpose&quot;: &quot;Load the canonical minimum-authority routing contract before selecting or executing capabilities.&quot;
+    },
+    {
+      &quot;step&quot;: 3,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;target&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json&quot;,
+      &quot;fallback&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html&quot;,
+      &quot;purpose&quot;: &quot;Select the minimum-capability skill set required for the task.&quot;
+    },
+    {
+      &quot;step&quot;: 4,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;target&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json&quot;,
+      &quot;purpose&quot;: &quot;Load blacklight.charles once for the orchestration context before selected task skills.&quot;
+    },
+    {
+      &quot;step&quot;: 5,
+      &quot;action&quot;: &quot;GET&quot;,
+      &quot;target&quot;: &quot;skills/{selected-skill}/SKILL.md&quot;,
+      &quot;purpose&quot;: &quot;Load only the selected skill workflow and follow its explicit capability, operation, resource, helper, and executionRequirements references.&quot;
+    },
+    {
+      &quot;step&quot;: 6,
+      &quot;action&quot;: &quot;FOLLOW_BOOTSTRAP_ON_DEMAND&quot;,
+      &quot;target&quot;: &quot;selected skill references&quot;,
+      &quot;purpose&quot;: &quot;Load status vocabulary, capability registry, operation contracts, resource collections, runtime requirements, and self-tests only when the selected task actually requires them; reuse unchanged authorities already loaded in this orchestration context.&quot;
+    }
+  ],
+  &quot;portableSkillProof&quot;: {
+    &quot;loader&quot;: &quot;../../ai-skill-loader.js&quot;,
+    &quot;browserHarness&quot;: &quot;../../ai-skill-test.html&quot;,
+    &quot;firstPackage&quot;: &quot;../../skills/binary-cube-laboratory/manifest.json&quot;,
+    &quot;selfTest&quot;: &quot;../../skills/binary-cube-laboratory/self-test.json&quot;,
+    &quot;examples&quot;: &quot;../../skills/binary-cube-laboratory/examples.json&quot;,
+    &quot;capabilityId&quot;: &quot;shadowrun.binary-cube&quot;,
+    &quot;repositoryState&quot;: &quot;implemented&quot;,
+    &quot;publicExecutionState&quot;: &quot;requires-deployed-browser-read-back&quot;,
+    &quot;packages&quot;: [
+      {
+        &quot;skill&quot;: &quot;binary-cube-laboratory&quot;,
+        &quot;capabilityId&quot;: &quot;shadowrun.binary-cube&quot;,
+        &quot;manifest&quot;: &quot;../../skills/binary-cube-laboratory/manifest.json&quot;,
+        &quot;selfTest&quot;: &quot;../../skills/binary-cube-laboratory/self-test.json&quot;,
+        &quot;runtimeScripts&quot;: [
+          &quot;../../shadowrun-binary-cube-engine.js&quot;
+        ],
+        &quot;runtimeShape&quot;: &quot;single-script-global-dispatch&quot;,
+        &quot;status&quot;: &quot;runtime-required&quot;
+      },
+      {
+        &quot;skill&quot;: &quot;module-map-generation&quot;,
+        &quot;capabilityId&quot;: &quot;spatial.module-map.generate&quot;,
+        &quot;manifest&quot;: &quot;../../skills/module-map-generation/manifest.json&quot;,
+        &quot;selfTest&quot;: &quot;../../skills/module-map-generation/self-test.json&quot;,
+        &quot;runtimeScripts&quot;: [
+          &quot;../../semantic-spatial-engine.js&quot;,
+          &quot;../../semantic-content-populator.js&quot;,
+          &quot;../../module-map-generator.js&quot;
+        ],
+        &quot;runtimeShape&quot;: &quot;ordered-multi-script-global-method&quot;,
+        &quot;status&quot;: &quot;runtime-required&quot;
+      }
+    ],
+    &quot;note&quot;: &quot;Repository implementation and package metadata do not themselves prove that GitHub Pages has deployed the latest commit or that a given external host executed the browser self-tests.&quot;
+  },
+  &quot;tabletopOperations&quot;: {
+    &quot;skillCount&quot;: 11,
+    &quot;diceSkill&quot;: &quot;tabletop-dice-rolling&quot;,
+    &quot;dicePortableRange&quot;: &quot;1-10 dice, d2-d100, optional integer modifier&quot;,
+    &quot;diceModes&quot;: [
+      &quot;cumulative&quot;,
+      &quot;individual total&quot;
+    ],
+    &quot;randomnessRule&quot;: &quot;Use host cryptographic randomness such as Python secrets or Web Crypto rejection sampling; do not claim physical true randomness without an independently attested physical entropy source.&quot;,
+    &quot;sandboxStateSkill&quot;: &quot;tabletop-sandbox-data-management&quot;,
+    &quot;defaultChatGptSandboxPath&quot;: &quot;/mnt/data/ttrpg_state/&quot;,
+    &quot;stateModel&quot;: &quot;system-neutral CSV current-state tables plus append-only campaign ledger&quot;,
+    &quot;battlespaceSkill&quot;: &quot;tabletop-battlespace-visualization&quot;,
+    &quot;battlespacePackage&quot;: &quot;../../skills/tabletop-battlespace-visualization/manifest.json&quot;,
+    &quot;battlespaceHelper&quot;: &quot;../../skills/tabletop-battlespace-visualization/scripts/battlespace.py&quot;,
+    &quot;battlespaceTables&quot;: [
+      &quot;battlefield_maps.csv&quot;,
+      &quot;battlefield_tokens.csv&quot;,
+      &quot;battlefield_terrain.csv&quot;,
+      &quot;battlefield_effects.csv&quot;
+    ],
+    &quot;battlespaceRenderMinimum&quot;: &quot;1 pixel = 1 grid cell&quot;,
+    &quot;battlespaceRenderScaling&quot;: &quot;nearest-neighbor&quot;,
+    &quot;battlespaceAuthority&quot;: &quot;CSV coordinates are authoritative; PNG previews are diagnostic projections.&quot;
+  },
+  &quot;externalModelAcceptance&quot;: {
+    &quot;resource&quot;: &quot;external-model-acceptance-tests.json&quot;,
+    &quot;absoluteResource&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/external-model-acceptance-tests.json&quot;,
+    &quot;loadPolicy&quot;: &quot;Load only when validating external-model discovery, routing, personality binding, runtime boundaries, or portable execution behavior.&quot;,
+    &quot;testCount&quot;: 14
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

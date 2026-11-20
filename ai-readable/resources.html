@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical static and lore resource identities">
+<meta name="hb-projection-sha256" content="75a09cb4c678c014762b3f15431015c7479c36dbde1001d7df11b41c9af46768">
+<meta name="hb-source-path" content="api/resource-collections.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/resources.html">
+<title>Resource collections — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Resource collections</h1>
+<p>Canonical static and lore resource identities</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/resource-collections.json"><code>api/resource-collections.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>75a09cb4c678c014762b3f15431015c7479c36dbde1001d7df11b41c9af46768</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="75a09cb4c678c014762b3f15431015c7479c36dbde1001d7df11b41c9af46768">{
+  &quot;schemaVersion&quot;: &quot;1.6.0&quot;,
+  &quot;description&quot;: &quot;Expandable authoritative indexes and broader campaign/lore/operation-contract/Agent-Skills/personality/Charles gateway resources for HBFoundryAPI.&quot;,
+  &quot;operationContracts&quot;: {
+    &quot;getResource&quot;: {
+      &quot;call&quot;: &quot;HBFoundryAPI.getResource(resourceId, options)&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;resourceId&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Stable resource id from this registry or the capability manifest.&quot;
+        },
+        {
+          &quot;name&quot;: &quot;options&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;fields&quot;: {
+            &quot;raw&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: false,
+              &quot;description&quot;: &quot;Return raw text instead of JSON parsing when applicable.&quot;
+            },
+            &quot;refresh&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: false,
+              &quot;description&quot;: &quot;Force a reload instead of using the facade cache.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: &quot;Parsed JSON for json resources or text for non-json resources.&quot;
+    },
+    &quot;expandResourceIndex&quot;: {
+      &quot;call&quot;: &quot;HBFoundryAPI.expandResourceIndex(resourceId)&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;resourceId&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Stable id of a resource that declares indexRules.&quot;
+        }
+      ],
+      &quot;returns&quot;: &quot;Array of generated child descriptors containing stable derived id, parentId, title, workspace, kind, format, path, and tags.&quot;
+    },
+    &quot;searchCollection&quot;: {
+      &quot;call&quot;: &quot;HBFoundryAPI.searchCollection(resourceId, query, options)&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;resourceId&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Stable id of an expandable indexed resource.&quot;
+        },
+        {
+          &quot;name&quot;: &quot;query&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Case-insensitive literal search term. Must be non-empty.&quot;
+        },
+        {
+          &quot;name&quot;: &quot;options&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;fields&quot;: {
+            &quot;maxResults&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 80,
+              &quot;range&quot;: &quot;1..500&quot;
+            },
+            &quot;includeErrors&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: false,
+              &quot;description&quot;: &quot;Include child retrieval errors as result records instead of silently skipping them.&quot;
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: &quot;Search-hit records carrying child resource id/path and matching value excerpt.&quot;
+    },
+    &quot;searchResources&quot;: {
+      &quot;call&quot;: &quot;HBFoundryAPI.searchResources(query, options)&quot;,
+      &quot;arguments&quot;: [
+        {
+          &quot;name&quot;: &quot;query&quot;,
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;required&quot;: true,
+          &quot;description&quot;: &quot;Case-insensitive literal search term. Must be non-empty.&quot;
+        },
+        {
+          &quot;name&quot;: &quot;options&quot;,
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;required&quot;: false,
+          &quot;fields&quot;: {
+            &quot;workspace&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false
+            },
+            &quot;kind&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false
+            },
+            &quot;resourceQuery&quot;: {
+              &quot;type&quot;: &quot;string&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Filter resource descriptors before content search.&quot;
+            },
+            &quot;resourceIds&quot;: {
+              &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+              &quot;required&quot;: false,
+              &quot;description&quot;: &quot;Restrict search to specified top-level resource ids.&quot;
+            },
+            &quot;maxResults&quot;: {
+              &quot;type&quot;: &quot;integer&quot;,
+              &quot;required&quot;: false,
+              &quot;default&quot;: 40,
+              &quot;range&quot;: &quot;1..200&quot;
+            },
+            &quot;includeErrors&quot;: {
+              &quot;type&quot;: &quot;boolean&quot;,
+              &quot;required&quot;: false
+            }
+          }
+        }
+      ],
+      &quot;returns&quot;: &quot;Search-hit records across registered top-level resources.&quot;
+    }
+  },
+  &quot;resources&quot;: [
+    {
+      &quot;id&quot;: &quot;foundry.agent-skills&quot;,
+      &quot;title&quot;: &quot;Foundry Agent Skills Registry&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;skill-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;skills/index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;skills&quot;,
+        &quot;agents&quot;,
+        &quot;workflows&quot;,
+        &quot;open standard&quot;,
+        &quot;discoverability&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;foundry.operation-contracts&quot;,
+      &quot;title&quot;: &quot;Foundry Self-Describing Operation Contracts&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;operation-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/operation-contracts.json&quot;,
+      &quot;tags&quot;: [
+        &quot;api&quot;,
+        &quot;operations&quot;,
+        &quot;arguments&quot;,
+        &quot;schemas&quot;,
+        &quot;self-documenting&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;charles.interactive-resource-gateway&quot;,
+      &quot;title&quot;: &quot;Charles Interactive Resource Gateway&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;kind&quot;: &quot;capability-contract&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/charles-interactive-resource-gateway.json&quot;,
+      &quot;authority&quot;: &quot;Charles&quot;,
+      &quot;tags&quot;: [
+        &quot;Charles&quot;,
+        &quot;AI interface&quot;,
+        &quot;access control&quot;,
+        &quot;privacy&quot;,
+        &quot;anti-abuse&quot;,
+        &quot;automation&quot;,
+        &quot;honeypot&quot;,
+        &quot;tarpit&quot;,
+        &quot;discoverability&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;kaysender.wiki-index&quot;,
+      &quot;title&quot;: &quot;Kaysender Complete Layered Wiki Index&quot;,
+      &quot;workspace&quot;: &quot;Kaysender&quot;,
+      &quot;kind&quot;: &quot;lore-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/kaysender/wiki/wiki-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;kaysender&quot;,
+        &quot;lore&quot;,
+        &quot;campaign&quot;,
+        &quot;rules&quot;,
+        &quot;converted stats&quot;
+      ],
+      &quot;childKind&quot;: &quot;lore-pack&quot;,
+      &quot;supports&quot;: [
+        &quot;getResource&quot;,
+        &quot;expandResourceIndex&quot;,
+        &quot;searchCollection&quot;
+      ],
+      &quot;indexRules&quot;: [
+        {
+          &quot;key&quot;: &quot;packs&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;lore-pack&quot;,
+          &quot;description&quot;: &quot;Each packs entry is already a repository-root-relative authoritative JSON path.&quot;
+        },
+        {
+          &quot;key&quot;: &quot;sourceDocuments&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;source-reference&quot;,
+          &quot;description&quot;: &quot;Each source-document entry is already a repository-root-relative source-page-references path; do not prepend the Kaysender directory.&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;barotrauma.encounter-index&quot;,
+      &quot;title&quot;: &quot;Barotrauma General Encounter Engine Registry&quot;,
+      &quot;workspace&quot;: &quot;Barotrauma&quot;,
+      &quot;kind&quot;: &quot;encounter-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/barotrauma/tools/encounters/encounter-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;barotrauma&quot;,
+        &quot;encounters&quot;,
+        &quot;lethality&quot;,
+        &quot;campaign&quot;,
+        &quot;generator data&quot;
+      ],
+      &quot;childKind&quot;: &quot;encounter-data&quot;,
+      &quot;supports&quot;: [
+        &quot;getResource&quot;,
+        &quot;expandResourceIndex&quot;,
+        &quot;searchCollection&quot;
+      ],
+      &quot;indexRules&quot;: [
+        {
+          &quot;key&quot;: &quot;parts&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;encounter-templates&quot;,
+          &quot;description&quot;: &quot;Encounter-template JSON parts.&quot;
+        },
+        {
+          &quot;key&quot;: &quot;lethalityParts&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;encounter-lethality&quot;,
+          &quot;description&quot;: &quot;Matching lethality-profile JSON parts.&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.crew-operations&quot;,
+      &quot;title&quot;: &quot;Blacklight EXO Crew Operations Simulator&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;operations-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;blacklight-exo-crew-operations.html&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;EXO&quot;,
+        &quot;crew operations&quot;,
+        &quot;helm&quot;,
+        &quot;navigation&quot;,
+        &quot;gunnery&quot;,
+        &quot;engineering&quot;,
+        &quot;science&quot;,
+        &quot;comms&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.charles-engram-manifest&quot;,
+      &quot;title&quot;: &quot;Charles Personality Engram Manifest&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;personality-engram-manifest&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;docs/blacklight/charles-personality-engram-manifest.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;Charles&quot;,
+        &quot;personality&quot;,
+        &quot;engram&quot;,
+        &quot;manifest&quot;,
+        &quot;AI interface&quot;,
+        &quot;discoverability&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.charles-personality-engram&quot;,
+      &quot;title&quot;: &quot;Charles CE1 Personality Engram&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;personality-engram&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;docs/blacklight/charles-personality-engram.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;Charles&quot;,
+        &quot;personality&quot;,
+        &quot;engram&quot;,
+        &quot;CE1&quot;,
+        &quot;CE1.1&quot;,
+        &quot;AI interface&quot;,
+        &quot;assistant persona&quot;,
+        &quot;machine readable&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.charles-personality-profile&quot;,
+      &quot;title&quot;: &quot;Charles Personality Profile&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;personality-profile&quot;,
+      &quot;format&quot;: &quot;markdown&quot;,
+      &quot;path&quot;: &quot;docs/blacklight/charles-personality-profile.md&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;Charles&quot;,
+        &quot;personality&quot;,
+        &quot;voice&quot;,
+        &quot;behavior&quot;,
+        &quot;lore&quot;,
+        &quot;AI integration&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.charles-engram-spec&quot;,
+      &quot;title&quot;: &quot;Charles Personality Engram Specification&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;personality-specification&quot;,
+      &quot;format&quot;: &quot;markdown&quot;,
+      &quot;path&quot;: &quot;docs/blacklight/charles-personality-engram.md&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;Charles&quot;,
+        &quot;engram&quot;,
+        &quot;CE1&quot;,
+        &quot;schema&quot;,
+        &quot;prompt assembly&quot;,
+        &quot;token efficient&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.complete-lore-index&quot;,
+      &quot;title&quot;: &quot;Blacklight Continuum Campaign and Lore Index&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;lore-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/resources/blacklight-lore-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;campaign&quot;,
+        &quot;lore&quot;,
+        &quot;rules&quot;,
+        &quot;archives&quot;
+      ],
+      &quot;childKind&quot;: &quot;blacklight-record&quot;,
+      &quot;supports&quot;: [
+        &quot;getResource&quot;,
+        &quot;expandResourceIndex&quot;,
+        &quot;searchCollection&quot;
+      ],
+      &quot;indexRules&quot;: [
+        {
+          &quot;key&quot;: &quot;resources&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;blacklight-record&quot;,
+          &quot;description&quot;: &quot;Repository-root-relative Blacklight HTML/JSON/Markdown authority paths.&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;foundry.campaign-lore-index&quot;,
+      &quot;title&quot;: &quot;Foundry Cross-Setting Campaign and Lore Index&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;campaign-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/resources/campaign-lore-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;campaign&quot;,
+        &quot;lore&quot;,
+        &quot;settings&quot;,
+        &quot;modules&quot;
+      ],
+      &quot;childKind&quot;: &quot;campaign-resource&quot;,
+      &quot;supports&quot;: [
+        &quot;getResource&quot;,
+        &quot;expandResourceIndex&quot;,
+        &quot;searchCollection&quot;
+      ],
+      &quot;indexRules&quot;: [
+        {
+          &quot;key&quot;: &quot;resources&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;campaign-resource&quot;,
+          &quot;description&quot;: &quot;Repository-root-relative cross-setting campaign/lore entry paths.&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;warhammer.lore-index&quot;,
+      &quot;title&quot;: &quot;Warhammer 40K Lore Index&quot;,
+      &quot;workspace&quot;: &quot;Warhammer 40K&quot;,
+      &quot;kind&quot;: &quot;lore-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/resources/warhammer-40k-lore-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;warhammer&quot;,
+        &quot;40k&quot;,
+        &quot;campaign&quot;,
+        &quot;lore&quot;
+      ],
+      &quot;childKind&quot;: &quot;lore-resource&quot;,
+      &quot;supports&quot;: [
+        &quot;getResource&quot;,
+        &quot;expandResourceIndex&quot;,
+        &quot;searchCollection&quot;
+      ],
+      &quot;indexRules&quot;: [
+        {
+          &quot;key&quot;: &quot;resources&quot;,
+          &quot;base&quot;: &quot;&quot;,
+          &quot;kind&quot;: &quot;lore-resource&quot;,
+          &quot;description&quot;: &quot;Repository-root-relative Warhammer lore/archive paths.&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;foundry.environment-production&quot;,
+      &quot;title&quot;: &quot;Iterative Environment Production Kit&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;workflow-package&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;skills/environment-production/manifest.json&quot;,
+      &quot;tags&quot;: [
+        &quot;map development&quot;,
+        &quot;terrain&quot;,
+        &quot;model authoring&quot;,
+        &quot;visual review&quot;,
+        &quot;quality gates&quot;,
+        &quot;portable&quot;,
+        &quot;CI&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.psx-editor-engineering&quot;,
+      &quot;title&quot;: &quot;Beckenburg PSX Editor: Selective Engineering Rules&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/psx-editor-reference.json&quot;,
+      &quot;tags&quot;: [
+        &quot;psx&quot;,
+        &quot;editor&quot;,
+        &quot;runtime&quot;,
+        &quot;lighting&quot;,
+        &quot;navigation&quot;,
+        &quot;level building&quot;,
+        &quot;accessible UI&quot;,
+        &quot;rule provenance&quot;,
+        &quot;implementation criteria&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Static design guidance, not an executable game/editor API nor implementation confirmation.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.psx-asset-import&quot;,
+      &quot;title&quot;: &quot;Beckenburg PSX Asset Import and Over-Regression Contract&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/psx-asset-import-reference.json&quot;,
+      &quot;tags&quot;: [
+        &quot;psx&quot;,
+        &quot;3D asset&quot;,
+        &quot;import&quot;,
+        &quot;OBJ&quot;,
+        &quot;STL&quot;,
+        &quot;GLB&quot;,
+        &quot;mesh&quot;,
+        &quot;LOD&quot;,
+        &quot;over regression&quot;,
+        &quot;memory&quot;,
+        &quot;warning&quot;,
+        &quot;original preservation&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Real import support is format-specific; JSON explicitly distinguishes implemented and planned readers.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.psx-reference-batch-2026-10-30&quot;,
+      &quot;title&quot;: &quot;PSX design sources: nine-file intake and adoption ledger&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/psx-reference-ingestion-2026-10-30.json&quot;,
+      &quot;tags&quot;: [
+        &quot;psx&quot;,
+        &quot;animation&quot;,
+        &quot;campaign&quot;,
+        &quot;sfx&quot;,
+        &quot;provenance&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Six duplicate and three new PDF references; source PDFs not mirrored as binary files.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.psx-menu-campaign-billboards&quot;,
+      &quot;title&quot;: &quot;Menu, Campaign and Billboard Editor Manipulation Contract&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/psx-editor-manipulation-contract.json&quot;,
+      &quot;tags&quot;: [
+        &quot;psx&quot;,
+        &quot;menu&quot;,
+        &quot;campaign&quot;,
+        &quot;scripting&quot;,
+        &quot;billboard&quot;,
+        &quot;save&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Owner-authored inline design brief, adapt modern Java runtime separately from PS1 hardware.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.npc-ai-ghost-rules&quot;,
+      &quot;title&quot;: &quot;Canonical Beckenburg NPC/AI ghost rule authoring contract&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/psx-npc-ai-authoring.json&quot;,
+      &quot;tags&quot;: [
+        &quot;npc&quot;,
+        &quot;ai&quot;,
+        &quot;ghost&quot;,
+        &quot;authoring&quot;,
+        &quot;rules&quot;,
+        &quot;behavior&quot;,
+        &quot;visibility&quot;,
+        &quot;frenzy&quot;,
+        &quot;host&quot;,
+        &quot;editor&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Static tool contract; real species rules are read from live Java source by GhostAiRuleAdapter, not maintained as an independent truth copy.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;beckenburg.dev-admin-ai-full-lobby&quot;,
+      &quot;title&quot;: &quot;Beckenburg private developer full-lobby AI match and omniscient admin observer&quot;,
+      &quot;workspace&quot;: &quot;Beckenburg&quot;,
+      &quot;kind&quot;: &quot;engineering-reference&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/dev-match-admin-observer-contract.json&quot;,
+      &quot;tags&quot;: [
+        &quot;beckenburg&quot;,
+        &quot;admin&quot;,
+        &quot;developer&quot;,
+        &quot;multiplayer&quot;,
+        &quot;ai&quot;,
+        &quot;ghost&quot;,
+        &quot;hunter&quot;,
+        &quot;observer&quot;,
+        &quot;testing&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;PLANNED ONLY. Seven ordinary multiplayer bot clients, one separate host-local dev admin observer, optional Windows CI match evidence.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;fmpl.asset-production-library&quot;,
+      &quot;title&quot;: &quot;Factorio Modeling Production Library&quot;,
+      &quot;workspace&quot;: &quot;AI Tools&quot;,
+      &quot;kind&quot;: &quot;asset-registry&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/ai/fmpl-library.json&quot;,
+      &quot;tags&quot;: [
+        &quot;fmpl&quot;,
+        &quot;factorio&quot;,
+        &quot;blender&quot;,
+        &quot;geometry&quot;,
+        &quot;pbr&quot;,
+        &quot;greebles&quot;,
+        &quot;models&quot;,
+        &quot;cross-project&quot;
+      ],
+      &quot;supports&quot;: [
+        &quot;getResource&quot;
+      ],
+      &quot;notes&quot;: &quot;Source-pinned, read-only discovery; no private binaries, Blender remote execution, or runtime integration claim.&quot;
+    }
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

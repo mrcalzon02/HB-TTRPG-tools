@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for shadowrun.binary-cube">
+<meta name="hb-projection-sha256" content="ae98d74e1fb108278f1a3018a5387decf9fb8808d9633a9a4a70a70b7897ce02">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/shadowrun-binary-cube.html">
+<title>Operation contract: shadowrun.binary-cube — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: shadowrun.binary-cube</h1>
+<p>Canonical contract slice for shadowrun.binary-cube</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>ae98d74e1fb108278f1a3018a5387decf9fb8808d9633a9a4a70a70b7897ce02</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="ae98d74e1fb108278f1a3018a5387decf9fb8808d9633a9a4a70a70b7897ce02">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;shadowrun.binary-cube&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;dispatcher&quot;,
+    &quot;securityClassification&quot;: &quot;experimental-ttrpg-obfuscation-not-production-cryptography&quot;,
+    &quot;sharedTypes&quot;: {
+      &quot;rawKey&quot;: &quot;Canonical key object or JSON string in hb-ttrpg-shadowrun-binary-cube-key schema.&quot;,
+      &quot;rawPackage&quot;: &quot;Canonical encrypted package object or JSON string in hb-ttrpg-shadowrun-binary-cube-package schema.&quot;,
+      &quot;binary&quot;: &quot;String containing only 0/1 and optional whitespace.&quot;,
+      &quot;face&quot;: &quot;One of top, bottom, front, back, left, right.&quot;,
+      &quot;quarterTurns&quot;: &quot;Integer-like value normalized modulo 4.&quot;
+    },
+    &quot;operations&quot;: {
+      &quot;createKey&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;fields&quot;: {
+              &quot;gridSize&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 4,
+                &quot;range&quot;: &quot;3..1024&quot;
+              },
+              &quot;seed&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: &quot;shadowrun-cube-key&quot;
+              },
+              &quot;inputFace&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: &quot;top&quot;,
+                &quot;enum&quot;: [
+                  &quot;top&quot;,
+                  &quot;bottom&quot;,
+                  &quot;front&quot;,
+                  &quot;back&quot;,
+                  &quot;left&quot;,
+                  &quot;right&quot;
+                ]
+              },
+              &quot;outputFace&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: &quot;front&quot;,
+                &quot;description&quot;: &quot;Must be perpendicular to inputFace; same/opposite face is rejected.&quot;
+              },
+              &quot;inputQuarterTurns&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 0,
+                &quot;description&quot;: &quot;Normalized modulo 4.&quot;
+              },
+              &quot;outputQuarterTurns&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 0,
+                &quot;description&quot;: &quot;Normalized modulo 4.&quot;
+              },
+              &quot;maskDensity&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 1,
+                &quot;range&quot;: &quot;0.01..1&quot;,
+                &quot;description&quot;: &quot;Payload-cell fraction; exact deterministic mask retained in key.&quot;
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Validated canonical key with permutations, mask, keyId, SHA-256 key digest metadata, and collision-free invariant.&quot;
+        },
+        &quot;example&quot;: {
+          &quot;operation&quot;: &quot;createKey&quot;,
+          &quot;args&quot;: [
+            {
+              &quot;gridSize&quot;: 16,
+              &quot;seed&quot;: &quot;run-echo&quot;,
+              &quot;inputFace&quot;: &quot;top&quot;,
+              &quot;outputFace&quot;: &quot;front&quot;,
+              &quot;maskDensity&quot;: 0.75
+            }
+          ]
+        }
+      },
+      &quot;validateKey&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Normalized validated canonical key; throws on format, digest, permutation, mask, or invariant failure.&quot;
+        }
+      },
+      &quot;validatePackage&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawPackage&quot;,
+            &quot;type&quot;: &quot;rawPackage&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Normalized validated encrypted package bound to the supplied key.&quot;
+        }
+      },
+      &quot;buildPoints&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Canonical cube point field for every x/y input coordinate.&quot;
+        }
+      },
+      &quot;buildPointsById&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;pointIds&quot;,
+            &quot;type&quot;: &quot;iterable&lt;integer&gt;&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Point IDs in canonical 0..gridSize^2-1 domain.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Requested canonical point records.&quot;
+        }
+      },
+      &quot;pointDepth&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;x&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true,
+            &quot;range&quot;: &quot;0..gridSize-1&quot;
+          },
+          {
+            &quot;name&quot;: &quot;y&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true,
+            &quot;range&quot;: &quot;0..gridSize-1&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;integer&quot;,
+          &quot;description&quot;: &quot;Canonical z/depth coordinate.&quot;
+        }
+      },
+      &quot;faceCell&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;point&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Point with x, y, z integer coordinates.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;face&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;size&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true,
+            &quot;range&quot;: &quot;&gt;=1&quot;
+          },
+          {
+            &quot;name&quot;: &quot;quarterTurns&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;[integer,integer]&quot;,
+          &quot;description&quot;: &quot;[row,column] projection cell.&quot;
+        }
+      },
+      &quot;faceOrder&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;points&quot;,
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;face&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;size&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;quarterTurns&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Projection-ordered point array; throws on collisions or empty cells.&quot;
+        }
+      },
+      &quot;projectionOrder&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;face&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;quarterTurns&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;Int32Array&quot;,
+          &quot;description&quot;: &quot;Point ID at each projected face cell.&quot;
+        }
+      },
+      &quot;transformBlock&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;block&quot;,
+            &quot;type&quot;: &quot;binary&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Exactly one gridSize^2-cell block.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;fromFace&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;fromTurns&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;toFace&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;toTurns&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;Transformed binary block.&quot;
+        }
+      },
+      &quot;deterministicFiller&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;blockIndex&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: true,
+            &quot;range&quot;: &quot;&gt;=0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;cellCount&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;gridSize^2&quot;,
+            &quot;range&quot;: &quot;&gt;=1&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+          &quot;description&quot;: &quot;Deterministic padding bits for the block.&quot;
+        }
+      },
+      &quot;traceEncryptBlock&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;binary&quot;,
+            &quot;type&quot;: &quot;binary&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;blockIndex&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0,
+            &quot;range&quot;: &quot;&gt;=0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;sourceOffset&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Optional source-bit offset; canonical default is derived from blockIndex and payload capacity.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Canonical transformation trace with framing, projections, phases, point assignments, and validation metadata.&quot;
+        }
+      },
+      &quot;validateTransformationTrace&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawTrace&quot;,
+            &quot;type&quot;: &quot;object|string&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Transformation-trace object or JSON string.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Validated canonical transformation trace.&quot;
+        }
+      },
+      &quot;projectionDiagnostics&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Per-face projection diagnostics plus algebraic collision invariant.&quot;
+        }
+      },
+      &quot;assertProjectionUniqueness&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawPointsOrKey&quot;,
+            &quot;type&quot;: &quot;array&lt;object&gt;|rawKey&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Either an explicit point array or canonical key.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;size&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Required when first argument is an explicit point array.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;boolean|object&quot;,
+          &quot;description&quot;: &quot;Asserts collision-free face projections; throws on conflict.&quot;
+        }
+      },
+      &quot;encryptBinary&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;binary&quot;,
+            &quot;type&quot;: &quot;binary&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Canonical encrypted package containing ciphertext, framing metadata, key identity, and corruption checksum.&quot;
+        },
+        &quot;example&quot;: {
+          &quot;operation&quot;: &quot;encryptBinary&quot;,
+          &quot;args&quot;: [
+            &quot;0100100001101001&quot;,
+            {
+              &quot;$ref&quot;: &quot;createKey result&quot;
+            }
+          ]
+        }
+      },
+      &quot;decryptBinary&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawPackage&quot;,
+            &quot;type&quot;: &quot;rawPackage&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;Recovered original binary payload.&quot;
+        }
+      },
+      &quot;diagnosePackage&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawPackage&quot;,
+            &quot;type&quot;: &quot;rawPackage&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Key identity, grid, point-field diagnostics, payload/ciphertext sizes, checksum information, first-block face projections, and omnidirectional invariant.&quot;
+        }
+      },
+      &quot;packageChecksum&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;payload&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Canonical package-like payload containing checksum framing material.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;FNV-1a 32-bit corruption-detection checksum as eight hex characters.&quot;
+        }
+      },
+      &quot;sha256Hex&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;value&quot;,
+            &quot;type&quot;: &quot;string|coercible&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;SHA-256 lowercase hexadecimal digest.&quot;
+        }
+      },
+      &quot;keyIdentityMaterial&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;key&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Canonical key-shaped object.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;Stable canonical key identity material used for key fingerprint/digest.&quot;
+        }
+      },
+      &quot;keyDigest&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;key&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Canonical key-shaped object.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;SHA-256 digest of canonical key identity material.&quot;
+        }
+      },
+      &quot;legalOutputFaces&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;inputFace&quot;,
+            &quot;type&quot;: &quot;face&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;string&gt;&quot;,
+          &quot;description&quot;: &quot;The four perpendicular legal output faces.&quot;
+        }
+      },
+      &quot;algebraicInvariant&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Algebraic bijection/collision-free invariant without mandatory exhaustive six-face enumeration.&quot;
+        }
+      },
+      &quot;assertOmnidirectionalNonConflict&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;rawKey&quot;,
+            &quot;type&quot;: &quot;rawKey&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;fields&quot;: {
+              &quot;exhaustive&quot;: {
+                &quot;type&quot;: &quot;boolean&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: false,
+                &quot;description&quot;: &quot;When true, additionally performs explicit exhaustive projection diagnostics.&quot;
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Collision-free invariant; includes exhaustive diagnostics when requested; throws on failure.&quot;
+        }
+      }
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

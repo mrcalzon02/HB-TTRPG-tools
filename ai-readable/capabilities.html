@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical capability identifiers and runtime details">
+<meta name="hb-projection-sha256" content="6c96552818820eb8086906a36cfd76e9ab63c7e5703ef1d43800fd90e40a030a">
+<meta name="hb-source-path" content="api/foundry-capabilities.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/capabilities.html">
+<title>Foundry capability registry — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Foundry capability registry</h1>
+<p>Canonical capability identifiers and runtime details</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json"><code>api/foundry-capabilities.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>6c96552818820eb8086906a36cfd76e9ab63c7e5703ef1d43800fd90e40a030a</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="6c96552818820eb8086906a36cfd76e9ab63c7e5703ef1d43800fd90e40a030a">{
+  &quot;schemaVersion&quot;: &quot;1.2.1&quot;,
+  &quot;apiVersion&quot;: &quot;2026-09-17&quot;,
+  &quot;name&quot;: &quot;Calzon&#x27;s TTRPG Foundry AI Capability Manifest&quot;,
+  &quot;baseUrl&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/&quot;,
+  &quot;statusVocabulary&quot;: &quot;ai/status-vocabulary.json&quot;,
+  &quot;architecture&quot;: {
+    &quot;rule&quot;: &quot;Mirrored calls, not mirrored logic.&quot;,
+    &quot;description&quot;: &quot;Canonical browser engines, generator modules, laboratory solvers, and authoritative campaign data remain the source of truth. This manifest and the HBFoundryAPI facade only discover, load, invoke, and search those authorities.&quot;,
+    &quot;transport&quot;: &quot;GitHub Pages is a static origin. Static JSON/HTML resources are remotely GET-retrievable. Executable capabilities run in JavaScript through the canonical site modules or through an external MCP/tool adapter that mirrors these descriptors; this manifest does not pretend a server-side RPC service exists.&quot;,
+    &quot;facade&quot;: &quot;foundry-api.js&quot;,
+    &quot;llms&quot;: &quot;llms.txt&quot;
+  },
+  &quot;protocolHints&quot;: {
+    &quot;mcp&quot;: &quot;Map each executable capability id to a tool with the descriptor input schema, then invoke the canonical global/method shown in invocation.&quot;,
+    &quot;openaiTools&quot;: &quot;Use capability ids as stable tool names after replacing dots with underscores. Preserve the input schema and source/provenance fields.&quot;,
+    &quot;resourceRetrieval&quot;: &quot;Use HBFoundryAPI.listResources(), getResource(), and searchResources() or fetch the registered same-origin resource URLs directly.&quot;
+  },
+  &quot;capabilities&quot;: [
+    {
+      &quot;id&quot;: &quot;spatial.module-map.generate&quot;,
+      &quot;title&quot;: &quot;Semantic Module Map Generator&quot;,
+      &quot;workspace&quot;: &quot;Generators&quot;,
+      &quot;kind&quot;: &quot;generate&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;module&quot;,
+        &quot;map&quot;,
+        &quot;location&quot;,
+        &quot;dungeon&quot;,
+        &quot;building&quot;,
+        &quot;encounter-space&quot;
+      ],
+      &quot;description&quot;: &quot;Generate purpose-aware semantic-first locations through the shared spatial engine and content population authority.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {
+          &quot;seed&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;locationArchetype&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;rulesTarget&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;dangerLevel&quot;: {
+            &quot;type&quot;: &quot;number&quot;
+          },
+          &quot;faction&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;adventurePurpose&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;semantic-spatial-engine.js&quot;,
+          &quot;semantic-content-populator.js&quot;,
+          &quot;module-map-generator.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-method&quot;,
+        &quot;global&quot;: &quot;generator.module_map&quot;,
+        &quot;method&quot;: &quot;generate&quot;
+      },
+      &quot;source&quot;: [
+        &quot;semantic-spatial-engine.js&quot;,
+        &quot;semantic-content-populator.js&quot;,
+        &quot;module-map-generator.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;spatial.alien-vessel.generate&quot;,
+      &quot;title&quot;: &quot;Alien Vessel Generator&quot;,
+      &quot;workspace&quot;: &quot;Generators&quot;,
+      &quot;kind&quot;: &quot;generate&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;alien&quot;,
+        &quot;vessel&quot;,
+        &quot;ship&quot;,
+        &quot;multi-deck&quot;,
+        &quot;interior&quot;,
+        &quot;wreck&quot;,
+        &quot;derelict&quot;,
+        &quot;salvage&quot;
+      ],
+      &quot;description&quot;: &quot;Generate an immutable intact alien-vessel reference through the shared spatial/hull authorities, then apply deterministic lifecycle condition history for operational, damaged, abandoned, salvaged, crippled, wrecked, or destroyed states.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {
+          &quot;seed&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;profile&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;enum&quot;: [
+              &quot;recon&quot;,
+              &quot;damaged_recon&quot;,
+              &quot;science&quot;,
+              &quot;freighter&quot;,
+              &quot;command_cruiser&quot;,
+              &quot;carrier&quot;
+            ]
+          },
+          &quot;faction&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;speciesProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;
+          },
+          &quot;civilizationProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;
+          },
+          &quot;technologyProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;
+          },
+          &quot;conditionTemplate&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;conditionAxes&quot;: {
+            &quot;type&quot;: &quot;object&quot;
+          },
+          &quot;destructionPercent&quot;: {
+            &quot;type&quot;: &quot;number&quot;
+          },
+          &quot;salvageRemovalPercent&quot;: {
+            &quot;type&quot;: &quot;number&quot;
+          },
+          &quot;sourceLayout&quot;: {
+            &quot;type&quot;: &quot;object&quot;
+          }
+        }
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;semantic-spatial-engine.js&quot;,
+          &quot;vessel-condition-model.js&quot;,
+          &quot;vessel-hull-envelope.js&quot;,
+          &quot;alien-vessel-generator.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-method&quot;,
+        &quot;global&quot;: &quot;generator.alien_vessel&quot;,
+        &quot;method&quot;: &quot;generate&quot;
+      },
+      &quot;source&quot;: [
+        &quot;alien-vessel-generator.js&quot;,
+        &quot;vessel-condition-model.js&quot;,
+        &quot;semantic-spatial-engine.js&quot;,
+        &quot;vessel-hull-envelope.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;kaysender.airship.generate&quot;,
+      &quot;title&quot;: &quot;Kaysender Airship Spatial Generator&quot;,
+      &quot;workspace&quot;: &quot;Kaysender&quot;,
+      &quot;kind&quot;: &quot;generate&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;kaysender&quot;,
+        &quot;airship&quot;,
+        &quot;vessel&quot;,
+        &quot;crew&quot;,
+        &quot;cargo&quot;,
+        &quot;encounter-space&quot;
+      ],
+      &quot;description&quot;: &quot;Generate Kaysender airship interiors from vessel class, culture, core, purpose, crew, cargo, armament, defenses, condition, legal status, and faction context.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;semantic-spatial-engine.js&quot;,
+          &quot;semantic-content-populator.js&quot;,
+          &quot;vessel-hull-envelope.js&quot;,
+          &quot;kaysender-airship-generator.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-method&quot;,
+        &quot;global&quot;: &quot;generator.kaysender_airship&quot;,
+        &quot;method&quot;: &quot;generate&quot;
+      },
+      &quot;source&quot;: [
+        &quot;kaysender-airship-generator.js&quot;,
+        &quot;semantic-spatial-engine.js&quot;,
+        &quot;semantic-content-populator.js&quot;,
+        &quot;vessel-hull-envelope.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;signals.configuration.analyze&quot;,
+      &quot;title&quot;: &quot;Signals Laboratory Configuration Analyzer&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;kind&quot;: &quot;analyze&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;signals&quot;,
+        &quot;RF&quot;,
+        &quot;antenna&quot;,
+        &quot;propagation&quot;,
+        &quot;heterodyne&quot;,
+        &quot;interfrequency&quot;,
+        &quot;laboratory&quot;
+      ],
+      &quot;description&quot;: &quot;Run the authoritative Signals Laboratory analysis without duplicating RF, antenna, mapping, inference, or experiment logic.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;signals-laboratory.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-method&quot;,
+        &quot;global&quot;: &quot;SignalsLaboratory&quot;,
+        &quot;method&quot;: &quot;analyzeConfiguration&quot;
+      },
+      &quot;source&quot;: [
+        &quot;signals-laboratory.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;signals.utilities&quot;,
+      &quot;title&quot;: &quot;Signals Laboratory Utility Functions&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;kind&quot;: &quot;calculate&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;signals&quot;,
+        &quot;RF&quot;,
+        &quot;wavelength&quot;,
+        &quot;RLC&quot;,
+        &quot;antenna&quot;,
+        &quot;path-loss&quot;,
+        &quot;mapping&quot;,
+        &quot;laboratory&quot;
+      ],
+      &quot;description&quot;: &quot;Dispatch to the exported pure utility functions of SignalsLaboratory.utilities.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [
+          &quot;operation&quot;
+        ],
+        &quot;properties&quot;: {
+          &quot;operation&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;args&quot;: {
+            &quot;type&quot;: &quot;array&quot;
+          }
+        }
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;signals-laboratory.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-dispatch&quot;,
+        &quot;global&quot;: &quot;SignalsLaboratory.utilities&quot;,
+        &quot;operationField&quot;: &quot;operation&quot;,
+        &quot;argsField&quot;: &quot;args&quot;,
+        &quot;allowedOperations&quot;: [
+          &quot;wavelength&quot;,
+          &quot;resonantFrequency&quot;,
+          &quot;seriesRlcImpedance&quot;,
+          &quot;mismatch&quot;,
+          &quot;resonanceTransfer&quot;,
+          &quot;bandpassTuningResponse&quot;,
+          &quot;antennaResponse&quot;,
+          &quot;freeSpacePathLossDb&quot;,
+          &quot;planeWaveFieldVPerM&quot;,
+          &quot;thermalNoiseFloorDbm&quot;,
+          &quot;directReception&quot;,
+          &quot;heterodyneProducts&quot;,
+          &quot;intermodulationProducts&quot;,
+          &quot;adjacentCarrierProbe&quot;,
+          &quot;inferSourceCandidates&quot;,
+          &quot;estimateRangeScenarios&quot;,
+          &quot;logarithmicSweep&quot;,
+          &quot;sweepAntenna&quot;,
+          &quot;environmentPoint&quot;,
+          &quot;buildEnvironmentMap&quot;,
+          &quot;progressiveEnvironmentMaps&quot;,
+          &quot;mapStatistics&quot;,
+          &quot;compareMaps&quot;,
+          &quot;resolutionDiagnostics&quot;,
+          &quot;adaptiveEnvironmentSamples&quot;,
+          &quot;wifiPreset&quot;,
+          &quot;interfrequencyExperiment&quot;,
+          &quot;buildReceiverMixingMap&quot;,
+          &quot;buildPropagatingProductMap&quot;,
+          &quot;buildExperimentSuite&quot;,
+          &quot;experimentCatalog&quot;,
+          &quot;buildExperimentDataLayout&quot;,
+          &quot;buildExperimentRunRecord&quot;,
+          &quot;serializeExperimentRunRecord&quot;
+        ]
+      },
+      &quot;source&quot;: [
+        &quot;signals-laboratory.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;shadowrun.binary-cube&quot;,
+      &quot;title&quot;: &quot;Binary Cube Laboratory Engine&quot;,
+      &quot;workspace&quot;: &quot;Shadowrun&quot;,
+      &quot;kind&quot;: &quot;transform&quot;,
+      &quot;mode&quot;: &quot;browser-js&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;binary cube&quot;,
+        &quot;block laboratory&quot;,
+        &quot;laboratory&quot;,
+        &quot;permutation&quot;,
+        &quot;obfuscation&quot;,
+        &quot;shadowrun&quot;
+      ],
+      &quot;description&quot;: &quot;Dispatch directly to the canonical Binary Cube engine. This is experimental TTRPG obfuscation research, not production cryptography.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [
+          &quot;operation&quot;
+        ],
+        &quot;properties&quot;: {
+          &quot;operation&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;args&quot;: {
+            &quot;type&quot;: &quot;array&quot;
+          }
+        }
+      },
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;shadowrun-binary-cube-engine.js&quot;
+        ]
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-dispatch&quot;,
+        &quot;global&quot;: &quot;ShadowrunBinaryCubeEngine&quot;,
+        &quot;operationField&quot;: &quot;operation&quot;,
+        &quot;argsField&quot;: &quot;args&quot;,
+        &quot;allowedOperations&quot;: [
+          &quot;createKey&quot;,
+          &quot;validateKey&quot;,
+          &quot;validatePackage&quot;,
+          &quot;buildPoints&quot;,
+          &quot;buildPointsById&quot;,
+          &quot;pointDepth&quot;,
+          &quot;faceCell&quot;,
+          &quot;faceOrder&quot;,
+          &quot;projectionOrder&quot;,
+          &quot;transformBlock&quot;,
+          &quot;deterministicFiller&quot;,
+          &quot;traceEncryptBlock&quot;,
+          &quot;validateTransformationTrace&quot;,
+          &quot;projectionDiagnostics&quot;,
+          &quot;assertProjectionUniqueness&quot;,
+          &quot;encryptBinary&quot;,
+          &quot;decryptBinary&quot;,
+          &quot;diagnosePackage&quot;,
+          &quot;packageChecksum&quot;,
+          &quot;sha256Hex&quot;,
+          &quot;keyIdentityMaterial&quot;,
+          &quot;keyDigest&quot;,
+          &quot;legalOutputFaces&quot;,
+          &quot;algebraicInvariant&quot;,
+          &quot;assertOmnidirectionalNonConflict&quot;
+        ]
+      },
+      &quot;source&quot;: [
+        &quot;shadowrun-binary-cube-engine.js&quot;,
+        &quot;shadowrun-binary-cube-encryption.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.exo.jump.calculate&quot;,
+      &quot;title&quot;: &quot;Blacklight EXO Cluster Jump Calculator&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;calculate&quot;,
+      &quot;mode&quot;: &quot;browser-page-context&quot;,
+      &quot;status&quot;: &quot;page-context&quot;,
+      &quot;deterministic&quot;: true,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;EXO&quot;,
+        &quot;jump&quot;,
+        &quot;FTL&quot;,
+        &quot;route&quot;,
+        &quot;navigation&quot;
+      ],
+      &quot;description&quot;: &quot;Invoke the canonical Blacklight EXO jump calculator only when the EXO cartography page context is initialized. The current cluster-spatial authority derives its system set from that page, so the API facade reports the dependency rather than fabricating a second cluster model.&quot;,
+      &quot;inputSchema&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [
+          &quot;startSeed&quot;,
+          &quot;endSeed&quot;
+        ],
+        &quot;properties&quot;: {
+          &quot;startSeed&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;endSeed&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;familyKey&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          },
+          &quot;pathLevelKey&quot;: {
+            &quot;type&quot;: &quot;string&quot;
+          }
+        }
+      },
+      &quot;runtime&quot;: {
+        &quot;autoLoad&quot;: false,
+        &quot;context&quot;: &quot;Blacklight EXO cartography with BlacklightExoClusterSpatial and BlacklightExoFTL initialized&quot;
+      },
+      &quot;invocation&quot;: {
+        &quot;type&quot;: &quot;global-method&quot;,
+        &quot;global&quot;: &quot;BlacklightExoJumpCalculator&quot;,
+        &quot;method&quot;: &quot;calculate&quot;
+      },
+      &quot;source&quot;: [
+        &quot;blacklight-exo-jump-calculator-core.js&quot;,
+        &quot;blacklight-exo-cluster-spatial.js&quot;,
+        &quot;blacklight-exo-ftl-core.js&quot;
+      ],
+      &quot;page&quot;: &quot;blacklight.html&quot;
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.random-character&quot;,
+      &quot;title&quot;: &quot;Blacklight Random Character Generator&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;generate&quot;,
+      &quot;mode&quot;: &quot;browser-ui&quot;,
+      &quot;status&quot;: &quot;ui-bound&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;character&quot;,
+        &quot;character creation&quot;,
+        &quot;archetype&quot;,
+        &quot;equipment&quot;
+      ],
+      &quot;description&quot;: &quot;The existing character generator is authoritative but still couples generation state to page controls. Its complete rule/content sources are exposed below as retrievable resources; no duplicate headless generator is invented here.&quot;,
+      &quot;page&quot;: &quot;blacklight-random-character.html&quot;,
+      &quot;source&quot;: [
+        &quot;blacklight-random-character.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;charles.interactive-resource-gateway&quot;,
+      &quot;title&quot;: &quot;Charles Interactive Resource Gateway&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;kind&quot;: &quot;access-control&quot;,
+      &quot;mode&quot;: &quot;static-resource&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;deterministic&quot;: false,
+      &quot;tags&quot;: [
+        &quot;Charles&quot;,
+        &quot;AI interface&quot;,
+        &quot;access control&quot;,
+        &quot;privacy&quot;,
+        &quot;anti-abuse&quot;,
+        &quot;automation&quot;,
+        &quot;honeypot&quot;,
+        &quot;tarpit&quot;,
+        &quot;human-presence&quot;
+      ],
+      &quot;description&quot;: &quot;Discover the formally attested Charles access-control policy and its bounded browser runtime. The capability denies untrusted automation for protected gateway operations, supports short-lived human-presence grants, rejects synthetic engagement events, isolates gateway retrieval from ad-tech/cross-origin calls, and uses only finite non-retaliatory honeypot/tarpit behavior.&quot;,
+      &quot;authority&quot;: &quot;Charles&quot;,
+      &quot;attestation&quot;: &quot;This Interactive Resource Gateway is a Charles capability of Calzon&#x27;s TTRPG Foundry.&quot;,
+      &quot;resourceId&quot;: &quot;charles.interactive-resource-gateway&quot;,
+      &quot;runtime&quot;: {
+        &quot;scripts&quot;: [
+          &quot;charles-resource-gateway.js&quot;
+        ],
+        &quot;page&quot;: &quot;charles-interactive-resource-gateway.html&quot;,
+        &quot;notes&quot;: &quot;GitHub Pages is a public static origin. Hard network-level denial of direct static-file requests requires a server/CDN enforcement layer.&quot;
+      },
+      &quot;accessCall&quot;: {
+        &quot;discover&quot;: &quot;HBFoundryAPI.describe(&#x27;charles.interactive-resource-gateway&#x27;)&quot;,
+        &quot;policy&quot;: &quot;HBFoundryAPI.invoke(&#x27;charles.interactive-resource-gateway&#x27;)&quot;,
+        &quot;browser&quot;: &quot;CharlesResourceGateway.requestAccess(request)&quot;
+      },
+      &quot;source&quot;: [
+        &quot;api/charles-interactive-resource-gateway.json&quot;,
+        &quot;charles-resource-gateway.js&quot;,
+        &quot;charles-interactive-resource-gateway.html&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;foundry.site-index&quot;,
+      &quot;title&quot;: &quot;Foundry Site and Tool Index&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;discover&quot;,
+      &quot;mode&quot;: &quot;static-resource&quot;,
+      &quot;status&quot;: &quot;discoverable&quot;,
+      &quot;description&quot;: &quot;Discover workspaces, generators, utilities, modules, campaigns, and indexed tools through search-index.json.&quot;,
+      &quot;resourceId&quot;: &quot;foundry.search-index&quot;
+    }
+  ],
+  &quot;laboratories&quot;: [
+    {
+      &quot;id&quot;: &quot;signals-laboratory&quot;,
+      &quot;title&quot;: &quot;Signals Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;page&quot;: &quot;signals-laboratory.html&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;signals.configuration.analyze&quot;,
+        &quot;signals.utilities&quot;
+      ],
+      &quot;source&quot;: [
+        &quot;signals-laboratory.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;binary-cube-laboratory&quot;,
+      &quot;title&quot;: &quot;Binary Cube Encryption Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Shadowrun&quot;,
+      &quot;status&quot;: &quot;runtime-required&quot;,
+      &quot;capabilityIds&quot;: [
+        &quot;shadowrun.binary-cube&quot;
+      ],
+      &quot;source&quot;: [
+        &quot;shadowrun-binary-cube-engine.js&quot;,
+        &quot;shadowrun-binary-cube-encryption.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;live-signals-laboratory&quot;,
+      &quot;title&quot;: &quot;Live Signals Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;live-device-context&quot;,
+      &quot;page&quot;: &quot;live-signals-laboratory.html&quot;,
+      &quot;source&quot;: [
+        &quot;live-signals-laboratory.js&quot;
+      ],
+      &quot;notes&quot;: &quot;Live-device laboratory. Sensor access, ranging support, platform limits, and safety boundaries remain browser/device-context concerns and are not misrepresented as a remote server API.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;audio-laboratory&quot;,
+      &quot;title&quot;: &quot;Audio Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;live-device-context&quot;,
+      &quot;page&quot;: &quot;audio-laboratory.html&quot;,
+      &quot;source&quot;: [
+        &quot;audio-laboratory.js&quot;
+      ],
+      &quot;notes&quot;: &quot;Active acoustic ranging/mapping laboratory; register pure engines separately as they are extracted.&quot;
+    },
+    {
+      &quot;id&quot;: &quot;steganalysis-laboratory&quot;,
+      &quot;title&quot;: &quot;Advanced Steganalysis Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;page-context&quot;
+    },
+    {
+      &quot;id&quot;: &quot;double-slit-laboratory&quot;,
+      &quot;title&quot;: &quot;Double Slit Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;page-context&quot;,
+      &quot;page&quot;: &quot;double-slit-laboratory.html&quot;,
+      &quot;source&quot;: [
+        &quot;double-slit-lab.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;interstellar-media-collisions-laboratory&quot;,
+      &quot;title&quot;: &quot;Interstellar Media Collisions Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;page-context&quot;,
+      &quot;page&quot;: &quot;interstellar-media-collisions-laboratory.html&quot;,
+      &quot;source&quot;: [
+        &quot;interstellar-media-collisions-lab.js&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;gravitational-simulation-laboratory&quot;,
+      &quot;title&quot;: &quot;Gravitational Simulation Laboratory&quot;,
+      &quot;workspace&quot;: &quot;Scientific Tools&quot;,
+      &quot;status&quot;: &quot;page-context&quot;,
+      &quot;page&quot;: &quot;gravitational-simulation-laboratory.html&quot;,
+      &quot;source&quot;: [
+        &quot;gravitational-simulation-lab.js&quot;
+      ],
+      &quot;notes&quot;: &quot;Newtonian N-body foundation is implemented. Extended Euclidean mass distributions, general-relativistic spacetime, and non-Euclidean geometry are separate future model layers and are not silently approximated.&quot;
+    }
+  ],
+  &quot;resources&quot;: [
+    {
+      &quot;id&quot;: &quot;foundry.search-index&quot;,
+      &quot;title&quot;: &quot;Foundry Search Index&quot;,
+      &quot;workspace&quot;: &quot;Foundry&quot;,
+      &quot;kind&quot;: &quot;index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;search-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;site&quot;,
+        &quot;tools&quot;,
+        &quot;generators&quot;,
+        &quot;campaigns&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;kaysender.tools-registry&quot;,
+      &quot;title&quot;: &quot;Kaysender Tool Registry&quot;,
+      &quot;workspace&quot;: &quot;Kaysender&quot;,
+      &quot;kind&quot;: &quot;registry&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/kaysender-tools-registry.json&quot;,
+      &quot;tags&quot;: [
+        &quot;kaysender&quot;,
+        &quot;tools&quot;,
+        &quot;generators&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;kaysender.wiki-index&quot;,
+      &quot;title&quot;: &quot;Kaysender Wiki Pack Index&quot;,
+      &quot;workspace&quot;: &quot;Kaysender&quot;,
+      &quot;kind&quot;: &quot;lore-index&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/kaysender/wiki/wiki-index.json&quot;,
+      &quot;tags&quot;: [
+        &quot;kaysender&quot;,
+        &quot;lore&quot;,
+        &quot;campaign&quot;,
+        &quot;wiki&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;kaysender.wiki-entries&quot;,
+      &quot;title&quot;: &quot;Kaysender Wiki Entries&quot;,
+      &quot;workspace&quot;: &quot;Kaysender&quot;,
+      &quot;kind&quot;: &quot;lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/kaysender/wiki/entries.json&quot;,
+      &quot;tags&quot;: [
+        &quot;kaysender&quot;,
+        &quot;lore&quot;,
+        &quot;campaign&quot;,
+        &quot;wiki&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.character-options&quot;,
+      &quot;title&quot;: &quot;Blacklight Basic Character Options&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/basic-character-options.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;rules&quot;,
+        &quot;character creation&quot;,
+        &quot;archetypes&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.character-creation&quot;,
+      &quot;title&quot;: &quot;Blacklight Character Creation Foundation&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/character-creation-foundation.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;rules&quot;,
+        &quot;character creation&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.human-practices&quot;,
+      &quot;title&quot;: &quot;Blacklight Human Vigil Practices&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/human-vigil-practices.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;human&quot;,
+        &quot;practices&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.vampire-bloodlines&quot;,
+      &quot;title&quot;: &quot;Blacklight Vampire Remainder Bloodlines&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/vampire-remainder-bloodlines.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;vampire&quot;,
+        &quot;bloodlines&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.shapechanger-forms&quot;,
+      &quot;title&quot;: &quot;Blacklight Shapechanger Remainder Forms&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/shapechanger-remainder-forms.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;shapechanger&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.eldritch-sources&quot;,
+      &quot;title&quot;: &quot;Blacklight Eldritch Binding Sources&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/eldritch-binding-sources.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;eldritch&quot;,
+        &quot;binding&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.harmonic-remainders&quot;,
+      &quot;title&quot;: &quot;Blacklight Harmonic Compact Remainders&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/harmonic-compact-remainders.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;harmonic&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.technomancer-practices&quot;,
+      &quot;title&quot;: &quot;Blacklight Technomancer Awakening Practices&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/technomancer-awakening-practices.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;technomancer&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.supernatural-factions&quot;,
+      &quot;title&quot;: &quot;Blacklight Supernatural Factions&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/wiki/supernatural-factions.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;factions&quot;,
+        &quot;politics&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.internal-adversaries&quot;,
+      &quot;title&quot;: &quot;Blacklight Internal Adversaries&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/wiki/internal-adversaries.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;adversaries&quot;,
+        &quot;factions&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.random-character-content&quot;,
+      &quot;title&quot;: &quot;Blacklight Random Character Content&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;generator-data&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/generators/random-character-content.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;character&quot;,
+        &quot;generator&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.historical-equipment&quot;,
+      &quot;title&quot;: &quot;Blacklight Modern Historical Equipment&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/modern-historical-equipment.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;equipment&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.future-equipment&quot;,
+      &quot;title&quot;: &quot;Blacklight Future Scavenged Survival Equipment&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/future-scavenged-survival-equipment.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;equipment&quot;,
+        &quot;future&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.relics&quot;,
+      &quot;title&quot;: &quot;Blacklight Supernatural Artifacts and Relics&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/supernatural-artifacts-relics.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;artifacts&quot;,
+        &quot;relics&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.alien-tech&quot;,
+      &quot;title&quot;: &quot;Blacklight Alien Technology Templates&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;rules-lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;data/blacklight-continuum/rules/alien-technology-templates.json&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;alien&quot;,
+        &quot;technology&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;warhammer.reddit-story-archive&quot;,
+      &quot;title&quot;: &quot;Warhammer 40K Lore Story Archive&quot;,
+      &quot;workspace&quot;: &quot;Warhammer 40K&quot;,
+      &quot;kind&quot;: &quot;lore&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;assets/warhammer-40k/lore/reddit-story-archive.json&quot;,
+      &quot;tags&quot;: [
+        &quot;warhammer&quot;,
+        &quot;40k&quot;,
+        &quot;lore&quot;,
+        &quot;fiction&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.wiki-archive&quot;,
+      &quot;title&quot;: &quot;Blacklight Continuum Unified Wiki Archive&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;lore-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;blacklight-wiki-archive.html&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;lore&quot;,
+        &quot;wiki&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;blacklight.era-campaign&quot;,
+      &quot;title&quot;: &quot;Blacklight Era Campaign&quot;,
+      &quot;workspace&quot;: &quot;Blacklight Continuum&quot;,
+      &quot;kind&quot;: &quot;campaign-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;blacklight-era-campaign.html&quot;,
+      &quot;tags&quot;: [
+        &quot;blacklight&quot;,
+        &quot;campaign&quot;,
+        &quot;awakening&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;warhammer.lore-page&quot;,
+      &quot;title&quot;: &quot;Warhammer 40K Lore Archive&quot;,
+      &quot;workspace&quot;: &quot;Warhammer 40K&quot;,
+      &quot;kind&quot;: &quot;lore-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;warhammer-40k-lore.html&quot;,
+      &quot;tags&quot;: [
+        &quot;warhammer&quot;,
+        &quot;40k&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;barotrauma.workspace&quot;,
+      &quot;title&quot;: &quot;Barotrauma Europa Operations Workspace&quot;,
+      &quot;workspace&quot;: &quot;Barotrauma&quot;,
+      &quot;kind&quot;: &quot;campaign-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;barotrauma.html&quot;,
+      &quot;tags&quot;: [
+        &quot;barotrauma&quot;,
+        &quot;campaign&quot;,
+        &quot;lore&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;shadowrun.workspace&quot;,
+      &quot;title&quot;: &quot;Shadowrun Campaign Workspace&quot;,
+      &quot;workspace&quot;: &quot;Shadowrun&quot;,
+      &quot;kind&quot;: &quot;campaign-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;shadowrun.html&quot;,
+      &quot;tags&quot;: [
+        &quot;shadowrun&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;world-of-darkness.workspace&quot;,
+      &quot;title&quot;: &quot;World of Darkness Chronicle Workspace&quot;,
+      &quot;workspace&quot;: &quot;World of Darkness&quot;,
+      &quot;kind&quot;: &quot;campaign-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;world-of-darkness.html&quot;,
+      &quot;tags&quot;: [
+        &quot;world of darkness&quot;,
+        &quot;chronicle&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;solanum-umbra.workspace&quot;,
+      &quot;title&quot;: &quot;Solanum Umbra Workspace&quot;,
+      &quot;workspace&quot;: &quot;Solanum Umbra&quot;,
+      &quot;kind&quot;: &quot;campaign-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;solanum-umbra.html&quot;,
+      &quot;tags&quot;: [
+        &quot;solanum umbra&quot;,
+        &quot;rules&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;modules.workspace&quot;,
+      &quot;title&quot;: &quot;Adventure Module Workspace&quot;,
+      &quot;workspace&quot;: &quot;Modules&quot;,
+      &quot;kind&quot;: &quot;module-page&quot;,
+      &quot;format&quot;: &quot;html&quot;,
+      &quot;path&quot;: &quot;modules.html&quot;,
+      &quot;tags&quot;: [
+        &quot;modules&quot;,
+        &quot;encounters&quot;,
+        &quot;rooms&quot;,
+        &quot;treasure&quot;,
+        &quot;campaign&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;fmpl.asset-production-library&quot;,
+      &quot;title&quot;: &quot;Factorio Modeling Production Library&quot;,
+      &quot;workspace&quot;: &quot;AI Tools&quot;,
+      &quot;kind&quot;: &quot;asset-registry&quot;,
+      &quot;format&quot;: &quot;json&quot;,
+      &quot;path&quot;: &quot;api/ai/fmpl-library.json&quot;,
+      &quot;tags&quot;: [
+        &quot;fmpl&quot;,
+        &quot;factorio&quot;,
+        &quot;blender&quot;,
+        &quot;models&quot;,
+        &quot;materials&quot;
+      ]
+    }
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for signals.utilities">
+<meta name="hb-projection-sha256" content="dc6fdbaac52e80e2e6aba28834c0ccc4dfd8e21a1c5fda26a5564b4568af3fa6">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/signals-utilities.html">
+<title>Operation contract: signals.utilities — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: signals.utilities</h1>
+<p>Canonical contract slice for signals.utilities</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>dc6fdbaac52e80e2e6aba28834c0ccc4dfd8e21a1c5fda26a5564b4568af3fa6</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="dc6fdbaac52e80e2e6aba28834c0ccc4dfd8e21a1c5fda26a5564b4568af3fa6">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;signals.utilities&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;dispatcher&quot;,
+    &quot;operations&quot;: {
+      &quot;wavelength&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;units&quot;: &quot;m&quot;
+        }
+      },
+      &quot;resonantFrequency&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;inductanceH&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;H&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;capacitanceF&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;F&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;units&quot;: &quot;Hz&quot;
+        }
+      },
+      &quot;seriesRlcImpedance&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;resistanceOhm&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;ohm&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;inductanceH&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;H&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;capacitanceF&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;F&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;resistance&quot;,
+            &quot;reactance&quot;,
+            &quot;magnitude&quot;,
+            &quot;phaseDeg&quot;
+          ]
+        }
+      },
+      &quot;mismatch&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;antenna&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;RLC antenna object with resistanceOhm, inductanceH, capacitanceF and optional feedOhm.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;reflectionMagnitude&quot;,
+            &quot;acceptedPowerFraction&quot;,
+            &quot;returnLossDb&quot;
+          ]
+        }
+      },
+      &quot;resonanceTransfer&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;centerHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;q&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 8
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;description&quot;: &quot;Voltage transfer fraction.&quot;
+        }
+      },
+      &quot;bandpassTuningResponse&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;centerHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;q&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 8
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;frequencyHz&quot;,
+            &quot;centerHz&quot;,
+            &quot;q&quot;,
+            &quot;voltageTransfer&quot;,
+            &quot;responseDb&quot;
+          ]
+        }
+      },
+      &quot;antennaResponse&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;antenna&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;RLC antenna with resistanceOhm, inductanceH, capacitanceF, q, feedOhm and optional resonantHz.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;resonantHz&quot;,
+            &quot;resonance&quot;,
+            &quot;mismatch&quot;,
+            &quot;voltageTransfer&quot;,
+            &quot;responseDb&quot;
+          ]
+        }
+      },
+      &quot;freeSpacePathLossDb&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;frequencyHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;distanceM&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;m&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;units&quot;: &quot;dB&quot;
+        }
+      },
+      &quot;planeWaveFieldVPerM&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;txPowerDbm&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;dBm&quot;
+          },
+          {
+            &quot;name&quot;: &quot;txGainDb&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0,
+            &quot;units&quot;: &quot;dB&quot;
+          },
+          {
+            &quot;name&quot;: &quot;distanceM&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;m&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;units&quot;: &quot;V/m&quot;
+        }
+      },
+      &quot;thermalNoiseFloorDbm&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;bandwidthHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;noiseFigureDb&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0,
+            &quot;units&quot;: &quot;dB&quot;
+          },
+          {
+            &quot;name&quot;: &quot;temperatureK&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 290,
+            &quot;units&quot;: &quot;K&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;number&quot;,
+          &quot;units&quot;: &quot;dBm&quot;
+        }
+      },
+      &quot;directReception&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;frequencyHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;distanceM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;txPowerDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;txGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;rxGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;extraLossDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;antenna&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receiverCenterHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receiverBandwidthHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;noiseFigureDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;temperatureK&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;K&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 290
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;response&quot;,
+            &quot;fsplDb&quot;,
+            &quot;freeSpaceDbm&quot;,
+            &quot;receiverInputDbm&quot;,
+            &quot;noiseFloorDbm&quot;,
+            &quot;snrDb&quot;,
+            &quot;inReceiverBand&quot;
+          ]
+        }
+      },
+      &quot;heterodyneProducts&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;signalHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;localOscillatorHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;signalHz&quot;,
+            &quot;localOscillatorHz&quot;,
+            &quot;differenceHz&quot;,
+            &quot;sumHz&quot;
+          ]
+        }
+      },
+      &quot;intermodulationProducts&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;f1Hz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;f2Hz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;maximumOrder&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 3,
+            &quot;range&quot;: &quot;2..5&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Sorted unique intermodulation products with frequencyHz, order, m, n, expression.&quot;
+        }
+      },
+      &quot;adjacentCarrierProbe&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;carrierHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;sourceHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receiverCenterHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receiverBandwidthHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;coupling&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 0.02,
+                &quot;range&quot;: &quot;0..1&quot;
+              },
+              &quot;nonlinearity&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 0.02
+              },
+              &quot;carrierAmplitude&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 1
+              },
+              &quot;sourceAmplitude&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 0.1
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;carrierHz&quot;,
+            &quot;sourceHz&quot;,
+            &quot;beatHz&quot;,
+            &quot;modulationIndex&quot;,
+            &quot;estimatedSidebandAmplitude&quot;,
+            &quot;products&quot;,
+            &quot;inBandProducts&quot;
+          ]
+        }
+      },
+      &quot;inferSourceCandidates&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;observedHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;localOscillatorHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;carrierHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: false
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Frequency candidates with mechanism and equation.&quot;
+        }
+      },
+      &quot;estimateRangeScenarios&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;frequencyHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receivedDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;txPowersDbm&quot;: {
+                &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: [
+                  -10,
+                  0,
+                  10,
+                  20,
+                  30,
+                  40,
+                  50
+                ]
+              },
+              &quot;txGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;rxGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;extraLossDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;fields&quot;: [
+            &quot;txPowerDbm&quot;,
+            &quot;allowedPathLossDb&quot;,
+            &quot;distanceM&quot;
+          ]
+        }
+      },
+      &quot;logarithmicSweep&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;minHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          {
+            &quot;name&quot;: &quot;maxHz&quot;,
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;description&quot;: &quot;Must exceed minHz.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;points&quot;,
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 256,
+            &quot;range&quot;: &quot;16..1024&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+          &quot;units&quot;: &quot;Hz&quot;
+        }
+      },
+      &quot;sweepAntenna&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;minHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;maxHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;points&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 256
+              },
+              &quot;antenna&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Frequency sweep rows with responseDb, impedanceMagnitudeOhm, phaseDeg, returnLossDb.&quot;
+        }
+      },
+      &quot;environmentPoint&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;source&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true,
+                &quot;description&quot;: &quot;x,y,z,frequencyHz,txPowerDbm and antenna orientation/type/gain context.&quot;
+              },
+              &quot;receiver&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true,
+                &quot;description&quot;: &quot;x,y,z and optional gainDb.&quot;
+              },
+              &quot;environment&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;surfaces&quot;: {
+                &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;reflectors&quot;: {
+                &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;Alias/fallback surface list.&quot;
+              },
+              &quot;coherence&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;range&quot;: &quot;0..1&quot;
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;powerDbm&quot;,
+            &quot;directDbm&quot;,
+            &quot;coherentDbm&quot;,
+            &quot;incoherentDbm&quot;,
+            &quot;penetrationLossDb&quot;,
+            &quot;paths&quot;,
+            &quot;surfaceInteractions&quot;
+          ]
+        }
+      },
+      &quot;buildEnvironmentMap&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;widthM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;heightM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;resolutionX&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 48,
+                &quot;range&quot;: &quot;12..128&quot;
+              },
+              &quot;resolutionY&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;Defaults to resolutionX; clamped 12..128.&quot;
+              },
+              &quot;sampleHeightM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 1.2
+              },
+              &quot;source&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;receiverGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;coherence&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;range&quot;: &quot;0..1&quot;
+              },
+              &quot;surfaces&quot;: {
+                &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;reflectors&quot;: {
+                &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;label&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;RF map summary with Float64Array values and geometry/statistics metadata.&quot;
+        }
+      },
+      &quot;progressiveEnvironmentMaps&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Same fields as buildEnvironmentMap plus resolutions array.&quot;,
+            &quot;fields&quot;: {
+              &quot;resolutions&quot;: {
+                &quot;type&quot;: &quot;array&lt;integer&gt;&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: [
+                  24,
+                  48,
+                  80
+                ]
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Environment maps at each requested resolution.&quot;
+        }
+      },
+      &quot;mapStatistics&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;map&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Canonical environment map.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;fields&quot;: {
+              &quot;thresholdDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: -90
+              },
+              &quot;gradientThresholdDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 3
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;thresholdDbm&quot;,
+            &quot;detectableAreaFraction&quot;,
+            &quot;meanNeighborGradientDb&quot;,
+            &quot;steepGradientFraction&quot;,
+            &quot;peakDbm&quot;,
+            &quot;meanDbm&quot;,
+            &quot;fadeDepthDb&quot;
+          ]
+        }
+      },
+      &quot;compareMaps&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;reference&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;candidate&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Must have same sample count as reference.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;mapStatistics threshold options.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;RMS, absolute, mean, peak, fade-depth, detectable-area, and gradient-density deltas.&quot;
+        }
+      },
+      &quot;resolutionDiagnostics&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;map&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;frequenciesHz&quot;,
+            &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;fields&quot;: {
+              &quot;snrDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;default&quot;: 20
+              },
+              &quot;coherence&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;range&quot;: &quot;0..1&quot;,
+                &quot;default&quot;: 1
+              },
+              &quot;q&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;default&quot;: 8
+              },
+              &quot;modelFidelity&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;range&quot;: &quot;0..1&quot;,
+                &quot;default&quot;: 0.72
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Sampling/wavelength diagnostics and effective confidence with reasons.&quot;
+        }
+      },
+      &quot;adaptiveEnvironmentSamples&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;widthM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;heightM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;source&quot;: {
+                &quot;type&quot;: &quot;object&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;surfaces&quot;: {
+                &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;coherence&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;range&quot;: &quot;0..1&quot;,
+                &quot;default&quot;: 0.85
+              },
+              &quot;sampleHeightM&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;m&quot;,
+                &quot;default&quot;: 1.2
+              },
+              &quot;receiverGainDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;required&quot;: false
+              },
+              &quot;startResolution&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;default&quot;: 12,
+                &quot;range&quot;: &quot;4..32&quot;
+              },
+              &quot;maxResolution&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;default&quot;: 64,
+                &quot;range&quot;: &quot;startResolution..128&quot;
+              },
+              &quot;gradientThresholdDb&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dB&quot;,
+                &quot;default&quot;: 3
+              },
+              &quot;snrStopDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;default&quot;: -105
+              },
+              &quot;maxCells&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;default&quot;: 4096,
+                &quot;range&quot;: &quot;startResolution^2..16384&quot;
+              },
+              &quot;frequenciesHz&quot;: {
+                &quot;type&quot;: &quot;array&lt;number&gt;&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;Defaults to source.frequencyHz.&quot;
+              },
+              &quot;wavelengthDriven&quot;: {
+                &quot;type&quot;: &quot;boolean&quot;,
+                &quot;default&quot;: false
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Adaptive leaf cells, refinement/sample counts, resolution limits, shortest wavelength, and surfaces.&quot;
+        }
+      },
+      &quot;wifiPreset&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;name&quot;,
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;wifi-2.4&quot;,
+            &quot;enum&quot;: [
+              &quot;wifi-2.4&quot;,
+              &quot;wifi-5&quot;,
+              &quot;wifi-6&quot;,
+              &quot;custom&quot;
+            ]
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;fields&quot;: [
+            &quot;label&quot;,
+            &quot;frequencyHz&quot;,
+            &quot;txPowerDbm&quot;
+          ]
+        }
+      },
+      &quot;interfrequencyExperiment&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;f1Hz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;f2Hz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;f1PowerDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;default&quot;: 20
+              },
+              &quot;f2PowerDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;default&quot;: 17
+              },
+              &quot;coupling&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;range&quot;: &quot;0..1&quot;,
+                &quot;default&quot;: 0.05
+              },
+              &quot;nonlinearity&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;range&quot;: &quot;0..1&quot;,
+                &quot;default&quot;: 0.03
+              },
+              &quot;maximumOrder&quot;: {
+                &quot;type&quot;: &quot;integer&quot;,
+                &quot;range&quot;: &quot;2..5&quot;,
+                &quot;default&quot;: 3
+              },
+              &quot;productFloorDbm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;dBm&quot;,
+                &quot;default&quot;: -120
+              },
+              &quot;productMode&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;default&quot;: &quot;difference&quot;,
+                &quot;enum&quot;: [
+                  &quot;difference&quot;,
+                  &quot;sum&quot;,
+                  &quot;im3-lower&quot;,
+                  &quot;im3-upper&quot;
+                ]
+              },
+              &quot;mechanism&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;default&quot;: &quot;receiver-front-end&quot;,
+                &quot;enum&quot;: [
+                  &quot;receiver-front-end&quot;,
+                  &quot;source-nonlinearity&quot;
+                ]
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Intermodulation products, selected product, modeled strength, and physical interpretation.&quot;
+        }
+      },
+      &quot;buildReceiverMixingMap&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;primaryMap&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;secondaryMap&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Must match primary map geometry.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;experiment&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Result of interfrequencyExperiment.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;label&quot;,
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;Receiver mixing response&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Detector-response map; explicitly non-propagating.&quot;
+        }
+      },
+      &quot;buildPropagatingProductMap&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;environment&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;primarySource&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;experiment&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Result of interfrequencyExperiment; returns null unless selected product exists and mechanism is source-nonlinearity.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object|null&quot;,
+          &quot;description&quot;: &quot;Environment map for source-generated selected product.&quot;
+        }
+      },
+      &quot;buildExperimentSuite&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;config&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Full Signals experiment config with environment and experiments.&quot;
+          },
+          {
+            &quot;name&quot;: &quot;baseMap&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Canonical baseline environment map.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Tuning responses, secondary carrier, interfrequency products/maps, comparisons, statistics, resolution diagnostics, and adaptive sampling.&quot;
+        }
+      },
+      &quot;experimentCatalog&quot;: {
+        &quot;arguments&quot;: [],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Canonical experiment definitions and assumptions.&quot;
+        }
+      },
+      &quot;buildExperimentDataLayout&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;config&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;analysis&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Result from analyzeConfiguration.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+          &quot;description&quot;: &quot;Experiment catalog augmented with current input/output data fields and provenance.&quot;
+        }
+      },
+      &quot;buildExperimentRunRecord&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;config&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;analysis&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;fields&quot;: {
+              &quot;timestampUtc&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;required&quot;: false,
+                &quot;description&quot;: &quot;ISO-8601 timestamp; defaults to current time.&quot;
+              }
+            }
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;object&quot;,
+          &quot;description&quot;: &quot;Structured hb-ttrpg-signals-laboratory-run-record.&quot;
+        }
+      },
+      &quot;serializeExperimentRunRecord&quot;: {
+        &quot;arguments&quot;: [
+          {
+            &quot;name&quot;: &quot;config&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;analysis&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true
+          },
+          {
+            &quot;name&quot;: &quot;options&quot;,
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Same options as buildExperimentRunRecord.&quot;
+          }
+        ],
+        &quot;returns&quot;: {
+          &quot;type&quot;: &quot;string&quot;,
+          &quot;description&quot;: &quot;Pretty-printed JSON run record.&quot;
+        }
+      }
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

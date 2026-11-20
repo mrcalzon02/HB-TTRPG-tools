@@ -9,6 +9,7 @@
   },
   "entrypoints": {
     "aiIndex": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json",
+    "staticHtmlMachineDocs": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html",
     "bootstrap": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt",
     "statusVocabulary": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json",
     "capabilityRegistry": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json",

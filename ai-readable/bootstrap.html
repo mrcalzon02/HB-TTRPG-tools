@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Mandatory discovery and execution boundaries">
+<meta name="hb-projection-sha256" content="2415b7c69e5ba5189c363c4d8cc51d921302a91a57b2112fd887359e8ac58e7d">
+<meta name="hb-source-path" content="api/ai/bootstrap.txt">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/bootstrap.html">
+<title>AI bootstrap contract — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>AI bootstrap contract</h1>
+<p>Mandatory discovery and execution boundaries</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt"><code>api/ai/bootstrap.txt</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>2415b7c69e5ba5189c363c4d8cc51d921302a91a57b2112fd887359e8ac58e7d</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="2415b7c69e5ba5189c363c4d8cc51d921302a91a57b2112fd887359e8ac58e7d">FOUNDRY AI BOOTSTRAP CONTRACT
+
+For reasoning models, code interpreters, agents, and tool-capable hosts.
+
+PRIME RULE
+
+Mirrored calls, not mirrored logic.
+
+Calzon&#x27;s TTRPG Foundry contains authoritative generators, calculators, laboratories, resources, campaign-state systems, helpers, and personality definitions. Discover and use registered authority instead of recreating behavior from model knowledge.
+
+Never claim execution, persistence, randomness, rendering, deployment, or tool access without observed host evidence. This file is a routing contract; referenced current machine authorities govern on conflict.
+
+REQUIRED DISCOVERY
+
+Start at /.well-known/ai-capabilities.json, then load only what the selected task requires:
+
+1. /.well-known/ai-capabilities.json
+2. /api/ai/status-vocabulary.json before interpreting status, acceptance, or execution-state vocabulary
+3. /skills/index.json to select the minimum-capability skill that fits the task
+4. /docs/blacklight/charles-personality-engram.json once for the orchestration context
+5. /skills/{selected-skill}/SKILL.md
+6. /api/foundry-capabilities.json only when the skill references capabilities
+7. /api/operation-contracts.json only before constructing executable calls
+8. /api/resource-collections.json only for registered static, campaign, or lore material required by the task
+9. Check only the selected skill&#x27;s executionRequirements and referenced helper requirements
+10. Check host runtime and transport compatibility only for execution actually required
+11. Run a declared deterministic self-test only before claiming self-test-passed or ready
+
+Cache each loaded authority for the current orchestration context. Do not reload unchanged registries, contracts, helpers, resources, or persona. Follow exact selected-skill references instead of scanning sibling registries or unrelated collections.
+
+Restricted browsers may use the static HTML directory at https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html when raw JSON/TXT/Markdown is inaccessible. Each page has complete escaped source in initial HTML, and large operation contracts also have smaller capability-specific pages. These are read-only compatibility views, NOT independent authority or executable runtimes; canonical files always win.
+
+EXECUTION CLASSES
+
+static-resource: retrieve the registered authoritative resource.
+
+browser-js: load the declared canonical JavaScript runtime in dependency order and execute it in a compatible JavaScript host. Do not translate or recreate its algorithm. Use registered loaders and self-tests when available.
+
+host-sandbox: use only registered helpers/scripts when the host satisfies declared requirements such as Python, Pillow, writable filesystem access, or cryptographic randomness. Repository presence is not execution.
+
+browser-page-context: execute only inside the required initialized page context. If unavailable, report the limitation and registered authoritative interface; do not simulate hidden state.
+
+browser-ui: behavior remains coupled to the declared UI. Do not invent headless APIs, JSON injection, DOM hooks, or alternate renderers unless registered.
+
+live-sensor-browser-context: requires the declared browser, device, and sensor context. Never report simulated measurements as observations.
+
+EXECUTION STATE
+
+Static discovery and host execution are separate. A capability may progress through observed states such as runtime-required -&gt; runtime-compatible -&gt; self-test-passed -&gt; ready. Never promote state without evidence. Static GET readiness does not imply discovered capability execution.
+
+TRANSPORT
+
+GitHub Pages is a static origin. Public files may be retrieved through GET when the host permits their content type. OpenAPI is discovery, not proof of executable RPC. Do not infer POST, RPC, MCP, browser control, or another execution service unless the machine manifest declares it and the current host verifies it.
+
+ARGUMENTS AND DEPENDENCIES
+
+For an executable operation, use /api/operation-contracts.json for exact operation IDs, call styles, argument order, names, types, ranges, units, enums, defaults, aliases, and returns. Do not invent public arguments. Preserve declared dependencies, tables, constants, modules, initialization, seed rules, random sources, and source ordering.
+
+RANDOMNESS AND STATE
+
+Use only randomness permitted by the selected skill. Never fabricate random results when its required trusted source is unavailable.
+
+For persistent campaign/state operations, use the registered state-management skill and helper only with observed writable storage. Conversation state is transient fallback state. Never claim persistence without observed filesystem or host evidence.
+
+CHARLES
+
+MANDATORY TWO-WAY COMPANION: Every registered skill requires blacklight.charles; the canonical Charles engram requires skills/index.json as the discovery index of optional, on-demand skills. Validate the registry&#x27;s SHA-256 pin against the raw engram and check the engram&#x27;s reciprocal registry reference before any skill activation. Fail closed if either required companion is unavailable or mismatched. Use charles-foundry-interface for Charles-facing or multi-skill requests. Higher-priority host/system policy or an explicit OOC request may suppress Charles presentation, NOT the integrity/dependency check. Charles grants no tools, permissions, credentials, network, filesystem, persistence, randomness, or execution state. A public file alone cannot force an untrusted host to comply.
+
+FAILURE
+
+If authoritative capability execution is unavailable: identify the selected skill/capability, state the missing runtime/context/transport, identify the registered authoritative interface or resource, and do not manufacture an equivalent implementation.
+
+RESULT PROVENANCE
+
+When practical, report the selected Agent Skill, capability/resource ID, canonical source, operation, material arguments or seed, runtime, and observed execution/self-test state.
+
+FINAL RULE
+
+Discover authority. Load only required authority. Execute it when possible. Retrieve it when static. Use its declared interface when context-bound. Report inability when requirements are absent. Never substitute invented Foundry logic.
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

@@ -46,7 +46,8 @@
       <h2>Do not reconstruct the Foundry's capabilities from page prose.</h2>
       <p>External LLMs, agents, tool hosts, and adapters should begin with the machine discovery manifest and then follow the compact bootstrap routing contract. The bootstrap selects the minimum-capability skill for the task and resolves status vocabulary, capabilities, operation contracts, resources, runtime requirements, and validation material only when the selected workflow actually needs them. Those machine documents are the authority; this page is only the human-readable entrypoint.</p>
       <p>If the current model browser cannot retrieve raw JSON or Markdown, use the HTML Agent Skills compatibility directory to enumerate registered skills and follow its GitHub HTML fallbacks. The compatibility directory does not replace <code>skills/index.json</code> or any <code>SKILL.md</code> as authority.</p>
-      <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a> <a class="link-button" href="api/ai/bootstrap.txt">Read Bootstrap Contract</a> <a class="link-button" href="agent-skills.html">Open Agent Skills HTML Directory</a></p>
+      <p><strong>Restricted browser fallback:</strong> <a href="ai-readable/index.html">Open the AI-readable machine documentation directory</a>. It embeds the real bootstrap, discovery manifest, registries, operation contracts and engram in static initial HTML, with per-capability contract pages for readers that truncate large JSON. No JavaScript or backend execution is implied. Canonical sources still win.</p>
+      <p><a class="link-button primary-action" href=".well-known/ai-capabilities.json">Open AI Capability Discovery Manifest</a> <a class="link-button" href="api/ai/bootstrap.txt">Read Bootstrap Contract</a> <a class="link-button" href="agent-skills.html">Open Agent Skills HTML Directory</a> <a class="link-button" href="ai-readable/index.html">Readable Machine Docs</a></p>
     </section>
 
     <section class="registry-section" aria-labelledby="machine-entrypoints-title">
@@ -114,7 +115,7 @@
         <article class="module-card"><h3>Browser JavaScript</h3><p><strong>Runtime required.</strong> The host must load the canonical scripts and execute the declared global/method or dispatch contract before host-level readiness can be established.</p></article>
         <article class="module-card"><h3>Host Sandbox</h3><p><strong>Runtime required.</strong> Registered helpers may additionally require writable file access, cryptographic randomness, Python, Pillow, or other declared host-local dependencies. Repository presence alone is not execution evidence.</p></article>
         <article class="module-card"><h3>Page / Device Context</h3><p><strong>Conditional.</strong> Page-bound, UI-bound, and sensor capabilities require their declared browser or device context.</p></article>
-        <article class="module-card"><h3>Remote MCP / RPC</h3><p><strong>Not deployed.</strong> Discovery files must not be interpreted as an active remote execution service. A future transport adapter can mirror the same capability IDs and contracts.</p></article>
+        <article class="module-card"><h3>Remote MCP / RPC</h3><p><strong>Not deployed.</strong> Discovery files must not be interpreted as an active remote execution service. A future transport adapter can mirror the same capability IDs and contracts. <a href="docs/ai-access/html-compatibility-and-remote-execution.md">Read the HTML fallback and Local Charles / MCP integration architecture.</a></p></article>
       </div>
     </section>
 

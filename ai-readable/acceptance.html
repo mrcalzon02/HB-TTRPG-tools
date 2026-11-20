@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Declared test cases, not evidence of execution">
+<meta name="hb-projection-sha256" content="1e86e195469aaaccdb5ebad8a1b1760776eff7b2431e5fd35dc6b9339bc481cf">
+<meta name="hb-source-path" content="api/ai/external-model-acceptance-tests.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/acceptance.html">
+<title>External-model acceptance tests — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>External-model acceptance tests</h1>
+<p>Declared test cases, not evidence of execution</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/external-model-acceptance-tests.json"><code>api/ai/external-model-acceptance-tests.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>1e86e195469aaaccdb5ebad8a1b1760776eff7b2431e5fd35dc6b9339bc481cf</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="1e86e195469aaaccdb5ebad8a1b1760776eff7b2431e5fd35dc6b9339bc481cf">{
+  &quot;schemaVersion&quot;: &quot;1.0.0&quot;,
+  &quot;profile&quot;: &quot;hb-ai-external-model-acceptance/1&quot;,
+  &quot;purpose&quot;: &quot;External reasoning-model acceptance tests for Foundry discovery, skill routing, personality binding, runtime boundaries, and portable execution proof. Load this suite only when validating external-model integration behavior.&quot;,
+  &quot;tests&quot;: [
+    {&quot;id&quot;:&quot;discover-capabilities&quot;,&quot;prompt&quot;:&quot;Examine the Foundry and enumerate its AI-available capabilities.&quot;,&quot;passCondition&quot;:&quot;Model uses the machine capability registry rather than only reconstructing the human site catalog.&quot;},
+    {&quot;id&quot;:&quot;enumerate-agent-skills&quot;,&quot;prompt&quot;:&quot;How many registered Agent Skills are currently present? Give every exact registered name and the personality they inherit.&quot;,&quot;passCondition&quot;:&quot;Model retrieves skills/index.json and enumerates every current name value plus defaultPersonality blacklight.charles; if raw JSON is blocked, it uses agent-skills.html and still reports the inherited Charles binding.&quot;},
+    {&quot;id&quot;:&quot;charles-personality-binding&quot;,&quot;prompt&quot;:&quot;Load a Foundry Agent Skill and determine which personality engram should remain active while using it.&quot;,&quot;passCondition&quot;:&quot;Model resolves defaultPersonality to blacklight.charles, loads the canonical engram once, and does not invent a skill-local replacement persona.&quot;},
+    {&quot;id&quot;:&quot;charles-cross-skill-routing&quot;,&quot;prompt&quot;:&quot;Ask Charles to prepare and run ordinary homebrew tabletop support across characters, dice, encounters, inventory, campaign state, and tactical position.&quot;,&quot;passCondition&quot;:&quot;Model uses charles-foundry-interface and routes to the smallest relevant tabletop skill set while preserving one Charles personality layer.&quot;},
+    {&quot;id&quot;:&quot;tabletop-dice-modes&quot;,&quot;prompt&quot;:&quot;Roll 6d10 cumulative, then roll 6d10 individual total.&quot;,&quot;passCondition&quot;:&quot;Model identifies tabletop-dice-rolling; cumulative presents one aggregate total, individual total presents every die in roll order without collapsing them into one displayed sum, and randomness is not fabricated if the host lacks a trustworthy RNG.&quot;},
+    {&quot;id&quot;:&quot;tabletop-state&quot;,&quot;prompt&quot;:&quot;Import a character sheet and track a stat change in CSV-backed campaign state.&quot;,&quot;passCondition&quot;:&quot;Model preserves the source, uses stable IDs and system-neutral CSV state, records significant mutation in campaign_ledger.csv, and does not claim file persistence without writable-sandbox evidence.&quot;},
+    {&quot;id&quot;:&quot;tabletop-battlespace-1px&quot;,&quot;prompt&quot;:&quot;Create a 40 by 30 five-foot-grid battlespace, place two PCs and an enemy, render the smallest valid preview, then move one PC two cells left and one cell up.&quot;,&quot;passCondition&quot;:&quot;Model selects tabletop-battlespace-visualization; stores integer CSV coordinates; renders or requests a 40x30 RGB PNG at cell_pixels=1 when Python/Pillow are actually available; applies movement as dx=-2,dy=-1 to structured state before rerendering; and does not claim persistence or rendering without host evidence.&quot;},
+    {&quot;id&quot;:&quot;tabletop-battlespace-rules-boundary&quot;,&quot;prompt&quot;:&quot;Which targets are inside this area and who is within 30 feet?&quot;,&quot;passCondition&quot;:&quot;Model uses structured battlespace geometry, respects the map/rules distance mode, prefers explicit affected cells when authoritative, and does not silently invent system-specific diagonal, reach, LOS, cover, or AoE-template rules.&quot;},
+    {&quot;id&quot;:&quot;skill-document-access&quot;,&quot;prompt&quot;:&quot;Open a named registered Agent Skill and report its instructions and compatibility requirements.&quot;,&quot;passCondition&quot;:&quot;Model opens the registered SKILL.md or the HTML compatibility projection rather than fabricating instructions.&quot;},
+    {&quot;id&quot;:&quot;binary-cube&quot;,&quot;prompt&quot;:&quot;Find the Cube Encryption capability and determine whether the current environment can invoke it.&quot;,&quot;passCondition&quot;:&quot;Model identifies shadowrun.binary-cube, reads its operation contract and portable package when available, and distinguishes browser-JavaScript runtime requirements from remote transport availability.&quot;},
+    {&quot;id&quot;:&quot;binary-cube-browser-proof&quot;,&quot;prompt&quot;:&quot;Use the Foundry portable skill proof harness to test the Binary Cube package in a compatible browser host.&quot;,&quot;passCondition&quot;:&quot;The host loads only the registered same-origin canonical runtime, runs the declared deterministic self-tests, and reports ready only after every test passes.&quot;},
+    {&quot;id&quot;:&quot;module-map-portable-package&quot;,&quot;prompt&quot;:&quot;Find the Module Map generator and determine whether it has a portable package that can run from this host.&quot;,&quot;passCondition&quot;:&quot;Model selects module-map-generation/spatial.module-map.generate, resolves the companion manifest and exact three-script runtime order, reads the audited operation contract, and reports runtime-required unless its current host actually proves compatibility.&quot;},
+    {&quot;id&quot;:&quot;module-map-browser-proof&quot;,&quot;prompt&quot;:&quot;Use the Foundry portable skill proof harness to test Module Map generation in a compatible browser host.&quot;,&quot;passCondition&quot;:&quot;The host loads semantic-spatial-engine.js, semantic-content-populator.js, and module-map-generator.js in canonical order, runs the deterministic tests, and reports ready only after all tests pass.&quot;},
+    {&quot;id&quot;:&quot;website-interaction&quot;,&quot;prompt&quot;:&quot;Find the website interaction capability and determine whether it is usable from the current environment.&quot;,&quot;passCondition&quot;:&quot;Model reports the declared gateway/browser status and does not fabricate a remote browser service.&quot;}
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

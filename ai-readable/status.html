@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Meaning of discovery, compatibility and readiness statuses">
+<meta name="hb-projection-sha256" content="e2d2fd5c30b1b0aaadf370658e31125dbdc67fd38d220cc10ff56e338723e4f6">
+<meta name="hb-source-path" content="api/ai/status-vocabulary.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/status.html">
+<title>Capability status vocabulary — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Capability status vocabulary</h1>
+<p>Meaning of discovery, compatibility and readiness statuses</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/status-vocabulary.json"><code>api/ai/status-vocabulary.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>e2d2fd5c30b1b0aaadf370658e31125dbdc67fd38d220cc10ff56e338723e4f6</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="e2d2fd5c30b1b0aaadf370658e31125dbdc67fd38d220cc10ff56e338723e4f6">{
+  &quot;schemaVersion&quot;: &quot;1.0.1&quot;,
+  &quot;protocol&quot;: &quot;hb-ai-status/1&quot;,
+  &quot;name&quot;: &quot;Calzon&#x27;s TTRPG Foundry AI Capability Status Vocabulary&quot;,
+  &quot;authority&quot;: &quot;api/ai/status-vocabulary.json&quot;,
+  &quot;purpose&quot;: &quot;Define one shared vocabulary for discovery, onboarding, runtime compatibility, validation, and execution state without implying that static GitHub Pages resources provide universal remote execution.&quot;,
+  &quot;rules&quot;: [
+    &quot;Capability availability and host execution state are separate concerns.&quot;,
+    &quot;A static descriptor must not use callable as a synonym for remotely executable from every LLM host.&quot;,
+    &quot;runtime-compatible, self-test-passed, ready, incompatible, and degraded are environment-scoped observations and must not be published as unconditional host-independent facts.&quot;,
+    &quot;Discovery and onboarding can succeed even when execution is unavailable in the current host.&quot;,
+    &quot;GitHub Pages remains a static origin unless a separately deployed execution transport is explicitly declared and verified.&quot;
+  ],
+  &quot;statuses&quot;: {
+    &quot;discoverable&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;The capability or resource descriptor can be found through the machine-discovery chain.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;onboardable&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;The capability has sufficient skill or instruction material for an agent to understand authority, contracts, runtime requirements, and constraints.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;runtime-required&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;An authoritative implementation exists, but the consuming host must supply the declared execution runtime before invocation can be attempted.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;runtime-compatible&quot;: {
+      &quot;scope&quot;: &quot;host-observed&quot;,
+      &quot;meaning&quot;: &quot;The current host satisfies the declared runtime requirements.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;self-test-passed&quot;: {
+      &quot;scope&quot;: &quot;host-observed&quot;,
+      &quot;meaning&quot;: &quot;The authoritative implementation passed its declared deterministic non-destructive self-test in the current host.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;ready&quot;: {
+      &quot;scope&quot;: &quot;host-observed&quot;,
+      &quot;meaning&quot;: &quot;The selected operation may be invoked in the current host after required runtime and validation gates have succeeded.&quot;,
+      &quot;executionClaim&quot;: true
+    },
+    &quot;incompatible&quot;: {
+      &quot;scope&quot;: &quot;host-observed&quot;,
+      &quot;meaning&quot;: &quot;The current host cannot satisfy the capability&#x27;s declared runtime or context requirements.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;degraded&quot;: {
+      &quot;scope&quot;: &quot;host-observed&quot;,
+      &quot;meaning&quot;: &quot;Only part of the declared capability is usable in the current host.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;ui-bound&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;Authoritative behavior remains coupled to human page controls or UI state and must not be presented as a headless API.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;page-context&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;Execution requires a declared browser page context and initialized page-specific dependencies.&quot;,
+      &quot;executionClaim&quot;: false
+    },
+    &quot;live-device-context&quot;: {
+      &quot;scope&quot;: &quot;static&quot;,
+      &quot;meaning&quot;: &quot;Execution requires live browser, sensor, microphone, radio, hardware, or other device context.&quot;,
+      &quot;executionClaim&quot;: false
+    }
+  },
+  &quot;recommendedStaticStatusByRuntimeClass&quot;: {
+    &quot;static-resource&quot;: &quot;discoverable&quot;,
+    &quot;browser-js&quot;: &quot;runtime-required&quot;,
+    &quot;host-sandbox&quot;: &quot;runtime-required&quot;,
+    &quot;browser-page-context&quot;: &quot;page-context&quot;,
+    &quot;browser-ui&quot;: &quot;ui-bound&quot;,
+    &quot;live-sensor-browser-context&quot;: &quot;live-device-context&quot;
+  },
+  &quot;hostEvaluationOrder&quot;: [
+    &quot;discoverable&quot;,
+    &quot;onboardable&quot;,
+    &quot;runtime-compatible&quot;,
+    &quot;self-test-passed&quot;,
+    &quot;ready&quot;
+  ],
+  &quot;failureOrLimitationStates&quot;: [
+    &quot;incompatible&quot;,
+    &quot;degraded&quot;,
+    &quot;ui-bound&quot;,
+    &quot;page-context&quot;,
+    &quot;live-device-context&quot;
+  ]
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

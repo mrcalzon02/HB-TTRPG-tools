@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for blacklight.exo.jump.calculate">
+<meta name="hb-projection-sha256" content="a3fff51d7333e27607568b4279f478c62531e53ee0f2450cfc39b0a502e68b45">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/blacklight-exo-jump-calculate.html">
+<title>Operation contract: blacklight.exo.jump.calculate — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: blacklight.exo.jump.calculate</h1>
+<p>Canonical contract slice for blacklight.exo.jump.calculate</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>a3fff51d7333e27607568b4279f478c62531e53ee0f2450cfc39b0a502e68b45</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="a3fff51d7333e27607568b4279f478c62531e53ee0f2450cfc39b0a502e68b45">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;blacklight.exo.jump.calculate&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;single-object&quot;,
+    &quot;operation&quot;: &quot;calculate&quot;,
+    &quot;arguments&quot;: [
+      {
+        &quot;name&quot;: &quot;input&quot;,
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: true,
+        &quot;fields&quot;: {
+          &quot;startSeed&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Departure system seed from initialized EXO cluster spatial context.&quot;
+          },
+          &quot;endSeed&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: true,
+            &quot;description&quot;: &quot;Destination system seed from initialized EXO cluster spatial context; must differ from startSeed.&quot;
+          },
+          &quot;familyKey&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;metric-envelope&quot;,
+            &quot;description&quot;: &quot;FTL family key known to BlacklightExoFTL.&quot;
+          },
+          &quot;pathLevelKey&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;p4&quot;,
+            &quot;description&quot;: &quot;FTL path-level key known to BlacklightExoFTL.&quot;
+          }
+        }
+      }
+    ],
+    &quot;contextRequirements&quot;: [
+      &quot;BlacklightExoClusterSpatial initialized with systems&quot;,
+      &quot;BlacklightExoFTL initialized&quot;,
+      &quot;BlacklightExoJumpCalculator loaded&quot;
+    ],
+    &quot;returns&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;description&quot;: &quot;In-universe engineering route estimate with start/end systems, geometry, effective distance, rating, range, timing, energy, certainty, status, corrections, and explicit fictional-FTL warning.&quot;
+    },
+    &quot;example&quot;: {
+      &quot;startSeed&quot;: &quot;system-a&quot;,
+      &quot;endSeed&quot;: &quot;system-b&quot;,
+      &quot;familyKey&quot;: &quot;metric-envelope&quot;,
+      &quot;pathLevelKey&quot;: &quot;p4&quot;
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Static HTML mirrors of Foundry machine documentation for restrictive AI readers.">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html">
+<title>AI-readable Foundry documentation</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header><nav aria-label="Foundry"><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a><a href="../index.html">Foundry home</a></nav>
+<h1>Foundry AI-readable documentation</h1>
+<p>Human- and model-readable <strong>initial HTML</strong> snapshots of authoritative machine files. No JavaScript is needed to read any page.</p></header>
+<main>
+<h2>Required distinction: reading versus executing</h2>
+<p><strong>Reading:</strong> use these static pages when the receiving model cannot retrieve a raw JSON, Markdown or TXT document. Each page embeds the complete escaped source and a drift-detection checksum.</p>
+<p><strong>Executing:</strong> this static origin has no deployed remote MCP or RPC runtime. A model must use an explicitly authorized local runner, registered MCP server, compatible browser JavaScript host or other approved tool. Never claim an operation ran because a contract is readable.</p>
+<p><strong>Engram:</strong> registered skills require the reciprocal canonical Charles engram and skill registry. Neither grants tools or overrides host/system policy. Select individual skills only as needed.</p>
+<h2>Canonical machine authorities — full static HTML mirrors</h2>
+<ol>
+<li><a href="llms.html">LLM discovery and routing</a> — Starting route and human-readable agent guidance (<code>llms.txt</code>)</li>
+<li><a href="bootstrap.html">AI bootstrap contract</a> — Mandatory discovery and execution boundaries (<code>api/ai/bootstrap.txt</code>)</li>
+<li><a href="discovery.html">AI discovery manifest</a> — Top-level canonical machine entrypoints (<code>.well-known/ai-capabilities.json</code>)</li>
+<li><a href="ai-index.html">AI integration index</a> — AI routing, transport classes and declarations (<code>api/ai/index.json</code>)</li>
+<li><a href="onboarding.html">Agent Skill onboarding</a> — Onboarding and external-model compatibility guidance (<code>api/ai/skill-onboarding.json</code>)</li>
+<li><a href="status.html">Capability status vocabulary</a> — Meaning of discovery, compatibility and readiness statuses (<code>api/ai/status-vocabulary.json</code>)</li>
+<li><a href="skills.html">Registered Agent Skills index</a> — All registered optional skills, engram binding and requirements (<code>skills/index.json</code>)</li>
+<li><a href="capabilities.html">Foundry capability registry</a> — Canonical capability identifiers and runtime details (<code>api/foundry-capabilities.json</code>)</li>
+<li><a href="contracts.html">Operation contracts</a> — Exact allowed operation signatures and constraints (<code>api/operation-contracts.json</code>)</li>
+<li><a href="resources.html">Resource collections</a> — Canonical static and lore resource identities (<code>api/resource-collections.json</code>)</li>
+<li><a href="openapi.html">Static OpenAPI discovery</a> — GET-only discovery, no remote execution server (<code>api/ai/openapi.json</code>)</li>
+<li><a href="acceptance.html">External-model acceptance tests</a> — Declared test cases, not evidence of execution (<code>api/ai/external-model-acceptance-tests.json</code>)</li>
+<li><a href="charles.html">Charles personality engram</a> — Canonical passive blacklight.charles engram (<code>docs/blacklight/charles-personality-engram.json</code>)</li>
+<li><a href="charles-manifest.html">Charles engram manifest</a> — Engram discovery and registry companion (<code>docs/blacklight/charles-personality-engram-manifest.json</code>)</li>
+<li><a href="fmpl.html">FMPL shared asset library</a> — Canonical shared Factorio modeling resource index (<code>api/ai/fmpl-library.json</code>)</li>
+</ol>
+<h2>Smaller operation-contract views</h2>
+<p>For restrictive readers that truncate the full operation-contract registry, use the <a href="contracts-index.html">per-capability contract directory</a>. These are generated slices of the canonical registry, not separate operation definitions.</p>
+<h2>Supported human handoff: portable browser self-test</h2>
+<p>These links preselect one of the three registered browser-JavaScript proof packages. They never run a test automatically: <a href="../ai-skill-test.html?skill=module-map-generation">module map</a>, <a href="../ai-skill-test.html?skill=alien-vessel-generation">alien vessel</a>, or <a href="../ai-skill-test.html?skill=binary-cube-laboratory">Binary Cube laboratory</a>. The user must choose to run the self-test in a compatible browser.</p>
+<h2>Handoff and limitations</h2>
+<p>Browsers and models differ in which URL types they permit. A model may be able to read this HTML without having any permission to call an operation. For a human handoff, prefer an existing registered page or application link; query parameters are valid only where the real application explicitly supports them. No speculative remote execution links are published.</p>
+<p>Machine clients that can consume native formats should prefer the original <a href="../.well-known/ai-capabilities.json">discovery JSON</a>, <a href="../api/ai/bootstrap.txt">bootstrap contract</a> and <a href="../skills/index.json">skill index</a>.</p>
+</main>
+<footer><p>Mirror generator: <code>scripts/generate-ai-readable-html.py</code>. Validate with <code>python3 scripts/generate-ai-readable-html.py --check</code>.</p></footer>
+</body>
+</html>

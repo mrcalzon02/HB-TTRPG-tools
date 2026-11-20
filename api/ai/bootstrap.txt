@@ -28,7 +28,7 @@ Start at /.well-known/ai-capabilities.json, then load only what the selected tas
 
 Cache each loaded authority for the current orchestration context. Do not reload unchanged registries, contracts, helpers, resources, or persona. Follow exact selected-skill references instead of scanning sibling registries or unrelated collections.
 
-Restricted browsers may use registered HTML compatibility projections for discovery; those projections never replace canonical JSON, SKILL.md, helpers, source code, or the Charles engram.
+Restricted browsers may use the static HTML directory at https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html when raw JSON/TXT/Markdown is inaccessible. Each page has complete escaped source in initial HTML, and large operation contracts also have smaller capability-specific pages. These are read-only compatibility views, NOT independent authority or executable runtimes; canonical files always win.
 
 EXECUTION CLASSES
 

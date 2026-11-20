@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="GET-only discovery, no remote execution server">
+<meta name="hb-projection-sha256" content="0035625e0429de3d00e61083c40ec9c97bfbae8d1ce94e5cac28cfdec1481e25">
+<meta name="hb-source-path" content="api/ai/openapi.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/openapi.html">
+<title>Static OpenAPI discovery — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>Static OpenAPI discovery</h1>
+<p>GET-only discovery, no remote execution server</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json"><code>api/ai/openapi.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>0035625e0429de3d00e61083c40ec9c97bfbae8d1ce94e5cac28cfdec1481e25</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="0035625e0429de3d00e61083c40ec9c97bfbae8d1ce94e5cac28cfdec1481e25">{
+  &quot;openapi&quot;: &quot;3.1.0&quot;,
+  &quot;info&quot;: {
+    &quot;title&quot;: &quot;Calzon&#x27;s TTRPG Foundry Machine Discovery&quot;,
+    &quot;version&quot;: &quot;1.1.0&quot;,
+    &quot;description&quot;: &quot;Static machine-discovery surface for the Foundry&#x27;s canonical bootstrap, status, capability, operation, resource, acceptance-test, and Agent Skills authorities. This document describes public GET discovery resources; it does not claim a remote execution RPC service.&quot;
+  },
+  &quot;servers&quot;: [
+    {
+      &quot;url&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools&quot;
+    }
+  ],
+  &quot;x-hb-execution-model&quot;: {
+    &quot;remoteRpc&quot;: &quot;not-deployed&quot;,
+    &quot;remoteMcp&quot;: &quot;not-deployed&quot;,
+    &quot;browserJs&quot;: &quot;available-in-compatible-host&quot;,
+    &quot;staticResources&quot;: &quot;available&quot;
+  },
+  &quot;x-hb-routing&quot;: {
+    &quot;bootstrap&quot;: &quot;/api/ai/bootstrap.txt&quot;,
+    &quot;policy&quot;: &quot;demand-driven&quot;,
+    &quot;rule&quot;: &quot;Use the bootstrap contract for orchestration and minimum-authority loading. This OpenAPI document only enumerates public discovery GET resources.&quot;
+  },
+  &quot;paths&quot;: {
+    &quot;/.well-known/ai-capabilities.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getAiCapabilityDiscovery&quot;,
+        &quot;summary&quot;: &quot;Get the top-level AI capability discovery manifest&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Machine discovery manifest&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/bootstrap.txt&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getAiBootstrapContract&quot;,
+        &quot;summary&quot;: &quot;Get the canonical demand-driven AI bootstrap routing contract&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Compact orchestration and minimum-authority loading contract&quot;,
+            &quot;content&quot;: {
+              &quot;text/plain&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;string&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/index.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getAiAccessIndex&quot;,
+        &quot;summary&quot;: &quot;Get the AI access index and transport status&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;AI access index&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/status-vocabulary.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getAiStatusVocabulary&quot;,
+        &quot;summary&quot;: &quot;Get canonical AI discovery and execution-state vocabulary&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Status and acceptance vocabulary&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/foundry-capabilities.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;listFoundryCapabilities&quot;,
+        &quot;summary&quot;: &quot;Get canonical capability descriptors&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Canonical Foundry capability manifest&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/operation-contracts.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getOperationContracts&quot;,
+        &quot;summary&quot;: &quot;Get exact executable operation contracts&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Operation contracts&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/resource-collections.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getResourceCollections&quot;,
+        &quot;summary&quot;: &quot;Get authoritative resource collection descriptors&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Resource collections&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/skills/index.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;listAgentSkills&quot;,
+        &quot;summary&quot;: &quot;Get the Agent Skills registry&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Agent Skills index&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/skill-onboarding.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getSkillOnboardingProfile&quot;,
+        &quot;summary&quot;: &quot;Get the Agent Skills onboarding sequence and status semantics&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Skill onboarding profile&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/external-model-acceptance-tests.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getExternalModelAcceptanceTests&quot;,
+        &quot;summary&quot;: &quot;Get the external-model integration acceptance suite when validation is required&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;External-model acceptance tests; not required for routine discovery or execution&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/charles-interactive-resource-gateway.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getCharlesGatewayPolicy&quot;,
+        &quot;summary&quot;: &quot;Get the Charles Interactive Resource Gateway policy&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;Charles gateway policy&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;/api/ai/fmpl-library.json&quot;: {
+      &quot;get&quot;: {
+        &quot;operationId&quot;: &quot;getFmplAssetCatalog&quot;,
+        &quot;summary&quot;: &quot;Retrieve the source-pinned FMPL cross-project asset registry (static discovery only)&quot;,
+        &quot;responses&quot;: {
+          &quot;200&quot;: {
+            &quot;description&quot;: &quot;FMPL catalog JSON; not a remote Blender or runner API&quot;,
+            &quot;content&quot;: {
+              &quot;application/json&quot;: {
+                &quot;schema&quot;: {
+                  &quot;type&quot;: &quot;object&quot;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

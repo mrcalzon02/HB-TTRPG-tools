@@ -24,6 +24,7 @@
   "discovery": {
     "wellKnown": "https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json",
     "bootstrap": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt",
+    "staticHtmlMachineDocs": "https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html",
     "openapi": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/openapi.json",
     "skillOnboarding": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/skill-onboarding.json",
     "externalModelAcceptanceTests": "https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/external-model-acceptance-tests.json",

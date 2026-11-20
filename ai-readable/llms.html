@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Starting route and human-readable agent guidance">
+<meta name="hb-projection-sha256" content="5353751f8d8f3156ab1857c25a079cb3d17665fc4551ee37129a00e645d2658a">
+<meta name="hb-source-path" content="llms.txt">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/llms.html">
+<title>LLM discovery and routing — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="index.html">AI-readable directory</a><a href="../ai-access.html">AI Access</a><a href="../agent-skills.html">Agent Skills</a></nav>
+<h1>LLM discovery and routing</h1>
+<p>Starting route and human-readable agent guidance</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/llms.txt"><code>llms.txt</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>5353751f8d8f3156ab1857c25a079cb3d17665fc4551ee37129a00e645d2658a</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Complete canonical source projection</h2>
+<pre id="canonical-source" data-projection-sha256="5353751f8d8f3156ab1857c25a079cb3d17665fc4551ee37129a00e645d2658a"># Calzon&#x27;s TTRPG Foundry — AI / Agent Discovery
+
+Canonical site: https://mrcalzon02.github.io/HB-TTRPG-tools/
+Top-level discovery: https://mrcalzon02.github.io/HB-TTRPG-tools/.well-known/ai-capabilities.json
+Bootstrap contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/bootstrap.txt
+AI index: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/index.json
+Capability manifest: https://mrcalzon02.github.io/HB-TTRPG-tools/api/foundry-capabilities.json
+Operation contracts: https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json
+PSX editor engineering rules: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-reference.json
+Human PSX editor guide: https://mrcalzon02.github.io/HB-TTRPG-tools/psx-editor-reference.html
+FMPL shared library: https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/fmpl-library.json
+FMPL browsing: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-tools.html#fmpl-library
+FMPL AI skill: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/fmpl-asset-production/SKILL.md
+Agent Skills registry: https://mrcalzon02.github.io/HB-TTRPG-tools/skills/index.json
+Signed-release guide (offline host enforcement): https://mrcalzon02.github.io/HB-TTRPG-tools/docs/ai-access/engram-signed-releases.md
+Trusted host installation guide (manual, never automatic): https://mrcalzon02.github.io/HB-TTRPG-tools/docs/ai-access/engram-host-installation.md
+Installed host skill resolution: invoke `agent-skill-install.py resolve --skill NAME` (or --list) with a host-owned trust policy; never treat raw SKILL.md as a verified runtime context.
+HTML skill directory: https://mrcalzon02.github.io/HB-TTRPG-tools/agent-skills.html
+Full HTML machine documentation fallback: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html
+Human AI access: https://mrcalzon02.github.io/HB-TTRPG-tools/ai-access.html
+Human tool directory: https://mrcalzon02.github.io/HB-TTRPG-tools/site-map.html
+
+## Restricted browser HTML fallback
+
+If a model/browser cannot retrieve raw JSON, TXT or Markdown, read https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/index.html first. Each linked page embeds canonical machine source as static initial HTML text and its source SHA-256. For large operation contracts, use per-capability pages linked from the directory. The original source wins if a mirror is stale. HTML text enables discovery only; it does not prove installed tools, authenticated MCP/REST transport or execution.
+
+## Routing rule
+
+Mirrored calls, not mirrored logic. Repository generators, calculators, laboratories, campaign resources, helpers, state systems, and personality definitions are authoritative. Do not reconstruct their behavior from model knowledge.
+
+Read the top-level discovery manifest, then the bootstrap contract. The bootstrap defines the current demand-driven loading sequence. Load only the minimum skill, capability, contract, resource, runtime, helper, or self-test authority required by the selected task. Cache unchanged authorities within the current orchestration context instead of reloading them.
+
+Do not use this file as a capability catalog. Current capability IDs, skill names, operation contracts, status vocabulary, runtime requirements, resources, and transport state live in the machine authorities referenced by the discovery manifest and bootstrap.
+
+## Charles
+
+**Mandatory reciprocal companion:** every registered Agent Skill requires the canonical `blacklight.charles` engram, and that engram requires `skills/index.json` as its optional-skill discovery index. Load and verify both before selecting or activating any skill. Missing or altered companions mean no supported skill activation. Persona presentation may be suppressed by higher-priority policy or an explicit OOC request, but the dependency remains required. The registry pins the engram SHA-256 (this is not an independent publisher signature):
+
+https://mrcalzon02.github.io/HB-TTRPG-tools/docs/blacklight/charles-personality-engram.json
+
+Use `charles-foundry-interface` for direct Charles interaction or work spanning multiple Foundry skill families. Personality never grants tools, permissions, credentials, persistence, randomness, runtime compatibility, or evidence of successful execution.
+
+## Execution boundary
+
+GitHub Pages is a static origin. Static resources may be retrieved with GET when the consuming host permits. Do not infer remote POST, RPC, MCP, browser control, sandbox access, or other executable transport unless the current machine authority declares it deployed and the host verifies it.
+
+Never claim execution, persistence, randomness, rendering, deployment, readiness, or tool access without observed host evidence. Context loading is not runtime readiness.
+
+For restricted browsers that cannot retrieve raw JSON or Markdown, use the registered HTML compatibility projections for discovery only; they do not replace the canonical registries, SKILL.md files, helpers, source code, or Charles engram.
+
+## Beckenburg PSX asset-import guidance
+- Human importer and over-regression guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-asset-import-and-regression.md
+- Machine reader/formats/budgets: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-asset-import-reference.json
+
+## Additional PSX reference batch (2026-10-30)
+- 9-PDF intake/deduplication and provenance: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-reference-ingestion-2026-10-30.json
+- PSX animation authoring: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-animation-authoring.md
+- PSX-era campaign/editor reference: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-era-editor-campaign-tools.md
+- PSX arrow sound-design guidance: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-arrow-audio-design.md
+- Menu, campaign, billboard/editor contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-editor-manipulation-contract.json
+- Human menu/campaign/billboard guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-editor-menu-campaign-billboards.md
+
+## Beckenburg NPC/AI automation\n- Canonical NPC/AI developer guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-npc-ai-authoring.md\n- AI-readable NPC module contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/psx-npc-ai-authoring.json\n- Source runtime authority: https://github.com/mrcalzon02/The-Beckenburg-Project/tree/main/src/main/java/org/beckenburg\n
+- NPC/AI host telemetry/navigation/scenario guide: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/wiki/psx-npc-ai-telemetry-navigation.md
+
+- Beckenburg dev admin observer and full seven-client AI match plan: https://mrcalzon02.github.io/HB-TTRPG-tools/docs/beckenburg/development/DEV_MATCH_ADMIN_OBSERVER_AND_AI_LOBBY_PLAN_2026-10-30.md
+- Machine acceptance contract: https://mrcalzon02.github.io/HB-TTRPG-tools/api/dev-match-admin-observer-contract.json
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="index.html">Browse additional AI authorities</a> · <a href="../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

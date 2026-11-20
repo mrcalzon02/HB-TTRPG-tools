@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for spatial.alien-vessel.generate">
+<meta name="hb-projection-sha256" content="8af48cc2afa98c38149feb0c05e519856567812fa01e44703678b1bfda186663">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/spatial-alien-vessel-generate.html">
+<title>Operation contract: spatial.alien-vessel.generate — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: spatial.alien-vessel.generate</h1>
+<p>Canonical contract slice for spatial.alien-vessel.generate</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>8af48cc2afa98c38149feb0c05e519856567812fa01e44703678b1bfda186663</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="8af48cc2afa98c38149feb0c05e519856567812fa01e44703678b1bfda186663">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;spatial.alien-vessel.generate&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;single-object&quot;,
+    &quot;operation&quot;: &quot;generate&quot;,
+    &quot;validatedAgainst&quot;: {
+      &quot;date&quot;: &quot;2026-09-17&quot;,
+      &quot;sources&quot;: {
+        &quot;alien-vessel-generator.js&quot;: &quot;92bad88eda72e1f65ca02879ff3033bd28d8448d&quot;,
+        &quot;vessel-condition-model.js&quot;: &quot;5f2715f5358067da548e3c1a70025840c3f07073&quot;,
+        &quot;semantic-spatial-engine.js&quot;: &quot;a21aad5405120063e53cd54cbad2790ac33a2cb5&quot;,
+        &quot;vessel-hull-envelope.js&quot;: &quot;81320099033a856a7574a75c58e9ea707c285f2f&quot;
+      }
+    },
+    &quot;arguments&quot;: [
+      {
+        &quot;name&quot;: &quot;input&quot;,
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: false,
+        &quot;description&quot;: &quot;Alien vessel generation request. Intact topology is generated or imported first and retained as referenceVessel authority; lifecycle condition is applied afterward without rewriting the reference geometry.&quot;,
+        &quot;fields&quot;: {
+          &quot;seed&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Deterministic vessel seed. When omitted the generator derives alien-vessel:&lt;requested profile&gt;.&quot;
+          },
+          &quot;profile&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;recon&quot;,
+            &quot;enum&quot;: [
+              &quot;recon&quot;,
+              &quot;damaged_recon&quot;,
+              &quot;science&quot;,
+              &quot;freighter&quot;,
+              &quot;command_cruiser&quot;,
+              &quot;carrier&quot;
+            ],
+            &quot;description&quot;: &quot;Semantic vessel program. damaged_recon is a compatibility alias for recon topology with DAMAGED condition when no explicit condition is supplied.&quot;
+          },
+          &quot;vesselType&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Returned vessel-type label. Defaults to the selected profile&#x27;s canonical label.&quot;
+          },
+          &quot;faction&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Faction/civilization ownership label.&quot;
+          },
+          &quot;species&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Simple species label fallback when speciesProfile is not supplied.&quot;
+          },
+          &quot;technologyBasis&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Simple technology-basis label fallback when technologyProfile is not supplied.&quot;
+          },
+          &quot;speciesProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Species architectural context. May supply name/id, bodyPlan, requiredRoles, adjacency, architectureTags, layout biases, or extraEdgeChance.&quot;
+          },
+          &quot;civilizationProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Civilization/organization architectural context. May supply requiredRoles, adjacency, architectureTags, layout biases, or extraEdgeChance.&quot;
+          },
+          &quot;technologyProfile&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Technology architectural context. May supply name/basis, requiredRoles, adjacency, architectureTags, and layout biases.&quot;
+          },
+          &quot;sourceLayout&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Existing HBSemanticSpatialEngine-compatible layout to preserve as intact reference geometry instead of generating new topology.&quot;
+          },
+          &quot;sourceHull&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Existing hull envelope paired with sourceLayout. When omitted the canonical hull adapter wraps the imported reference layout.&quot;
+          },
+          &quot;conditionTemplate&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;OPERATIONAL&quot;,
+            &quot;enum&quot;: [
+              &quot;NEWLY_MANUFACTURED&quot;,
+              &quot;PARTIALLY_COMPLETED&quot;,
+              &quot;COMMISSIONING&quot;,
+              &quot;OPERATIONAL&quot;,
+              &quot;WORN_SERVICE&quot;,
+              &quot;PARTIALLY_TORN_DOWN&quot;,
+              &quot;MOTHBALLED&quot;,
+              &quot;ABANDONED&quot;,
+              &quot;PARTIALLY_SALVAGED&quot;,
+              &quot;DAMAGED&quot;,
+              &quot;CRIPPLED&quot;,
+              &quot;WRECKED&quot;,
+              &quot;DESTROYED&quot;
+            ],
+            &quot;description&quot;: &quot;Named post-generation lifecycle template aligned with Black Light EXO vessel condition vocabulary.&quot;
+          },
+          &quot;condition&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for conditionTemplate.&quot;
+          },
+          &quot;conditionAxes&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Overrides named template percentages without changing intact topology. Supported axes match the EXO condition vocabulary: constructionCompletionPercent, commissioningCompletionPercent, operationalReadinessPercent, structuralDamagePercent, systemDamagePercent, salvageRemovalPercent, decommissioningPercent, maintenanceDebtPercent, fuelLoadPercent, coolantLoadPercent, atmosphereIntegrityPercent, contaminationPercent, crewAvailabilityPercent, dataIntegrityPercent, destructionPercent.&quot;
+          },
+          &quot;destructionPercent&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..100&quot;,
+            &quot;description&quot;: &quot;Top-level override for destructionPercent.&quot;
+          },
+          &quot;salvageRemovalPercent&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..100&quot;,
+            &quot;description&quot;: &quot;Top-level override for salvageRemovalPercent.&quot;
+          },
+          &quot;contaminationPercent&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..100&quot;,
+            &quot;description&quot;: &quot;Top-level override for contaminationPercent.&quot;
+          },
+          &quot;damageSeverity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..1&quot;,
+            &quot;description&quot;: &quot;Legacy compatibility input. When positive and no named condition is supplied it selects DAMAGED and raises structural/system/destruction axes deterministically.&quot;
+          },
+          &quot;decks&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;&gt;=1&quot;,
+            &quot;description&quot;: &quot;Override deck count for generated topology. Imported sourceLayout keeps its own deckCount.&quot;
+          },
+          &quot;width&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 84,
+            &quot;units&quot;: &quot;grid cells&quot;,
+            &quot;description&quot;: &quot;Requested topology width before layout overrides.&quot;
+          },
+          &quot;height&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 60,
+            &quot;units&quot;: &quot;grid cells&quot;,
+            &quot;description&quot;: &quot;Requested topology height before layout overrides.&quot;
+          },
+          &quot;additionalRoles&quot;: {
+            &quot;type&quot;: &quot;array&lt;object&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Additional semantic compartments appended to profile/species/civilization/technology roles before topology generation.&quot;
+          },
+          &quot;adjacency&quot;: {
+            &quot;type&quot;: &quot;array&lt;[string,string]|object&gt;&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Additional semantic adjacency constraints appended before topology generation.&quot;
+          },
+          &quot;layout&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Shared spatial-engine placement overrides applied after profile/species/technology/civilization layout biases.&quot;
+          },
+          &quot;extraEdgeChance&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;range&quot;: &quot;0..1 recommended&quot;,
+            &quot;description&quot;: &quot;Additional same-deck topology edge probability; explicit input has highest precedence.&quot;
+          },
+          &quot;pruneDeadEnds&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: true,
+            &quot;description&quot;: &quot;Dead-end pruning gate for generated topology.&quot;
+          },
+          &quot;strict&quot;: {
+            &quot;type&quot;: &quot;boolean&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: true,
+            &quot;description&quot;: &quot;Reject invalid generated/imported spatial layouts or hull envelopes unless false.&quot;
+          },
+          &quot;hullShape&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;connected-skin&quot;,
+            &quot;enum&quot;: [
+              &quot;connected-skin&quot;,
+              &quot;oval&quot;,
+              &quot;capsule&quot;,
+              &quot;rectangle&quot;,
+              &quot;square&quot;,
+              &quot;circle&quot;
+            ],
+            &quot;description&quot;: &quot;Canonical hull-envelope shape.&quot;
+          },
+          &quot;shape&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for hullShape.&quot;
+          },
+          &quot;hullTightness&quot;: {
+            &quot;type&quot;: &quot;string|number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: &quot;standard&quot;,
+            &quot;description&quot;: &quot;Canonical hull clearance selector or numeric adapter input.&quot;
+          },
+          &quot;tightness&quot;: {
+            &quot;type&quot;: &quot;string|number&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Alias for hullTightness.&quot;
+          }
+        }
+      }
+    ],
+    &quot;returns&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;description&quot;: &quot;Alien vessel record schema 2.0.0 containing architecture context, immutable referenceVessel authority, conditioned spatialLayout, condition and conditionHistory records, salvage candidates and surviving graph, legacy damage compatibility annotations, hull, provenance, semantic summary, and combined spatial/hull/condition validation.&quot;
+    },
+    &quot;example&quot;: {
+      &quot;seed&quot;: &quot;kharvaxi-command-cruiser-01&quot;,
+      &quot;profile&quot;: &quot;command_cruiser&quot;,
+      &quot;faction&quot;: &quot;Kharvaxi&quot;,
+      &quot;speciesProfile&quot;: {
+        &quot;name&quot;: &quot;Kharvaxi&quot;,
+        &quot;bodyPlan&quot;: &quot;arachnid&quot;,
+        &quot;architectureTags&quot;: [
+          &quot;arachnid-access&quot;,
+          &quot;factional-compartmentation&quot;
+        ]
+      },
+      &quot;technologyProfile&quot;: {
+        &quot;name&quot;: &quot;quantum crystalline strand&quot;,
+        &quot;architectureTags&quot;: [
+          &quot;quantum-fiber&quot;,
+          &quot;crystal-compute&quot;
+        ]
+      },
+      &quot;conditionTemplate&quot;: &quot;WRECKED&quot;,
+      &quot;salvageRemovalPercent&quot;: 20,
+      &quot;hullShape&quot;: &quot;connected-skin&quot;,
+      &quot;strict&quot;: true
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>

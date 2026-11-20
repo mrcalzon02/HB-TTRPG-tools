@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<meta name="description" content="Canonical contract slice for signals.configuration.analyze">
+<meta name="hb-projection-sha256" content="585ee36dd0f72ebee8f47b63b7f261eed442afc26df98b4e25a3360e478b4b59">
+<meta name="hb-source-path" content="api/operation-contracts.json">
+<link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/contracts/signals-configuration-analyze.html">
+<title>Operation contract: signals.configuration.analyze — Foundry AI-readable mirror</title>
+<style>body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.55;
+background:#11141a;color:#edf0f4;margin:0}main,header,footer{max-width:1120px;
+margin:auto;padding:1rem 1.25rem}a{color:#9ac7ff}a:focus-visible{outline:2px solid #fff}
+a:hover{text-decoration-thickness:2px}h1{font-size:1.55rem}h2{font-size:1.2rem}
+p{max-width:82ch}.meta{color:#c9cdd5}pre{white-space:pre-wrap;overflow-wrap:anywhere;
+background:#1c222c;color:#eef2f8;border:1px solid #4f6072;padding:1rem;
+border-radius:.4rem;line-height:1.55;font-size:.86rem}
+li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+<header>
+<nav aria-label="AI documentation"><a href="../index.html">AI-readable directory</a><a href="../../ai-access.html">AI Access</a><a href="../../agent-skills.html">Agent Skills</a></nav>
+<h1>Operation contract: signals.configuration.analyze</h1>
+<p>Canonical contract slice for signals.configuration.analyze</p>
+</header>
+<main>
+<p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/operation-contracts.json"><code>api/operation-contracts.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>585ee36dd0f72ebee8f47b63b7f261eed442afc26df98b4e25a3360e478b4b59</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
+<h2>Canonical capability contract slice</h2>
+<pre id="canonical-source" data-projection-sha256="585ee36dd0f72ebee8f47b63b7f261eed442afc26df98b4e25a3360e478b4b59">{
+  &quot;source&quot;: &quot;api/operation-contracts.json&quot;,
+  &quot;capabilityId&quot;: &quot;signals.configuration.analyze&quot;,
+  &quot;contract&quot;: {
+    &quot;callStyle&quot;: &quot;single-object&quot;,
+    &quot;operation&quot;: &quot;analyzeConfiguration&quot;,
+    &quot;arguments&quot;: [
+      {
+        &quot;name&quot;: &quot;config&quot;,
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: true,
+        &quot;fields&quot;: {
+          &quot;sourceHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          &quot;distanceM&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;m&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          &quot;txPowerDbm&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;dBm&quot;
+          },
+          &quot;txGainDb&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;dB&quot;,
+            &quot;default&quot;: 0
+          },
+          &quot;rxGainDb&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;dB&quot;,
+            &quot;default&quot;: 0
+          },
+          &quot;extraLossDb&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;dB&quot;,
+            &quot;default&quot;: 0
+          },
+          &quot;receiverCenterHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          &quot;receiverBandwidthHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          &quot;noiseFigureDb&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;dB&quot;,
+            &quot;default&quot;: 0
+          },
+          &quot;antenna&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: true,
+            &quot;fields&quot;: {
+              &quot;resistanceOhm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;ohm&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;inductanceH&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;H&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;capacitanceF&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;F&quot;,
+                &quot;required&quot;: true
+              },
+              &quot;feedOhm&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;ohm&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 50
+              },
+              &quot;q&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;required&quot;: false,
+                &quot;default&quot;: 8
+              },
+              &quot;resonantHz&quot;: {
+                &quot;type&quot;: &quot;number&quot;,
+                &quot;units&quot;: &quot;Hz&quot;,
+                &quot;required&quot;: false
+              }
+            }
+          },
+          &quot;localOscillatorHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          &quot;carrierHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;
+          },
+          &quot;carrierAmplitude&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 1
+          },
+          &quot;sourceAmplitude&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0.1
+          },
+          &quot;coupling&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0.02,
+            &quot;range&quot;: &quot;0..1&quot;
+          },
+          &quot;nonlinearity&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 0.02,
+            &quot;range&quot;: &quot;&gt;=0&quot;
+          },
+          &quot;observedHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: false,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;default&quot;: 0
+          },
+          &quot;sweepMinHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;range&quot;: &quot;&gt;0&quot;
+          },
+          &quot;sweepMaxHz&quot;: {
+            &quot;type&quot;: &quot;number&quot;,
+            &quot;required&quot;: true,
+            &quot;units&quot;: &quot;Hz&quot;,
+            &quot;description&quot;: &quot;Must exceed sweepMinHz.&quot;
+          },
+          &quot;sweepPoints&quot;: {
+            &quot;type&quot;: &quot;integer&quot;,
+            &quot;required&quot;: false,
+            &quot;default&quot;: 256,
+            &quot;range&quot;: &quot;16..1024&quot;
+          },
+          &quot;environment&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;RF map environment. If omitted, canonical defaults are constructed from sourceHz/txPowerDbm.&quot;
+          },
+          &quot;experiments&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;required&quot;: false,
+            &quot;description&quot;: &quot;Experiment-suite settings. If omitted, canonical defaults are derived from the environment.&quot;
+          }
+        }
+      }
+    ],
+    &quot;returns&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;description&quot;: &quot;Frozen analysis with direct reception, heterodyne products, adjacent-carrier probe, antenna sweep, inferred candidates, range scenarios, environment map, experiment suite, and source field strength.&quot;
+    }
+  }
+}
+</pre>
+</main>
+<footer><p>Mirrored data only · <a href="../index.html">Browse additional AI authorities</a> · <a href="../../docs/engram-skill-bidirectional-binding.md">Engram/skill binding</a></p></footer>
+</body>
+</html>
