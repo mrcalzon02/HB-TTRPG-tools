@@ -94,7 +94,8 @@ final class AttachmentsUi {
         if (state.loaded) {
             for (AttachmentStore.Transfer f : state.files) {
                 String prior = observedFileStates.put(f.id, f.status);
-                if (observedInitialFiles && prior != null && !prior.equals(f.status)) {
+                if (TransferEventText.shouldNotify(observedInitialFiles, prior,
+                        f.status, f.outgoing, f.reason)) {
                     String event = TransferEventText.changed(
                             f.status, f.outgoing, f.name, f.reason);
                     if (event != null) {
@@ -545,9 +546,7 @@ final class AttachmentsUi {
             progress.setProgress(Math.max(0,
                     TransferProgress.progressPermille(f.progress, f.size)));
             detailBytes.setText(size(TransferProgress.boundedBytes(f.progress, f.size))
-                    + " / " + size(Math.max(0, f.size))
-                    + (f.size > 0 && f.progress >= f.size
-                            ? " · Awaiting confirmation" : ""));
+                    + " / " + size(Math.max(0, f.size)));
         }
         boolean offline = !link.snapshot().connected;
         String buttons = f.status + "/" + f.paused + "/" + offline;
