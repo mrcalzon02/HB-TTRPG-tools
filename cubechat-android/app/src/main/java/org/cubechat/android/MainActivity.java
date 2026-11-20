@@ -1206,6 +1206,10 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         }));
         content.addView(button("Blend QR into a photo", true, v -> {
             if (!chatOpen() || link == null || artworkQr != null) return;
+            // Switching export modes invalidates a previously cancelled plain
+            // QR destination request; never reuse a stale invite string.
+            exportCode = null;
+            pendingQrContact = 0;
             final long contact = renderedId;
             final String expected = code;
             QrArtworkUi artwork = new QrArtworkUi(this, expected,
