@@ -185,7 +185,8 @@
         "sprite animation export",
         "audio and video production",
         "host tool readiness diagnosis",
-        "visual proof and game integration"
+        "visual proof and game integration",
+        "inspect OBJ, glTF, GLB and Blender source metadata offline"
       ],
       "personalityPolicy": "inherit-default",
       "personalityEngramIds": [
@@ -194,6 +195,11 @@
       "executionRequirements": [
         "Node.js 20+ for optional offline diagnostic CLI",
         "Separate host-authorized modality tools and host-verified acceptance"
+      ],
+      "helperPaths": [
+        "skills/multimodal-production-routing/scripts/plan.mjs",
+        "skills/multimodal-production-routing/scripts/inspect.mjs",
+        "skills/multimodal-production-routing/scripts/inspect-model.mjs"
       ]
     },
     {

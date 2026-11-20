@@ -6,7 +6,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: "1.1.0"
+  version: "1.2.0"
   interface: hb-production-plan/1
   execution-mode: public-offline-declarative
 ---
@@ -50,6 +50,17 @@ node --test skills/multimodal-production-routing/tests/inspect.test.mjs
 ```
 
 It accepts at most 16 files of at most 32 MiB each, refuses absolute paths, escaping the selected root and direct symlinks, and rejects malformed/unsupported media headers. Structural inspection is **not** full media decoding, visual comparison, copyright verification, animation playback, game load testing or production acceptance. Output explicitly sets `visualProofProvided: false` and `gameRuntimeAcceptanceVerified: false`. Publishing actual visual proof remains a separate authorized operation.
+
+## Read-only editable 3D source inspection
+
+The optional `scripts/inspect-model.mjs` provides **real local source triage** for `.obj`, `.gltf`, `.glb`, and `.blend` files. It reports SHA-256 and bounded format information without loading or executing 3D projects. OBJ inspection counts vertices, faces, UV/normal coverage and declared bounds; glTF/GLB inspection checks JSON and container references, mesh/accessor counts, declared bounds, and whether external resources are referenced; Blender inspection checks **only the native file header** (pointer width, endianness and advertised version).
+
+```sh
+node skills/multimodal-production-routing/scripts/inspect-model.mjs --root path/to/assets machine.obj scene.glb working.blend
+node --test skills/multimodal-production-routing/tests/inspect-model.test.mjs
+```
+
+Inputs are 1–16 explicitly selected files under an operator-selected root, each 1 byte–32 MiB. The tool rejects absolute and escaping paths, nested symlinks, unsupported formats, malformed source structures and invalid references it can check without decoding buffers. It never follows glTF external URIs, executes scripts, opens `.blend` scenes in Blender, renders a model, verifies copyright, or validates actual game integration. It provides **technical source diagnostics, not final mesh validation or visual proof**. The existing image/audio inspector and native FMPL production workflows remain separate authorities.
 
 ## Security and status requirements
 

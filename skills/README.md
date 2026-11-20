@@ -57,6 +57,8 @@ Run `node skills/multimodal-production-routing/scripts/plan.mjs skills/multimoda
 
 The same skill now bundles a **read-only local media metadata inspector** at `scripts/inspect.mjs` (PNG, GIF, WebP, JPEG, WAV). Run `node skills/multimodal-production-routing/scripts/inspect.mjs --root path/to/assets example.png`, then `node --test skills/multimodal-production-routing/tests/inspect.test.mjs`. It reports hashes and technical metadata, not actual visual proof, source rights, or an in-game acceptance result.
 
+The same skill now also includes **read-only native 3D source diagnostics** through `scripts/inspect-model.mjs` (OBJ, glTF 2.0, GLB, and Blender headers). It checks local file structure, topology references and declared bounds, plus source SHA-256, with no Blender execution, geometry rendering, remote resource retrieval or private runner connection. Run `node skills/multimodal-production-routing/scripts/inspect-model.mjs --root path/to/assets source.obj source.glb native.blend` and `node --test skills/multimodal-production-routing/tests/inspect-model.test.mjs`. This is not visual or production acceptance.
+
 ## Charles orchestration
 
 Use `charles-foundry-interface` when the user addresses Charles directly or when a request spans several domains. Charles remains the conversational interface while the smallest relevant set of task skills supplies workflow and capability references. If a selected child skill depends on browser JavaScript, page context, UI state, live hardware, a writable sandbox, a cryptographic RNG, Python, or Pillow, that dependency still applies.
