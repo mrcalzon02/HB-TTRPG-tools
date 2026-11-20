@@ -37,7 +37,10 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
-      - name: Build debug APKs and test the offline composer
+      - name: Offline conversation search regression
+        run: bash cubechat-android/scripts/test-message-search-host.sh
+
+      - name: Build debug APKs and run Android unit tests
         working-directory: cubechat-android
         run: |
           chmod +x ./gradlew
@@ -93,5 +96,7 @@ jobs:
           path: |
             cubechat-android/app/build/outputs/apk/debug/*.apk
             cubechat-android/app/build/outputs/apk/androidTest/debug/*.apk
+            cubechat-android/app/build/test-results/testDebugUnitTest/**/*
+            cubechat-android/app/build/reports/tests/testDebugUnitTest/**/*
           if-no-files-found: warn
           retention-days: 14
