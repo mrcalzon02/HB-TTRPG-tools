@@ -304,8 +304,10 @@ final class ChatStore extends SQLiteOpenHelper {
             ContentValues row = new ContentValues();
             if (text == null || text.isEmpty()) row.putNull("draft");
             else row.put("draft", seal(text, scope(id, "draft")));
-            // A delayed editor callback for a forgotten contact cannot create or change another contact.
-            db.update("contacts", row, "id=?", idArg(id));
+            // A delayed editor callback for a forgotten contact must not
+            // create or change another contact or falsely report a saved draft.
+            if (db.update("contacts", row, "id=?", idArg(id)) != 1)
+                throw new IllegalStateException("Conversation no longer available for draft save");
             db.setTransactionSuccessful();
         } finally { db.endTransaction(); }
     }
