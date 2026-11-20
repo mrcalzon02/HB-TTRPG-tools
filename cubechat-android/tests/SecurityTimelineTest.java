@@ -46,6 +46,18 @@ public final class SecurityTimelineTest {
         check(t.snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 2, "6h valid");
         t.recordDrops(now - 7 * SecurityTimeline.HOUR_MS, 1, 8);
         check(t.snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 2, "6h expired");
+        // Even when no new packets or cell samples arrive, an expired stored row
+        // must be detectable so the encrypted snapshot can be rewritten on idle flush.
+        SecurityTimeline idle = new SecurityTimeline();
+        idle.recordDrops(now, 2, 64);
+        check(!idle.prune(now + 5 * SecurityTimeline.HOUR_MS,
+                6 * SecurityTimeline.HOUR_MS), "unexpired idle history unchanged");
+        check(idle.prune(now + 7 * SecurityTimeline.HOUR_MS,
+                6 * SecurityTimeline.HOUR_MS), "idle expiry signals durable rewrite");
+        check(idle.snapshot(now + 7 * SecurityTimeline.HOUR_MS,
+                6 * SecurityTimeline.HOUR_MS).isEmpty(), "expired idle history empty");
+        check(!idle.prune(now + 8 * SecurityTimeline.HOUR_MS,
+                6 * SecurityTimeline.HOUR_MS), "no repeated dirty work after expiry");
         t.clear();
         check(t.snapshot(now, 72 * SecurityTimeline.HOUR_MS).isEmpty(), "manual and purge clear");
         // Bounded 5-minute buckets, dropping the oldest without carrying sensitive raw events.

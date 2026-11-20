@@ -131,12 +131,19 @@ final class SecurityTelemetryStore {
         if (purging || storageError != null) return Collections.emptyList();
         long now = System.currentTimeMillis();
         drain(now);
+        // A read can expire buckets without any new traffic; persist that deletion.
+        if (timeline.prune(now, retentionMs)) {
+            dirty = true;
+            writer.execute(this::flushNow);
+        }
         return timeline.snapshot(now, retentionMs);
     }
     synchronized void flushNow() {
         if (purging || storageError != null) return;
         long now = System.currentTimeMillis();
         drain(now);
+        // Retention must expire encrypted rows even on a completely idle phone.
+        if (timeline.prune(now, retentionMs)) dirty = true;
         if (!dirty) return;
         try {
             // Never write unencrypted metadata. The only durable time series is AEAD ciphertext.

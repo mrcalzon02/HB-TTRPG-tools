@@ -71,8 +71,10 @@ public final class SecurityTimeline {
         b.reportedCells = reported; b.freshCells = fresh;
         b.servingCells = serving; b.servingDbm = servingDbm;
     }
-    public synchronized void prune(long nowMs, long maxAgeMs) {
+    /** Returns true when rows expired, allowing encrypted storage to persist their removal. */
+    public synchronized boolean prune(long nowMs, long maxAgeMs) {
         if (!validRetention(maxAgeMs) || nowMs < 0) throw new IllegalArgumentException("Invalid retention");
+        int before = buckets.size();
         watermarkMs = Math.max(watermarkMs, nowMs);
         long cutoff = Math.max(0, watermarkMs - maxAgeMs);
         while (!buckets.isEmpty() && (buckets.firstKey() < cutoff || buckets.size() > MAX_BUCKETS))
@@ -80,6 +82,7 @@ public final class SecurityTimeline {
         // A clock reset must not keep far-future observations in the current chart.
         while (!buckets.isEmpty() && buckets.lastKey() > watermarkMs + BUCKET_MS)
             buckets.pollLastEntry();
+        return buckets.size() != before;
     }
     public synchronized List<Bucket> snapshot(long nowMs, long retentionMs) {
         prune(nowMs, retentionMs);
