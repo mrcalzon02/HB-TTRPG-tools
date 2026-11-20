@@ -285,6 +285,17 @@ public final class FirewallSettings extends Activity {
     /** Aggregate-only diagnostic history. No raw packets, tower identity, or location is persisted. */
     private void showHistory() {
         text(page, "Security history · this phone only", 19, INK);
+        // FirewallSettings can be opened from the persistent VPN notification.
+        // Never expose retained security history while a protected profile is sealed.
+        try {
+            if (new LocalVault(getApplicationContext()).locked()) {
+                text(page, "Unlock CubeChat before viewing saved security history.", 15, DANGER);
+                return;
+            }
+        } catch (RuntimeException cannotCheckAccess) {
+            text(page, "Security history is unavailable until profile access can be verified.", 15, DANGER);
+            return;
+        }
         text(page, "Five-minute buckets shown in local device time. AndroidKeyStore AES-GCM encrypts aggregate history; no cloud uploads or backups. No message text, addresses, peer identities, cell IDs, coordinates or packet payloads are stored.", 14, MUTED);
         SecurityTelemetryStore telemetry = SecurityTelemetryStore.get(this);
         if (telemetry.error() != null) text(page, telemetry.error(), 15, DANGER);

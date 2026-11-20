@@ -11,6 +11,11 @@ This ledger tracks the work from the single-conversation Android APK to a messen
 
 ## November 20, 2026 · On-device encrypted security telemetry, time-series graphs and PURGE
 
+- Follow-up hardening: opening the History tab through the VPN notification now refuses
+  retained-statistics access while a local profile is locked or access checks fail.
+  The dedicated telemetry key explicitly requests 256-bit AES in AndroidKeyStore.
+
+
 - Added 5-minute aggregate-only security history (SecurityTimeline, SecurityTelemetryStore),
   bounded at 2,016 buckets, default 72-hour retention and selectable 6-hour, 24-hour,
   3-day and 7-day expiry. The local History tab displays TUN-discard packet/byte counts,
