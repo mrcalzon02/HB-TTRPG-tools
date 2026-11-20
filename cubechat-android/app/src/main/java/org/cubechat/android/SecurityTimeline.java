@@ -111,13 +111,16 @@ public final class SecurityTimeline {
             throw new IllegalArgumentException("Invalid telemetry encoding");
         SecurityTimeline result = new SecurityTimeline();
         String[] lines = encoded.split("\n", -1);
-        if (lines.length > MAX_BUCKETS + 3) throw new IllegalArgumentException("Too many buckets");
+        if (lines.length > MAX_BUCKETS + 2) throw new IllegalArgumentException("Too many buckets");
         long previous = -1;
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].isEmpty()) {
                 if (i != lines.length - 1) throw new IllegalArgumentException("Blank bucket");
                 continue;
             }
+            // A corrupt, over-capacity snapshot must fail closed, not be
+            // accepted and silently truncated by prune() during restoration.
+            if (i > MAX_BUCKETS) throw new IllegalArgumentException("Too many buckets");
             String[] fields = lines[i].split(",", -1);
             if (fields.length != 8) throw new IllegalArgumentException("Bad bucket width");
             try {
