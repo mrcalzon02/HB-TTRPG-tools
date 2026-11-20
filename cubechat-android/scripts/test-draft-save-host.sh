@@ -8,5 +8,8 @@ trap 'rm -rf "$classes"' EXIT
 
 javac --release 17 -encoding UTF-8 -d "$classes" \
     "$here/app/src/main/java/org/cubechat/android/DraftSaveState.java" \
-    "$here/tests/DraftSaveStateTest.java"
+    "$here/app/src/main/java/org/cubechat/android/DraftStatusText.java" \
+    "$here/tests/DraftSaveStateTest.java" \
+    "$here/tests/DraftStatusTextTest.java"
 java -cp "$classes" org.cubechat.android.DraftSaveStateTest
+java -cp "$classes" org.cubechat.android.DraftStatusTextTest
