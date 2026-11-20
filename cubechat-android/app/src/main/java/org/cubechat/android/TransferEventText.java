@@ -8,6 +8,23 @@ package org.cubechat.android;
 final class TransferEventText {
     private TransferEventText() { }
 
+    /**
+     * Only newly observed terminal changes should show a notice. One special
+     * case is an incoming offer automatically declined during the storage
+     * preflight: it may arrive already DECLINED without ever appearing OFFERED.
+     * Do not replay older historic file events when first opening a mailbox.
+     */
+    static boolean shouldNotify(boolean baselineLoaded, String previousStatus,
+                                String currentStatus, boolean outgoing, String reason) {
+        if (!baselineLoaded) return false;
+        if (previousStatus == null)
+            return !outgoing && "DECLINED".equals(currentStatus)
+                    && "not_enough_storage".equals(reason);
+        if (previousStatus.equals(currentStatus)) return false;
+        return "COMPLETE".equals(currentStatus) || "DECLINED".equals(currentStatus)
+                || "CANCELED".equals(currentStatus);
+    }
+
     static String changed(String status, boolean outgoing, String filename, String reason) {
         if ("COMPLETE".equals(status))
             return (outgoing ? "File delivered: " : "File received: ") + filename(filename);
