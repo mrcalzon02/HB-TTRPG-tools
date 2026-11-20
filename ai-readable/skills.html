@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow">
 <meta name="description" content="All registered optional skills, engram binding and requirements">
-<meta name="hb-projection-sha256" content="a63c7d355ff5084e82ccb4567f02a6dd41b6646ae4e761b4599ead8a6386bff8">
+<meta name="hb-projection-sha256" content="9c505f992f1f0ad8b63ba668e3f13a9d0b39e0bfeaeabe324803ef4e18ec79ba">
 <meta name="hb-source-path" content="skills/index.json">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/skills.html">
 <title>Registered Agent Skills index — Foundry AI-readable mirror</title>
@@ -29,7 +29,7 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
 <p class="meta"><strong>Displayed projection SHA-256:</strong> <code>be0e9b1d353d3ea2da19fd0199bc8d2444c744a6b8e3c27a1e712b1349641e4b</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
 <p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
 <h2>Complete canonical source projection</h2>
-<pre id="canonical-source" data-projection-sha256="a63c7d355ff5084e82ccb4567f02a6dd41b6646ae4e761b4599ead8a6386bff8">{
+<pre id="canonical-source" data-projection-sha256="9c505f992f1f0ad8b63ba668e3f13a9d0b39e0bfeaeabe324803ef4e18ec79ba">{
   &quot;schemaVersion&quot;: &quot;1.6.0&quot;,
   &quot;standard&quot;: &quot;Agent Skills&quot;,
   &quot;standardUrl&quot;: &quot;https://agentskills.io/specification&quot;,
@@ -78,6 +78,7 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
         &quot;foundry-discovery&quot;,
         &quot;model-context-and-budget-manager&quot;,
         &quot;task-focus-orchestration&quot;,
+        &quot;multimodal-production-routing&quot;,
         &quot;campaign-lore-retrieval&quot;,
         &quot;adventure-module-operations&quot;,
         &quot;module-map-generation&quot;,
@@ -199,6 +200,31 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
       &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
       &quot;personalityEngramIds&quot;: [
         &quot;blacklight.charles&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;multimodal-production-routing&quot;,
+      &quot;path&quot;: &quot;skills/multimodal-production-routing/SKILL.md&quot;,
+      &quot;status&quot;: &quot;onboardable&quot;,
+      &quot;capabilityIds&quot;: [],
+      &quot;resourceIds&quot;: [],
+      &quot;laboratoryIds&quot;: [],
+      &quot;useFor&quot;: [
+        &quot;image generation and editing&quot;,
+        &quot;3D modeling and Blender asset routing&quot;,
+        &quot;texture and material production&quot;,
+        &quot;sprite animation export&quot;,
+        &quot;audio and video production&quot;,
+        &quot;host tool readiness diagnosis&quot;,
+        &quot;visual proof and game integration&quot;
+      ],
+      &quot;personalityPolicy&quot;: &quot;inherit-default&quot;,
+      &quot;personalityEngramIds&quot;: [
+        &quot;blacklight.charles&quot;
+      ],
+      &quot;executionRequirements&quot;: [
+        &quot;Node.js 20+ for optional offline diagnostic CLI&quot;,
+        &quot;Separate host-authorized modality tools and host-verified acceptance&quot;
       ]
     },
     {
