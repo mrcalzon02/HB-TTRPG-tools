@@ -52,15 +52,21 @@ A BPF filesystem mount or available `tc` tool does **not** establish that a usab
 bash scripts/test-radioguard-readonly-probe.sh
 ```
 
-## Experimental QR artwork: luminance modulation
+## QR artwork: brightness-modulated photo key cards (development source)
 
-The in-progress [QR luminance compositor](app/src/main/java/org/cubechat/android/QrLuminanceOverlay.java) can blend a valid QR matrix into an opaque picture by locally brightening its white modules and darkening its black modules, while preserving original colors as far as the RGB gamut allows. The matrix must already include a four-module quiet zone, and the rendered square must provide at least six pixels per module. An adjustment-strength parameter controls how obvious the pattern appears.
+The existing **Show my invite → Save QR image** path still produces the familiar, high-contrast black-and-white PNG. An additional **Blend QR into a photo** action has now been integrated into the development source.
 
-**Not yet exposed as a user-facing export:** the existing black-and-white pairing QR and PNG save action are unchanged. Before enabling artwork-backed exports, CubeChat must try decoding the finished picture using its existing ZXing reader, reject an unscannable result rather than silently saving it as scan-ready, and preserve the plain QR as a fallback. Use PNG for first-party export; compression, resizing, filters, poor lighting and camera quality may destroy weak luminance patterns. Prefer an opaque image or flatten transparency before adding a QR.
+1. Open a pairing invite, tap **Blend QR into a photo**, and select an existing local image through Android's document picker. No additional media permission is requested.
+2. Use the **Visibility** slider to darken/lighten picture pixels in the centered QR pattern. The editor updates its preview after a brief pause while dragging.
+3. The app runs its existing ZXing QR decoder on the *full composed image*. **Save verified artwork PNG** remains disabled unless the decoder recovers the **exact pairing invite**.
+4. Choose a destination for the PNG. The app losslessly encodes the image, decodes the encoded PNG bytes back to pixels, verifies them **again** against the invite, and only then writes the requested file.
 
-This is **visual camouflage, not encryption**. CubeChat pairing invites can contain key material; anyone who obtains a decodable copy of the picture can extract the invite and its associated credentials. Treat artwork-embedded key cards with the same privacy as visible QR key cards.
+Photos are sampled to a maximum 1600-pixel dimension and the QR requires six pixels per module plus a four-module quiet zone. Tiny or highly elongated images may be rejected; choose a larger or squarer image. Transparent backgrounds are flattened against white, and original image metadata is not copied into the rendered PNG. The editor does not save the picture, invite or preview until you explicitly choose a PNG destination. Photo selection and scan verification happen locally without uploading to a server.
 
-Developer host smoke: `bash scripts/test-qr-luminance-host.sh`. Android/ZXing source regression: `QrLuminanceOverlayDecodeTest` under `app/src/test` (not yet executed on the SDK workflow). One offline textured-background smoke using the exact Java compositor and an independent OpenCV reader decoded a dummy QR at strengths 0.40–1.00 but not 0.30. These are **single synthetic-image observations**, not verified real-world phone/camera thresholds.
+**Status: source-integrated, not yet validated as a running APK.** The compositing and centered-geometry Java host tests passed **35/35**, with exact current source/test Git blob hashes. An independent OpenCV reader decoded an example *synthetic landscape* image at six contrast strengths (40–100%); this is not proof of real camera, printed-card or arbitrary photo reliability. Android's `QrArtworkRenderTest` and the pre-existing ZXing luminance decode tests are committed but require the manual Android SDK / API26+ build and regression workflow. See [QR artwork tracking issue #24](https://github.com/mrcalzon02/HB-TTRPG-tools/issues/24).
+
+**Security:** QR luminance camouflage is **not encryption**. Anyone who reads the QR from the artwork can access the encoded pairing material. Treat the entire picture as a private key card, avoid posting it publicly, and use a conventional visible QR whenever scanning fails. The option does not alter CubeChat's keys, transport protocol or original QR export.
+
 
 ## Conversations and drafts
 
