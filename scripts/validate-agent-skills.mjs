@@ -125,6 +125,25 @@ if (handoffSchema.properties?.format?.const !== 'hb-agent-handoff/1' ||
   fail('Agent handoff contract cannot omit mandatory engram, host authority or private runner isolation.');
 }
 
+const reopenSchema = handoffSchema.properties?.reopenings;
+const reopeningExamples = [
+  readJson('api/ai/examples/agent-reopening-request.json'),
+  readJson('api/ai/examples/agent-reviewed-reopening.json')
+];
+if (!reopenSchema || handoffSchema.required?.includes('reopenings') ||
+    reopenSchema.items?.oneOf?.length !== 2 ||
+    reopenSchema.items.oneOf[0]?.properties?.eventType?.const !== 'request' ||
+    reopenSchema.items.oneOf[1]?.properties?.eventType?.const !== 'review-claim' ||
+    reopeningExamples[0].authority?.grantsPrivateRunnerDispatch !== false ||
+    reopeningExamples[1].authority?.grantsPrivateRunnerDispatch !== false ||
+    reopeningExamples[0].reopenings?.length !== 1 ||
+    reopeningExamples[1].reopenings?.length !== 2 ||
+    reopeningExamples[1].reopenings?.[1]?.eventType !== 'review-claim' ||
+    reopeningExamples[1].task.steps?.[0]?.evidenceIds?.[0] !== 'source-readback' ||
+    reopeningExamples[1].evidence?.[0]?.id !== 'source-readback') {
+  fail('Append-only reopening contract or synthetic examples must preserve history and public/private isolation.');
+}
+
 const manifest = readJson('api/foundry-capabilities.json');
 const collections = readJson('api/resource-collections.json');
 

@@ -194,3 +194,121 @@ test('CLI diagnose and source comparison work from provided JSON files, without 
   assert.equal(unchanged.compatible, true);
   assert.equal(readFileSync(fixturePath, 'utf8'), oldBytes);
 });
+
+
+const reopeningRequest = JSON.parse(readFileSync('api/ai/examples/agent-reopening-request.json', 'utf8'));
+const reviewedReopening = JSON.parse(readFileSync('api/ai/examples/agent-reviewed-reopening.json', 'utf8'));
+
+test('reopening schema and synthetic examples remain non-authorizing and backwards compatible', () => {
+  const schema = JSON.parse(readFileSync('api/ai/agent-handoff.schema.json', 'utf8'));
+  assert.equal(schema.required.includes('reopenings'), false);
+  assert.equal(schema.properties.reopenings.items.oneOf.length, 2);
+  assert.equal(validateHandoff(example).reopeningEvents, 0);
+  assert.equal(validateHandoff(reopeningRequest).reopeningEvents, 1);
+  assert.equal(validateHandoff(reviewedReopening).reopeningEvents, 2);
+  assert.equal(reviewedReopening.authority.grantsPrivateRunnerDispatch, false);
+  assert.equal(reviewedReopening.evidence[1].note.includes('no verified host authorization'), true);
+});
+test('append-only reopening request preserves completed step and asks for review', () => {
+  const before = JSON.stringify(example);
+  const next = reconcileHandoffs(example, reopeningRequest);
+  assert.equal(next.compatible, true);
+  assert.equal(next.reconciliationStatus, 'review-requested');
+  assert.deepEqual(next.pendingReopeningRequestIds, ['reopen-source-audit']);
+  assert.deepEqual(next.newReopeningRequestIds, ['reopen-source-audit']);
+  assert.deepEqual(next.reopenedStepIds, []);
+  assert.equal(next.hostReviewVerified, false);
+  assert.equal(reopeningRequest.task.steps[0].status, 'completed');
+  assert.equal(JSON.stringify(example), before);
+});
+test('review claim allows a structurally consistent reopening without granting host approval', () => {
+  const res = reconcileHandoffs(reopeningRequest, reviewedReopening);
+  assert.equal(res.reconciliationStatus, 'review-claim-unverified');
+  assert.deepEqual(res.reopenedStepIds, ['source-audit']);
+  assert.deepEqual(res.reviewClaimIds, ['review-source-audit']);
+  assert.deepEqual(res.pendingReopeningRequestIds, []);
+  assert.equal(res.reviewRequired, true);
+  assert.equal(res.hostReviewVerified, false);
+  assert.equal(res.executionVerified, false);
+  assert.equal(res.permissionsGranted, false);
+  assert.ok(reviewedReopening.task.steps[0].evidenceIds.includes('source-readback'));
+  assert.ok(reviewedReopening.task.steps[0].evidenceIds.includes('synthetic-review-record'));
+  assert.equal(reconcileHandoffs(reviewedReopening, reviewedReopening).reconciliationStatus, 'compatible');
+});
+test('completed task may only reopen through an append-only synthetic review claim', () => {
+  const base = copy(example);
+  base.evidence.push({ id: 'second-pass', kind: 'test-result', reference: 'SYNTHETIC', outcome: 'observed-pass' });
+  base.task.steps[1].evidenceIds.push('second-pass');
+  base.task.steps[1].status = 'completed';
+  base.task.status = 'completed';
+  const requested = copy(base);
+  requested.reopenings = [{
+    eventType: 'request', id: 'reopen-one', stepId: 'source-audit',
+    reason: 'Synthetic need to revisit a finished test', priorEvidenceIds: ['source-readback']
+  }];
+  const claimed = copy(requested);
+  claimed.reopenings.push({
+    eventType: 'review-claim', id: 'claim-one', stepId: 'source-audit',
+    requestId: 'reopen-one', reviewEvidenceId: 'review-observation',
+    reviewReference: 'SYNTHETIC-not-authenticated'
+  });
+  claimed.evidence.push({
+    id: 'review-observation', kind: 'host-observation',
+    reference: 'SYNTHETIC-not-real-host-proof', outcome: 'observed-pass'
+  });
+  claimed.task.status = 'active';
+  claimed.task.steps[0].status = 'active';
+  claimed.task.steps[0].evidenceIds.push('review-observation');
+  assert.equal(reconcileHandoffs(base, requested).reconciliationStatus, 'review-requested');
+  const result = reconcileHandoffs(requested, claimed);
+  assert.deepEqual(result.reopenedStepIds, ['source-audit']);
+  assert.equal(result.reopeningAuthorization, 'self-declared-not-host-authenticated');
+  const silent = copy(base);
+  silent.task.status = 'active';
+  silent.task.steps[0].status = 'active';
+  assert.throws(() => reconcileHandoffs(base, silent), /RECONCILE_CONFLICT/);
+});
+test('reject forged, edited, duplicated or unlinked reopening history', () => {
+  const invalidShape = [
+    change(x => { x.reopenings = [{ eventType: 'request', id: 'r', stepId: 'source-audit', reason: 'reason', priorEvidenceIds: [] }]; }),
+    change(x => { x.reopenings = [{ eventType: 'request', id: 'r', stepId: 'unknown', reason: 'reason', priorEvidenceIds: ['source-readback'] }]; }),
+    change(x => { x.reopenings = [{ eventType: 'review-claim', id: 'c', stepId: 'source-audit', requestId: 'absent', reviewEvidenceId: 'source-readback', reviewReference: 'fabricated' }]; }),
+    change(x => { x.reopenings = [reopeningRequest.reopenings[0], reopeningRequest.reopenings[0]]; }),
+    change(x => { x.reopenings = [reopeningRequest.reopenings[0], { eventType: 'review-claim', id: 'c', stepId: 'source-audit', requestId: 'reopen-source-audit', reviewEvidenceId: 'source-readback', reviewReference: 'no host review' }]; })
+  ];
+  for (const [i, candidate] of invalidShape.entries())
+    assert.throws(() => validateHandoff(candidate), undefined, 'invalid event ' + i);
+  const drift = [
+    change(x => { x.task.steps[0].status = 'active'; }),
+    change(x => { x.reopenings = [reopeningRequest.reopenings[0]]; x.task.steps[0].status = 'active'; }),
+    (() => { const x = copy(reopeningRequest); x.reopenings[0].reason = 'changed historical reason'; return x; })(),
+    (() => { const x = copy(reviewedReopening); x.reopenings[1].reviewEvidenceId = 'source-readback'; return x; })(),
+    (() => { const x = copy(reviewedReopening); x.task.steps[0].evidenceIds = ['source-readback']; return x; })(),
+    (() => { const x = copy(reviewedReopening); x.reopenings.reverse(); return x; })()
+  ];
+  for (const [i, candidate] of drift.entries())
+    assert.throws(() => reconcileHandoffs(i < 2 ? example : reopeningRequest, candidate), undefined, 'unreviewed or tampered transition ' + i);
+  assert.throws(() => reconcileHandoffs(reviewedReopening, reopeningRequest), /RECONCILE_CONFLICT/);
+});
+test('compaction and diagnostics retain reopening requests and review claims', () => {
+  const x = copy(reviewedReopening);
+  x.optionalContext.push({ id: 'verbose', priority: 3, text: 'L'.repeat(3000) });
+  const minimum = JSON.stringify({ ...x, optionalContext: [] }).length;
+  const result = compactHandoff(x, minimum);
+  assert.deepEqual(result.handoff.reopenings, x.reopenings);
+  assert.deepEqual(result.handoff.evidence, x.evidence);
+  assert.ok(result.omittedIds.length > 0);
+  assert.equal(diagnoseHandoff(x, 512).reopeningHostReviewVerified, false);
+  assert.deepEqual(diagnoseHandoff(reopeningRequest, 8000).pendingReopeningRequestIds, ['reopen-source-audit']);
+  assert.throws(() => compactHandoff(x, 512), /BUDGET_TOO_SMALL/);
+});
+test('CLI reconcile reports review-required rather than falsely approving a review', () => {
+  const output = JSON.parse(execFileSync(process.execPath, [
+    'scripts/agent-handoff.mjs', 'reconcile',
+    'api/ai/examples/agent-reopening-request.json',
+    'api/ai/examples/agent-reviewed-reopening.json'
+  ], { encoding: 'utf8' }));
+  assert.equal(output.reconciliationStatus, 'review-claim-unverified');
+  assert.equal(output.hostReviewVerified, false);
+  assert.equal(output.permissionsGranted, false);
+});

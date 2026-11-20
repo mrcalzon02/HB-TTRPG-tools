@@ -1,0 +1,99 @@
+{
+  "format": "hb-agent-handoff/1",
+  "engram": {
+    "id": "blacklight.charles",
+    "registry": "skills/index.json",
+    "selection": "optional-on-demand"
+  },
+  "task": {
+    "id": "static-doc-validation",
+    "objective": "Verify the public AI documentation mirrors without changing private infrastructure",
+    "project": "mrcalzon02/HB-TTRPG-tools",
+    "status": "active",
+    "steps": [
+      {
+        "id": "source-audit",
+        "title": "Compare manifest sources with HTML mirrors",
+        "status": "active",
+        "evidenceIds": [
+          "source-readback",
+          "synthetic-review-record"
+        ]
+      },
+      {
+        "id": "run-tests",
+        "title": "Run offline consistency checks and record outputs",
+        "status": "pending",
+        "evidenceIds": []
+      }
+    ]
+  },
+  "checkpoint": {
+    "summary": "A self-declared review record was added; historical evidence remains intact and source audit is active again. This is not proof of host approval.",
+    "nextAction": "Independently confirm review authorization and recheck authoritative sources before declaring new work complete.",
+    "blockers": [],
+    "uncertainties": [
+      "No runner execution result has been obtained.",
+      "Pinned engram revision has not been independently rechecked for freshness in this handoff.",
+      "No review authorization has been independently verified.",
+      "A self-declared review claim cannot authenticate the user or a host."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "source-readback",
+      "kind": "source",
+      "reference": "skills/index.json",
+      "outcome": "observed-pass",
+      "note": "Self-declared; independently recheck before reporting as verified."
+    },
+    {
+      "id": "synthetic-review-record",
+      "kind": "host-observation",
+      "reference": "SYNTHETIC_ONLY_not-an-actual-host-approval",
+      "outcome": "observed-pass",
+      "note": "Illustrative caller-supplied record; no verified host authorization, source freshness or real execution."
+    }
+  ],
+  "optionalContext": [
+    {
+      "id": "historical-notes",
+      "priority": 3,
+      "text": "Earlier versions used raw TXT discovery; HTML mirrors were added for restricted readers."
+    }
+  ],
+  "authority": {
+    "stateOwner": "host",
+    "grantsTools": false,
+    "grantsPrivateRunnerDispatch": false,
+    "grantsPersistentMemory": false,
+    "authorizationSource": "host-policy"
+  },
+  "sourcePins": [
+    {
+      "id": "charles-engram",
+      "reference": "docs/blacklight/charles-personality-engram.json",
+      "algorithm": "sha256",
+      "revision": "85e4884dedf58522574c041c63ed678c803bd5d54dde616ff33fc022b4f57ec7"
+    }
+  ],
+  "reopenings": [
+    {
+      "eventType": "request",
+      "id": "reopen-source-audit",
+      "stepId": "source-audit",
+      "reason": "A newer source may contradict the originally completed documentation audit.",
+      "priorEvidenceIds": [
+        "source-readback"
+      ]
+    },
+    {
+      "eventType": "review-claim",
+      "id": "review-source-audit",
+      "stepId": "source-audit",
+      "requestId": "reopen-source-audit",
+      "reviewEvidenceId": "synthetic-review-record",
+      "reviewReference": "SYNTHETIC_ONLY_claimed-review-example"
+    }
+  ]
+}

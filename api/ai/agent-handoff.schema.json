@@ -334,6 +334,92 @@
           }
         ]
       }
+    },
+    "reopenings": {
+      "type": "array",
+      "maxItems": 64,
+      "description": "Optional append-only journal of requested completed-step reopenings and self-declared review claims. Never authenticates approval.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "id",
+              "stepId",
+              "reason",
+              "priorEvidenceIds"
+            ],
+            "properties": {
+              "eventType": {
+                "const": "request"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "stepId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "priorEvidenceIds": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "id",
+              "stepId",
+              "requestId",
+              "reviewEvidenceId",
+              "reviewReference"
+            ],
+            "properties": {
+              "eventType": {
+                "const": "review-claim"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "stepId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "requestId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "reviewEvidenceId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "reviewReference": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "x-hb-contract": {
@@ -341,11 +427,12 @@
       "docs/blacklight/charles-personality-engram.json",
       "skills/index.json"
     ],
-    "compactRule": "Only optionalContext entries may be dropped, lowest priority first; never omit task, evidence, sourcePins (when supplied), engram, checkpoint, or authority.",
+    "compactRule": "Only optionalContext entries may be dropped, lowest priority first. Never omit task, evidence, sourcePins, reopenings/journal, engram, checkpoint, or authority.",
     "evidenceRule": "Evidence references are self-declared until externally verified against the host; document shape validation is not proof of execution.",
-    "privacyRule": "Never publish or paste private details, credentials, signing keys, or protected runner information into a public handoff.",
+    "privacyRule": "Never put private data, secrets, runner topology, credentials or real approval tokens in public handoff examples. The schema grants no tools or access.",
     "execution": "none",
     "sourceRule": "Pinned revisions and externally supplied observations are comparison inputs only; freshnessVerified is always false without independent host evidence. No networking is performed.",
-    "reconcileRule": "Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution."
+    "reconcileRule": "Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution.",
+    "reopeningRule": "Append-only self-declared requests and review claims preserve prior evidence. A completed-step reversal needs a new, correctly linked review claim and a new declared passing host-observation. Structural consistency never proves host review, consent or permission; independent host authorization is required."
   }
 }

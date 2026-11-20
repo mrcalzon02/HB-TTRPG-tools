@@ -6,8 +6,8 @@ The canonical `blacklight.charles` engram now advertises the mandatory `skills/i
 
 ## Accepted public, declarative skill workflows
 
-- `model-context-and-budget-manager` — registered, source-grounded context selection and deterministic optional-context pruning using `hb-agent-handoff/1`; preserves mandatory engram/index, host authority, evidence and task state. Optional `scripts/agent-handoff.mjs` runs locally with Node and performs **no writes, network calls, runner dispatch or automatic tasks**.
-- `task-focus-orchestration` — registered task/checkpoint workflow with stable step IDs, evidence-linked completion declarations, blockers, and explicit next action. The shared format does not prove external results or grant persistent memory.
+- `model-context-and-budget-manager` — registered, source-grounded context selection, mandatory reopening-journal retention and deterministic optional-context pruning using `hb-agent-handoff/1`; preserves mandatory engram/index, host authority, evidence and task state. Optional `scripts/agent-handoff.mjs` runs locally with Node and performs **no writes, network calls, runner dispatch or automatic tasks**.
+- `task-focus-orchestration` — registered task/checkpoint workflow with stable step IDs, evidence-linked completion declarations, blockers, and explicit next action. Version 1.2.0 adds an append-only reopening journal with separate request/review claims and preserved history; review authenticity remains unverified in public tooling. The shared format does not prove external results or grant persistent memory.
 - Shared contract: `api/ai/agent-handoff.schema.json`; synthetic example: `api/ai/examples/agent-handoff.json`; optional caller-supplied source observations: `api/ai/examples/agent-source-observations.json`. The read-only CLI now offers `diagnose`, `reconcile`, and `compare-sources`; it never fetches sources or authenticates observations. Regression: `node --test tests/agent-handoff.test.mjs`.
 
 The original `blacklight.charles` personality engram has **not** been modified or forked. Existing mandatory binding and digest stay authoritative.

@@ -36,7 +36,7 @@ function distinct(items, label) {
   if (new Set(ids).size !== ids.length) invalid(label + ' contains duplicate IDs');
 }
 function validateHandoff(input) {
-  record(input, 'handoff', ['format', 'engram', 'task', 'checkpoint', 'evidence', 'optionalContext', 'authority'], ['sourcePins']);
+  record(input, 'handoff', ['format', 'engram', 'task', 'checkpoint', 'evidence', 'optionalContext', 'authority'], ['sourcePins', 'reopenings']);
   if (input.format !== FORMAT) invalid('unsupported handoff format');
   record(input.engram, 'engram', ['id', 'registry', 'selection']);
   if (input.engram.id !== ENGRAM || input.engram.registry !== INDEX || input.engram.selection !== 'optional-on-demand')
@@ -112,8 +112,58 @@ function validateHandoff(input) {
     }
     distinct(input.sourcePins, 'sourcePins');
   }
+  if (input.reopenings !== undefined) {
+    list(input.reopenings, 'reopenings', 64);
+    const events = new Set(), requests = new Map(), reviewed = new Set();
+    for (const event of input.reopenings) {
+      if (!event || typeof event !== 'object' || Array.isArray(event))
+        invalid('reopening event must be an object');
+      if (event.eventType === 'request') {
+        record(event, 'reopening request', ['eventType', 'id', 'stepId', 'reason', 'priorEvidenceIds']);
+        id(event.id, 'reopening.id');
+        id(event.stepId, 'reopening.stepId');
+        text(event.reason, 'reopening.reason', 1000);
+        list(event.priorEvidenceIds, 'reopening.priorEvidenceIds', 64, 1);
+        if (new Set(event.priorEvidenceIds).size !== event.priorEvidenceIds.length)
+          invalid('reopening request duplicates historical evidence');
+        for (const ref of event.priorEvidenceIds) {
+          id(ref, 'reopening.priorEvidenceIds[]');
+          if (!evidenceById.has(ref)) invalid('reopening refers to missing historical evidence: ' + ref);
+        }
+        if (!input.task.steps.some(step => step.id === event.stepId))
+          invalid('reopening request refers to a nonexistent step: ' + event.stepId);
+        requests.set(event.id, event);
+      } else if (event.eventType === 'review-claim') {
+        record(event, 'reopening review claim',
+          ['eventType', 'id', 'stepId', 'requestId', 'reviewEvidenceId', 'reviewReference']);
+        id(event.id, 'reopening.id');
+        id(event.stepId, 'reopening.stepId');
+        id(event.requestId, 'reopening.requestId');
+        id(event.reviewEvidenceId, 'reopening.reviewEvidenceId');
+        text(event.reviewReference, 'reopening.reviewReference', 500);
+        const request = requests.get(event.requestId);
+        if (!request || request.stepId !== event.stepId)
+          invalid('reopening review claim has no matching earlier request');
+        if (reviewed.has(event.requestId)) invalid('reopening request has duplicate review claims');
+        const evidence = evidenceById.get(event.reviewEvidenceId);
+        if (!evidence || evidence.kind !== 'host-observation' || evidence.outcome !== 'observed-pass')
+          invalid('reopening review claim requires a declared passing host-observation evidence record');
+        reviewed.add(event.requestId);
+      } else invalid('unrecognized reopening event type');
+      if (events.has(event.id)) invalid('reopening event IDs must be unique');
+      events.add(event.id);
+    }
+    const outstanding = new Set();
+    for (const request of requests.values()) {
+      if (!reviewed.has(request.id)) {
+        if (outstanding.has(request.stepId)) invalid('multiple pending reopening requests for the same step');
+        outstanding.add(request.stepId);
+      }
+    }
+  }
   return Object.freeze({
     valid: true, steps: input.task.steps.length, evidence: input.evidence.length,
+    reopeningEvents: (input.reopenings || []).length, reviewClaimsAuthenticity: 'self-declared-not-host-verified',
     optionalContext: input.optionalContext.length, evidenceOrigin: 'self-declared-not-host-verified',
     executionPermission: false
   });
@@ -174,6 +224,11 @@ function diagnoseHandoff(input, maxChars = 8000) {
     blockers: input.checkpoint.blockers.length, uncertainties: input.checkpoint.uncertainties.length,
     declaredPassEvidenceIds: declaredPassIds, nonPassingEvidenceIds: pendingReviewIds,
     sourcePinIds: (input.sourcePins || []).map(x => x.id),
+    reopeningRequestIds: (input.reopenings || []).filter(x => x.eventType === 'request').map(x => x.id),
+    reopeningReviewClaimIds: (input.reopenings || []).filter(x => x.eventType === 'review-claim').map(x => x.id),
+    pendingReopeningRequestIds: (input.reopenings || []).filter(x => x.eventType === 'request' &&
+      !(input.reopenings || []).some(y => y.eventType === 'review-claim' && y.requestId === x.id)).map(x => x.id),
+    reopeningHostReviewVerified: false,
     sourceFreshness: 'not-checked',
     evidenceOrigin: 'self-declared-not-host-verified',
     tokenEstimate: 'not-provided; UTF-16 characters are not model tokens',
@@ -188,50 +243,112 @@ function reconcileHandoffs(previous, current) {
   for (const key of ['id', 'project', 'objective']) {
     if (previous.task[key] !== current.task[key]) conflicts.push('task.' + key + ' changed');
   }
-  if (previous.task.status === 'completed' && current.task.status !== 'completed')
-    conflicts.push('completed task reverted without a reviewed new task');
   if (previous.task.status === 'active' && current.task.status === 'planned')
     conflicts.push('active task reverted silently to planned');
+
+  const beforeSteps = new Map(previous.task.steps.map(x => [x.id, x]));
   const nextSteps = new Map(current.task.steps.map(x => [x.id, x]));
-  const changedStepIds = [];
-  for (const before of previous.task.steps) {
-    const after = nextSteps.get(before.id);
-    if (!after) { conflicts.push('step removed: ' + before.id); continue; }
-    if (before.title !== after.title) conflicts.push('step title changed: ' + before.id);
-    if (before.status === 'completed' && after.status !== 'completed')
-      conflicts.push('completed step reopened without a reviewed new task: ' + before.id);
-    if (before.status === 'active' && after.status === 'pending')
-      conflicts.push('active step silently reverted: ' + before.id);
-    if (before.status !== after.status) changedStepIds.push(before.id);
-    for (const ref of before.evidenceIds) {
-      if (!after.evidenceIds.includes(ref)) conflicts.push('step evidence removed: ' + before.id + '/' + ref);
-    }
-  }
   const beforeEvidence = new Map(previous.evidence.map(x => [x.id, x]));
   const nextEvidence = new Map(current.evidence.map(x => [x.id, x]));
-  for (const [idValue, item] of beforeEvidence) {
-    const currentItem = nextEvidence.get(idValue);
-    if (!currentItem || JSON.stringify(item) !== JSON.stringify(currentItem))
-      conflicts.push('existing evidence removed or rewritten: ' + idValue);
+  for (const [evidenceId, entry] of beforeEvidence) {
+    const next = nextEvidence.get(evidenceId);
+    if (!next || JSON.stringify(entry) !== JSON.stringify(next))
+      conflicts.push('existing evidence removed or rewritten: ' + evidenceId);
+  }
+
+  // Reopening journal entries are immutable and append-only across checkpoints.
+  for (const [position, entry] of (previous.reopenings || []).entries()) {
+    if (JSON.stringify(entry) !== JSON.stringify((current.reopenings || [])[position]))
+      conflicts.push('reopening journal reordered, removed or altered at position ' + position);
+  }
+  const oldEvents = new Map((previous.reopenings || []).map(x => [x.id, x]));
+  const allEvents = new Map((current.reopenings || []).map(x => [x.id, x]));
+  for (const [eventId, entry] of oldEvents) {
+    const next = allEvents.get(eventId);
+    if (!next || JSON.stringify(entry) !== JSON.stringify(next))
+      conflicts.push('reopening history removed or rewritten: ' + eventId);
+  }
+  const newEvents = (current.reopenings || []).filter(x => !oldEvents.has(x.id));
+  const newRequests = newEvents.filter(x => x.eventType === 'request');
+  const newClaims = newEvents.filter(x => x.eventType === 'review-claim');
+  const reopened = new Map();
+  for (const request of newRequests) {
+    const original = beforeSteps.get(request.stepId);
+    if (!original || original.status !== 'completed')
+      conflicts.push('reopening request must target an already completed step: ' + request.stepId);
+    else if (JSON.stringify(original.evidenceIds) !== JSON.stringify(request.priorEvidenceIds))
+      conflicts.push('reopening request must preserve the exact prior evidence ID list: ' + request.stepId);
+  }
+  for (const claim of newClaims) {
+    const request = allEvents.get(claim.requestId);
+    const original = beforeSteps.get(claim.stepId);
+    const next = nextSteps.get(claim.stepId);
+    if (!request || request.eventType !== 'request' ||
+        !original || original.status !== 'completed' ||
+        !next || next.status === 'completed' ||
+        JSON.stringify(request.priorEvidenceIds) !== JSON.stringify(original.evidenceIds)) {
+      conflicts.push('reopening claim has no valid completed-step transition and historical evidence snapshot: ' + claim.stepId);
+      continue;
+    }
+    if (beforeEvidence.has(claim.reviewEvidenceId))
+      conflicts.push('reopening must cite newly added review evidence: ' + claim.reviewEvidenceId);
+    if (!next.evidenceIds.includes(claim.reviewEvidenceId))
+      conflicts.push('reopened step must link its review evidence: ' + claim.stepId);
+    if (reopened.has(claim.stepId))
+      conflicts.push('multiple reopening claims for one step in the same transition: ' + claim.stepId);
+    reopened.set(claim.stepId, claim.id);
+  }
+
+  const changedStepIds = [];
+  for (const original of previous.task.steps) {
+    const next = nextSteps.get(original.id);
+    if (!next) { conflicts.push('step removed: ' + original.id); continue; }
+    if (original.title !== next.title) conflicts.push('step title changed: ' + original.id);
+    if (original.status === 'completed' && next.status !== 'completed' && !reopened.has(original.id))
+      conflicts.push('completed step reopened without a new review-claim event: ' + original.id);
+    if (original.status === 'active' && next.status === 'pending')
+      conflicts.push('active step silently reverted: ' + original.id);
+    if (original.status !== next.status) changedStepIds.push(original.id);
+    for (const ref of original.evidenceIds) {
+      if (!next.evidenceIds.includes(ref)) conflicts.push('step evidence removed: ' + original.id + '/' + ref);
+    }
+  }
+  if (previous.task.status === 'completed' && current.task.status !== 'completed') {
+    if (!reopened.size || current.task.status === 'planned')
+      conflicts.push('completed task reverted without a new reviewed-claim transition');
   }
   const beforePins = new Map((previous.sourcePins || []).map(x => [x.id, x]));
   const nextPins = new Map((current.sourcePins || []).map(x => [x.id, x]));
   const changedSourcePinIds = [];
-  for (const [idValue, item] of beforePins) {
-    const after = nextPins.get(idValue);
-    if (!after) { conflicts.push('source pin removed: ' + idValue); continue; }
-    if (item.reference !== after.reference || item.algorithm !== after.algorithm)
-      conflicts.push('source pin identity rewritten: ' + idValue);
-    if (item.revision !== after.revision) changedSourcePinIds.push(idValue);
+  for (const [pinId, entry] of beforePins) {
+    const next = nextPins.get(pinId);
+    if (!next) { conflicts.push('source pin removed: ' + pinId); continue; }
+    if (entry.reference !== next.reference || entry.algorithm !== next.algorithm)
+      conflicts.push('source pin identity rewritten: ' + pinId);
+    if (entry.revision !== next.revision) changedSourcePinIds.push(pinId);
   }
   if (conflicts.length) invalid('RECONCILE_CONFLICT: ' + conflicts.join('; '));
+  const pendingRequests = (current.reopenings || []).filter(x => x.eventType === 'request' &&
+    !(current.reopenings || []).some(y => y.eventType === 'review-claim' && y.requestId === x.id));
   return Object.freeze({
-    compatible: true, taskId: current.task.id, taskStatus: current.task.status,
-    changedStepIds, addedStepIds: current.task.steps.filter(x => !previous.task.steps.some(y => x.id === y.id)).map(x => x.id),
+    compatible: true,
+    reconciliationStatus: newClaims.length ? 'review-claim-unverified' :
+      newRequests.length ? 'review-requested' : 'compatible',
+    reviewRequired: newRequests.length > 0 || newClaims.length > 0,
+    pendingReopeningRequestIds: pendingRequests.map(x => x.id),
+    newReopeningRequestIds: newRequests.map(x => x.id),
+    reviewClaimIds: newClaims.map(x => x.id),
+    reopenedStepIds: [...reopened.keys()],
+    hostReviewVerified: false,
+    reopeningAuthorization: 'self-declared-not-host-authenticated',
+    taskId: current.task.id, taskStatus: current.task.status,
+    changedStepIds,
+    addedStepIds: current.task.steps.filter(x => !beforeSteps.has(x.id)).map(x => x.id),
     addedEvidenceIds: current.evidence.filter(x => !beforeEvidence.has(x.id)).map(x => x.id),
     changedSourcePinIds,
     addedSourcePinIds: (current.sourcePins || []).filter(x => !beforePins.has(x.id)).map(x => x.id),
-    sourceRecheckRequired: changedSourcePinIds.length > 0 || (current.sourcePins || []).some(x => !beforePins.has(x.id)),
+    sourceRecheckRequired: changedSourcePinIds.length > 0 ||
+      (current.sourcePins || []).some(x => !beforePins.has(x.id)),
     evidenceOrigin: 'self-declared-not-host-verified',
     executionVerified: false, permissionsGranted: false
   });

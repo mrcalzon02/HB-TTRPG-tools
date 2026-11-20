@@ -230,6 +230,10 @@ Two optional public Agent Skills, `model-context-and-budget-manager` and `task-f
 
 An agent handoff keeps the engram/index reference, task steps, blockers, self-declared evidence, optional pinned source revisions and next action while pruning only explicitly optional context. Read-only checkpoint comparison rejects silently rewritten scope, completed steps and historical evidence, while source-pin comparison checks equality against caller-supplied observations only. Neither verifies source freshness independently. A JSON record labeled `observed-pass` is not verified host evidence by itself; follow the actual commit, test or source readback before declaring work complete. If required data cannot fit the requested character budget, fail with `BUDGET_TOO_SMALL` instead of dropping authority.
 
+## Correcting completed task checkpoints
+
+Charles may use the optional `task-focus-orchestration` skill and `hb-agent-handoff/1` checkpoint format when an earlier step must be revisited. The historical evidence and completion claim must remain visible. An append-only `request` identifies why correction is needed; a later `review-claim` and new, self-declared `host-observation` may document a proposed reopening, but **neither proves real host authorization or executes anything**. Reconciliation always reports `hostReviewVerified: false`. A trusted host independently checks approval and actual evidence; no model-authored journal can confer private runner control, persistent memory, or tool privileges. The CE1.1 identity payload remains unchanged.
+
 ## Conformance and drift control
 
 Different reasoning engines do not have to produce identical wording. They do need to preserve the same behavioral contract.

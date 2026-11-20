@@ -29,7 +29,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: &quot;1.1.0&quot;
+  version: &quot;1.2.0&quot;
   interface: hb-agent-handoff/1
   execution-mode: public-offline-declarative
 ---
@@ -53,6 +53,18 @@ Manage the **description and checkpoint state** of one user-authorized task. Thi
 7. Independently recheck referenced files, commits and test results. Optional `sourcePins` carry expected SHA-256 or Git revisions; `compare-sources` compares them against a separately supplied observation file but never fetches, authenticates, or certifies either value.
 8. On completion, require every step to be completed and every completion claim to be evidence-linked; preserve the final readback. When completed work must be reopened after material facts change, prepare an explicitly reviewed new task version; the helper refuses silent historical alteration.
 
+## Reviewed correction of previously completed work
+
+Correction must preserve the old result, not erase it. The optional `reopenings` field in `hb-agent-handoff/1` is an **append-only event journal**, never a permission system:
+
+1. While the old step is still `completed`, append a `request` event with a unique ID, the completed step ID, the reason for reconsideration and the **exact previous evidence ID list**. Do not erase, downgrade or rewrite its existing evidence.
+2. Save that request-only checkpoint. A standalone request **does not reopen** the step. Obtain an independently reviewed decision and genuinely new host evidence outside this public helper.
+3. Only after that external review, append a separate `review-claim` event referring to the request and a **new** `host-observation` evidence ID (declared passing). Add the new evidence ID to the step without removing historical evidence; change its state to `active` or `pending`. Keep both journal events unchanged thereafter.
+4. Compare old and proposed handoffs with the read-only `reconcile` command. A structurally consistent reopening returns `review-claim-unverified`, `reviewRequired: true`, and `hostReviewVerified: false`. **This is not approval** to execute, mutate external systems, or dispatch a runner.
+5. The real host or operator must independently authenticate and approve the review. If that cannot be confirmed, hold execution and state the blocker. The helper has no approval tokens, trusted identity provider, private runner interface or durable state.
+
+Synthetic two-phase examples are `api/ai/examples/agent-reopening-request.json` and `api/ai/examples/agent-reviewed-reopening.json`. Both are fictional test records, not valid host attestations. The existing `hb-agent-handoff/1` envelope remains backward compatible: `reopenings` is optional.
+
 ## Portable record
 
 Authoritative contract: `api/ai/agent-handoff.schema.json`. Use the sample `api/ai/examples/agent-handoff.json` and optional read-only CLI:
@@ -60,13 +72,14 @@ Authoritative contract: `api/ai/agent-handoff.schema.json`. Use the sample `api/
 ```sh
 node scripts/agent-handoff.mjs validate api/ai/examples/agent-handoff.json
 node scripts/agent-handoff.mjs diagnose api/ai/examples/agent-handoff.json 8000
-node scripts/agent-handoff.mjs reconcile previous-handoff.json candidate-handoff.json
+node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-handoff.json api/ai/examples/agent-reopening-request.json
+node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-reopening-request.json api/ai/examples/agent-reviewed-reopening.json
 node scripts/agent-handoff.mjs compare-sources api/ai/examples/agent-handoff.json api/ai/examples/agent-source-observations.json
 ```
 
 Pair with `model-context-and-budget-manager` only when output needs compacting. The character-budget mechanism drops low-priority `optionalContext` only, not the decision record.
 
-Reconciliation does not approve new work or perform any source retrieval. Matching source hashes are caller-supplied equality observations, not independently verified freshness. Both records remain unchanged; the caller must establish a trusted source readback before declaring a new step completed.
+Reconciliation does not approve new work or perform any source retrieval. A journal entry is self-declared; even `host-observation` with `observed-pass` is not independently authenticated by the offline tool. Matching source hashes are caller-supplied equality observations, not independently verified freshness. Both records remain unchanged; the caller must establish a trusted source readback before declaring a new step completed.
 
 ## Stop and protection rules
 
