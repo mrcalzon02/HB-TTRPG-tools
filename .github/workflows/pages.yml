@@ -62,6 +62,7 @@ jobs:
           node scripts/validate-engram-loader.mjs
           python3 scripts/validate-agent-skill-projections.py
           python3 scripts/validate-engram-bundle.py
+          python3 scripts/validate-engram-release-signature.py
           python3 scripts/agent-skill-bundle.py pack --skill foundry-discovery --output "$RUNNER_TEMP/foundry-discovery-engram.zip"
           PIN="$(python3 -c 'import json; print(json.load(open("skills/index.json"))["defaultPersonality"]["integrity"]["digest"])')"
           INDEX_PIN="$(sha256sum skills/index.json | cut -d ' ' -f1)"

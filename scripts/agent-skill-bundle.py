@@ -33,6 +33,35 @@ SHARED = (
 MAX_FILE_COUNT = 1024
 MAX_UNCOMPRESSED_BYTES = 64 * 1024 * 1024
 
+# Portable packages must not accidentally gather signing keys, secrets, or local
+# host credentials just because a file was placed inside a skill directory.
+BLOCKED_BASENAMES = frozenset({
+    ".env", ".env.local", ".env.production", "id_rsa", "id_dsa", "id_ed25519",
+    "credentials.json", "secrets.json", "token.json", "service-account.json",
+    "client_secret.json", "private_key", "known_hosts", "authorized_keys",
+})
+BLOCKED_SUFFIXES = frozenset({
+    ".pem", ".key", ".p12", ".pfx", ".p8", ".jks", ".keystore",
+    ".kdbx", ".gpg", ".age",
+})
+ALLOWED_HIDDEN = frozenset({".gitignore", ".gitattributes"})
+
+
+def safe_skill_member(path: str) -> bool:
+    if not safe_relative(path):
+        return False
+    parts = PurePosixPath(path).parts
+    if any(part.lower() in BLOCKED_BASENAMES for part in parts):
+        return False
+    if any(part.lower().startswith((".env.", "client_secret", "service-account")) for part in parts):
+        return False
+    if any(part.startswith(".") and part not in ALLOWED_HIDDEN for part in parts):
+        return False
+    if PurePosixPath(path).suffix.lower() in BLOCKED_SUFFIXES:
+        return False
+    return True
+
+
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
@@ -136,12 +165,17 @@ def build_payload(skill_names: list[str]) -> tuple[dict[str, bytes], list[str]]:
             if file.is_symlink():
                 raise ValueError(f"Symlink is forbidden in portable skill package: {file}")
             if file.is_file():
-                paths.add(file.relative_to(ROOT).as_posix())
+                relative = file.relative_to(ROOT).as_posix()
+                if not safe_skill_member(relative):
+                    raise ValueError(f"Refusing to package a secret or unsafe skill member: {relative}")
+                paths.add(relative)
     payload: dict[str, bytes] = {}
     for path in sorted(paths):
         if not safe_relative(path):
             raise ValueError(f"Unsafe bundle path: {path}")
         payload[path] = (ROOT / path).read_bytes()
+    if len(payload) + 1 > MAX_FILE_COUNT or sum(map(len, payload.values())) > MAX_UNCOMPRESSED_BYTES:
+        raise ValueError("Skill package exceeds archive file-count or uncompressed byte limits")
     for name in requested:
         validate_skill(catalogue[name], payload[f"skills/{name}/SKILL.md"])
     manifest = load_json(payload[SHARED[2]], SHARED[2])
@@ -169,8 +203,10 @@ def package(skill_names: list[str], output: Path) -> None:
         "note": "Integrity alone is not origin authentication; pin the engram digest or verify a signed release through a trusted channel.",
     }
     payload[LOCK] = (json.dumps(lock, indent=2, sort_keys=True) + "\n").encode()
+    if output.exists() or output.is_symlink():
+        raise ValueError(f"Refusing to overwrite existing skill bundle: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
-    with ZipFile(output, "w", ZIP_DEFLATED, compresslevel=9) as archive:
+    with ZipFile(output, "x", ZIP_DEFLATED, compresslevel=9) as archive:
         for name, data in sorted(payload.items()):
             info = ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
             info.compress_type = ZIP_DEFLATED
@@ -238,6 +274,8 @@ def verify(
     allowed_roots = tuple(f"skills/{name}/" for name in skill_names)
     if any(path not in SHARED and not path.startswith(allowed_roots) for path in file_specs):
         raise ValueError("Bundle contains a file outside the selected skills and required companions")
+    if any(path not in SHARED and not safe_skill_member(path) for path in file_specs):
+        raise ValueError("Bundle contains a secret or unsafe skill member")
     manifest = load_json(payload[SHARED[2]], SHARED[2])
     if not any(
         item.get("id") == "blacklight.charles"

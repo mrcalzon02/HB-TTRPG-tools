@@ -62,6 +62,14 @@ def main() -> None:
         mod.package(["foundry-discovery"], two)
         assert one.read_bytes() == two.read_bytes(), "Bundle not reproducible"
         print("PASS [bundle] byte-identical deterministic exports")
+        must_reject("output overwrite", lambda: mod.package(["foundry-discovery"], one))
+        assert mod.safe_skill_member("skills/environment-production/.gitattributes")
+        assert mod.safe_skill_member("skills/environment-production/.gitignore")
+        for bad in ("skills/foundry-discovery/.env", "skills/foundry-discovery/id_ed25519",
+                    "skills/foundry-discovery/credentials.json", "skills/foundry-discovery/publisher.pem",
+                    "skills/foundry-discovery/.ssh/key", "skills/foundry-discovery/.env.production"):
+            assert not mod.safe_skill_member(bad), f"Secret file should not be packageable: {bad}"
+        print("PASS [bundle] secret-file and signing-key exclusions")
 
         full = tmp / "all.zip"
         mod.package([entry["name"] for entry in index["skills"]], full)
@@ -89,6 +97,18 @@ def main() -> None:
             add={"skills/foundry-discovery/link": (b"/etc/passwd", 0o120777)}), pin))
         must_reject("archive non-canonical path", lambda: mod.verify(remix_check(one, tmp, "noncanonical",
             add={"skills//rogue": (b"attack", 0o100644)}), pin))
+        # Even a correctly re-hashed and inventoried secret must be rejected.
+        with ZipFile(one) as original:
+            locked = json.loads(original.read(mod.LOCK))
+        secret = b"DO_NOT_INCLUDE_PRIVATE_MATERIAL"
+        secret_path = "skills/foundry-discovery/.env"
+        locked["files"][secret_path] = {"sha256": digest(secret), "bytes": len(secret)}
+        forged_lock = (json.dumps(locked, indent=2, sort_keys=True) + "\n").encode()
+        forged = remix_check(one, tmp, "inventoried-secret",
+                             updates={mod.LOCK: forged_lock},
+                             add={secret_path: (secret, 0o100644)})
+        must_reject("inventoried secret in otherwise coherent bundle",
+                    lambda: mod.verify(forged, pin))
 
         old = (ROOT / "skills/foundry-discovery/SKILL.md").read_bytes()
         record = next(record for record in index["skills"] if record["name"] == "foundry-discovery")
