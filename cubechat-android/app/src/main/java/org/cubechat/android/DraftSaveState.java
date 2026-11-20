@@ -24,19 +24,27 @@ final class DraftSaveState {
 
     private long revision;
     private boolean dirty;
+    private boolean awaiting;
+    private boolean failedPreviously;
 
     void edited() {
         revision++;
         dirty = true;
+        awaiting = false;
+        failedPreviously = false;
     }
 
     /** Called on contact change, profile lock, or destruction of the editor. */
     void reset() {
         revision++;
         dirty = false;
+        awaiting = false;
+        failedPreviously = false;
     }
 
     boolean isDirty() { return dirty; }
+    boolean isAwaiting() { return awaiting; }
+    boolean hadFailure() { return failedPreviously; }
 
     /**
      * Start a save only if the current editor needs one. This clears the
@@ -46,6 +54,8 @@ final class DraftSaveState {
     Ticket begin(long contactId, String text) {
         if (!dirty || contactId <= 0 || text == null) return null;
         dirty = false;
+        awaiting = true;
+        failedPreviously = false;
         return new Ticket(contactId, revision, text);
     }
 
@@ -55,22 +65,37 @@ final class DraftSaveState {
      */
     boolean failed(Ticket ticket, long currentContactId,
                    String currentText, String error) {
-        if (ticket == null || error == null || ticket.contactId != currentContactId
-                || ticket.revision != revision || !Objects.equals(ticket.text, currentText))
+        if (ticket == null || error == null || !isCurrent(ticket, currentContactId, currentText))
             return false;
+        awaiting = false;
         dirty = true;
+        failedPreviously = true;
         return true;
     }
 
     /** The result still belongs to the current displayed edit. */
     boolean isCurrent(Ticket ticket, long currentContactId, String currentText) {
-        return ticket != null && ticket.contactId == currentContactId
+        return awaiting && ticket != null && ticket.contactId == currentContactId
                 && ticket.revision == revision && Objects.equals(ticket.text, currentText);
+    }
+
+    /**
+     * The UI may say "saved locally" only when this exact pending edit was
+     * acknowledged by the local database. No stale or duplicate receipt
+     * can mark a newer edit as saved.
+     */
+    boolean succeeded(Ticket ticket, long currentContactId, String currentText) {
+        if (!isCurrent(ticket, currentContactId, currentText)) return false;
+        awaiting = false;
+        failedPreviously = false;
+        return true;
     }
 
     /** Explicit user-requested retry, including when no pending write exists. */
     void retry() {
         revision++;
         dirty = true;
+        awaiting = false;
+        failedPreviously = false;
     }
 }
