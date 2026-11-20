@@ -37,6 +37,38 @@ public final class DraftSaveStateAndroidTest {
         assertFalse(state.isDirty());
     }
 
+    @Test public void composerLabelReflectsActualLocalSaveAcknowledgement() {
+        DraftSaveState state = new DraftSaveState();
+        state.edited();
+        DraftStatusText.Summary edited = DraftStatusText.describe(
+                "A🐟", true, state.isAwaiting(), state.hadFailure(), state.isDirty());
+        assertTrue(edited.label.contains("Unsaved changes"));
+        assertTrue(edited.sendable);
+        assertTrue(edited.bytes == 5);
+
+        DraftSaveState.Ticket pending = state.begin(1, "A🐟");
+        DraftStatusText.Summary saving = DraftStatusText.describe(
+                "A🐟", true, state.isAwaiting(), state.hadFailure(), state.isDirty());
+        assertTrue(saving.label.contains("Saving locally"));
+        assertFalse(saving.label.contains("Saved locally"));
+
+        assertTrue(state.succeeded(pending, 1, "A🐟"));
+        DraftStatusText.Summary saved = DraftStatusText.describe(
+                "A🐟", true, state.isAwaiting(), state.hadFailure(), state.isDirty());
+        assertTrue(saved.label.contains("Saved locally"));
+        assertFalse(saved.problem);
+
+        state.edited();
+        DraftSaveState.Ticket failedTicket = state.begin(1, "B");
+        assertTrue(state.failed(failedTicket, 1, "B", "Local disk unavailable"));
+        DraftStatusText.Summary failed = DraftStatusText.describe(
+                "B", true, state.isAwaiting(), state.hadFailure(), state.isDirty());
+        assertTrue(failed.label.contains("Draft not saved"));
+        assertTrue(failed.problem);
+        assertFalse(DraftStatusText.describe("🐟".repeat(1025),
+                true, false, false, false).sendable);
+    }
+
     @Test public void oldSameTextResultCannotAffectNewEditOrLockedProfile() {
         DraftSaveState state = new DraftSaveState();
         state.edited();
