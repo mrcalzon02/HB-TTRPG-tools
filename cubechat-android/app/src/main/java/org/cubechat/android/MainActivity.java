@@ -1095,7 +1095,16 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
         choices.setOnItemClickListener((parent, view, position, id) -> {
             ConversationPickerModel.Entry selected = rows.getItem(position);
             dialog.dismiss();
-            if (selected != null) selectContact(selected.id);
+            if (selected == null || !chatOpen() || link == null) return;
+            // The modal is a snapshot; a contact can be forgotten while it is
+            // open. Never navigate using a no-longer-present contact identity.
+            boolean exists = false;
+            for (ChatStore.Contact live : link.snapshot().contacts) {
+                if (live.id == selected.id) { exists = true; break; }
+            }
+            if (exists) selectContact(selected.id);
+            else Toast.makeText(this, "That conversation is no longer available.",
+                    Toast.LENGTH_SHORT).show();
         });
         dialog.setOnDismissListener(d -> {
             // Keep contact queries out of saved state/keyboard personalization,
