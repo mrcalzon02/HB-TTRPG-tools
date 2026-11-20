@@ -661,6 +661,9 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             lastProblem = "";
             wasConnected = false;
             if (inviteDialog != null) inviteDialog.dismiss();
+            // A QR artwork editor holds private pairing key material only for
+            // its original conversation; dismiss on contact switch.
+            if (artworkQr != null) artworkQr.close();
             loadingDraft = true;
             String saved = retained != null && retained.id == renderedId && retained.draft != null
                     ? retained.draft : next.draft;
