@@ -67,6 +67,10 @@ final class QrArtworkUi {
         this.onClosed = onClosed;
     }
 
+    boolean validForCurrentPairing() {
+        return !closed && stillCurrent.getAsBoolean();
+    }
+
     void chooseImage() {
         if (closed || !stillCurrent.getAsBoolean()) { close(); return; }
         Intent choose = new Intent(Intent.ACTION_OPEN_DOCUMENT);
