@@ -95,16 +95,11 @@ final class AttachmentsUi {
             for (AttachmentStore.Transfer f : state.files) {
                 String prior = observedFileStates.put(f.id, f.status);
                 if (observedInitialFiles && prior != null && !prior.equals(f.status)) {
-                    if ("COMPLETE".equals(f.status)) {
+                    String event = TransferEventText.changed(
+                            f.status, f.outgoing, f.name, f.reason);
+                    if (event != null) {
                         latestFileEventId = f.id;
-                        latestFileEventText = f.outgoing ? "File delivered: " + f.name : "File received: " + f.name;
-                    } else if ("DECLINED".equals(f.status) || "CANCELED".equals(f.status)) {
-                        latestFileEventId = f.id;
-                        if (AttachmentStore.STORAGE_REASON.equals(f.reason))
-                            latestFileEventText = f.outgoing
-                                    ? "File rejected: recipient has insufficient storage"
-                                    : "Incoming file rejected: insufficient local storage";
-                        else latestFileEventText = ("DECLINED".equals(f.status) ? "File declined: " : "Transfer canceled: ") + f.name;
+                        latestFileEventText = event;
                     }
                 }
             }
