@@ -128,10 +128,14 @@ if (handoffSchema.properties?.format?.const !== 'hb-agent-handoff/1' ||
 const reopenSchema = handoffSchema.properties?.reopenings;
 const reopeningExamples = [
   readJson('api/ai/examples/agent-reopening-request.json'),
-  readJson('api/ai/examples/agent-reviewed-reopening.json')
+  readJson('api/ai/examples/agent-reviewed-reopening.json'),
+  readJson('api/ai/examples/agent-timed-review.json'),
+  readJson('api/ai/examples/agent-superseded-review.json')
 ];
 if (!reopenSchema || handoffSchema.required?.includes('reopenings') ||
-    reopenSchema.items?.oneOf?.length !== 2 ||
+    reopenSchema.items?.oneOf?.length !== 3 ||
+    reopenSchema.items.oneOf[2]?.properties?.eventType?.const !== 'review-invalidate' ||
+    !reopenSchema.items.oneOf[1]?.dependentRequired?.reviewedAt?.includes('expiresAt') ||
     reopenSchema.items.oneOf[0]?.properties?.eventType?.const !== 'request' ||
     reopenSchema.items.oneOf[1]?.properties?.eventType?.const !== 'review-claim' ||
     reopeningExamples[0].authority?.grantsPrivateRunnerDispatch !== false ||
@@ -140,7 +144,14 @@ if (!reopenSchema || handoffSchema.required?.includes('reopenings') ||
     reopeningExamples[1].reopenings?.length !== 2 ||
     reopeningExamples[1].reopenings?.[1]?.eventType !== 'review-claim' ||
     reopeningExamples[1].task.steps?.[0]?.evidenceIds?.[0] !== 'source-readback' ||
-    reopeningExamples[1].evidence?.[0]?.id !== 'source-readback') {
+    reopeningExamples[1].evidence?.[0]?.id !== 'source-readback' ||
+    reopeningExamples[2].reopenings?.[1]?.reviewedAt !== '2026-11-01T12:00:00Z' ||
+    reopeningExamples[2].reopenings?.[1]?.expiresAt !== '2026-11-02T12:00:00Z' ||
+    reopeningExamples[3].reopenings?.[2]?.eventType !== 'review-invalidate' ||
+    reopeningExamples[3].reopenings?.[2]?.reasonCode !== 'superseded' ||
+    reopeningExamples[3].reopenings?.[2]?.claimId !== reopeningExamples[3].reopenings?.[1]?.id ||
+    JSON.stringify(reopeningExamples[2].evidence) !== JSON.stringify(reopeningExamples[3].evidence) ||
+    reopeningExamples.some(item => item.authority?.grantsPrivateRunnerDispatch !== false)) {
   fail('Append-only reopening contract or synthetic examples must preserve history and public/private isolation.');
 }
 

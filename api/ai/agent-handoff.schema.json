@@ -415,6 +415,64 @@
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 500
+              },
+              "reviewedAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+                "description": "Claimed UTC review time. Unverified caller data; no host clock is queried."
+              },
+              "expiresAt": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+                "description": "Claimed UTC expiration. A time-window comparison never grants permissions."
+              }
+            },
+            "dependentRequired": {
+              "reviewedAt": [
+                "expiresAt"
+              ],
+              "expiresAt": [
+                "reviewedAt"
+              ]
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "eventType",
+              "id",
+              "stepId",
+              "claimId",
+              "reasonCode",
+              "reason"
+            ],
+            "properties": {
+              "eventType": {
+                "const": "review-invalidate"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "stepId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "claimId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9._-]{0,63}$"
+              },
+              "reasonCode": {
+                "enum": [
+                  "superseded",
+                  "withdrawn"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
               }
             }
           }
@@ -433,6 +491,7 @@
     "execution": "none",
     "sourceRule": "Pinned revisions and externally supplied observations are comparison inputs only; freshnessVerified is always false without independent host evidence. No networking is performed.",
     "reconcileRule": "Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution.",
-    "reopeningRule": "Append-only self-declared requests and review claims preserve prior evidence. A completed-step reversal needs a new, correctly linked review claim and a new declared passing host-observation. Structural consistency never proves host review, consent or permission; independent host authorization is required."
+    "reopeningRule": "The append-only review journal retains historical claims. An optional UTC review time and expiry are self-declared; missing times, expiry, withdrawal and supersession all require review. A review-invalidate event cites an earlier claim for the same step, does not remove it, and grants no permissions. Only an independently authenticated host can approve real work.",
+    "reviewTimeRule": "The offline review-status command NEVER reads a clock. asOf UTC is optional caller data, and any 'within-declared-window-unverified' state is only a comparison, not an authorization or freshness proof."
   }
 }

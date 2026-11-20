@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { test } from 'node:test';
-import { validateHandoff, compactHandoff, diagnoseHandoff, reconcileHandoffs, compareSourcePins } from '../scripts/agent-handoff.mjs';
+import { validateHandoff, compactHandoff, diagnoseHandoff, reconcileHandoffs, compareSourcePins, auditReviewClaims } from '../scripts/agent-handoff.mjs';
 
 const fixturePath = 'api/ai/examples/agent-handoff.json';
 const example = JSON.parse(readFileSync(fixturePath, 'utf8'));
@@ -202,7 +202,7 @@ const reviewedReopening = JSON.parse(readFileSync('api/ai/examples/agent-reviewe
 test('reopening schema and synthetic examples remain non-authorizing and backwards compatible', () => {
   const schema = JSON.parse(readFileSync('api/ai/agent-handoff.schema.json', 'utf8'));
   assert.equal(schema.required.includes('reopenings'), false);
-  assert.equal(schema.properties.reopenings.items.oneOf.length, 2);
+  assert.equal(schema.properties.reopenings.items.oneOf.length, 3);
   assert.equal(validateHandoff(example).reopeningEvents, 0);
   assert.equal(validateHandoff(reopeningRequest).reopeningEvents, 1);
   assert.equal(validateHandoff(reviewedReopening).reopeningEvents, 2);
@@ -311,4 +311,131 @@ test('CLI reconcile reports review-required rather than falsely approving a revi
   assert.equal(output.reconciliationStatus, 'review-claim-unverified');
   assert.equal(output.hostReviewVerified, false);
   assert.equal(output.permissionsGranted, false);
+});
+
+
+const timedReview = JSON.parse(readFileSync('api/ai/examples/agent-timed-review.json', 'utf8'));
+const supersededReview = JSON.parse(readFileSync('api/ai/examples/agent-superseded-review.json', 'utf8'));
+
+test('legacy undated review remains readable but has unknown expiration', () => {
+  assert.equal(validateHandoff(reviewedReopening).valid, true);
+  const outcome = auditReviewClaims(reviewedReopening, '2026-11-20T12:00:00Z');
+  assert.equal(outcome.claims[0].status, 'unknown-expiration');
+  assert.deepEqual(outcome.recheckClaimIds, ['review-source-audit']);
+  assert.equal(outcome.hostReviewVerified, false);
+  assert.equal(outcome.executionPermission, false);
+});
+test('timed review has a declared window, never independently authenticated', () => {
+  const early = auditReviewClaims(timedReview, '2026-11-01T11:59:59Z');
+  assert.equal(early.claims[0].status, 'not-yet-issued');
+  const during = auditReviewClaims(timedReview, '2026-11-02T11:59:59Z');
+  assert.equal(during.claims[0].status, 'within-declared-window-unverified');
+  assert.equal(during.freshnessVerified, false);
+  assert.equal(during.hostReviewVerified, false);
+  assert.equal(during.comparisonTimeOrigin, 'caller-supplied-not-authenticated');
+  assert.deepEqual(during.hostVerificationRequiredClaimIds, ['review-source-audit']);
+  const boundary = auditReviewClaims(timedReview, '2026-11-02T12:00:00Z');
+  assert.equal(boundary.claims[0].status, 'expired');
+  assert.deepEqual(boundary.recheckClaimIds, ['review-source-audit']);
+  const unknownClock = auditReviewClaims(timedReview);
+  assert.equal(unknownClock.claims[0].status, 'time-unchecked');
+  assert.equal(unknownClock.comparisonTime, null);
+  assert.deepEqual(diagnoseHandoff(timedReview).reviewClaimsNeedingRecheckIds, ['review-source-audit']);
+  assert.deepEqual(diagnoseHandoff(timedReview).reviewClaimsAwaitingHostVerificationIds, ['review-source-audit']);
+});
+test('withdrawn and superseded claims are explicitly invalidated, not erased', () => {
+  assert.deepEqual(timedReview.evidence, supersededReview.evidence);
+  assert.deepEqual(timedReview.reopenings, supersededReview.reopenings.slice(0, -1));
+  const sup = auditReviewClaims(supersededReview, '2026-11-02T11:00:00Z');
+  assert.equal(sup.claims[0].status, 'superseded');
+  assert.equal(sup.claims[0].invalidationEventId, 'supersede-source-review');
+  assert.equal(sup.executionPermission, false);
+  const withdrawn = copy(supersededReview);
+  withdrawn.reopenings[2].reasonCode = 'withdrawn';
+  const result = auditReviewClaims(withdrawn, '2026-11-01T12:00:00Z');
+  assert.equal(result.claims[0].status, 'withdrawn');
+  assert.deepEqual(result.recheckClaimIds, ['review-source-audit']);
+});
+test('review invalidation is a compatible append-only history update requiring re-review', () => {
+  const previous = JSON.stringify(timedReview);
+  const outcome = reconcileHandoffs(timedReview, supersededReview);
+  assert.equal(outcome.compatible, true);
+  assert.equal(outcome.reconciliationStatus, 'review-invalidated');
+  assert.equal(outcome.reviewRequired, true);
+  assert.equal(outcome.reviewRecheckRequired, true);
+  assert.deepEqual(outcome.invalidatedReviewClaimIds, ['review-source-audit']);
+  assert.equal(outcome.hostReviewVerified, false);
+  assert.equal(outcome.permissionsGranted, false);
+  assert.deepEqual(diagnoseHandoff(supersededReview).invalidatedReviewClaimIds, ['review-source-audit']);
+  assert.equal(JSON.stringify(timedReview), previous);
+  assert.equal(reconcileHandoffs(supersededReview, supersededReview).reconciliationStatus, 'compatible');
+});
+test('invalid review time windows and calendar values fail closed', () => {
+  const invalid = [
+    x => { delete x.reopenings[1].expiresAt; },
+    x => { delete x.reopenings[1].reviewedAt; },
+    x => { x.reopenings[1].expiresAt = x.reopenings[1].reviewedAt; },
+    x => { x.reopenings[1].expiresAt = '2026-10-31T12:00:00Z'; },
+    x => { x.reopenings[1].reviewedAt = '2026-02-31T12:00:00Z'; },
+    x => { x.reopenings[1].reviewedAt = '2026-11-01T12:00:00+02:00'; },
+    x => { x.reopenings[1].expiresAt = '2026-11-02T12:00Z'; },
+    x => { x.reopenings[1].expiresAt = '2026-11-02T12:00:00.000Z'; }
+  ];
+  for (const [i, mutate] of invalid.entries()) {
+    const bad = copy(timedReview);
+    mutate(bad);
+    assert.throws(() => validateHandoff(bad), undefined, 'bad time case ' + i);
+  }
+  assert.throws(() => auditReviewClaims(timedReview, '2026-02-31T00:00:00Z'), /UTC timestamp/);
+  assert.throws(() => auditReviewClaims(timedReview, 'now'), /UTC timestamp/);
+  assert.throws(() => auditReviewClaims(timedReview, '2026-11-01T11:00:00-09:00'), /UTC timestamp/);
+});
+test('invalidations cannot be duplicated, backdated into ordering, or aimed at unrelated claims', () => {
+  const wrong = [
+    x => { x.reopenings[2].claimId = 'unknown'; },
+    x => { x.reopenings[2].stepId = 'run-tests'; },
+    x => { x.reopenings[2].reasonCode = 'approved'; },
+    x => { x.reopenings[2].reason = ''; },
+    x => { x.reopenings[2].credentials = 'unsanctioned'; },
+    x => { x.reopenings.push({ ...x.reopenings[2], id: 'second-invalidate' }); },
+    x => { x.reopenings.unshift(x.reopenings.pop()); }
+  ];
+  for (const [i, mutate] of wrong.entries()) {
+    const bad = copy(supersededReview);
+    mutate(bad);
+    assert.throws(() => validateHandoff(bad), undefined, 'invalid invalidation case ' + i);
+  }
+  const changed = copy(supersededReview);
+  changed.reopenings[1].expiresAt = '2026-11-04T12:00:00Z';
+  assert.throws(() => reconcileHandoffs(supersededReview, changed), /RECONCILE_CONFLICT/);
+  assert.throws(() => reconcileHandoffs(supersededReview, timedReview), /RECONCILE_CONFLICT/);
+  const removed = copy(supersededReview);
+  removed.reopenings.pop();
+  assert.throws(() => reconcileHandoffs(supersededReview, removed), /RECONCILE_CONFLICT/);
+});
+test('compaction retains review validity and invalidation history without leaking privileges', () => {
+  const input = copy(supersededReview);
+  input.optionalContext.push({ id: 'large-optional', priority: 3, text: 'C'.repeat(3000) });
+  const baseline = JSON.stringify({ ...input, optionalContext: [] }).length;
+  const result = compactHandoff(input, baseline + 5);
+  assert.ok(result.omittedIds.includes('large-optional'));
+  assert.deepEqual(result.handoff.reopenings, input.reopenings);
+  assert.deepEqual(result.handoff.evidence, input.evidence);
+  assert.deepEqual(result.handoff.authority, input.authority);
+  assert.equal(result.handoff.authority.grantsPrivateRunnerDispatch, false);
+  assert.throws(() => compactHandoff(input, 512), /BUDGET_TOO_SMALL/);
+});
+test('CLI review-status uses explicit UTC clock input only and cannot authenticate a claim', () => {
+  const source = 'api/ai/examples/agent-timed-review.json';
+  const raw = readFileSync(source, 'utf8');
+  const expired = JSON.parse(execFileSync(process.execPath, [
+    'scripts/agent-handoff.mjs', 'review-status', source, '2026-11-02T12:00:00Z'
+  ], { encoding: 'utf8' }));
+  assert.equal(expired.claims[0].status, 'expired');
+  assert.equal(expired.hostReviewVerified, false);
+  const clockMissing = JSON.parse(execFileSync(process.execPath, [
+    'scripts/agent-handoff.mjs', 'review-status', source
+  ], { encoding: 'utf8' }));
+  assert.equal(clockMissing.claims[0].status, 'time-unchecked');
+  assert.equal(readFileSync(source, 'utf8'), raw);
 });

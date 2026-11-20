@@ -35,6 +35,8 @@ AUTHORITIES = (
     ("handoff-observations", "Agent source revision observations", "api/ai/examples/agent-source-observations.json", "Caller-provided revision equality fixture; not authenticated source freshness"),
     ("reopening-request", "Completed-step reopening request", "api/ai/examples/agent-reopening-request.json", "Synthetic request to revisit completed work while preserving original evidence"),
     ("reviewed-reopening", "Self-declared reopening review claim", "api/ai/examples/agent-reviewed-reopening.json", "Synthetic review claim; never proof of real host authorization"),
+    ("timed-review", "Time-bounded self-declared review", "api/ai/examples/agent-timed-review.json", "Synthetic review with an explicit UTC time window; never an authorization"),
+    ("superseded-review", "Superseded review claim", "api/ai/examples/agent-superseded-review.json", "Synthetic append-only review invalidation requiring independent recheck"),
     ("capabilities", "Foundry capability registry", "api/foundry-capabilities.json", "Canonical capability identifiers and runtime details"),
     ("contracts", "Operation contracts", "api/operation-contracts.json", "Exact allowed operation signatures and constraints"),
     ("resources", "Resource collections", "api/resource-collections.json", "Canonical static and lore resource identities"),

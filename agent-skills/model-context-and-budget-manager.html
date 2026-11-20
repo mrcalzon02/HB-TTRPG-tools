@@ -29,7 +29,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: &quot;1.2.0&quot;
+  version: &quot;1.3.0&quot;
   interface: hb-agent-handoff/1
   execution-mode: public-offline-declarative
 ---
@@ -63,7 +63,11 @@ node scripts/agent-handoff.mjs diagnose api/ai/examples/agent-handoff.json 8000
 node scripts/agent-handoff.mjs compare-sources api/ai/examples/agent-handoff.json api/ai/examples/agent-source-observations.json
 node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-handoff.json api/ai/examples/agent-reopening-request.json
 node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-reopening-request.json api/ai/examples/agent-reviewed-reopening.json
+node scripts/agent-handoff.mjs review-status api/ai/examples/agent-timed-review.json 2026-11-02T12:00:00Z
+node scripts/agent-handoff.mjs review-status api/ai/examples/agent-superseded-review.json
 ```
+
+For review quality-of-life, the offline `review-status` subcommand accepts a caller-provided UTC `asOf` timestamp, distinguishes expired, superseded, withdrawn, undated and unchecked review claims, and explicitly never reports independent host approval. A review-claim may carry `reviewedAt` and `expiresAt` together; if either is absent, the claim&#x27;s expiration remains unknown. The `review-invalidate` event preserves a superseded or withdrawn review in history without activating a replacement.
 
 The reopening examples are fictional and do not certify host review. Their previous completion and evidence record cannot be silently erased or rewritten. The program reads a **user-supplied file or standard input** and prints JSON to stdout. It performs no network calls, scheduling, filesystem writes, tool invocation or runner dispatch. It validates envelope shape and self-declared evidence IDs, **not** real-world test outcomes; the caller must verify referenced commits, tests or files. `diagnose` reveals the minimum required size without dropping data, `compare-sources` performs **comparison only**, and `reconcile` checks changes to the same task without altering either record. Observations passed through a JSON file are not authenticated by this tool.
 

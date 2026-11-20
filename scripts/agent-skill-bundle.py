@@ -37,6 +37,8 @@ HANDOFF_ASSETS = (
     "api/ai/examples/agent-source-observations.json",
     "api/ai/examples/agent-reopening-request.json",
     "api/ai/examples/agent-reviewed-reopening.json",
+    "api/ai/examples/agent-timed-review.json",
+    "api/ai/examples/agent-superseded-review.json",
     "scripts/agent-handoff.mjs",
 )
 MAX_FILE_COUNT = 1024

@@ -6,7 +6,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: "1.2.0"
+  version: "1.3.0"
   interface: hb-agent-handoff/1
   execution-mode: public-offline-declarative
 ---
@@ -38,9 +38,12 @@ Correction must preserve the old result, not erase it. The optional `reopenings`
 2. Save that request-only checkpoint. A standalone request **does not reopen** the step. Obtain an independently reviewed decision and genuinely new host evidence outside this public helper.
 3. Only after that external review, append a separate `review-claim` event referring to the request and a **new** `host-observation` evidence ID (declared passing). Add the new evidence ID to the step without removing historical evidence; change its state to `active` or `pending`. Keep both journal events unchanged thereafter.
 4. Compare old and proposed handoffs with the read-only `reconcile` command. A structurally consistent reopening returns `review-claim-unverified`, `reviewRequired: true`, and `hostReviewVerified: false`. **This is not approval** to execute, mutate external systems, or dispatch a runner.
-5. The real host or operator must independently authenticate and approve the review. If that cannot be confirmed, hold execution and state the blocker. The helper has no approval tokens, trusted identity provider, private runner interface or durable state.
+5. An optional `reviewedAt` + `expiresAt` UTC pair can annotate the claimed review window. Neither value is authenticated by the helper; undated claims require fresh review, and time-bounded claims become `expired` at the supplied `asOf` boundary. If `asOf` is omitted, time is `time-unchecked`, not silently read from the host clock.
+6. To invalidate an earlier review without erasing it, append a `review-invalidate` event with `claimId`, `stepId`, `reasonCode` (`superseded` or `withdrawn`) and a concrete reason. This records that the earlier claim must no longer be relied on; it does not establish a replacement approval or automatically reopen the task.
+7. Review a handoff using `node scripts/agent-handoff.mjs review-status ... [asOfUTC]`. Report `expired`, `superseded`, `withdrawn`, `unknown-expiration`, `time-unchecked` or `within-declared-window-unverified` exactly. A claim inside its stated window is **not authorized**: it remains unverified caller data.
+8. The real host or operator must independently authenticate and approve the review. If that cannot be confirmed, hold execution and state the blocker. The helper has no approval tokens, trusted identity provider, private runner interface or durable state.
 
-Synthetic two-phase examples are `api/ai/examples/agent-reopening-request.json` and `api/ai/examples/agent-reviewed-reopening.json`. Both are fictional test records, not valid host attestations. The existing `hb-agent-handoff/1` envelope remains backward compatible: `reopenings` is optional.
+Synthetic two-phase examples are `api/ai/examples/agent-reopening-request.json` and `api/ai/examples/agent-reviewed-reopening.json`. Timed and superseded examples are `api/ai/examples/agent-timed-review.json` and `api/ai/examples/agent-superseded-review.json`. Both are fictional test records, not valid host attestations. The existing `hb-agent-handoff/1` envelope remains backward compatible: `reopenings` is optional.
 
 ## Portable record
 
@@ -51,6 +54,8 @@ node scripts/agent-handoff.mjs validate api/ai/examples/agent-handoff.json
 node scripts/agent-handoff.mjs diagnose api/ai/examples/agent-handoff.json 8000
 node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-handoff.json api/ai/examples/agent-reopening-request.json
 node scripts/agent-handoff.mjs reconcile api/ai/examples/agent-reopening-request.json api/ai/examples/agent-reviewed-reopening.json
+node scripts/agent-handoff.mjs review-status api/ai/examples/agent-timed-review.json 2026-11-02T12:00:00Z
+node scripts/agent-handoff.mjs review-status api/ai/examples/agent-superseded-review.json
 node scripts/agent-handoff.mjs compare-sources api/ai/examples/agent-handoff.json api/ai/examples/agent-source-observations.json
 ```
 

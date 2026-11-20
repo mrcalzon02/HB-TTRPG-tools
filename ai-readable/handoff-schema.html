@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow">
 <meta name="description" content="Portable source-grounded task checkpoint contract; no privileges or persistence">
-<meta name="hb-projection-sha256" content="53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c">
+<meta name="hb-projection-sha256" content="778e0d0f23d97cbe7c3f8cb8d52cd361739c76897cda3d10a80557fb0145ac41">
 <meta name="hb-source-path" content="api/ai/agent-handoff.schema.json">
 <link rel="canonical" href="https://mrcalzon02.github.io/HB-TTRPG-tools/ai-readable/handoff-schema.html">
 <title>Agent checkpoint handoff schema — Foundry AI-readable mirror</title>
@@ -26,10 +26,10 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
 </header>
 <main>
 <p><strong>Static HTML compatibility mirror.</strong> Canonical source: <a href="https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/agent-handoff.schema.json"><code>api/ai/agent-handoff.schema.json</code></a>. The content below is generated directly from that source, not reconstructed by an AI and not executed by this page. When discrepancies occur, the canonical source wins.</p>
-<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
+<p class="meta"><strong>Displayed projection SHA-256:</strong> <code>778e0d0f23d97cbe7c3f8cb8d52cd361739c76897cda3d10a80557fb0145ac41</code>. The checksum detects projection drift; it is not independent publisher authentication.</p>
 <p><strong>Execution boundary:</strong> GitHub Pages serves static resources. This document does not grant a model tools, credentials, permission to run software, or remote MCP/REST execution. Tool calls require an explicitly connected compatible host.</p>
 <h2>Complete canonical source projection</h2>
-<pre id="canonical-source" data-projection-sha256="53e1a46f4d276be813cc18282865b0b8130c9d440e08e30d1039cfcc758fb27c">{
+<pre id="canonical-source" data-projection-sha256="778e0d0f23d97cbe7c3f8cb8d52cd361739c76897cda3d10a80557fb0145ac41">{
   &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
   &quot;$id&quot;: &quot;https://mrcalzon02.github.io/HB-TTRPG-tools/api/ai/agent-handoff.schema.json&quot;,
   &quot;title&quot;: &quot;Host-owned, engram-bound agent task handoff (public declarative format)&quot;,
@@ -365,6 +365,150 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
           }
         ]
       }
+    },
+    &quot;reopenings&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;maxItems&quot;: 64,
+      &quot;description&quot;: &quot;Optional append-only journal of requested completed-step reopenings and self-declared review claims. Never authenticates approval.&quot;,
+      &quot;items&quot;: {
+        &quot;oneOf&quot;: [
+          {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;additionalProperties&quot;: false,
+            &quot;required&quot;: [
+              &quot;eventType&quot;,
+              &quot;id&quot;,
+              &quot;stepId&quot;,
+              &quot;reason&quot;,
+              &quot;priorEvidenceIds&quot;
+            ],
+            &quot;properties&quot;: {
+              &quot;eventType&quot;: {
+                &quot;const&quot;: &quot;request&quot;
+              },
+              &quot;id&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;stepId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;reason&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;minLength&quot;: 1,
+                &quot;maxLength&quot;: 1000
+              },
+              &quot;priorEvidenceIds&quot;: {
+                &quot;type&quot;: &quot;array&quot;,
+                &quot;minItems&quot;: 1,
+                &quot;maxItems&quot;: 64,
+                &quot;uniqueItems&quot;: true,
+                &quot;items&quot;: {
+                  &quot;type&quot;: &quot;string&quot;,
+                  &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+                }
+              }
+            }
+          },
+          {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;additionalProperties&quot;: false,
+            &quot;required&quot;: [
+              &quot;eventType&quot;,
+              &quot;id&quot;,
+              &quot;stepId&quot;,
+              &quot;requestId&quot;,
+              &quot;reviewEvidenceId&quot;,
+              &quot;reviewReference&quot;
+            ],
+            &quot;properties&quot;: {
+              &quot;eventType&quot;: {
+                &quot;const&quot;: &quot;review-claim&quot;
+              },
+              &quot;id&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;stepId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;requestId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;reviewEvidenceId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;reviewReference&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;minLength&quot;: 1,
+                &quot;maxLength&quot;: 500
+              },
+              &quot;reviewedAt&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$&quot;,
+                &quot;description&quot;: &quot;Claimed UTC review time. Unverified caller data; no host clock is queried.&quot;
+              },
+              &quot;expiresAt&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$&quot;,
+                &quot;description&quot;: &quot;Claimed UTC expiration. A time-window comparison never grants permissions.&quot;
+              }
+            },
+            &quot;dependentRequired&quot;: {
+              &quot;reviewedAt&quot;: [
+                &quot;expiresAt&quot;
+              ],
+              &quot;expiresAt&quot;: [
+                &quot;reviewedAt&quot;
+              ]
+            }
+          },
+          {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;additionalProperties&quot;: false,
+            &quot;required&quot;: [
+              &quot;eventType&quot;,
+              &quot;id&quot;,
+              &quot;stepId&quot;,
+              &quot;claimId&quot;,
+              &quot;reasonCode&quot;,
+              &quot;reason&quot;
+            ],
+            &quot;properties&quot;: {
+              &quot;eventType&quot;: {
+                &quot;const&quot;: &quot;review-invalidate&quot;
+              },
+              &quot;id&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;stepId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;claimId&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;pattern&quot;: &quot;^[a-z][a-z0-9._-]{0,63}$&quot;
+              },
+              &quot;reasonCode&quot;: {
+                &quot;enum&quot;: [
+                  &quot;superseded&quot;,
+                  &quot;withdrawn&quot;
+                ]
+              },
+              &quot;reason&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;minLength&quot;: 1,
+                &quot;maxLength&quot;: 1000
+              }
+            }
+          }
+        ]
+      }
     }
   },
   &quot;x-hb-contract&quot;: {
@@ -372,12 +516,14 @@ li{margin:.5rem 0}nav{display:flex;flex-wrap:wrap;gap:1rem}code{overflow-wrap:an
       &quot;docs/blacklight/charles-personality-engram.json&quot;,
       &quot;skills/index.json&quot;
     ],
-    &quot;compactRule&quot;: &quot;Only optionalContext entries may be dropped, lowest priority first; never omit task, evidence, sourcePins (when supplied), engram, checkpoint, or authority.&quot;,
+    &quot;compactRule&quot;: &quot;Only optionalContext entries may be dropped, lowest priority first. Never omit task, evidence, sourcePins, reopenings/journal, engram, checkpoint, or authority.&quot;,
     &quot;evidenceRule&quot;: &quot;Evidence references are self-declared until externally verified against the host; document shape validation is not proof of execution.&quot;,
-    &quot;privacyRule&quot;: &quot;Never publish or paste private details, credentials, signing keys, or protected runner information into a public handoff.&quot;,
+    &quot;privacyRule&quot;: &quot;Never put private data, secrets, runner topology, credentials or real approval tokens in public handoff examples. The schema grants no tools or access.&quot;,
     &quot;execution&quot;: &quot;none&quot;,
     &quot;sourceRule&quot;: &quot;Pinned revisions and externally supplied observations are comparison inputs only; freshnessVerified is always false without independent host evidence. No networking is performed.&quot;,
-    &quot;reconcileRule&quot;: &quot;Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution.&quot;
+    &quot;reconcileRule&quot;: &quot;Same task identity, scope, existing step identity and evidence must be preserved. Silent step completion reversals or overwritten evidence are conflicts; no automatic reopening or execution.&quot;,
+    &quot;reopeningRule&quot;: &quot;The append-only review journal retains historical claims. An optional UTC review time and expiry are self-declared; missing times, expiry, withdrawal and supersession all require review. A review-invalidate event cites an earlier claim for the same step, does not remove it, and grants no permissions. Only an independently authenticated host can approve real work.&quot;,
+    &quot;reviewTimeRule&quot;: &quot;The offline review-status command NEVER reads a clock. asOf UTC is optional caller data, and any &#x27;within-declared-window-unverified&#x27; state is only a comparison, not an authorization or freshness proof.&quot;
   }
 }
 </pre>

@@ -31,6 +31,14 @@ function list(value, label, max = 64, min = 0) {
 function oneOf(value, allowed, label) {
   if (!allowed.includes(value)) invalid(label + ' has invalid value');
 }
+// Time is never read from the host. A caller-provided UTC timestamp is only
+// comparison data, not proof of current time or an authenticated review.
+function utcInstant(value, label) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(value) ||
+      !Number.isFinite(Date.parse(value)) || new Date(value).toISOString() !== value.replace('Z', '.000Z'))
+    invalid(label + ' must be a real UTC timestamp formatted YYYY-MM-DDTHH:mm:ssZ');
+  return Date.parse(value);
+}
 function distinct(items, label) {
   const ids = items.map(item => item.id);
   if (new Set(ids).size !== ids.length) invalid(label + ' contains duplicate IDs');
@@ -114,7 +122,7 @@ function validateHandoff(input) {
   }
   if (input.reopenings !== undefined) {
     list(input.reopenings, 'reopenings', 64);
-    const events = new Set(), requests = new Map(), reviewed = new Set();
+    const events = new Set(), requests = new Map(), reviewed = new Set(), claims = new Map(), invalidated = new Set();
     for (const event of input.reopenings) {
       if (!event || typeof event !== 'object' || Array.isArray(event))
         invalid('reopening event must be an object');
@@ -135,12 +143,20 @@ function validateHandoff(input) {
         requests.set(event.id, event);
       } else if (event.eventType === 'review-claim') {
         record(event, 'reopening review claim',
-          ['eventType', 'id', 'stepId', 'requestId', 'reviewEvidenceId', 'reviewReference']);
+          ['eventType', 'id', 'stepId', 'requestId', 'reviewEvidenceId', 'reviewReference'],
+          ['reviewedAt', 'expiresAt']);
         id(event.id, 'reopening.id');
         id(event.stepId, 'reopening.stepId');
         id(event.requestId, 'reopening.requestId');
         id(event.reviewEvidenceId, 'reopening.reviewEvidenceId');
         text(event.reviewReference, 'reopening.reviewReference', 500);
+        if ((event.reviewedAt === undefined) !== (event.expiresAt === undefined))
+          invalid('timed review claim must declare both reviewedAt and expiresAt');
+        if (event.reviewedAt !== undefined) {
+          const reviewed = utcInstant(event.reviewedAt, 'reviewedAt');
+          const expires = utcInstant(event.expiresAt, 'expiresAt');
+          if (expires <= reviewed) invalid('review claim expiresAt must be strictly after reviewedAt');
+        }
         const request = requests.get(event.requestId);
         if (!request || request.stepId !== event.stepId)
           invalid('reopening review claim has no matching earlier request');
@@ -149,6 +165,21 @@ function validateHandoff(input) {
         if (!evidence || evidence.kind !== 'host-observation' || evidence.outcome !== 'observed-pass')
           invalid('reopening review claim requires a declared passing host-observation evidence record');
         reviewed.add(event.requestId);
+        claims.set(event.id, event);
+      } else if (event.eventType === 'review-invalidate') {
+        record(event, 'review invalidation',
+          ['eventType', 'id', 'stepId', 'claimId', 'reasonCode', 'reason']);
+        id(event.id, 'reopening.id');
+        id(event.stepId, 'reopening.stepId');
+        id(event.claimId, 'review-invalidate.claimId');
+        oneOf(event.reasonCode, ['superseded', 'withdrawn'], 'review-invalidate.reasonCode');
+        text(event.reason, 'review-invalidate.reason', 1000);
+        const claim = claims.get(event.claimId);
+        if (!claim || claim.stepId !== event.stepId)
+          invalid('review invalidation must cite an earlier claim for the same step');
+        if (invalidated.has(event.claimId))
+          invalid('review claim may be invalidated only once');
+        invalidated.add(event.claimId);
       } else invalid('unrecognized reopening event type');
       if (events.has(event.id)) invalid('reopening event IDs must be unique');
       events.add(event.id);
@@ -211,6 +242,47 @@ function budgetPlan(input, maxChars) {
  * Read-only diagnostics: there is deliberately no tokenizer or host source check.
  * Only public IDs and count metadata are returned, not task/private text.
  */
+/**
+ * Review diagnostics have no live clock, network, approval channel or credentials.
+ * asOf is explicit caller input, NOT authenticated current time. Even a review
+ * inside its claimed time window is not permission to resume execution.
+ */
+function auditReviewClaims(input, asOf = null) {
+  validateHandoff(input);
+  if (asOf !== null) utcInstant(asOf, 'asOf');
+  const invalidations = new Map((input.reopenings || [])
+    .filter(event => event.eventType === 'review-invalidate')
+    .map(event => [event.claimId, event]));
+  const claims = (input.reopenings || [])
+    .filter(event => event.eventType === 'review-claim')
+    .map(event => {
+      const invalidation = invalidations.get(event.id);
+      let status;
+      if (invalidation) status = invalidation.reasonCode;
+      else if (event.expiresAt === undefined) status = 'unknown-expiration';
+      else if (asOf === null) status = 'time-unchecked';
+      else if (asOf < event.reviewedAt) status = 'not-yet-issued';
+      else if (asOf >= event.expiresAt) status = 'expired';
+      else status = 'within-declared-window-unverified';
+      return Object.freeze({
+        claimId: event.id, stepId: event.stepId, status,
+        reviewedAt: event.reviewedAt ?? null, expiresAt: event.expiresAt ?? null,
+        invalidationEventId: invalidation?.id ?? null,
+        hostReviewVerified: false, grantsExecution: false
+      });
+    });
+  return Object.freeze({
+    comparisonTime: asOf,
+    comparisonTimeOrigin: asOf === null ? 'not-supplied' : 'caller-supplied-not-authenticated',
+    claims,
+    recheckClaimIds: claims.filter(x => x.status !== 'within-declared-window-unverified').map(x => x.claimId),
+    hostVerificationRequiredClaimIds: claims.map(x => x.claimId),
+    hostReviewVerified: false, freshnessVerified: false,
+    executionPermission: false,
+    instruction: 'Recheck independently with the trusted host; claimed time windows and journal events grant no permission.'
+  });
+}
+
 function diagnoseHandoff(input, maxChars = 8000) {
   const plan = budgetPlan(input, maxChars);
   const declaredPassIds = input.evidence.filter(e => e.outcome === 'observed-pass').map(e => e.id);
@@ -228,6 +300,9 @@ function diagnoseHandoff(input, maxChars = 8000) {
     reopeningReviewClaimIds: (input.reopenings || []).filter(x => x.eventType === 'review-claim').map(x => x.id),
     pendingReopeningRequestIds: (input.reopenings || []).filter(x => x.eventType === 'request' &&
       !(input.reopenings || []).some(y => y.eventType === 'review-claim' && y.requestId === x.id)).map(x => x.id),
+    invalidatedReviewClaimIds: (input.reopenings || []).filter(x => x.eventType === 'review-invalidate').map(x => x.claimId),
+    reviewClaimsNeedingRecheckIds: auditReviewClaims(input).recheckClaimIds,
+    reviewClaimsAwaitingHostVerificationIds: auditReviewClaims(input).hostVerificationRequiredClaimIds,
     reopeningHostReviewVerified: false,
     sourceFreshness: 'not-checked',
     evidenceOrigin: 'self-declared-not-host-verified',
@@ -271,6 +346,7 @@ function reconcileHandoffs(previous, current) {
   const newEvents = (current.reopenings || []).filter(x => !oldEvents.has(x.id));
   const newRequests = newEvents.filter(x => x.eventType === 'request');
   const newClaims = newEvents.filter(x => x.eventType === 'review-claim');
+  const newInvalidations = newEvents.filter(x => x.eventType === 'review-invalidate');
   const reopened = new Map();
   for (const request of newRequests) {
     const original = beforeSteps.get(request.stepId);
@@ -332,9 +408,12 @@ function reconcileHandoffs(previous, current) {
     !(current.reopenings || []).some(y => y.eventType === 'review-claim' && y.requestId === x.id));
   return Object.freeze({
     compatible: true,
-    reconciliationStatus: newClaims.length ? 'review-claim-unverified' :
+    reconciliationStatus: newInvalidations.length ? 'review-invalidated' :
+      newClaims.length ? 'review-claim-unverified' :
       newRequests.length ? 'review-requested' : 'compatible',
-    reviewRequired: newRequests.length > 0 || newClaims.length > 0,
+    reviewRequired: newRequests.length > 0 || newClaims.length > 0 || newInvalidations.length > 0,
+    invalidatedReviewClaimIds: newInvalidations.map(x => x.claimId),
+    reviewRecheckRequired: auditReviewClaims(current).recheckClaimIds.length > 0,
     pendingReopeningRequestIds: pendingRequests.map(x => x.id),
     newReopeningRequestIds: newRequests.map(x => x.id),
     reviewClaimIds: newClaims.map(x => x.id),
@@ -390,18 +469,19 @@ function compareSourcePins(input, observations = []) {
   });
 }
 
-export { validateHandoff, compactHandoff, diagnoseHandoff, reconcileHandoffs, compareSourcePins };
+export { validateHandoff, compactHandoff, diagnoseHandoff, reconcileHandoffs, compareSourcePins, auditReviewClaims };
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const [command, source = '-', limit] = process.argv.slice(2);
   try {
-    if (!['validate', 'compact', 'diagnose', 'reconcile', 'compare-sources'].includes(command))
-      throw new Error('Usage: node scripts/agent-handoff.mjs validate|compact|diagnose source.json [maxChars] OR reconcile|compare-sources source.json second.json');
+    if (!['validate', 'compact', 'diagnose', 'reconcile', 'compare-sources', 'review-status'].includes(command))
+      throw new Error('Usage: node scripts/agent-handoff.mjs validate|compact|diagnose|review-status source.json [maxChars|asOfUTC] OR reconcile|compare-sources source.json second.json');
     const input = JSON.parse(readFileSync(source === '-' ? 0 : source, 'utf8'));
     let result;
     if (command === 'validate') result = validateHandoff(input);
     else if (command === 'compact') result = compactHandoff(input, limit === undefined ? 8000 : Number(limit));
     else if (command === 'diagnose') result = diagnoseHandoff(input, limit === undefined ? 8000 : Number(limit));
+    else if (command === 'review-status') result = auditReviewClaims(input, limit === undefined ? null : limit);
     else {
       if (!limit || limit === '-') invalid('a second JSON file path is required for ' + command);
       const secondary = JSON.parse(readFileSync(limit, 'utf8'));
