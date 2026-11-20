@@ -164,8 +164,17 @@ final class QrArtworkUi {
         }
 
         final int ticket = ++generation;
+        // A failed replacement must not allow the previous photo's QR to be
+        // saved under the guise of a newly selected artwork file.
+        background = null;
+        qr = null;
         verifiedOutput = null;
         save.setEnabled(false);
+        if (preview != null) preview.setImageDrawable(null);
+        if (previewBitmap != null) {
+            previewBitmap.recycle();
+            previewBitmap = null;
+        }
         status.setText("Reading image locally…");
         worker.execute(() -> {
             try {
