@@ -7,5 +7,8 @@ trap 'rm -rf "$classes"' EXIT
 
 javac --release 17 -encoding UTF-8 -d "$classes" \
   "$here/app/src/main/java/org/cubechat/android/QrLuminanceOverlay.java" \
-  "$here/tests/QrLuminanceOverlayTest.java"
+  "$here/app/src/main/java/org/cubechat/android/QrArtworkGeometry.java" \
+  "$here/tests/QrLuminanceOverlayTest.java" \
+  "$here/tests/QrArtworkGeometryTest.java"
 java -cp "$classes" org.cubechat.android.QrLuminanceOverlayTest
+java -cp "$classes" org.cubechat.android.QrArtworkGeometryTest
