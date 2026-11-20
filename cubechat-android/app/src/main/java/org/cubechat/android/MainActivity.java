@@ -1064,6 +1064,7 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
             List<ConversationPickerModel.Entry> filtered = ConversationPickerModel.choose(
                     contacts, current.activeId, search.getText().toString(),
                     queuedOnly.isChecked());
+            rows.setNotifyOnChange(false);
             rows.clear();
             rows.addAll(filtered);
             rows.notifyDataSetChanged();
