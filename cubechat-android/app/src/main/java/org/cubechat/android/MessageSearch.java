@@ -77,7 +77,12 @@ final class MessageSearch {
     }
 
     private static boolean senderAccepts(Sender sender, boolean outgoing) {
-        return sender == Sender.ALL || (sender == Sender.YOU) == outgoing;
+        switch (sender) {
+            case ALL: return true;
+            case YOU: return outgoing;
+            case PEER: return !outgoing;
+            default: return false;
+        }
     }
 
     private static String excerpt(String message, int matchOffset) {
