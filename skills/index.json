@@ -93,7 +93,8 @@
         "environment-production",
         "privacy-exposure-remediation",
         "professional-presence-development",
-        "visual-gallery-publication"
+        "visual-gallery-publication",
+        "garrvel-resident-state-of-mind"
       ],
       "useFor": [
         "Charles",
@@ -1454,6 +1455,25 @@
         "Access to a consumer-pinned canonical FMPL checkout",
         "Authorized local Python and Blender or existing self-hosted runner for execution",
         "Actual source rights, measurements and validation evidence"
+      ]
+    },
+    {
+      "name": "garrvel-resident-state-of-mind",
+      "path": "skills/garrvel-resident-state-of-mind/SKILL.md",
+      "status": "onboardable",
+      "capabilityIds": [],
+      "resourceIds": [],
+      "laboratoryIds": [],
+      "useFor": [
+        "Garrvel town resident roster",
+        "State of Mind workbook",
+        "resident psychology",
+        "household relationships",
+        "fictional town continuity"
+      ],
+      "personalityPolicy": "inherit-default",
+      "personalityEngramIds": [
+        "blacklight.charles"
       ]
     }
   ]
