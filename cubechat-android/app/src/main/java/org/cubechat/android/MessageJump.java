@@ -27,6 +27,14 @@ final class MessageJump {
         for (int i = 0; i < visible.size(); i++)
             if (visible.get(i) == chosen) return i;
 
+        // A single look-alike in the refreshed list is not enough when
+        // the searched snapshot contained two distinct equal messages:
+        // the surviving match could belong to the other old message.
+        for (int i = 0; i < searched.size(); i++) {
+            T other = searched.get(i);
+            if (other != chosen && sameContent.test(chosen, other)) return -1;
+        }
+
         // After a reload, content alone cannot distinguish duplicated
         // messages. Jump only if the candidate is unambiguous.
         int candidate = -1;
