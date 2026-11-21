@@ -53,6 +53,9 @@ final class DraftSaveState {
      */
     Ticket begin(long contactId, String text) {
         if (!dirty || contactId <= 0 || text == null) return null;
+        // Each queued attempt needs a distinct generation, including manual
+        // retries of the exact same edit after a failed database write.
+        revision++;
         dirty = false;
         awaiting = true;
         failedPreviously = false;

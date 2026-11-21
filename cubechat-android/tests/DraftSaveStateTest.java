@@ -11,6 +11,70 @@ public final class DraftSaveStateTest {
         if (!result) throw new AssertionError(reason);
     }
 
+    /** Delayed old vault results must not confirm a reopened identical edit or retry. */
+    private static void reopenSameContactRegression() {
+        final long contact = 17L;
+        final String sameText = "synthetic draft";
+        DraftSaveState editor = new DraftSaveState();
+        editor.edited();
+        DraftSaveState.Ticket old = editor.begin(contact, sameText);
+        check(old != null && editor.isAwaiting(), "original vault write queued");
+
+        editor.reset(); // close conversation before original callback arrives
+        check(!editor.isCurrent(old, contact, sameText), "closing invalidates old ticket");
+        editor.edited(); // reopen the identical contact, retype identical text
+        check(editor.isDirty(), "reopened edit is dirty before new write");
+        check(!editor.succeeded(old, contact, sameText),
+                "old success cannot confirm reopened identical text while dirty");
+        check(editor.isDirty() && !editor.isAwaiting(),
+                "stale success cannot remove reopened pending work");
+
+        DraftSaveState.Ticket reopened = editor.begin(contact, sameText);
+        check(reopened != null && reopened.revision != old.revision,
+                "reopened ticket has distinct generation despite identical contact/text");
+        check(editor.isAwaiting() && !editor.isDirty(), "new vault write remains pending");
+        check(!editor.succeeded(old, contact, sameText),
+                "old success cannot acknowledge newer in-flight save");
+        check(!editor.failed(old, contact, sameText, "synthetic failure"),
+                "old failure cannot make newer in-flight save retryable");
+        check(editor.isAwaiting() && !editor.isDirty() && !editor.hadFailure(),
+                "both stale callback outcomes leave current pending state unchanged");
+        check(editor.isCurrent(reopened, contact, sameText),
+                "reopened ticket remains the sole current acknowledgement");
+        check(editor.succeeded(reopened, contact, sameText),
+                "new save acknowledgement is accepted once");
+        check(!editor.succeeded(reopened, contact, sameText),
+                "duplicate new success is ignored");
+        check(!editor.isDirty() && !editor.isAwaiting() && !editor.hadFailure(),
+                "new successful save leaves clean editor");
+
+        editor.edited();
+        DraftSaveState.Ticket priorFailure = editor.begin(contact, sameText);
+        editor.reset();
+        editor.edited();
+        DraftSaveState.Ticket newFailure = editor.begin(contact, sameText);
+        check(newFailure != null && newFailure.revision != priorFailure.revision,
+                "second reopen also creates distinct ticket");
+        check(!editor.failed(priorFailure, contact, sameText, "old failure"),
+                "old failure is ignored even if latest write will fail");
+        check(editor.failed(newFailure, contact, sameText, "new failure"),
+                "only current failure restores manual retry");
+        check(editor.isDirty() && editor.hadFailure() && !editor.isAwaiting(),
+                "current failure stays visibly retryable");
+        check(!editor.succeeded(priorFailure, contact, sameText),
+                "late old success cannot clear retry state");
+        check(editor.isDirty() && editor.hadFailure(),
+                "stale success leaves retry warning intact");
+        DraftSaveState.Ticket retried = editor.begin(contact, sameText);
+        check(retried != null && editor.isAwaiting(), "retry queues current draft");
+        check(!editor.succeeded(newFailure, contact, sameText),
+                "failed prior ticket cannot acknowledge new retry");
+        check(editor.succeeded(retried, contact, sameText), "retried write confirms once");
+        check(!editor.isDirty() && !editor.isAwaiting() && !editor.hadFailure(),
+                "successful retry clears failure status");
+
+    }
+
     public static void main(String[] args) {
         DraftSaveState editor = new DraftSaveState();
         check(!editor.isDirty(), "fresh editor is clean");
@@ -111,6 +175,7 @@ public final class DraftSaveStateTest {
                 "valid failure remains retryable");
         check(editor.hadFailure() && editor.isDirty(),
                 "failed final save remains explicitly retryable");
+        reopenSameContactRegression();
         System.out.println("DraftSaveState: " + assertions
                 + " offline assertions passed; no persistence or network");
     }
