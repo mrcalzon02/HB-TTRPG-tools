@@ -129,9 +129,71 @@ public final class TransferPresentationTest {
                 ""), "unrecognized state cannot announce terminal result");
     }
 
+    /**
+     * The formatter sees ACCEPTED snapshots, not authenticated receipts.
+     * Repeated full-byte snapshots after pause/reconnect/retry must therefore
+     * remain pending for either direction until the protocol says COMPLETE.
+     */
+    private static void unconfirmedReceiptAcrossInterruptions() {
+        for (boolean outgoing : new boolean[] {true, false}) {
+            String pending = outgoing
+                    ? "Awaiting delivery confirmation" : "Verifying received file";
+            String active = outgoing ? "Sending" : "Receiving";
+            check(pending.equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, false, 129, 128)),
+                    "overrun bytes alone cannot prove delivery in either direction");
+            check("Paused".equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, true, false, 129, 128)),
+                    "local pause overrides an unverified full-byte snapshot");
+            check("Paused by contact".equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, true, 129, 128)),
+                    "peer pause overrides an unverified full-byte snapshot");
+            check("Open conversation to resume".equals(TransferProgress.acceptedStatus(
+                    outgoing, false, true, true, false, false, 129, 128)),
+                    "inactive conversation does not claim delivery");
+            check("Waiting for connection".equals(TransferProgress.acceptedStatus(
+                    outgoing, true, false, true, false, false, 129, 128)),
+                    "reconnection is not a delivery receipt");
+            check("Waiting for file support".equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, false, false, false, 129, 128)),
+                    "peer capability failure is not a delivery receipt");
+            check(pending.equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, false, 129, 128)),
+                    "resume after interruption stays unverified at full bytes");
+            check(" · 100%".equals(TransferProgress.percentSuffix(129, 128)),
+                    "overrun summary is clamped to 100 percent while receipt pending");
+            check(TransferProgress.progressPermille(129, 128) == 1000,
+                    "overrun progress bar is clamped while receipt pending");
+            check(!TransferEventText.shouldNotify(true, "ACCEPTED", "ACCEPTED",
+                    outgoing, ""), "duplicate accepted snapshots never announce completion");
+            check(TransferEventText.changed("ACCEPTED", outgoing, "retry.txt", "") == null,
+                    "unverified snapshots cannot generate delivered notices");
+            check(active.equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, false, 1, 128)),
+                    "a retried partial byte count resumes transfer display");
+            check(pending.equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, false, 500, 128)),
+                    "retry reaching full bytes still requires receipt");
+            check(active.equals(TransferProgress.acceptedStatus(
+                    outgoing, true, true, true, false, false, 500, 0)),
+                    "unknown total never invents receipt state");
+            check(TransferProgress.percent(500, 0) == -1,
+                    "unknown total has no numeric percent on retry");
+            check("".equals(TransferProgress.percentSuffix(500, -1)),
+                    "invalid total has no misleading percentage suffix");
+            check(TransferProgress.percent(-7, 128) == 0,
+                    "retry cannot show a negative percent");
+            check(TransferProgress.progressPermille(-7, 128) == 0,
+                    "retry cannot show a negative progress bar");
+            check(TransferEventText.shouldNotify(true, "ACCEPTED", "COMPLETE",
+                    outgoing, ""), "only an actual COMPLETE transition may announce delivery");
+        }
+    }
+
     public static void main(String[] args) {
         progress();
         status();
+        unconfirmedReceiptAcrossInterruptions();
         events();
         notificationTransitions();
         System.out.println("TransferPresentation: " + checks
