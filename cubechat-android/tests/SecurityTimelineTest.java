@@ -34,6 +34,16 @@ public final class SecurityTimelineTest {
         invalid(() -> SecurityTimeline.decode("v1\n" + now + ",-1,0,0,0,0,0,-1\n", now));
         invalid(() -> SecurityTimeline.decode("v1\n" + now + ",1,0,0,0,0,0,-1\n" + now + ",1,0,0,0,0,0,-1\n", now));
         invalid(() -> SecurityTimeline.decode("garbage", now));
+        // A drop-only bucket cannot carry cell statistics: no cell report ever
+        // populated those fields. Reject corrupted persisted aggregates on restart.
+        invalid(() -> SecurityTimeline.decode("v1\n" + now
+                + ",0,10,0,2,1,1,-90\n", now));
+        invalid(() -> SecurityTimeline.decode("v1\n" + now
+                + ",0,10,0,0,0,0,-90\n", now));
+        check(SecurityTimeline.decode("v1\n" + now
+                + ",2,10,0,0,0,0,-1\n", now).snapshot(now,
+                        SecurityTimeline.MAX_AGE_MS).size() == 1,
+                "legitimate drop-only bucket survives restart");
         // A persisted snapshot can contain at most MAX_BUCKETS data rows. An
         // extra valid-looking row must not be silently dropped on restart.
         StringBuilder fullWire = new StringBuilder("v1\n");
