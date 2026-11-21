@@ -43,8 +43,12 @@ public final class SecurityTimeline {
 
     private Mutable at(long nowMs) {
         if (nowMs < 0) throw new IllegalArgumentException("Invalid wall clock");
-        long start = nowMs - nowMs % BUCKET_MS;
+        // A large future-clock excursion can strand every corrected-time event.
+        // Do not reinterpret normal delayed/out-of-order reports as a clock reset.
+        if (watermarkMs > nowMs && watermarkMs - nowMs > MAX_AGE_MS)
+            prune(nowMs, MAX_AGE_MS);
         watermarkMs = Math.max(watermarkMs, nowMs);
+        long start = nowMs - nowMs % BUCKET_MS;
         Mutable b = buckets.get(start);
         if (b == null) { b = new Mutable(start); buckets.put(start, b); }
         prune(watermarkMs, MAX_AGE_MS);
@@ -75,12 +79,23 @@ public final class SecurityTimeline {
     public synchronized boolean prune(long nowMs, long maxAgeMs) {
         if (!validRetention(maxAgeMs) || nowMs < 0) throw new IllegalArgumentException("Invalid retention");
         int before = buckets.size();
-        watermarkMs = Math.max(watermarkMs, nowMs);
+        if (watermarkMs > nowMs && watermarkMs - nowMs > BUCKET_MS) {
+            // This is a real clock correction, not a few seconds of jitter.
+            // A jump exceeding the entire storage window makes all old timestamps
+            // untrustworthy; discard them rather than carry future history forward.
+            if (watermarkMs - nowMs > MAX_AGE_MS) buckets.clear();
+            watermarkMs = nowMs;
+        } else {
+            watermarkMs = Math.max(watermarkMs, nowMs);
+        }
         long cutoff = Math.max(0, watermarkMs - maxAgeMs);
         while (!buckets.isEmpty() && (buckets.firstKey() < cutoff || buckets.size() > MAX_BUCKETS))
             buckets.pollFirstEntry();
-        // A clock reset must not keep far-future observations in the current chart.
-        while (!buckets.isEmpty() && buckets.lastKey() > watermarkMs + BUCKET_MS)
+        // Compare future rows to the actual clock, not a stale high watermark.
+        // Clamp addition so extreme valid timestamps cannot overflow.
+        long latest = nowMs > Long.MAX_VALUE - BUCKET_MS
+                ? Long.MAX_VALUE : nowMs + BUCKET_MS;
+        while (!buckets.isEmpty() && buckets.lastKey() > latest)
             buckets.pollLastEntry();
         return buckets.size() != before;
     }

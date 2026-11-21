@@ -86,6 +86,50 @@ public final class SecurityTimelineTest {
                 6 * SecurityTimeline.HOUR_MS).isEmpty(), "expired idle history empty");
         check(!idle.prune(now + 8 * SecurityTimeline.HOUR_MS,
                 6 * SecurityTimeline.HOUR_MS), "no repeated dirty work after expiry");
+        // A transient device-clock jump must not strand future buckets after
+        // the clock is corrected, nor silently discard new corrected-time drops.
+        SecurityTimeline clockJump = new SecurityTimeline();
+        long impossibleFuture = now + 2 * SecurityTimeline.MAX_AGE_MS;
+        clockJump.recordDrops(now, 1, 10);
+        clockJump.recordDrops(impossibleFuture, 7, 70);
+        check(clockJump.prune(now, 6 * SecurityTimeline.HOUR_MS),
+                "clock rollback removes future rows and signals encrypted rewrite");
+        check(clockJump.snapshot(now, 6 * SecurityTimeline.HOUR_MS).isEmpty(),
+                "far-future aggregate not visible after clock correction");
+        clockJump.recordDrops(now + SecurityTimeline.BUCKET_MS, 2, 20);
+        List<SecurityTimeline.Bucket> corrected = clockJump.snapshot(
+                now + SecurityTimeline.BUCKET_MS, 6 * SecurityTimeline.HOUR_MS);
+        check(corrected.size() == 1 && corrected.get(0).droppedPackets == 2,
+                "corrected wall clock accepts new history instead of orphaning buckets");
+        String correctedWire = clockJump.encode(now + SecurityTimeline.BUCKET_MS);
+        check(SecurityTimeline.decode(correctedWire, now + SecurityTimeline.BUCKET_MS)
+                .encode(now + SecurityTimeline.BUCKET_MS).equals(correctedWire),
+                "corrected history persists and roundtrips");
+        // Even a correction shorter than the seven-day storage cap must drop
+        // future samples and allow the selected six-hour retention to keep new ones.
+        SecurityTimeline smallJump = new SecurityTimeline();
+        smallJump.recordDrops(now + 12 * SecurityTimeline.HOUR_MS, 5, 50);
+        check(smallJump.prune(now, 6 * SecurityTimeline.HOUR_MS),
+                "shorter rollback evicts future clock samples");
+        smallJump.recordDrops(now, 3, 30);
+        check(smallJump.snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 1,
+                "six-hour retention accepts corrected-time samples");
+        // Decoding data recorded with a future clock preserves only genuine
+        // in-range samples and retains the existing v1 encoding contract.
+        String futureWire = "v1\n" + now + ",1,10,0,0,0,0,-1\n"
+                + impossibleFuture + ",7,70,0,0,0,0,-1\n";
+        SecurityTimeline restoredClock = SecurityTimeline.decode(futureWire, now);
+        check(restoredClock.snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 1,
+                "future persisted bucket discarded on restore");
+        check(SecurityTimeline.decode(restoredClock.encode(now), now)
+                .snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 1,
+                "valid persisted bucket survives normalized roundtrip");
+        // Extreme nonnegative wall-clock values must not overflow the future
+        // cutoff and delete a legitimately aligned current bucket.
+        SecurityTimeline extremeClock = new SecurityTimeline();
+        extremeClock.recordDrops(Long.MAX_VALUE, 1, 1);
+        check(extremeClock.snapshot(Long.MAX_VALUE, SecurityTimeline.MAX_AGE_MS)
+                .size() == 1, "future cutoff does not overflow long timestamp");
         t.clear();
         check(t.snapshot(now, 72 * SecurityTimeline.HOUR_MS).isEmpty(), "manual and purge clear");
         // Bounded 5-minute buckets, dropping the oldest without carrying sensitive raw events.
