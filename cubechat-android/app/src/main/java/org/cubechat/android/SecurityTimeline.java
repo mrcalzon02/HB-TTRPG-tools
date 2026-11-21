@@ -136,6 +136,10 @@ public final class SecurityTimeline {
                         || packets < 0 || bytes < 0 || reports < 0
                         || cells < 0 || cells > 256 || fresh < 0 || fresh > cells
                         || serving < 0 || serving > cells
+                        // A bucket with zero cell reports can only have the
+                        // default aggregate fields from Mutable's constructor.
+                        || (reports == 0 && (cells != 0 || fresh != 0
+                                || serving != 0 || dbm != UNKNOWN_SIGNAL))
                         || (dbm != UNKNOWN_SIGNAL && (dbm < -160 || dbm > -20)))
                     throw new IllegalArgumentException("Bad bucket values");
                 previous = start;
