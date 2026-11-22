@@ -10,6 +10,8 @@ javac --release 17 -encoding UTF-8 -d "$classes" \
     "$here/app/src/main/java/org/cubechat/android/DraftSaveState.java" \
     "$here/app/src/main/java/org/cubechat/android/DraftStatusText.java" \
     "$here/tests/DraftSaveStateTest.java" \
-    "$here/tests/DraftStatusTextTest.java"
+    "$here/tests/DraftStatusTextTest.java" \
+    "$here/tests/DraftInterleavedLifecycleTest.java"
 java -cp "$classes" org.cubechat.android.DraftSaveStateTest
 java -cp "$classes" org.cubechat.android.DraftStatusTextTest
+java -cp "$classes" org.cubechat.android.DraftInterleavedLifecycleTest
