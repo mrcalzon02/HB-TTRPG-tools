@@ -20,14 +20,18 @@ final class TransferProgress {
         // large, stale transfer size reaches the UI. It is a display-only
         // percentage, not an authorization or data-integrity check.
         long done = boundedBytes(progress, size);
-        return Math.max(0, Math.min(100, (int) (100.0 * done / size)));
+        int value = Math.max(0, Math.min(100, (int) (100.0 * done / size)));
+        // Doubles round huge (size - 1) counts to 100. Do not fill the
+        // display until the last byte is actually reported.
+        return done < size ? Math.min(99, value) : value;
     }
 
     /** 0–1000 range used by the detail progress bar; -1 means unknown. */
     static int progressPermille(long progress, long size) {
         if (size <= 0) return -1;
         long done = boundedBytes(progress, size);
-        return Math.max(0, Math.min(1000, (int) (1000.0 * done / size)));
+        int value = Math.max(0, Math.min(1000, (int) (1000.0 * done / size)));
+        return done < size ? Math.min(999, value) : value;
     }
 
     /** Accepted is not COMPLETE even after the last byte has been received. */

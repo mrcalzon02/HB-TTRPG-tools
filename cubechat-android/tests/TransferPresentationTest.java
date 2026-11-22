@@ -20,6 +20,15 @@ public final class TransferPresentationTest {
         check(TransferProgress.percent(-1, 200) == 0, "negative count cannot show negative percent");
         check(TransferProgress.percent(123, 0) == -1, "zero-length file has no percent");
         check(TransferProgress.percent(123, -1) == -1, "invalid file size has no percent");
+        check(TransferProgress.percent(Long.MAX_VALUE - 1, Long.MAX_VALUE) == 99,
+                "enormous incomplete transfer cannot show 100 percent");
+        check(TransferProgress.progressPermille(Long.MAX_VALUE - 1, Long.MAX_VALUE) == 999,
+                "enormous incomplete transfer cannot fill the progress bar");
+        check(TransferProgress.percent(1L << 53, (1L << 53) + 1) == 99,
+                "floating-point precision loss cannot imply all bytes arrived");
+        check(" · 99%".equals(TransferProgress.percentSuffix(
+                Long.MAX_VALUE - 1, Long.MAX_VALUE)),
+                "summary matches exact incomplete byte count");
         check(TransferProgress.percent(Long.MAX_VALUE, Long.MAX_VALUE) == 100,
                 "large integers never overflow progress");
         check(TransferProgress.percent(Long.MAX_VALUE - 4, Long.MAX_VALUE) <= 100,
@@ -105,6 +114,15 @@ public final class TransferPresentationTest {
     }
 
     private static void notificationTransitions() {
+        // Duplicate/out-of-order snapshots must not resurrect terminal history.
+        for (String terminal : new String[] {"CANCELED", "DECLINED", "COMPLETE"}) {
+            for (String late : new String[] {"ACCEPTED", "COMPLETE", "DECLINED", "CANCELED"}) {
+                for (boolean outgoing : new boolean[] {false, true}) {
+                    check(!TransferEventText.shouldNotify(true, terminal, late, outgoing, ""),
+                            "terminal " + terminal + " cannot announce late " + late);
+                }
+            }
+        }
         check(!TransferEventText.shouldNotify(false, null, "DECLINED", false,
                 "not_enough_storage"), "opening a mailbox does not replay historical failures");
         check(TransferEventText.shouldNotify(true, null, "DECLINED", false,

@@ -21,6 +21,10 @@ final class TransferEventText {
             return !outgoing && "DECLINED".equals(currentStatus)
                     && "not_enough_storage".equals(reason);
         if (previousStatus.equals(currentStatus)) return false;
+        // A terminal observation must never produce a later contradictory
+        // completion/refusal notice from an out-of-order status snapshot.
+        if ("COMPLETE".equals(previousStatus) || "DECLINED".equals(previousStatus)
+                || "CANCELED".equals(previousStatus)) return false;
         return "COMPLETE".equals(currentStatus) || "DECLINED".equals(currentStatus)
                 || "CANCELED".equals(currentStatus);
     }
