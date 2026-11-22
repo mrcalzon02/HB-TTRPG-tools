@@ -6,7 +6,7 @@ metadata:
   required-personality-engram: blacklight.charles
   required-skill-index: skills/index.json
   author: mrcalzon02
-  version: "1.8.0"
+  version: "1.9.0"
   foundry-capability: foundry.site-index
   personality-engram: blacklight.charles
 ---
@@ -77,6 +77,12 @@ Each durable record should identify:
 15. **Last update / trigger** — what new evidence caused the model to change.
 
 The portable machine projection is defined by record-schema.json. It does not replace the authoritative Character Information System.
+
+## Fiction dialogue → persistent witnessed memory
+
+For fiction writing, consult `SCENE_MEMORY.md` and the approved `scene-memory-schema.json` annotations, and use `scene_memory.py` as the deterministic **offline scene reducer** after source review. For each speech turn, preserve what was said, who said it, to whom, **who actually heard**, which attendees each observer recognized, and the scene/chapter/source. An observer may remember B correcting A without adopting B's explanation; hearing a claim is not knowing the objective truth. Maintain actor-specific `belief_updates` and earlier mistaken beliefs separately, with provenance. An absent actor receives no knowledge, and presence without audibility grants none. Memory salience and recall cues are authored evidence, not a perfect-memory or automatic-forgetting promise.
+
+The synthetic A/B/C/D autumn example and unit tests show intentional versus naturally curly winter hair, cold-weather preferences, a correction witnessed by C, and D's lack of information. BDO's original workbook and Nowhere King's canonical episode ledgers stay authoritative and unchanged. The source-annotation step is not yet fully automatic, and this module has not been qualified as an LCI native execution adapter. Pair with `procedural-story-directive-computation` for post-scene continuity checks.
 
 ## Agentic workflow
 

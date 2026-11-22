@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mrcalzon02.github.io/HB-TTRPG-tools/skills/interpersonal-theory-of-mind-modeling/scene-memory-schema.json",
+  "title": "Reviewed fictional dialogue and witness event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "series",
+    "segment",
+    "source_ref",
+    "canon_status",
+    "characters",
+    "presence_observations",
+    "turns"
+  ],
+  "properties": {
+    "schema": {
+      "const": "fiction.scene-memory-scene.v1"
+    },
+    "id": {
+      "$ref": "#/$defs/id"
+    },
+    "series": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "segment": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "canon_status": {
+      "enum": [
+        "canon",
+        "draft",
+        "provisional"
+      ]
+    },
+    "characters": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    },
+    "presence_observations": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "observer",
+          "recognized"
+        ],
+        "properties": {
+          "observer": {
+            "$ref": "#/$defs/id"
+          },
+          "recognized": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    },
+    "turns": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 120,
+      "items": {
+        "$ref": "#/$defs/turn"
+      }
+    },
+    "belief_updates": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "holder",
+          "about",
+          "claim_ref",
+          "belief",
+          "confidence",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "holder": {
+            "$ref": "#/$defs/id"
+          },
+          "about": {
+            "$ref": "#/$defs/id"
+          },
+          "claim_ref": {
+            "type": "string"
+          },
+          "belief": {
+            "enum": [
+              "accepts",
+              "doubts",
+              "rejects",
+              "suspects",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "enum": [
+              "unknown",
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "reactivations": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "holder",
+          "memory_id",
+          "hook"
+        ],
+        "properties": {
+          "holder": {
+            "$ref": "#/$defs/id"
+          },
+          "memory_id": {
+            "type": "string"
+          },
+          "hook": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,79}$"
+    },
+    "turn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "speaker",
+        "addressed_to",
+        "heard_by",
+        "text",
+        "claims"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "speaker": {
+          "$ref": "#/$defs/id"
+        },
+        "addressed_to": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "heard_by": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000
+        },
+        "claims": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "about",
+              "proposition",
+              "stance"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "about": {
+                "$ref": "#/$defs/id"
+              },
+              "proposition": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "stance": {
+                "enum": [
+                  "asserted",
+                  "self_report",
+                  "assumed",
+                  "denied",
+                  "corrected",
+                  "speculated",
+                  "asked",
+                  "quoted"
+                ]
+              },
+              "corrects": {
+                "type": "array",
+                "maxItems": 8,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "salience": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "importance": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "emotion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "relationship": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "recall_hooks": {
+              "type": "array",
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

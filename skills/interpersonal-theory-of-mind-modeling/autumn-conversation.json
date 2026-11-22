@@ -1,0 +1,138 @@
+{
+  "schema": "fiction.scene-memory-scene.v1",
+  "id": "autumn-001",
+  "series": "neutral-fiction",
+  "segment": "chapter-01/scene-02",
+  "source_ref": "autumn-conversation.json",
+  "canon_status": "provisional",
+  "characters": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "presence_observations": [
+    {
+      "observer": "A",
+      "recognized": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "observer": "B",
+      "recognized": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "observer": "C",
+      "recognized": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ],
+  "turns": [
+    {
+      "id": "turn1",
+      "speaker": "A",
+      "addressed_to": [
+        "B"
+      ],
+      "heard_by": [
+        "A",
+        "B",
+        "C"
+      ],
+      "text": "What a lovely autumn morning. I love the cold and sweater weather. Your hair always curls when it gets cold. I thought you styled it deliberately.",
+      "salience": {
+        "importance": 2,
+        "emotion": 2,
+        "relationship": 2,
+        "recall_hooks": [
+          "autumn",
+          "sweaters",
+          "B hair"
+        ]
+      },
+      "claims": [
+        {
+          "id": "c1",
+          "about": "A",
+          "proposition": "A likes cool autumn mornings",
+          "stance": "self_report"
+        },
+        {
+          "id": "c2",
+          "about": "B",
+          "proposition": "B intentionally curls their hair in cold weather",
+          "stance": "assumed"
+        }
+      ]
+    },
+    {
+      "id": "turn2",
+      "speaker": "B",
+      "addressed_to": [
+        "A"
+      ],
+      "heard_by": [
+        "A",
+        "B",
+        "C"
+      ],
+      "text": "I don't curl my hair on purpose; it just happens in cold air. But I love sweater season too.",
+      "salience": {
+        "importance": 3,
+        "emotion": 3,
+        "relationship": 4,
+        "recall_hooks": [
+          "natural curls",
+          "sweater weather"
+        ]
+      },
+      "claims": [
+        {
+          "id": "c1",
+          "about": "B",
+          "proposition": "B's hair curls naturally in cold air",
+          "stance": "corrected",
+          "corrects": [
+            "autumn-001/turn1/c2"
+          ]
+        },
+        {
+          "id": "c2",
+          "about": "B",
+          "proposition": "B enjoys sweater season",
+          "stance": "self_report"
+        }
+      ]
+    }
+  ],
+  "belief_updates": [
+    {
+      "id": "belief1",
+      "holder": "A",
+      "about": "B",
+      "claim_ref": "autumn-001/turn2/c1",
+      "belief": "accepts",
+      "confidence": "medium",
+      "reason": "B corrected A directly"
+    },
+    {
+      "id": "belief2",
+      "holder": "C",
+      "about": "B",
+      "claim_ref": "autumn-001/turn2/c1",
+      "belief": "accepts",
+      "confidence": "medium",
+      "reason": "C heard B correct A in person"
+    }
+  ]
+}

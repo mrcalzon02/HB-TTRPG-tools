@@ -1,0 +1,33 @@
+name: Fiction scene memory skill smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/interpersonal-theory-of-mind-modeling/**'
+      - '.github/workflows/fiction-scene-memory-verify.yml'
+permissions:
+  contents: read
+concurrency:
+  group: fiction-scene-memory-main
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: |
+            skills/interpersonal-theory-of-mind-modeling
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Validate and run isolated skill tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile skills/interpersonal-theory-of-mind-modeling/scene_memory.py
+          python3 -m json.tool skills/interpersonal-theory-of-mind-modeling/scene-memory-schema.json > /dev/null
+          python3 -m json.tool skills/interpersonal-theory-of-mind-modeling/autumn-conversation.json > /dev/null
+          python3 -m unittest discover -s skills/interpersonal-theory-of-mind-modeling -p 'test_scene_memory.py' -v
