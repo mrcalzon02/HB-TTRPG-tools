@@ -15,6 +15,74 @@ public final class CellObservationBookTest {
         return new CellObservation("LTE", "310", "260", id, 4152, 117, 1800, -88, registered, ageMs);
     }
 
+    /** A lookup for display must not count as a fresh observation for LRU eviction. */
+    private static void readOnlyLookupDoesNotRefreshHistory() {
+        CellObservationBook bounded = new CellObservationBook();
+        for (int i = 0; i < CellObservationBook.MAX_IDENTITIES; i++) {
+            bounded.record(Collections.singletonList(cell(1000L + i, 0, false)),
+                    100_000L + i * 20_000L);
+        }
+        check(bounded.size() == 256, "book respects 256 identity cap");
+        for (int i = 0; i < 10; i++) {
+            check(bounded.find(cell(1000, 0, false)) != null, "read-only display lookup");
+        }
+        bounded.record(Collections.singletonList(cell(2000, 0, false)), 6_000_000);
+        check(bounded.size() == 256, "new observation evicts one entry");
+        check(bounded.find(cell(1000, 0, false)) == null, "display lookup cannot refresh evidence recency");
+        check(bounded.find(cell(1001, 0, false)) != null, "next oldest remains");
+        bounded.record(Collections.singletonList(cell(1001, 0, false)), 6_020_000);
+        bounded.record(Collections.singletonList(cell(2001, 0, false)), 6_040_000);
+        check(bounded.find(cell(1001, 0, false)) != null, "real observation refreshes recency");
+        check(bounded.find(cell(1002, 0, false)) == null, "next stale entry evicts");
+        bounded.clear();
+        check(bounded.size() == 0, "clear discards bounded history");
+        bounded.record(Collections.singletonList(cell(1000, 0, false)), 6_060_000);
+        check(bounded.find(cell(1000, 0, false)).observations == 1,
+                "cleared and reappearing identity starts at first observation");
+        check(bounded.find(cell(1000, 0, false)).label().contains("unverified"),
+                "cleared identity never gains trust");
+    }
+
+    private static void monotonicClockAndAgeBoundaries() {
+        CellObservationBook timed = new CellObservationBook();
+        check(timed.record(Collections.singletonList(cell(1, 10_001, false)), 10_000).isEmpty(),
+                "observation age older than elapsed time rejected");
+        check(timed.record(Collections.singletonList(cell(1, 0, false)), -1).isEmpty(),
+                "negative elapsed clock rejected");
+        check(timed.record(Collections.singletonList(cell(1, -1, false)), 300_000).isEmpty(),
+                "unknown modem age rejected");
+        check(timed.record(Collections.singletonList(cell(1, 120_001, false)), 300_000).isEmpty(),
+                "stale modem age rejected");
+        check(timed.size() == 0, "invalid samples leave no history");
+        timed.record(Collections.singletonList(cell(1, 100, false)), 200_000);
+        timed.record(Arrays.asList(cell(1, 100, false), cell(1, 100, false)), 200_000);
+        timed.record(Collections.singletonList(cell(1, 0, false)), 200_100);
+        check(timed.find(cell(1, 0, false)).observations == 1,
+                "duplicate timestamps cannot inflate evidence");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 185_000);
+        check(timed.find(cell(1, 0, false)).observations == 1,
+                "out of order elapsed sample does not inflate evidence");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 215_000);
+        check(timed.find(cell(1, 0, false)).observations == 2,
+                "minimum distinct-sample boundary");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 799_899);
+        check(!timed.find(cell(1, 0, false)).repeatedThisSession,
+                "just before repeated-span boundary");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 800_000);
+        check(!timed.find(cell(1, 0, false)).repeatedThisSession,
+                "rapid refresh cannot forge a longer session");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 815_000);
+        check(timed.find(cell(1, 0, false)).repeatedThisSession,
+                "three distinct samples eventually span ten minutes");
+        check(timed.find(cell(1, 0, false)).label().contains("still unverified"),
+                "repeat remains unverified");
+        timed.clear();
+        check(timed.find(cell(1, 0, false)) == null, "clear removes old evidence");
+        timed.record(Collections.singletonList(cell(1, 0, false)), 900_000);
+        check(timed.find(cell(1, 0, false)).observations == 1,
+                "first observation after clear has no old history");
+    }
+
     public static void main(String[] ignored) {
         CellObservationBook book = new CellObservationBook();
         check(book.size() == 0, "empty book");
@@ -53,6 +121,8 @@ public final class CellObservationBookTest {
         check(book.find(cell(1319, 0, false)) != null, "newest retained");
         book.clear();
         check(book.size() == 0, "clear history");
+        monotonicClockAndAgeBoundaries();
+        readOnlyLookupDoesNotRefreshHistory();
         System.out.println("PASS CellObservationBookTest: " + assertions + " assertions; no modem activity");
     }
 }

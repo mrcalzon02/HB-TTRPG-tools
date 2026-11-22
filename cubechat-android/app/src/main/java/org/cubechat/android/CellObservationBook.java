@@ -40,8 +40,8 @@ public final class CellObservationBook {
         Evidence snapshot() { return new Evidence(count, firstSampleMs, lastSampleMs); }
     }
 
-    // Access-order eviction bounds memory without sending data outside the phone.
-    private final LinkedHashMap<String, SeenCell> entries = new LinkedHashMap<String, SeenCell>(32, .75f, true) {
+    // Observation-order eviction bounds memory; display lookups must not refresh history.
+    private final LinkedHashMap<String, SeenCell> entries = new LinkedHashMap<String, SeenCell>(32, .75f, false) {
         @Override protected boolean removeEldestEntry(Map.Entry<String, SeenCell> eldest) {
             return size() > MAX_IDENTITIES;
         }
@@ -60,10 +60,15 @@ public final class CellObservationBook {
             if (record == null) {
                 record = new SeenCell(modemObservationMs);
                 entries.put(key, record);
-            } else if (modemObservationMs > record.lastSampleMs
-                    && modemObservationMs - record.lastSampleMs >= MIN_DISTINCT_SAMPLE_MS) {
-                record.lastSampleMs = modemObservationMs;
-                record.count = Math.min(record.count + 1, Integer.MAX_VALUE);
+            } else {
+                // A received snapshot refreshes eviction recency. A UI find() does not.
+                entries.remove(key);
+                entries.put(key, record);
+                if (modemObservationMs > record.lastSampleMs
+                        && modemObservationMs - record.lastSampleMs >= MIN_DISTINCT_SAMPLE_MS) {
+                    record.lastSampleMs = modemObservationMs;
+                    record.count = Math.min(record.count + 1, Integer.MAX_VALUE);
+                }
             }
             results.put(key, record.snapshot());
         }
@@ -71,8 +76,10 @@ public final class CellObservationBook {
     }
 
     public synchronized Evidence find(CellObservation cell) {
-        if (cell == null || cell.identityKey() == null) return null;
-        SeenCell entry = entries.get(cell.identityKey());
+        if (cell == null) return null;
+        String key = cell.identityKey();
+        if (key == null) return null;
+        SeenCell entry = entries.get(key);
         return entry == null ? null : entry.snapshot();
     }
 
