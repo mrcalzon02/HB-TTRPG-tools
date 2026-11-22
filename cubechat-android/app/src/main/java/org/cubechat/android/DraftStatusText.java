@@ -28,13 +28,24 @@ final class DraftStatusText {
 
     private DraftStatusText() { }
 
+    /** Includes Unicode space separators without losing trim's C0 handling. */
+    private static boolean hasNonWhitespace(String text) {
+        for (int i = 0; i < text.length();) {
+            int cp = text.codePointAt(i);
+            if (cp > 0x20 && !Character.isWhitespace(cp) && !Character.isSpaceChar(cp))
+                return true;
+            i += Character.charCount(cp);
+        }
+        return false;
+    }
+
     static Summary describe(String draft, boolean contactSelected,
                             boolean saving, boolean failed, boolean dirty) {
         String text = draft == null ? "" : draft;
         int bytes = text.getBytes(StandardCharsets.UTF_8).length;
         boolean over = bytes > LIMIT_BYTES;
         boolean visible = contactSelected && (!text.isEmpty() || saving || failed || dirty);
-        boolean sendable = contactSelected && !over && !text.trim().isEmpty();
+        boolean sendable = contactSelected && !over && hasNonWhitespace(text);
         String suffix = over ? " · Message too long"
                 : failed ? " · Draft not saved · Retry in Draft ⋮"
                 : saving ? " · Saving locally…"
