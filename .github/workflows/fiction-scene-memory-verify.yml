@@ -21,6 +21,8 @@ jobs:
         with:
           sparse-checkout: |
             skills/interpersonal-theory-of-mind-modeling
+            skills/index.json
+          sparse-checkout-cone-mode: false
           persist-credentials: false
           fetch-depth: 1
       - name: Validate and run isolated skill tests

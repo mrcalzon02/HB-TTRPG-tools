@@ -11,6 +11,33 @@ class SceneMemoryTests(unittest.TestCase):
     def setUp(self):
         self.scene = json.loads(EXAMPLE.read_text(encoding="utf8"))
 
+    def test_compact_lci_router_finds_witness_memory_skill(self):
+        registry=json.loads((Path(__file__).parent.parent/"index.json").read_text(encoding="utf8"))
+        items=registry["skills"]
+        target="interpersonal-theory-of-mind-modeling"
+        stop={"the","and","with","from","that","this","then","have","into",
+              "will","what","where","should","make","using","for","our","get",
+              "tool","tools","skill","skills","help","able","would","need"}
+        import re
+        def tokens(value):
+            return [x for x in re.findall(r"[a-z0-9]+",value.casefold())
+                    if len(x)>=3 and x not in stop]
+        def score(query,item):
+            words=list(dict.fromkeys(tokens(query)))[:16]
+            title=" ".join(tokens(item["name"]))
+            aliases=" ".join(tokens(" ".join(item.get("useFor",[])[:25])))
+            return sum(6 if w in title.split() else
+                       3 if w in aliases.split() else
+                       1 if w in title or w in aliases else 0 for w in words)
+        for objective in (
+            "Continue fiction writing and track who heard what in a conversation",
+            "Beneath Dappled Oaks state of mind workbook continuity",
+            "Nowhere King episodic character theory of mind",
+        ):
+            with self.subTest(objective=objective):
+                ranked=sorted(items,key=lambda x:(-score(objective,x),x["name"]))
+                self.assertIn(target,[x["name"] for x in ranked[:3]])
+
     def test_a_b_c_hear_and_d_does_not(self):
         result=m.apply_scene(m.blank(),self.scene)
         for actor in "ABC":
