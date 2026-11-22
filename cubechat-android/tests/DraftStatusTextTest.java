@@ -72,6 +72,37 @@ public final class DraftStatusTextTest {
                 "compact label includes exact UTF-8 byte count");
         check(describe("A".repeat(2800), true, false, false, false).bytes == 2800,
                 "long valid draft does not lose bytes");
+        // Android's trim()-based blank check misses Unicode space-only drafts.
+        String[] unicodeBlank = {"\u0000\u001f", "\u00a0", "\u2003", "\u202f", "\u3000",
+                " \t\u00a0\u2003\n\u3000 "};
+        for (String whitespace : unicodeBlank) {
+            DraftStatusText.Summary onlySpace = describe(whitespace, true,
+                    false, false, true);
+            check(!onlySpace.sendable, "Unicode space-only draft cannot be sent");
+            check(onlySpace.bytes == whitespace.getBytes(
+                    java.nio.charset.StandardCharsets.UTF_8).length,
+                    "Unicode space count remains exact UTF-8 bytes");
+        }
+        check(!describe("\u00a0".repeat(4096), true, false, false, true).sendable,
+                "exact-limit non-breaking spaces remain non-sendable");
+        check(describe("\u00a0A\u3000", true, false, false, true).sendable,
+                "visible text among Unicode spaces remains sendable");
+        check(describe("\u2003A", true, false, false, true).label
+                .contains("Unsaved changes"), "Unicode spaces do not alter unsaved label");
+        check(describe("\u2003A", true, true, false, false).label
+                .contains("Saving locally"), "pending label remains pending");
+        check(describe("\u2003A", true, false, true, true).label
+                .contains("Draft not saved"), "failed label never claims save");
+        check(!describe("\u00a0A", false, false, false, false).sendable,
+                "unselected contact remains non-sendable despite visible text");
+        check(!describe("\u00a0A", false, false, false, false).visible,
+                "unselected contact hides status");
+        check(describe("🐟".repeat(1023) + "éé", true, false, false, true).bytes == 4096,
+                "mixed multibyte exact 4096-byte boundary");
+        check(describe("🐟".repeat(1023) + "éé", true, false, false, true).sendable,
+                "mixed multibyte exact limit remains sendable");
+        check(!describe("🐟".repeat(1023) + "ééA", true, false, false, true).sendable,
+                "mixed multibyte overflow remains non-sendable");
         System.out.println("DraftStatusText: " + checks
                 + " offline formatting assertions passed; no app or network actions");
     }
