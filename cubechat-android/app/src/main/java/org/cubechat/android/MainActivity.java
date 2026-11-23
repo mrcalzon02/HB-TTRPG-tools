@@ -1247,11 +1247,11 @@ public final class MainActivity extends Activity implements PeerLink.Listener {
                 FindMessages.show(this, items, index -> {
                     if (!chatOpen() || renderedId != state.activeId
                             || adapter == null || history == null) return;
-                    int position = MessageJump.locate(items, index, adapter.items,
-                            (original, visible) -> original != null && visible != null
-                                    && original.time == visible.time
-                                    && original.outgoing == visible.outgoing
-                                    && original.text.equals(visible.text));
+                    // A history refresh reconstructs Message objects. Resolve
+                    // by the original persisted row ID, never by look-alike
+                    // text/time after the 200-message window has shifted.
+                    int position = MessageJump.locateById(items, index, adapter.items,
+                            message -> message == null ? 0 : message.messageId);
                     if (position >= 0) {
                         history.setSelection(position);
                     } else {

@@ -62,7 +62,14 @@ public final class PeerLink {
         public final String text;
         public final boolean outgoing, delivered;
         public final long time;
+        // Local SQLite row identity, not a network identifier or an encrypted
+        // message body field. Stable across history reloads and status updates.
+        public final long messageId;
         Message(String text, boolean outgoing, boolean delivered, long time) {
+            this(0, text, outgoing, delivered, time);
+        }
+        Message(long messageId, String text, boolean outgoing, boolean delivered, long time) {
+            this.messageId = messageId;
             this.text = text; this.outgoing = outgoing; this.delivered = delivered; this.time = time;
         }
     }

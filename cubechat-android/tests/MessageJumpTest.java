@@ -21,6 +21,21 @@ public final class MessageJumpTest {
                 (a, b) -> a != null && b != null && a.content.equals(b.content));
     }
 
+    private static final class StoredMessage {
+        final long rowId;
+        final String content;
+        final long time;
+        StoredMessage(long rowId, String content, long time) {
+            this.rowId = rowId; this.content = content; this.time = time;
+        }
+    }
+
+    private static int jumpStored(List<StoredMessage> old, int selected,
+                                  List<StoredMessage> now) {
+        return MessageJump.locateById(old, selected, now,
+                message -> message.rowId);
+    }
+
     public static void main(String[] args) {
         Message a = new Message("repeated");
         Message b = new Message("repeated");
@@ -83,6 +98,48 @@ public final class MessageJumpTest {
                 "uniquely authored message still rejects two refreshed look-alikes");
         check(jump(original, 2, List.of()) == -1,
                 "cleared conversation never jumps to old data");
+
+        // Actual loaded-history boundary: after message 201, the oldest of
+        // 200 disappears. A new message can have the same text and timestamp
+        // as the evicted one, but it must never inherit its search result.
+        ArrayList<StoredMessage> oldWindow = new ArrayList<>();
+        oldWindow.add(new StoredMessage(1, "repeat", 123456));
+        for (int i = 2; i <= 200; i++)
+            oldWindow.add(new StoredMessage(i, "message-" + i, i));
+        ArrayList<StoredMessage> newWindow = new ArrayList<>();
+        for (int i = 1; i < oldWindow.size(); i++) {
+            StoredMessage previous = oldWindow.get(i);
+            newWindow.add(new StoredMessage(previous.rowId, previous.content, previous.time));
+        }
+        newWindow.add(new StoredMessage(201, "repeat", 123456));
+        check(jumpStored(oldWindow, 0, newWindow) == -1,
+                "evicted target must not jump to new identical timestamp/text row");
+        check(jumpStored(oldWindow, 120, newWindow) == 119,
+                "surviving middle target resolves after 200-message eviction");
+        check(jumpStored(oldWindow, 199, newWindow) == 198,
+                "surviving newest row resolves at new index");
+        check(jumpStored(oldWindow, 0, List.of(
+                new StoredMessage(1, "repeat", 123456))) == 0,
+                "reloaded instance with same stored row ID remains selectable");
+        check(jumpStored(oldWindow, 0, List.of(
+                new StoredMessage(900, "repeat", 123456))) == -1,
+                "single look-alike is not sufficient identity");
+        check(jumpStored(oldWindow, 0, List.of(
+                new StoredMessage(1, "repeat", 123456),
+                new StoredMessage(1, "repeat", 123456))) == -1,
+                "duplicate row IDs in a broken refresh fail closed");
+        check(jumpStored(oldWindow, 0, List.of()) == -1,
+                "cleared history cannot jump to evicted target");
+        check(jumpStored(List.of(new StoredMessage(0, "unknown", 0)), 0,
+                List.of(new StoredMessage(0, "unknown", 0))) == -1,
+                "missing database row identity fails closed");
+        check(jumpStored(oldWindow, -1, newWindow) == -1,
+                "invalid search result index fails closed");
+        check(jumpStored(oldWindow, 200, newWindow) == -1,
+                "out-of-range snapshot index fails closed");
+        check(jumpStored(oldWindow, 120, List.of(
+                new StoredMessage(121, "edited display flag", 121))) == 0,
+                "same persisted row stays selected after display metadata changes");
 
         System.out.println("MessageJump: " + checks
                 + " offline navigation assertions passed");

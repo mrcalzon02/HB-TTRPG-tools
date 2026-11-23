@@ -423,13 +423,13 @@ final class ChatStore extends SQLiteOpenHelper {
     List<PeerLink.Message> history() throws Exception {
         long id = activeId();
         ArrayList<PeerLink.Message> rows = new ArrayList<>();
-        try (Cursor c = getReadableDatabase().rawQuery("SELECT outgoing,seq,ts,delivered,body FROM messages "
+        try (Cursor c = getReadableDatabase().rawQuery("SELECT id,outgoing,seq,ts,delivered,body FROM messages "
                 + "WHERE contact_id=? ORDER BY id DESC LIMIT 200", idArg(id))) {
             while (c.moveToNext()) {
-                boolean outgoing = c.getInt(0) == 1;
-                String field = c.getInt(0) == 2 ? "peer-purge-notice" : "body:" + outgoing + ":" + c.getLong(1);
-                String body = open(c.getBlob(4), scope(id, field));
-                rows.add(new PeerLink.Message(body, outgoing, c.getInt(3) == 1, c.getLong(2)));
+                boolean outgoing = c.getInt(1) == 1;
+                String field = c.getInt(1) == 2 ? "peer-purge-notice" : "body:" + outgoing + ":" + c.getLong(2);
+                String body = open(c.getBlob(5), scope(id, field));
+                rows.add(new PeerLink.Message(c.getLong(0), body, outgoing, c.getInt(4) == 1, c.getLong(3)));
             }
         }
         Collections.reverse(rows);
