@@ -147,6 +147,46 @@ public final class SecurityTimelineTest {
                 "saturated bytes");
         check(overflow.snapshot(now, SecurityTimeline.MAX_AGE_MS).get(0).droppedPackets == Long.MAX_VALUE,
                 "saturated packets");
+        // A delayed observation older than the retained window must not be
+        // mistaken for a device-clock rollback and purge recent valid history.
+        SecurityTimeline late = new SecurityTimeline();
+        late.recordDrops(now, 4, 40);
+        late.recordCellReport(now, 2, 1, 1, -90);
+        long tooOld = now - SecurityTimeline.MAX_AGE_MS - SecurityTimeline.BUCKET_MS;
+        late.recordDrops(tooOld, 100, 1000);
+        check(late.snapshot(now, SecurityTimeline.MAX_AGE_MS).size() == 1,
+                "ancient delayed drop must not purge current history");
+        check(late.snapshot(now, SecurityTimeline.MAX_AGE_MS).get(0).droppedPackets == 4,
+                "ancient delayed drop cannot replace current counters");
+        late.recordCellReport(tooOld, 1, 1, 1, -120);
+        check(late.snapshot(now, SecurityTimeline.MAX_AGE_MS).get(0).servingDbm == -90,
+                "ancient delayed cell report cannot replace current history");
+        // Explicit clock correction still uses prune(), as tested above.
+        SecurityTimeline sparse = new SecurityTimeline();
+        sparse.recordCellReport(now - 3 * SecurityTimeline.BUCKET_MS, 1, 1, 1, -80);
+        sparse.recordDrops(now, 1, 10);
+        List<SecurityTimeline.Bucket> sparseRows = sparse.snapshot(
+                now, SecurityTimeline.MAX_AGE_MS);
+        check(sparseRows.size() == 2, "missing reports remain gaps, never filled with zeros");
+        check(sparseRows.get(1).cellReports == 0
+                && sparseRows.get(1).servingDbm == SecurityTimeline.UNKNOWN_SIGNAL,
+                "drop-only bucket has unknown signal rather than inferred zero");
+        SecurityTimeline purge = new SecurityTimeline();
+        for (int i = 0; i < 8; i++)
+            purge.recordDrops(now - (8 - i) * SecurityTimeline.HOUR_MS, 1, 1);
+        check(purge.prune(now, 6 * SecurityTimeline.HOUR_MS),
+                "retention removes multiple expired buckets");
+        check(purge.snapshot(now, 6 * SecurityTimeline.HOUR_MS).size() == 6,
+                "six-hour window retains only valid recent buckets");
+        purge.clear();
+        check("v1\n".equals(purge.encode(now)), "cleared timeline has no persisted bucket rows");
+        check(SecurityTimeline.decode(purge.encode(now), now).snapshot(
+                now, SecurityTimeline.MAX_AGE_MS).isEmpty(),
+                "clear then encode-decode cannot revive deleted observations");
+        invalid(() -> SecurityTimeline.decode("v1\n" + "x".repeat(512_001), now));
+        invalid(() -> SecurityTimeline.decode("v1\n" + now + ",1,2,3,4,5,6,-90,1\n", now));
+        invalid(() -> SecurityTimeline.decode("v1\n" + now + ",1,2,0,0,0,0,-1\n\n", now));
+        invalid(() -> late.recordDrops(-1, 0, 0));
         System.out.println("SecurityTimelineTest: " + checks + "/" + checks + " checks passed");
     }
 }
