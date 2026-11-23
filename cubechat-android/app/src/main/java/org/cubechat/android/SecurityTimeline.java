@@ -43,10 +43,11 @@ public final class SecurityTimeline {
 
     private Mutable at(long nowMs) {
         if (nowMs < 0) throw new IllegalArgumentException("Invalid wall clock");
-        // A large future-clock excursion can strand every corrected-time event.
-        // Do not reinterpret normal delayed/out-of-order reports as a clock reset.
+        // An individual report may arrive late. It must not masquerade as a
+        // wall-clock correction and erase newer aggregates. Only an explicit
+        // prune/snapshot at the corrected clock may reset the watermark.
         if (watermarkMs > nowMs && watermarkMs - nowMs > MAX_AGE_MS)
-            prune(nowMs, MAX_AGE_MS);
+            return null;
         watermarkMs = Math.max(watermarkMs, nowMs);
         long start = nowMs - nowMs % BUCKET_MS;
         Mutable b = buckets.get(start);
@@ -58,9 +59,11 @@ public final class SecurityTimeline {
         return a > Long.MAX_VALUE - b ? Long.MAX_VALUE : a + b;
     }
     public synchronized void recordDrops(long wallMs, long count, long bytes) {
-        if (count < 0 || bytes < 0) throw new IllegalArgumentException("Negative VPN counter");
+        if (wallMs < 0 || count < 0 || bytes < 0)
+            throw new IllegalArgumentException("Invalid VPN counter or wall clock");
         if (count == 0 && bytes == 0) return;
         Mutable b = at(wallMs);
+        if (b == null) return; // The delayed row is already outside seven days.
         b.droppedPackets = sum(b.droppedPackets, count);
         b.droppedBytes = sum(b.droppedBytes, bytes);
     }
@@ -71,6 +74,7 @@ public final class SecurityTimeline {
                 || (servingDbm != UNKNOWN_SIGNAL && (servingDbm < -160 || servingDbm > -20)))
             throw new IllegalArgumentException("Invalid aggregate cell report");
         Mutable b = at(wallMs);
+        if (b == null) return; // Preserve newer rows on stale observations.
         b.cellReports = b.cellReports == Integer.MAX_VALUE ? b.cellReports : b.cellReports + 1;
         b.reportedCells = reported; b.freshCells = fresh;
         b.servingCells = serving; b.servingDbm = servingDbm;
