@@ -23,7 +23,33 @@ function disconnect(c){c.stream?.close();c.stream=null;c.connected=false;render(
 $('load').onclick=async()=>{const files=Array.from($('imports').files);if(!files.length)return status('Choose one or more host packages');try{let n=0;for(const file of files){if(file.size>32768)throw Error('Package too large: '+file.name);const p=JSON.parse(await file.text());if(contacts.has(p.profileId))throw Error('Duplicate profile '+p.profileId);const c=await make(p);contacts.set(c.id,c);selected=selected||c.id;n++}render();status('Loaded '+n+' private host profile(s). Select and connect each one.')}catch(e){render();status('Import stopped: '+e.message)}};
 $('connect').onclick=()=>{const c=contacts.get(selected);if(c)connect(c)};
 $('disconnect').onclick=()=>{const c=contacts.get(selected);if(c)disconnect(c)};
-$('send').onclick=async()=>{const c=contacts.get(selected);try{if(!c?.connected)throw Error('Select a connected contact');const text=$('message').value;if(!text)throw Error('Write a message');const raw=te.encode(text);if(raw.length>4096)throw Error('Message exceeds 4096 bytes');const start=c.large?await CubeChatKeyLedger.reserve(c.large.AB,raw.length):null;const payload=c.large?CubeChatLargeKey.mix(c.large.AB,raw,start):raw,cube=E.encryptBinary(toBits(payload),c.out.cube),iv=crypto.getRandomValues(new Uint8Array(12)),p={format:'cubechat-local-v1',channel:'AB',sequence:c.seq,profile:'latin-cube-64',mode:c.large?'large-pad-v1':'deterministic',padStart:start,padLength:c.large?raw.length:null,iv:b64(iv),ciphertext:''};p.ciphertext=b64(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad(p)},c.out.aes,te.encode(JSON.stringify(cube)))));const r=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:'A',to:'B',profile:c.id,envelope:JSON.stringify(p)})});if(!r.ok)throw Error('Relay rejected message');const d=await r.json();c.seq++;add(c,text,true);$('message').value='';status('Sent to '+c.name+'; active guest subscriptions: '+d.deliveredConnections)}catch(e){status(e.message)}};
+let draftRevision=0;
+$('message').oninput=()=>{draftRevision++};
+$('send').onclick=async()=>{
+ const c=contacts.get(selected);
+ try{
+  if(!c?.connected)throw Error('Select a connected contact');
+  const editor=$('message'),text=editor.value,revision=draftRevision;
+  if(!text)throw Error('Write a message');
+  const raw=te.encode(text);
+  if(raw.length>4096)throw Error('Message exceeds 4096 bytes');
+  if(!Number.isSafeInteger(c.seq))throw Error('Message sequence exhausted. Provision new keys.');
+  // Commit the contact's sequence before reserving pad bytes or starting encryption.
+  const sequence=c.seq++,pad=c.large?.AB;
+  const start=pad?await CubeChatKeyLedger.reserve(pad,raw.length):null;
+  const payload=pad?CubeChatLargeKey.mix(pad,raw,start):raw;
+  const cube=E.encryptBinary(toBits(payload),c.out.cube),iv=crypto.getRandomValues(new Uint8Array(12));
+  const p={format:'cubechat-local-v1',channel:'AB',sequence,profile:'latin-cube-64',mode:pad?'large-pad-v1':'deterministic',padStart:start,padLength:pad?raw.length:null,iv:b64(iv),ciphertext:''};
+  p.ciphertext=b64(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad(p)},c.out.aes,te.encode(JSON.stringify(cube)))));
+  const response=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:'A',to:'B',profile:c.id,envelope:JSON.stringify(p)})});
+  if(!response.ok)throw Error('Relay rejected message');
+  const delivery=await response.json();
+  if(contacts.get(c.id)!==c)return;
+  add(c,text,true);
+  if(selected===c.id&&draftRevision===revision&&editor.value===text)editor.value='';
+  status('Sent to '+c.name+'; active guest subscriptions: '+delivery.deliveredConnections);
+ }catch(e){status(e.message)}
+};
 $('loadLarge').onclick=async()=>{const c=contacts.get(selected);try{if(!c||c.connected)throw Error('Select a disconnected contact first');const files=Array.from($('largeFiles').files);if(files.length!==2)throw Error('Select both CCLK2 directional files');const keys={};for(const file of files){if(file.size>16777280)throw Error('Key file too large');const k=CubeChatLargeKey.parse(await file.arrayBuffer());if(k.profile!==c.id||keys[k.direction])throw Error('Wrong contact or duplicate direction');keys[k.direction]=k}if(!keys.AB||!keys.BA)throw Error('Need both directions');for(const direction of ['AB','BA'])await CubeChatKeyLedger.enroll(keys[direction],$('largeFresh').checked);c.large=keys;c.padSeen=new Set();$('largeFresh').checked=false;render();status('Large-key mode enabled for '+c.name+' with same-origin persistent consumption ledger.')}catch(e){status(e.message)}};
 $('largeOff').onclick=()=>{const c=contacts.get(selected);if(!c||c.connected)return status('Disconnect selected contact first');c.large=null;c.padSeen=new Set();render();status('Deterministic mode restored for '+c.name)};
 $('clear').onclick=()=>{for(const c of contacts.values())disconnect(c);contacts.clear();selected=null;render();status('All contacts and messages cleared from page memory.')};

@@ -39,7 +39,34 @@ $('loadLarge').onclick=async()=>{try{if(connected)throw Error('Disconnect before
 $('largeOff').onclick=()=>{if(connected)return status('Disconnect before switching mode');large=null;largeSeen=new Set();$('largeState').textContent='Deterministic cube mode (default).';status('Returned to deterministic mode.')};
 $('connect').onclick=()=>{try{if(stream)stream.close();const url=endpoint();if(new URL(url).origin!==location.origin)throw Error('For LAN mode, open this page from the same host:port being connected to (http://ADDRESS:PORT/).');stream=new EventSource('/events?role='+role()+'&profile='+encodeURIComponent(profileId));stream.onopen=()=>{connected=true;update();status('Connected to '+url+' as '+role())};stream.onerror=()=>{connected=false;update();status('Disconnected; relay will retry automatically.')};stream.onmessage=e=>{const v=JSON.parse(e.data);receive(v.envelope).catch(err=>status('Incoming message rejected: '+err.message))}}catch(e){status(e.message)}};
 $('disconnect').onclick=()=>{stream?.close();stream=null;connected=false;update();status('Disconnected')};
-$('send').onclick=async()=>{try{if(!connected||!channels)throw Error('Not ready');const msg=$('message').value;if(!msg)throw Error('Enter a message');const name=role()==='A'?'AB':'BA',ch=channels[name],raw=te.encode(msg);if(raw.length>4096)throw Error('Message exceeds 4096 bytes');const start=large?await CubeChatKeyLedger.reserve(large[name],raw.length):null,material=large?CubeChatLargeKey.mix(large[name],raw,start):raw,cube=E.encryptBinary(bits(material),ch.key),iv=crypto.getRandomValues(new Uint8Array(12));const p={format:FORMAT,channel:name,sequence:next,profile:'latin-cube-64',mode:large?'large-pad-v1':'deterministic',padStart:start,padLength:large?raw.length:null,iv:to64(iv),ciphertext:''};p.ciphertext=to64(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad(p)},ch.aes,te.encode(JSON.stringify(cube)))));
-const res=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:role(),to:role()==='A'?'B':'A',profile:profileId,envelope:JSON.stringify(p)})});if(!res.ok)throw Error('Relay rejected message: '+res.status);const delivery=await res.json();next++;line(msg,true);$('message').value='';status('Encrypted message relayed to '+delivery.deliveredConnections+' active recipient connection(s).')}catch(e){status('Send failed: '+e.message)}};
+let draftRevision=0;
+$('message').oninput=()=>{draftRevision++};
+$('send').onclick=async()=>{
+ const activeChannels=channels,activeStream=stream,profile=profileId,from=role();
+ const isCurrent=()=>channels===activeChannels&&stream===activeStream&&profileId===profile&&role()===from;
+ try{
+  if(!connected||!activeChannels)throw Error('Not ready');
+  const editor=$('message'),msg=editor.value,revision=draftRevision;
+  if(!msg)throw Error('Enter a message');
+  const raw=te.encode(msg);
+  if(raw.length>4096)throw Error('Message exceeds 4096 bytes');
+  if(!Number.isSafeInteger(next))throw Error('Message sequence exhausted. Provision new keys.');
+  // Commit the sequence before any asynchronous work and never reuse it after a failed send.
+  const sequence=next++;
+  const to=from==='A'?'B':'A',name=from+to,ch=activeChannels[name],pad=large?.[name];
+  const start=pad?await CubeChatKeyLedger.reserve(pad,raw.length):null;
+  const material=pad?CubeChatLargeKey.mix(pad,raw,start):raw;
+  const cube=E.encryptBinary(bits(material),ch.key),iv=crypto.getRandomValues(new Uint8Array(12));
+  const p={format:FORMAT,channel:name,sequence,profile:'latin-cube-64',mode:pad?'large-pad-v1':'deterministic',padStart:start,padLength:pad?raw.length:null,iv:to64(iv),ciphertext:''};
+  p.ciphertext=to64(new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad(p)},ch.aes,te.encode(JSON.stringify(cube)))));
+  const res=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from,to,profile,envelope:JSON.stringify(p)})});
+  if(!res.ok)throw Error('Relay rejected message: '+res.status);
+  const delivery=await res.json();
+  if(!isCurrent())return;
+  line(msg,true);
+  if(draftRevision===revision&&editor.value===msg)editor.value='';
+  status('Encrypted message relayed to '+delivery.deliveredConnections+' active recipient connection(s).');
+ }catch(e){if(isCurrent())status('Send failed: '+e.message)}
+};
 loadBundle({...DEMO_BUNDLE}).then(()=>status('PUBLIC DEMONSTRATION KEYS preloaded. Select participant role and connect. NOT secure for private messages.')).catch(e=>status('Demo initialization failed: '+e.message));
 })();</script></body></html>

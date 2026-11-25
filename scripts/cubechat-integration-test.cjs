@@ -26,15 +26,20 @@ async function run(){port=await vacantPort();try{
  await new Promise(r=>setTimeout(r,2600));
  const reply=await request('POST',base+'/forum/api/posts',{thread,author:'Another tester',body:'Reply'});assert.equal(reply.status,201,reply.text);
  const posts=JSON.parse((await request('GET',base+'/forum/api/posts?thread='+thread)).text);assert.equal(posts.posts.length,2);
+ const offline=await request('POST',base+'/send',{profile:P1,from:'A',to:'B',envelope});
+ assert.equal(offline.status,200);assert.equal(JSON.parse(offline.text).deliveredConnections,0);
  const a=await subscribe(P1,'B'),b=await subscribe(P2,'B');
  const sent=await request('POST',base+'/send',{profile:P1,from:'A',to:'B',envelope});assert.equal(sent.status,200);assert.equal(JSON.parse(sent.text).deliveredConnections,1);
  await new Promise(r=>setTimeout(r,100));assert.ok(a.log().includes('ciphertext'),'profile 1 must receive opaque envelope');assert.ok(!b.log().includes('ciphertext'),'profile 2 must not receive profile 1 envelope');
  const other=await request('POST',base+'/send',{profile:P2,from:'A',to:'B',envelope});assert.equal(other.status,200);assert.equal(JSON.parse(other.text).deliveredConnections,1);
  await new Promise(r=>setTimeout(r,100));assert.ok(b.log().includes('ciphertext'),'profile 2 must receive its own envelope');
  assert.equal((await request('POST',base+'/send',{profile:'not-a-profile',from:'A',to:'B',envelope})).status,400);
+ const extra=await Promise.all(Array.from({length:7},()=>subscribe(P1,'B')));
+ assert.equal((await request('GET',base+'/events?role=B&profile='+P1)).status,429);
+ for(const connection of extra)connection.req.destroy();
  a.req.destroy();b.req.destroy();
  await stop();await start();
  const persisted=JSON.parse((await request('GET',base+'/forum/api/posts?thread='+thread)).text);assert.equal(persisted.posts.length,2);
- console.log('PASS: static routes, forum permissions, thread/reply persistence, profile-isolated SSE forwarding.');
+ console.log('PASS: static routes, forum permissions, thread/reply persistence, profile-isolated SSE forwarding, offline counts, and the per-route limit.');
 }finally{await stop();fs.rmSync(temp,{recursive:true,force:true})}}
 run().catch(err=>{console.error('FAIL: '+(err.stack||err));process.exitCode=1});
