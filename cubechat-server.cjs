@@ -57,8 +57,7 @@ function subscribe(res,url) {
 const CONNECTED=Buffer.from(': connected\n\n'), HEARTBEAT=Buffer.from(': heartbeat\n\n');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8'};
 function respond(res,code,text,type='text/plain; charset=utf-8'){res.writeHead(code,{'Content-Type':type,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self' 'unsafe-inline'; connect-src 'self'"});res.end(text)}
-const tls=process.env.CUBECHAT_TLS_CERT&&process.env.CUBECHAT_TLS_KEY;
-const server=(tls?https.createServer({cert:fs.readFileSync(process.env.CUBECHAT_TLS_CERT),key:fs.readFileSync(process.env.CUBECHAT_TLS_KEY)}):http.createServer)((req,res)=>{
+function handleRequest(req,res) {
 const base='http://localhost';let u;try{u=new URL(req.url,base)}catch{return respond(res,400,'Bad request')}
 if(forum.handle(req,res,u)||res.headersSent)return;
 if(req.method==='GET'&&u.pathname==='/events')return subscribe(res,u);
@@ -83,6 +82,12 @@ if(req.method==='GET'&&['/','/cubechat.html','/data/cubechat/sailing-family-conv
  const file=path.join(ROOT,name);return fs.readFile(file,(err,data)=>err?respond(res,404,'Not found'):respond(res,200,data,mime[path.extname(file)]));
 }
 respond(res,404,'Not found');
-});
+}
+const certPath=process.env.CUBECHAT_TLS_CERT,keyPath=process.env.CUBECHAT_TLS_KEY;
+if(Boolean(certPath)!==Boolean(keyPath))throw Error('Set CUBECHAT_TLS_CERT and CUBECHAT_TLS_KEY together');
+const server=certPath
+ ? https.createServer({cert:fs.readFileSync(certPath),key:fs.readFileSync(keyPath)},handleRequest)
+ : http.createServer(handleRequest);
 server.maxConnections=MAX_CONNECTIONS;
-server.listen(PORT,HOST,()=>console.log('CubeChat listening on '+(tls?'https://':'http://')+HOST+':'+PORT+(tls?' (TLS enabled)':' (localhost-only Web Crypto; use TLS for other devices)')));
+const address=HOST.includes(':')?'['+HOST+']':HOST;
+server.listen(PORT,HOST,()=>console.log('CubeChat listening on '+(certPath?'https://':'http://')+address+':'+PORT+(certPath?' (TLS enabled)':' (localhost-only Web Crypto; use TLS for other devices)')));

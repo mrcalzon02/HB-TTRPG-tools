@@ -8,27 +8,41 @@ const vm = require('node:vm');
 
 // Use deterministic response queues and timers with the real request handler.
 const intervals = new Set(), deadlines = new Set();
-const server = {
-  listen(port, host) { this.address = { port, host }; }
-};
 const maxSubscribers = 64, maxPerRoute = 8;
 const maxPendingBytes = 1024 * 1024 + 4096, drainTimeoutMs = 10_000;
 const filename = path.resolve(__dirname, '..', 'cubechat-server.cjs');
 const source = fs.readFileSync(filename, 'utf8');
-const clients = vm.runInNewContext(source + '\nclients;', {
-  __dirname: path.dirname(filename),
-  process: { env: {}, argv: [] },
-  require(name) {
-    if (name === 'node:http') return { createServer(handler) { server.handle = handler; return server; } };
-    if (name === './cubechat-forum.cjs') return { handle: () => false };
-    return require(name);
-  },
-  Buffer, URL,
-  setInterval(callback) { intervals.add(callback); return callback; },
-  clearInterval(callback) { intervals.delete(callback); },
-  setTimeout(callback, ms) { const timer = { callback, ms }; deadlines.add(timer); return timer; },
-  clearTimeout(timer) { deadlines.delete(timer); }
-}, { filename });
+function loadRelay(env = {}) {
+  const server = { listen(port, host) { this.address = { port, host }; } };
+  function attach(handler) {
+    assert.equal(typeof handler, 'function');
+    server.handle = handler;
+    return server;
+  }
+  const clients = vm.runInNewContext(source + '\nclients;', {
+    __dirname: path.dirname(filename),
+    process: { env, argv: [] },
+    require(name) {
+      if (name === 'node:http') return { createServer: attach };
+      if (name === 'node:https') return { createServer({ cert, key }, handler) {
+        assert.equal(cert.toString(), 'test certificate');
+        assert.equal(key.toString(), 'test key');
+        server.secure = true;
+        return attach(handler);
+      } };
+      if (name === 'node:fs' && env.CUBECHAT_TLS_CERT) return { readFileSync: value => Buffer.from(value) };
+      if (name === './cubechat-forum.cjs') return { handle: () => false };
+      return require(name);
+    },
+    Buffer, URL,
+    setInterval(callback) { intervals.add(callback); return callback; },
+    clearInterval(callback) { intervals.delete(callback); },
+    setTimeout(callback, ms) { const timer = { callback, ms }; deadlines.add(timer); return timer; },
+    clearTimeout(timer) { deadlines.delete(timer); }
+  }, { filename });
+  return { clients, server };
+}
+const { clients, server } = loadRelay();
 
 class Response extends EventEmitter {
   constructor() {
@@ -80,6 +94,11 @@ assert.equal(send(102), 0);
 assert.equal(clients.size, 0, 'Unsubscribed sends must not allocate routing entries');
 assert.equal(server.address.host, '127.0.0.1');
 assert.equal(server.maxConnections, 128);
+const secure = loadRelay({ CUBECHAT_HOST: '::1', CUBECHAT_TLS_CERT: 'test certificate', CUBECHAT_TLS_KEY: 'test key' });
+assert.equal(secure.server.secure, true);
+assert.equal(secure.server.address.host, '::1');
+assert.equal(secure.server.maxConnections, 128);
+assert.throws(() => loadRelay({ CUBECHAT_TLS_CERT: 'test certificate' }), /TLS_CERT and CUBECHAT_TLS_KEY together/);
 
 const sameRoute = Array.from({ length: maxPerRoute }, () => subscribe(1));
 assert.ok(sameRoute.every(response => response.status === 200));
@@ -127,4 +146,4 @@ assert.equal(deadlines.size, 0);
 good.destroy();
 assert.equal(clients.size, 0);
 assert.equal(intervals.size, 0, 'Disconnects must release all heartbeat timers');
-console.log('PASS: loopback default, connection and subscription bounds, idle-route cleanup, output cap, and drain deadlines.');
+console.log('PASS: HTTP/HTTPS startup, loopback default, connection and subscription bounds, idle-route cleanup, output cap, and drain deadlines.');

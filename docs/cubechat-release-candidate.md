@@ -79,7 +79,7 @@ The current experimental implementation includes round-trip tests for PNG, JPEG,
 | Area | Evidence or remaining gate |
 | --- | --- |
 | Browser send and replay | Passed both host and guest flows with overlapping sends, failed retries, draft preservation, CCLK2 accounting, and continued sending after guest reload. Headless Chrome passed IndexedDB v1 migration, 30 concurrent same-origin sequence reservations, concurrent duplicate rejection, and reload persistence. |
-| Relay and forum | Passed loopback static routes, forum permission and persistence, isolated profiles, offline delivery counts, and per-route admission. Controlled response tests passed global admission, idle-route removal, output caps, and stalled-drain cleanup. |
+| Relay and forum | Passed loopback static routes, forum permission and persistence, isolated profiles, offline delivery counts, and per-route admission. Controlled response tests passed global admission, idle-route removal, output caps, and stalled-drain cleanup. Trusted HTTPS startup and SSE forwarding passed on IPv4 and IPv6 loopback. Supplying a single TLS file now fails configuration. |
 | Capture and portable ZIP | Passed all 72 messages, six key sets, independent offline verification, and export from an explicit path without a latest-run file. Built and extracted the portable ZIP, then passed the loopback smoke test from the extracted sources. |
 | Binary fixtures and local simulation | Native Node passed all 11 byte-for-byte fixtures, wrong-key and bit-flip checks, and the 72-message local simulation. |
 | Key handoff | The generated WAV and text fixtures recovered the exact transfer and SHA-256, exported matching host and guest keys, and rejected a truncated WAV in the Node DOM harness. |
