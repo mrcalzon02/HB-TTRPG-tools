@@ -34,10 +34,15 @@ public final class ContactStorageChecks extends Instrumentation {
         int code = Activity.RESULT_OK;
         try {
             checkClipboardMetadata();
+            result.putString("clipboard_metadata", "passed");
             TransferOverviewChecks.run(context);
+            result.putString("transfer_overview", "passed");
             checkUpgradeAndIsolation(context, name);
+            result.putString("contact_storage", "passed");
             AttachmentStorageChecks.run(context);
+            result.putString("attachment_storage", "passed");
             VaultStorageChecks.run(context);
+            result.putString("password_vault", "passed");
             result.putString("cubechat_checks", "passed");
             result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\nPASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker.\n");
         } catch (Throwable failure) {

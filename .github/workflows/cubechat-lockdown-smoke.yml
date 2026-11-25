@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   smoke:
-    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && github.ref == 'refs/heads/main'
+    if: github.repository == 'mrcalzon02/HB-TTRPG-tools' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/codex/cubechat-android-instrumentation')
     runs-on: ubuntu-24.04
     timeout-minutes: 55
     steps:
@@ -88,7 +88,7 @@ jobs:
           adb -s "$serial" install -r app/build/outputs/apk/debug/app-debug.apk
           adb -s "$serial" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           result="$RUNNER_TEMP/cubechat-instrumentation.txt"
-          adb -s "$serial" shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tr -d '\r' | tee "$result"
+          timeout 300 adb -s "$serial" shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tr -d '\r' | tee "$result"
           grep -Fxq 'INSTRUMENTATION_RESULT: cubechat_checks=passed' "$result"
           grep -Fxq 'INSTRUMENTATION_CODE: -1' "$result"
           # An app that passes instrumentation but cannot launch is not a usable phone app.
@@ -104,5 +104,8 @@ jobs:
             cubechat-android/app/build/outputs/apk/debug/*.apk
             cubechat-android/app/build/outputs/apk/androidTest/debug/*.apk
             cubechat-android/app/build/test-results/testDebugUnitTest/**/*
+            ${{ runner.temp }}/cubechat-instrumentation.txt
+            ${{ runner.temp }}/cubechat-emulator.log
+            ${{ runner.temp }}/cubechat-checksums.txt
           if-no-files-found: warn
           retention-days: 14
