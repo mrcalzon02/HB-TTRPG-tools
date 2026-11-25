@@ -184,10 +184,29 @@ A developer-invoked [hardware feasibility probe](../scripts/radioguard-readonly-
 - [x] Define the versioned `LockdownPolicy` / `GuardianCapabilities` / `GuardianAttestation` **proposed** wire contracts and an immutable exact-match Java IP policy model. Privileged IPC, attestation authenticity and enforcement remain open.
 - [x] Add offline synthetic packet, bypass and non-IP-scope tests (41 assertions) to manual smoke script. **No kernel/radio claims.**
 - [x] Add manual, read-only ADB inventory script and host-only mock checks. **No handset has been probed or marked compatible.**
+- [x] Run the debug APK and Android 35 instrumentation on a GitHub-hosted emulator and verify app launch.
 - [ ] Probe exact spare handset only after model/firmware and rollback information are available.
 - [x] Implement the passive Connections screen and local encrypted aggregate History in development source. See the [Android ledger](../DEVELOPMENT_LEDGER.md) for software verification.
 - [ ] Verify platform permissions and passive observation accuracy on an approved spare handset, and complete the privacy review before a release claim.
 - [ ] Resume runtime firewall changes only after P0 findings and supported approach are reviewed.
+
+### November 24, 2026 · GitHub-hosted Android 35 instrumentation
+
+**Passed** on GitHub-hosted `ubuntu-24.04` with a KVM-accelerated Android 35 x86_64 emulator. The workflow built both debug APKs, passed the Android unit suite, and verified APK signatures before installation. The runner returned `cubechat_checks=passed` and `INSTRUMENTATION_CODE: -1`. It then launched `MainActivity` and confirmed the app process was running. The tested source was `43bf75141fd0d4fb2495ec2dd91ec0c0619549b3`. [Run and step logs](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45542030896) · [Evidence artifact](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45542030896/artifacts/14989168977)
+
+| Instrumentation group | Passed checks |
+| --- | --- |
+| Clipboard metadata | Sensitive previews and CubeChat ownership markers |
+| Transfer overview | Contact and status filters, transfer progress and pause states |
+| Contact storage | SQLite upgrade, contact isolation, drafts, outbox counters and replay rejection |
+| Attachment storage | Capacity admission, encrypted storage, resume bookkeeping, integrity, export and cleanup |
+| Password vault | Password-gated migration, credential changes, locked PURGE notices and durable reset marker |
+
+### Physical-device acceptance
+
+- Use two approved spare phones to verify CUB3 pairing, reconnects and delivery across actual Bluetooth and Wi-Fi Direct radios, LAN, and any configured repeater. Check attachment resume, completion acknowledgments and recovery after a real link interruption.
+- Verify Android Always-on VPN settings and external IPv4/IPv6 packet behavior through startup, reboot, service interruption, revocation and ordinary manual recovery. Record the handset, firmware, radio and OS scope of each result.
+- Verify passive cellular permission handling and observation accuracy on the approved handset. Keep privileged kernel, radio and modem checks gated on the documented device preflight and trusted platform controls. Exclude emergency calls and emergency-call simulations.
 
 ### Engineering truthfulness
 
