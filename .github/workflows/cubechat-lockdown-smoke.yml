@@ -14,8 +14,13 @@ on:
           - '35'
           - '26'
         default: '35'
+      apk_source_run:
+        description: "Optional successful QA run ID for reusing an unchanged, verified APK pair"
+        type: string
+        default: ''
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: cubechat-security-smoke-${{ inputs.emulator_api }}
   cancel-in-progress: false
@@ -28,6 +33,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          fetch-depth: 10
       - name: Java 17
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165
         with:
@@ -43,10 +49,44 @@ jobs:
         run: bash cubechat-android/scripts/test-qr-luminance-host.sh
       - name: Build debug APKs
         id: android_build
+        if: inputs.apk_source_run == ''
         working-directory: cubechat-android
         run: |
           chmod +x gradlew
           ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest
+      - name: Restore verified APK pair from QA
+        if: inputs.apk_source_run != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APK_SOURCE_RUN: ${{ inputs.apk_source_run }}
+        run: |
+          set -euo pipefail
+          [[ "$APK_SOURCE_RUN" =~ ^[0-9]{1,20}$ ]]
+          source_sha="$(gh run view "$APK_SOURCE_RUN" --repo "$GITHUB_REPOSITORY" \
+            --json conclusion,event,headBranch,headSha,workflowName \
+            --jq 'select(.conclusion == "success" and .event == "workflow_dispatch" and
+              .headBranch == "codex/cubechat-android-instrumentation" and
+              .workflowName == "CubeChat Lockdown security smoke") | .headSha')"
+          [[ "$source_sha" =~ ^[0-9a-f]{40}$ ]]
+          git merge-base --is-ancestor "$source_sha" "$GITHUB_SHA"
+          git diff --exit-code "$source_sha" "$GITHUB_SHA" -- \
+            cubechat-android/app cubechat-android/gradle cubechat-android/gradlew \
+            cubechat-android/build.gradle cubechat-android/settings.gradle \
+            cubechat-android/gradle.properties shadowrun-binary-cube-engine.js
+          destination="$(mktemp -d "$RUNNER_TEMP/cubechat-source-apks.XXXXXXXX")"
+          gh run download "$APK_SOURCE_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name cubechat-lockdown-smoke --dir "$destination"
+          mapfile -t app < <(find "$destination" -type f -name app-debug.apk)
+          mapfile -t instrumentation < <(find "$destination" -type f -name app-debug-androidTest.apk)
+          mapfile -t checksums < <(find "$destination" -type f -name cubechat-checksums.txt)
+          [[ "${#app[@]}" -eq 1 && "${#instrumentation[@]}" -eq 1 && "${#checksums[@]}" -eq 1 ]]
+          app_hash="$(awk '$2 == "app/build/outputs/apk/debug/app-debug.apk" {print $1}' "${checksums[0]}")"
+          test_hash="$(awk '$2 == "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" {print $1}' "${checksums[0]}")"
+          [[ "$app_hash" =~ ^[0-9a-f]{64}$ && "$test_hash" =~ ^[0-9a-f]{64}$ ]]
+          printf '%s  %s\n' "$app_hash" "${app[0]}" "$test_hash" "${instrumentation[0]}" | sha256sum --check --strict
+          install -D "${app[0]}" cubechat-android/app/build/outputs/apk/debug/app-debug.apk
+          install -D "${instrumentation[0]}" cubechat-android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          printf 'APK source run: %s\nAPK source SHA: %s\n' "$APK_SOURCE_RUN" "$source_sha" | tee "$RUNNER_TEMP/cubechat-apk-provenance.txt"
       - name: Verify signing and SHA256
         working-directory: cubechat-android
         run: |
@@ -135,5 +175,6 @@ jobs:
             ${{ runner.temp }}/cubechat-instrumentation.txt
             ${{ runner.temp }}/cubechat-emulator.log
             ${{ runner.temp }}/cubechat-checksums.txt
+            ${{ runner.temp }}/cubechat-apk-provenance.txt
           if-no-files-found: warn
           retention-days: 14
