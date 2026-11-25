@@ -4,13 +4,63 @@ Status: **experimental development**, not production-secure messaging. No centra
 
 ## Start a host
 
+### Fictional family sailing conversation
+
+For a local two-person test, start the host bound to loopback in PowerShell:
+
+```powershell
+$env:CUBECHAT_HOST = '127.0.0.1'
+node cubechat-server.cjs 8787
+```
+
+Open `http://127.0.0.1:8787/cubechat.html?scenario=sailing-family-trip` to replay 72 fictional exchanges between Nora Hart (Seattle) and Ben Mercer (Bellevue). The two friends coordinate families joined by a recent marriage, a fleet growing from four to six boats and 50 people, coastal stops, shared expenses, provisioning, a San Jose airport departure, and a possible eight-person/two-boat Hawaii passage. Dates, people, bookings and costs are invented; this is test dialogue, not a passage plan.
+
+The unparameterized `/cubechat.html` page offers **Load sailing conversation**, **Send next exchange**, **Play remaining conversation**, and **Pause**. Loading creates fresh in-memory directional keys and clears the previous session. Each message uses the existing cube transform and AES-GCM envelope and must decode exactly before appearing in both participant panes. Stage, sender and Pacific-time timestamps are display annotations separate from the encrypted body. Manual messages can continue after replay. The latest envelope is visible in Wire inspection; the public JSON transcript contains no session keys.
+
+This simulates both participants in one page and does not send the transcript through the network relay or create accounts, reservations, payments or real contacts. The corpus is `data/cubechat/sailing-family-conversation.json`. Run `node scripts/cubechat-sailing-conversation-test.cjs` for schema, exact bidirectional recovery, message sequence/nonce, control state, continuation/reset and ciphertext-integrity checks with the canonical engine and Node Web Crypto. This test does not establish production messaging security or two-device interoperability.
+
+### Known-plaintext transport and passive capture exercise
+
+Run from the repository root with Node.js 20+:
+
+```powershell
+node scripts/cubechat-capture-conversation.cjs
+```
+
+The script starts its own temporary loopback relay and a byte-copying TCP proxy, and executes the **unchanged `cubechat-network.html` client** in two isolated Node VM endpoints. It imports fresh matching private provisioning files and CCLK2 material into the real client handlers, then enters each of the 72 fictional messages in order. The next entry waits for the recipient's authenticated decode, exact text comparison, and recorded incoming key range. The proxy observes only the actual network traffic; provisioning and plaintext entry do not cross it. No external service, cellular network or real family is contacted.
+
+Six independently randomized A→B/B→A key sets are used. Each direction also has its own freshly generated 1 MiB CCLK2 file; outgoing messages consume distinct file ranges. Every 12 completed messages both clients disconnect, import replacement material privately, and reconnect. This coordinates the prototype's existing replacement-provisioning controls; it is not an automatic ratchet or in-band key-negotiation implementation. Random material comes from Node's OS-backed cryptographic RNG, not a certified external physical TRNG.
+
+The browser DOM and EventSource are adapted to Node, and browser IndexedDB is replaced by a filesystem backend using the **same canonical ledger core**. Reservations are written and fsynced before encryption; received ranges are recorded before decoded receipt is acknowledged. Ledger records persist across all replacements and are reloaded and checked after the run. This verifies the Node exercise's file ledger, not browser IndexedDB behavior, malicious storage rollback, or cross-device state management.
+
+Each run creates a new UUID directory under `artifacts/cubechat-capture/`, ignored by Git. `latest-run.json` points to the most recent successful run. The output separates:
+
+- **`capture-only.zip` / `capture-only/`**: exact bidirectional TCP byte streams, chunk timing/offset/hash index, connection metadata, captured encrypted HTTP POST bodies and receive streams, and checksums. `envelopes.jsonl` provides one entry per observed message, including each original POST body in base64. Routing labels, mode, IVs, sequence numbers, consumable byte offsets, lengths and timing remain visible. These are stream chunks, not IP packets or a `.pcap`; this is an application-layer loopback interception, not a cellular RF or TLS capture. Execution times are real; the dialogue's fictional dates and human reply delays are not simulated.
+- **`control/`**: the known plaintext (JSON and readable text), every test provisioning/key file, sender and receiver ledgers and journals, endpoint event audit, source hashes, message-to-capture comparisons, and verification report. These are local test secrets stored separately, without at-rest encryption. Share only the capture-only archive for a blind examination; the original dialogue also remains in this repository.
+
+The run independently decrypts every captured envelope using the separate controls, compares it byte-for-byte with the source text, matches the exact forwarded SSE bytes, checks sequencing and all persisted ranges, exercises wrong-key and altered-ciphertext rejection, and checks that plaintext and key material were excluded from the observer directory. All temporary sockets/processes close after capture. Fresh random material is generated on every run; do not reuse the saved material for another run or real communication.
+
+Recheck an existing run offline, including independent recovery and ledger comparisons:
+
+```powershell
+node scripts/cubechat-capture-conversation.cjs --verify artifacts/cubechat-capture/<run-uuid>
+```
+
+The captured ciphertext includes the outer AES-GCM layer. Examining it assesses the combined envelope; it does not isolate the cube transform's cryptographic strength. Successful delivery and an opaque capture are not evidence of production security. No cryptanalysis, publication or new chat is performed by this exercise.
+
+For a text-safe analyst handoff, run `node scripts/cubechat-export-intercept-text.cjs` (latest successful run), or supply a run directory as its argument. It reads only observer artifacts, verifies all stream/chunk hashes and exact POST bodies, and creates `text-handoff/`: a two-message JSON sample, all observed message bodies as JSON, all streams encoded as base64 JSON, the original ZIP as base64 text, and a review brief. It excludes the separate controls. Attach these files directly; never paste raw ZIP bytes as text. The brief distinguishes passive content-recovery attempts from active traffic alteration and from a full design/security assessment.
+
+### Starting network clients
+
 Requires Node.js 20+ and an existing clone of HB-TTRPG-tools. From the repository root:
 
 ```sh
 node cubechat-server.cjs 8787
 ```
 
-Open `http://127.0.0.1:8787/` in two browser windows, selecting A in one and B in the other. Generate the directional A→B and B→A key bundle on A and **manually** import the identical JSON in B. Both clients connect to the host then send messages. The host process only forwards encrypted JSON envelopes to connected clients. A delivery count of zero means no recipient is currently connected. The server is not a persistent queue.
+By default the relay listens on `127.0.0.1`. Open `http://127.0.0.1:8787/` in two browser windows, selecting A in one and B in the other. Generate the directional A→B and B→A key bundle on A and **manually** import the identical JSON in B. Both clients connect to the host then send messages. The relay forwards encrypted JSON envelopes to connected clients. The reported count is the number of event streams that accepted the envelope for forwarding. A count of zero means no stream accepted it. The server is not a persistent queue.
+
+The relay allows up to 128 open connections, including 64 event streams and up to eight streams per profile and role. A stream is closed before a write would queue more than roughly 1 MiB, or if its output buffer fails to drain within 10 seconds. New subscriptions above the per-route or global limit receive HTTP 429 or 503, respectively.
 
 For another LAN device, use HTTPS. Most browsers deny `crypto.subtle` on an ordinary HTTP page whose host is a LAN IP rather than localhost. The host may use an existing trusted TLS certificate and key:
 
@@ -24,8 +74,8 @@ Browse to `https://192.168.1.25:8787/` or `https://[IPv6-address]:8787/` **only 
 
 - The **full secret key bundle** must be exchanged through an independently trusted private channel or removable medium, *never* via the unauthenticated relay. The bundle currently holds two 256-bit random AES keys, which also serve as deterministic seeds for experimental Latin-cube transforms. This is a transitional prototype and does **not** meet the envisioned large independently physical-entropy-generated cube-key-file design.
 - Browser `crypto.getRandomValues` uses a browser cryptographic RNG. It is not independently verified to be a hardware TRNG. The cube is an experimental inner transform; AES-256-GCM authenticates and encrypts the serialized cube package.
-- The relay forwards only encrypted envelopes, but **does not authenticate participant role, server identity independently of HTTPS, or possession of a key before accepting sends**. Unauthorized senders can cause denial-of-service or push invalid envelopes. Clients reject failed AEAD checks and previously seen sequence IDs in the current session.
-- Key bundles and sequence/replay state live in page memory only. **Do not restart/reload and resume transmission with a previous key bundle without a new protocol for persisted monotonic sequences or deterministic collision-proof nonce management.** Current sessions generate fresh random 96-bit GCM nonces; collision risk remains small but key rotation and robust persistence are production work.
+- The relay forwards only encrypted envelopes, and trusts the supplied routing role and profile. HTTPS authenticates the server when its certificate is trusted. Clients reject failed AEAD checks and record authenticated sequences before displaying messages.
+- Key bundles stay in page memory. The same-origin IndexedDB ledger persists a counter and a 1,024-slot replay window scoped by profile, key fingerprint, and direction. Reimporting the same bundle after an ordinary reload resumes its counter. Two tabs using the same inbound key share its replay record. After storage is cleared, restored, or moved to another origin, provision new keys. AES-GCM uses random 96-bit nonces.
 - This release has no message persistence, contact verification, invitation, sender signature, off-device secret provisioning, recovery, authenticated handshake, durable delivery receipts, authenticated TLS server setup automation, rate limiting, or Internet NAT traversal.
 - Do not expose the relay to the public Internet or use it for sensitive data. No raw TCP listener is available inside a browser; Node provides the listening HTTP(S) socket, with event-stream receive and POST send.
 - Client currently allows local role selection; direction alone does not prove sender identity. A recipient holding the shared secret can forge messages under that channel.
@@ -37,6 +87,10 @@ Browse to `https://192.168.1.25:8787/` or `https://[IPv6-address]:8787/` **only 
 3. Open clients on two devices over trusted HTTPS. Import the same out-of-band channel bundle; exchange Unicode and binary-boundary test messages in both directions.
 4. Tampered message, wrong channel key, replayed sequence, malformed request, disconnected receiver, broken certificate, and connectivity loss must all be handled explicitly.
 5. Before describing a publicly deployable encrypted messaging system, build a hardened authenticated session protocol, safe key lifetime and counter persistence, key-provisioning workflow, transport security and independent security review.
+
+Run `node scripts/cubechat-browser-send-test.cjs` for overlapping sends and failed-send retries in both browser clients. Run `node scripts/cubechat-relay-bounds-test.cjs` for idle-route cleanup, subscription limits, and bounded output on slow streams. The loopback smoke test is `node scripts/cubechat-integration-test.cjs`.
+
+Run `node scripts/cubechat-key-handoff-test.cjs` to verify WAV and text imports, exported provisioning keys, and rejection of failed or superseded imports.
 
 Related files: `cubechat-network.html` (network client), `cubechat-server.cjs` (small Node transport), `cubechat.html` (isolated local simulation), `shadowrun-binary-cube-engine.js` (canonical cube engine).
 
@@ -63,11 +117,11 @@ Checkpoints required before live-use claims: two *different* profiles on one rel
 
 ## One-page host contact manager (2026-10-10)
 
-The `cubechat-host.html` UI now imports **multiple separate host-role provisioning packages** (`cubechat-HOST-private-*.json`) and keeps their direction-specific cube transforms, AES keys, monotonic send sequence, receive replay set and up-to-1000-item **in-memory** chat display partitioned by profile ID. Each contact may be connected or disconnected independently using one `/events?role=A&profile=<id>` event stream on the same relay. Send dispatches only to the selected contact's profile and B role. Profile imports reject duplicates, and the host package must match the page's active address/port origin. `cubechat-server.cjs` explicitly serves the new host page and provisioning page.
+The `cubechat-host.html` UI imports separate host-role provisioning packages (`cubechat-HOST-private-*.json`). It keeps cube transforms, AES keys, and up to 1,000 displayed chat items per profile in memory. The send sequence and receive replay window persist in IndexedDB. Each contact may be connected or disconnected independently using one `/events?role=A&profile=<id>` event stream on the same relay. Send dispatches only to the selected contact's profile and B role. Profile imports reject duplicates, and the host package must match the page's active address/port origin. `cubechat-server.cjs` serves the host page and provisioning page.
 
 For each recipient, generate a unique package pair via `cubechat-provision.html`, save the host copy locally, and deliver the guest copy privately. From the host address/port origin, open `/cubechat-host.html`, import one or more **host** packages and connect each contact. On each guest device, open `/cubechat-network.html`, import its matching **guest** package, then connect. Do not use the same profile ID for independent recipients. No host-side master vault or native installers exist yet.
 
-This is a **development implementation**, not a live-verified, secure multi-user messenger. Routing by client-provided profile ID is not authenticated admission; the existing relay does not verify host/guest identity. Stored chat histories and key material disappear at reload; keeping old key material while resetting replay/sequence state requires a revised lifetime/nonce protocol. No remote runtime test, two-device integration test, browser automation, traffic-isolation test or security review has yet passed. Source readback and JavaScript syntax are the verification completed for this slice.
+The relay trusts client-provided routing IDs. Histories and loaded key material disappear at reload. The [release checklist](cubechat-release-candidate.md) records the host, loopback, browser-storage and pending two-device checks.
 
 
 ## Basic forum and replacement-key transfer prototype (2026-10-10)
@@ -92,6 +146,6 @@ Retain the currently operational compact **deterministic 256-bit cube-seed demon
 
 `cubechat-large-key-adapter.js` parses the independently generated `CCLK2` directional binary files, performs bounds-checked XOR against **actual stored key-file bytes**, and reserves each transmitted message's byte range in a session-local monotonic cursor. The guest `cubechat-network.html` and host `cubechat-host.html` can each import both matching AB/BA files; host maintains separate key material for each contact. The default remains the prior deterministic Latin-cube demo.
 
-With large-key mode enabled, outgoing UTF-8 bytes are XOR-mixed with a contiguous, nonoverlapping segment of the A→B/B→A file, then run through the canonical Latin-cube transform, then protected inside the existing authenticated AES-GCM message envelope. Authenticated envelope fields include `mode=large-pad-v1`, `padStart` and `padLength`. Incoming authenticated metadata identifies the corresponding key-material region; the client reverses the cube transform and XOR. In-memory replay checks reject repeated sequences or a repeated starting offset. Exact file IDs/profiles and direction are validated at import. The adapter blocks an exhausted file instead of repeating the material.
+With large-key mode enabled, outgoing UTF-8 bytes are XOR-mixed with a contiguous, nonoverlapping segment of the A→B/B→A file, then run through the canonical Latin-cube transform and protected inside the existing authenticated AES-GCM message envelope. Authenticated envelope fields include `mode=large-pad-v1`, `padStart` and `padLength`. Upon full authenticated decode, IndexedDB records the consumed range and message sequence. The key ledger rejects overlapping ranges and exhausted files.
 
-**Research boundaries and remaining defects:** This is a deliberately simple *consumable byte mask feeding the existing cube*, **not** a large-random-matrix-generated geometric cube codebook, and not a claim of OTP security. It still depends on AES-GCM and the existing compact deterministic cube-seed credentials. Never use these files again in another session: the byte cursor is not durably persisted, and importing/reloading the same file resets use accounting. The current receive replay set only detects equal pad starting offsets, not all partially overlapping ranges; it must be hardened before long-term sessions. All clients must agree on the same mode and privately possess identical directional files. Mode switching only occurs when disconnected, with no automatic remote synchronization. On failed sends a reserved region is burned for safety; do not attempt to rewind consumption. Messages are capped at 4,096 UTF-8 bytes in this mode. Security, multi-device execution, ciphertext tampering and exhaustion tests are not complete.
+The consumable mask relies on AES-GCM and the deterministic cube-seed credentials. Keep the files at their enrolled origin and preserve its IndexedDB records. Both clients must agree on the mode and possess identical matching directional files. Switch mode while disconnected and coordinate the change privately. Failed sends consume their reserved ranges. The message limit is 4,096 UTF-8 bytes. Device and storage limits are documented in the [ledger notes](cubechat-file-types-and-ledger.md).

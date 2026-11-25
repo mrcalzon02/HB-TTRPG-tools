@@ -14,10 +14,37 @@ function hexBytes(s){return Uint8Array.from({length:s.length/2},(_,i)=>parseInt(
 function status(s){$('status').textContent=s}
 function aad(v){return te.encode(JSON.stringify({format:v.format,channel:v.channel,sequence:v.sequence,profile:v.profile,mode:v.mode||'deterministic',padStart:v.padStart??null,padLength:v.padLength??null}))}
 function validate(p){if(!p||p.format!=='cubechat-provision-v1'||p.role!=='A'||!/^[0-9a-f]{24}$/.test(p.profileId||'')||!p.endpoint||!['https:','http:'].includes(p.endpoint.scheme)||!Number.isInteger(p.endpoint.port)||p.endpoint.port<1||p.endpoint.port>65535)throw Error('Invalid host package');const h=p.endpoint.host;if(typeof h!=='string'||!/^[a-z0-9.:\[\]-]+$/i.test(h))throw Error('Invalid host address');const b=p.bundle;if(!b||b.format!=='cubechat-secret-bundle-v1'||!['AB','BA'].every(n=>typeof b[n]==='string'&&/^[a-f0-9]{64}$/.test(b[n]))||b.AB===b.BA)throw Error('Invalid key bundle');let hostname=h.includes(':')&&!h.startsWith('[')?'['+h+']':h;const url=new URL(p.endpoint.scheme+'//'+hostname+':'+p.endpoint.port+'/');if(p.endpoint.scheme==='http:'&&!['localhost','127.0.0.1','[::1]'].includes(url.hostname))throw Error('HTTP only allowed for loopback');if(url.origin!==location.origin)throw Error('Open the host manager at '+url.origin+' before importing its host package');return p}
-async function make(profile){const p=validate(profile),load=async(name)=>({cube:E.createKey({gridSize:64,seed:p.bundle[name],maskDensity:1,inputFace:'top',outputFace:'front'}),aes:await crypto.subtle.importKey('raw',hexBytes(p.bundle[name]),'AES-GCM',false,['encrypt','decrypt'])});return {id:p.profileId,name:String(p.recipient||p.profileId).slice(0,80),out:await load('AB'),inbound:await load('BA'),seen:new Set(),seq:0,stream:null,connected:false,history:[],large:null,padSeen:new Set()}}
+async function make(profile){
+ const p=validate(profile);
+ const load=async name=>{
+  const secret=hexBytes(p.bundle[name]);
+  return {
+   cube:E.createKey({gridSize:64,seed:p.bundle[name],maskDensity:1,inputFace:'top',outputFace:'front'}),
+   aes:await crypto.subtle.importKey('raw',secret,'AES-GCM',false,['encrypt','decrypt']),
+   sequenceId:await CubeChatKeyLedger.sequenceId(p.profileId,name,secret)
+  };
+ };
+ return {id:p.profileId,name:String(p.recipient||p.profileId).slice(0,80),out:await load('AB'),inbound:await load('BA'),stream:null,connected:false,history:[],large:null};
+}
 function render(){const panel=$('contacts');panel.textContent='';for(const c of contacts.values()){const b=document.createElement('button');b.className='contact'+(c.id===selected?' active':'');b.textContent=c.name+' — '+(c.connected?'connected':'offline');b.onclick=()=>{selected=c.id;render()};panel.append(b)}const c=contacts.get(selected);$('title').textContent=c?'Chat: '+c.name:'Select a contact';$('log').textContent='';if(c)for(const m of c.history){const d=document.createElement('div');d.className='message'+(m.mine?' mine':'');d.textContent=m.text;$('log').append(d)}$('send').disabled=!c?.connected;$('connect').disabled=!c||c.connected;$('disconnect').disabled=!c||!c.connected;$('largeState').textContent=c?.large?'LARGE KEY MODE — in-memory only; do not reload and reuse files':'Deterministic mode (default)'}
 function add(c,text,mine){c.history.push({text,mine});if(c.history.length>1000)c.history.shift();if(selected===c.id)render()}
-async function receive(c,raw){const p=JSON.parse(raw);if(p.format!=='cubechat-local-v1'||p.channel!=='BA'||p.profile!=='latin-cube-64'||!Number.isSafeInteger(p.sequence)||p.sequence<0||c.seen.has(p.sequence))throw Error('Rejected envelope or replay');const iv=un64(p.iv);if(iv.length!==12)throw Error('Invalid nonce');const buf=await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad(p)},c.inbound.aes,un64(p.ciphertext));const cube=JSON.parse(td.decode(buf));let material=fromBits(E.decryptBinary(cube,c.inbound.cube));if(p.mode==='large-pad-v1'){if(!c.large)throw Error('Missing large key material');const start=p.padStart,len=p.padLength;if(!Number.isSafeInteger(start)||!Number.isSafeInteger(len)||len!==material.length||start<0||start+len>c.large.BA.bytes.length||c.padSeen.has(start))throw Error('Invalid or reused pad range');material=CubeChatLargeKey.mix(c.large.BA,material,start)}else if(p.mode&&p.mode!=='deterministic')throw Error('Unknown mode');else if(c.large)throw Error('Expected large-key mode');const text=td.decode(material);if(p.mode==='large-pad-v1'){await CubeChatKeyLedger.markIncoming(c.large.BA,p.padStart,p.padLength);c.padSeen.add(p.padStart)}c.seen.add(p.sequence);add(c,text,false)}
+async function receive(c,raw){
+ const p=JSON.parse(raw),pad=c.large?.BA,activeStream=c.stream;
+ if(p.format!=='cubechat-local-v1'||p.channel!=='BA'||p.profile!=='latin-cube-64'||!Number.isSafeInteger(p.sequence)||p.sequence<0)throw Error('Rejected message envelope');
+ const iv=un64(p.iv);if(iv.length!==12)throw Error('Invalid nonce');
+ const buf=await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad(p)},c.inbound.aes,un64(p.ciphertext));
+ let material=fromBits(E.decryptBinary(JSON.parse(td.decode(buf)),c.inbound.cube));
+ if(p.mode==='large-pad-v1'){
+  if(!pad)throw Error('Missing large key material');
+  if(p.padLength!==material.length)throw Error('Invalid pad length');
+  material=CubeChatLargeKey.mix(pad,material,p.padStart);
+ }else if(p.mode&&p.mode!=='deterministic')throw Error('Unknown mode');
+ else if(pad)throw Error('Expected large-key mode');
+ const text=td.decode(material);
+ if(pad)await CubeChatKeyLedger.markIncoming(pad,p.padStart,p.padLength);
+ await CubeChatKeyLedger.markSequence(c.inbound.sequenceId,p.sequence);
+ if(contacts.get(c.id)===c&&c.stream===activeStream)add(c,text,false);
+}
 function connect(c){if(c.stream)c.stream.close();const es=new EventSource('/events?role=A&profile='+encodeURIComponent(c.id));c.stream=es;es.onopen=()=>{c.connected=true;render();status('Connected: '+c.name)};es.onerror=()=>{c.connected=false;render();status('Reconnecting: '+c.name)};es.onmessage=e=>receive(c,JSON.parse(e.data).envelope).catch(err=>status('Rejected message from '+c.name+': '+err.message))}
 function disconnect(c){c.stream?.close();c.stream=null;c.connected=false;render()}
 $('load').onclick=async()=>{const files=Array.from($('imports').files);if(!files.length)return status('Choose one or more host packages');try{let n=0;for(const file of files){if(file.size>32768)throw Error('Package too large: '+file.name);const p=JSON.parse(await file.text());if(contacts.has(p.profileId))throw Error('Duplicate profile '+p.profileId);const c=await make(p);contacts.set(c.id,c);selected=selected||c.id;n++}render();status('Loaded '+n+' private host profile(s). Select and connect each one.')}catch(e){render();status('Import stopped: '+e.message)}};
@@ -33,9 +60,8 @@ $('send').onclick=async()=>{
   if(!text)throw Error('Write a message');
   const raw=te.encode(text);
   if(raw.length>4096)throw Error('Message exceeds 4096 bytes');
-  if(!Number.isSafeInteger(c.seq))throw Error('Message sequence exhausted. Provision new keys.');
-  // Commit the contact's sequence before reserving pad bytes or starting encryption.
-  const sequence=c.seq++,pad=c.large?.AB;
+  const pad=c.large?.AB;
+  const sequence=await CubeChatKeyLedger.reserveSequence(c.out.sequenceId);
   const start=pad?await CubeChatKeyLedger.reserve(pad,raw.length):null;
   const payload=pad?CubeChatLargeKey.mix(pad,raw,start):raw;
   const cube=E.encryptBinary(toBits(payload),c.out.cube),iv=crypto.getRandomValues(new Uint8Array(12));
@@ -50,7 +76,7 @@ $('send').onclick=async()=>{
   status('Sent to '+c.name+'; active guest subscriptions: '+delivery.deliveredConnections);
  }catch(e){status(e.message)}
 };
-$('loadLarge').onclick=async()=>{const c=contacts.get(selected);try{if(!c||c.connected)throw Error('Select a disconnected contact first');const files=Array.from($('largeFiles').files);if(files.length!==2)throw Error('Select both CCLK2 directional files');const keys={};for(const file of files){if(file.size>16777280)throw Error('Key file too large');const k=CubeChatLargeKey.parse(await file.arrayBuffer());if(k.profile!==c.id||keys[k.direction])throw Error('Wrong contact or duplicate direction');keys[k.direction]=k}if(!keys.AB||!keys.BA)throw Error('Need both directions');for(const direction of ['AB','BA'])await CubeChatKeyLedger.enroll(keys[direction],$('largeFresh').checked);c.large=keys;c.padSeen=new Set();$('largeFresh').checked=false;render();status('Large-key mode enabled for '+c.name+' with same-origin persistent consumption ledger.')}catch(e){status(e.message)}};
-$('largeOff').onclick=()=>{const c=contacts.get(selected);if(!c||c.connected)return status('Disconnect selected contact first');c.large=null;c.padSeen=new Set();render();status('Deterministic mode restored for '+c.name)};
+$('loadLarge').onclick=async()=>{const c=contacts.get(selected);try{if(!c||c.connected)throw Error('Select a disconnected contact first');const files=Array.from($('largeFiles').files);if(files.length!==2)throw Error('Select both CCLK2 directional files');const keys={};for(const file of files){if(file.size>16777280)throw Error('Key file too large');const k=CubeChatLargeKey.parse(await file.arrayBuffer());if(k.profile!==c.id||keys[k.direction])throw Error('Wrong contact or duplicate direction');keys[k.direction]=k}if(!keys.AB||!keys.BA)throw Error('Need both directions');for(const direction of ['AB','BA'])await CubeChatKeyLedger.enroll(keys[direction],$('largeFresh').checked);c.large=keys;$('largeFresh').checked=false;render();status('Large-key mode enabled for '+c.name+' with same-origin persistent consumption ledger.')}catch(e){status(e.message)}};
+$('largeOff').onclick=()=>{const c=contacts.get(selected);if(!c||c.connected)return status('Disconnect selected contact first');c.large=null;render();status('Deterministic mode restored for '+c.name)};
 $('clear').onclick=()=>{for(const c of contacts.values())disconnect(c);contacts.clear();selected=null;render();status('All contacts and messages cleared from page memory.')};
 })();</script></body></html>

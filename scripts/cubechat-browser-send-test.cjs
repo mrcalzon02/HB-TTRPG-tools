@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const { webcrypto } = require('node:crypto');
+const { createHash, webcrypto } = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
@@ -14,7 +14,7 @@ const profile = 'a'.repeat(24);
 const bundle = { format: 'cubechat-secret-bundle-v1', AB: '12'.repeat(32), BA: '34'.repeat(32) };
 const engine = fs.readFileSync(path.join(root, 'shadowrun-binary-cube-engine.js'), 'utf8');
 const largeKeyAdapter = fs.readFileSync(path.join(root, 'cubechat-large-key-adapter.js'), 'utf8');
-const streams = new Map(), posts = [];
+const streams = new Map(), posts = [], sequences = new Map();
 
 class Element {
   constructor() {
@@ -61,6 +61,17 @@ function openPage(filename) {
     crypto: webcrypto, URL, TextEncoder, TextDecoder, Uint8Array, ArrayBuffer, DataView, btoa, atob,
     location: { origin, protocol: 'http:' }, EventSource: EventStream, fetch: fetchRelay,
     CubeChatKeyLedger: {
+      async sequenceId(profileId, direction, secret) {
+        return ledgerCore.sequenceId(profileId, direction, createHash('sha256').update(secret).digest('hex'));
+      },
+      async reserveSequence(id) {
+        const { state, value } = ledgerCore.reserveSequence(id, sequences.get(id));
+        sequences.set(id, state);
+        return value;
+      },
+      async markSequence(id, sequence) {
+        sequences.set(id, ledgerCore.acceptSequence(id, sequences.get(id), sequence).state);
+      },
       async enroll(key) { records.set(key, ledgerCore.initial(key.profile, key.direction, '0'.repeat(64), key.bytes.length)); },
       async reserve(key, size) {
         const { start, state } = ledgerCore.reserve(records.get(key), size);
@@ -117,7 +128,7 @@ function nextPost(sequence, from, to, padStart) {
   const { body, resolve } = posts.shift();
   assert.deepEqual({ from: body.from, to: body.to, profile: body.profile }, { from, to, profile });
   const packet = JSON.parse(body.envelope);
-  assert.equal(packet.sequence, sequence, from + ' should allocate a fresh sequence');
+  assert.equal(packet.sequence, ledgerCore.SEQUENCE_START + sequence, from + ' should allocate a fresh sequence');
   assert.equal(packet.mode, padStart === null ? 'deterministic' : 'large-pad-v1');
   assert.equal(packet.padStart, padStart);
   return { body, resolve };
@@ -173,9 +184,11 @@ async function exercise(sender, recipientLog, from, to, large) {
   finish(retried, true);
   await retry;
   assert.equal(sender('message').value, '');
+  return retried;
 }
 
 async function testMode(large) {
+  sequences.clear();
   const host = openPage('cubechat-host.html');
   const guest = openPage('cubechat-network.html');
   await waitFor(() => guest('status').textContent.includes('KEYS preloaded'), 'guest initialization');
@@ -192,16 +205,35 @@ async function testMode(large) {
   host('connect').onclick();
   guest('connect').onclick();
   await waitFor(() => streams.size === 2 && !host('send').disabled && !guest('send').disabled, 'both clients connected');
-  await exercise(host, guest('messages'), 'A', 'B', large);
+  const lastHost = await exercise(host, guest('messages'), 'A', 'B', large);
   await exercise(guest, host('log'), 'B', 'A', large);
-  host('disconnect').onclick();
   guest('disconnect').onclick();
+  if (!large) {
+    const reloaded = openPage('cubechat-network.html');
+    await waitFor(() => reloaded('status').textContent.includes('KEYS preloaded'), 'reloaded guest initialization');
+    reloaded('provisionFile').files = [provision('B')];
+    await reloaded('provisionImport').onclick();
+    reloaded('connect').onclick();
+    await waitFor(() => !reloaded('send').disabled && streams.size === 2, 'reloaded guest connected');
+    streams.get(profile + ':B').onmessage({ data: JSON.stringify(lastHost.body) });
+    await waitFor(() => reloaded('status').textContent.includes('replayed'), 'stored replay rejection');
+    assert.equal(reloaded('messages').children.length, 0);
+    draft(reloaded, 'message after reload');
+    const send = reloaded('send').onclick();
+    await waitFor(() => posts.length === 1, 'first post after reload');
+    const post = nextPost(4, 'B', 'A', null);
+    await forward(post, host('log'), 'message after reload');
+    finish(post, true);
+    await send;
+    reloaded('disconnect').onclick();
+  }
+  host('disconnect').onclick();
 }
 
 async function main() {
   await testMode(false);
   await testMode(true);
-  console.log('PASS: both browser clients used distinct sequences for overlapping sends and retries in deterministic and CCLK2 modes. Newer drafts survived and CCLK2 ranges were not reused.');
+  console.log('PASS: overlapping sends, drafts, retries and CCLK2 ranges. After reload, the sender resumed and the receiver rejected a previously accepted envelope.');
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });

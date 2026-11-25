@@ -6,7 +6,7 @@ const FILES=[
 'cubechat-server.cjs','cubechat-forum.cjs','cubechat-forum.html','cubechat-host.html',
 'cubechat-network.html','cubechat-provision.html','cubechat-key-handoff.html',
 'cubechat-large-keys.html','cubechat-large-key-adapter.js','cubechat-key-ledger-core.js','cubechat-key-ledger.js','cubechat.html',
-'shadowrun-binary-cube-engine.js','docs/cubechat-lan-development.md',
+'shadowrun-binary-cube-engine.js','data/cubechat/sailing-family-conversation.json','docs/cubechat-lan-development.md',
 'docs/cubechat-release-candidate.md'
 ];
 let crcTable=Array.from({length:256},(_,i)=>{let c=i;for(let j=0;j<8;j++)c=c&1?0xedb88320^(c>>>1):c>>>1;return c>>>0});

@@ -53,5 +53,43 @@ function acceptIncoming(s,start,length){
   if(compact.length>MAX_RANGES)throw Error('Key ledger range limit reached; rotate material');
   return {state:{...s,incomingRanges:compact}};
 }
-return Object.freeze({FORMAT,initial,validate,reserve,acceptIncoming});
+// Earlier browser builds started at zero. A separate range lets an upgraded
+// sender resume with the same keys while a still-open legacy peer is receiving.
+const SEQUENCE_START=2**48, REPLAY_WINDOW=1024;
+
+function sequenceId(profile,direction,fingerprint){
+  if(!/^[a-f0-9]{24}$/.test(profile)||!['AB','BA'].includes(direction)||!/^[a-f0-9]{64}$/.test(fingerprint))
+    throw Error('Invalid message sequence identity');
+  return 'sequence:'+profile+':'+direction+':'+fingerprint;
+}
+
+function sequenceState(id,record){
+  if(record===undefined)return {id,nextOut:SEQUENCE_START,high:-1,seen:[]};
+  if(record.id!==id||!validInt(record.nextOut)||record.nextOut<SEQUENCE_START||
+     !Number.isSafeInteger(record.high)||record.high< -1||!Array.isArray(record.seen)||
+     record.seen.length>REPLAY_WINDOW||record.seen.some((n,i)=>!validInt(n)||n>record.high||
+       n<=record.high-REPLAY_WINDOW||(i>0&&n<=record.seen[i-1]))||
+     (record.seen.at(-1)??-1)!==record.high)
+    throw Error('Invalid persisted message sequence state');
+  return record;
+}
+
+function reserveSequence(id,record){
+  const state=sequenceState(id,record);
+  if(state.nextOut===Number.MAX_SAFE_INTEGER)throw Error('Message sequence exhausted. Provision new keys.');
+  return {state:{...state,nextOut:state.nextOut+1},value:state.nextOut};
+}
+
+function acceptSequence(id,record,sequence){
+  const state=sequenceState(id,record);
+  if(!validInt(sequence)||sequence<=state.high-REPLAY_WINDOW||state.seen.includes(sequence))
+    throw Error('Invalid or replayed message sequence');
+  const high=Math.max(state.high,sequence);
+  const seen=state.seen.filter(value=>value>high-REPLAY_WINDOW);
+  seen.push(sequence);
+  seen.sort((a,b)=>a-b);
+  return {state:{...state,high,seen}};
+}
+
+return Object.freeze({FORMAT,initial,validate,reserve,acceptIncoming,SEQUENCE_START,sequenceId,reserveSequence,acceptSequence});
 });

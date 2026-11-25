@@ -7,7 +7,7 @@
  */
 (function(root){'use strict';
 const Core=root.CubeChatKeyLedgerCore;
-const DB_NAME='cubechat-consumable-key-ledger-v1',STORE='files';
+const DB_NAME='cubechat-consumable-key-ledger-v1',STORE='files',SEQUENCES='message-sequences';
 let cached=null;
 function requireSupport(){
  if(!Core||!root.indexedDB||!root.crypto?.subtle||!root.isSecureContext)
@@ -17,10 +17,11 @@ function open(){
  requireSupport();
  if(cached)return cached;
  cached=new Promise((resolve,reject)=>{
-   const request=indexedDB.open(DB_NAME,1);
+   const request=indexedDB.open(DB_NAME,2);
    request.onupgradeneeded=()=>{
      const db=request.result;
      if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:'id'});
+     if(!db.objectStoreNames.contains(SEQUENCES))db.createObjectStore(SEQUENCES,{keyPath:'id'});
    };
    request.onsuccess=()=>{const db=request.result;db.onversionchange=()=>db.close();resolve(db)};
    request.onerror=()=>reject(request.error||Error('Unable to open key ledger'));
@@ -29,6 +30,9 @@ function open(){
  return cached;
 }
 function hex(bytes){return Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('')}
+async function sequenceId(profile,direction,secret){
+ return Core.sequenceId(profile,direction,hex(new Uint8Array(await crypto.subtle.digest('SHA-256',secret))));
+}
 async function identity(key){
  requireSupport();
  if(!key||!(key.bytes instanceof Uint8Array)||!key.profile||!key.direction)
@@ -36,13 +40,13 @@ async function identity(key){
  const fingerprint=hex(new Uint8Array(await crypto.subtle.digest('SHA-256',key.bytes)));
  return Core.initial(key.profile,key.direction,fingerprint,key.bytes.length);
 }
-async function transaction(id,mutate){
+async function transaction(id,mutate,storeName=STORE){
  const db=await open();
  return new Promise((resolve,reject)=>{
    let transaction,answer,reason;
-   try{transaction=db.transaction(STORE,'readwrite',{durability:'strict'})}
+   try{transaction=db.transaction(storeName,'readwrite',{durability:'strict'})}
    catch(e){return reject(Error('Strict transactional key storage is unsupported: '+e.message))}
-   const store=transaction.objectStore(STORE);
+   const store=transaction.objectStore(storeName);
    const request=store.get(id);
    request.onsuccess=()=>{
      try{
@@ -90,5 +94,7 @@ async function markIncoming(key,start,length){
    return {...Core.acceptIncoming(record,start,length),value:true};
  });
 }
-root.CubeChatKeyLedger=Object.freeze({enroll,reserve,markIncoming});
+function reserveSequence(id){return transaction(id,record=>Core.reserveSequence(id,record),SEQUENCES)}
+function markSequence(id,sequence){return transaction(id,record=>Core.acceptSequence(id,record,sequence),SEQUENCES)}
+root.CubeChatKeyLedger=Object.freeze({enroll,reserve,markIncoming,sequenceId,reserveSequence,markSequence});
 })(typeof window!=='undefined'?window:globalThis);

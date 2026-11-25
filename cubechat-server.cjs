@@ -55,12 +55,12 @@ function subscribe(res,url) {
 }
 
 const CONNECTED=Buffer.from(': connected\n\n'), HEARTBEAT=Buffer.from(': heartbeat\n\n');
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8'};
 function respond(res,code,text,type='text/plain; charset=utf-8'){res.writeHead(code,{'Content-Type':type,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self' 'unsafe-inline'; connect-src 'self'"});res.end(text)}
 const tls=process.env.CUBECHAT_TLS_CERT&&process.env.CUBECHAT_TLS_KEY;
 const server=(tls?https.createServer({cert:fs.readFileSync(process.env.CUBECHAT_TLS_CERT),key:fs.readFileSync(process.env.CUBECHAT_TLS_KEY)}):http.createServer)((req,res)=>{
 const base='http://localhost';let u;try{u=new URL(req.url,base)}catch{return respond(res,400,'Bad request')}
-if(forum.handle(req,res,u))return;
+if(forum.handle(req,res,u)||res.headersSent)return;
 if(req.method==='GET'&&u.pathname==='/events')return subscribe(res,u);
 if(req.method==='POST'&&u.pathname==='/send'){
  let raw='',size=0,failed=false;
@@ -78,7 +78,7 @@ if(req.method==='POST'&&u.pathname==='/send'){
  respond(res,200,JSON.stringify({deliveredConnections}),'application/json; charset=utf-8');
  }catch{return respond(res,400,'Bad JSON')}});return;
 }
-if(req.method==='GET'&&['/','/cubechat-network.html','/cubechat-host.html','/cubechat-provision.html','/cubechat-forum.html','/cubechat-key-handoff.html','/cubechat-large-keys.html','/shadowrun-binary-cube-engine.js','/cubechat-large-key-adapter.js','/cubechat-key-ledger-core.js','/cubechat-key-ledger.js'].includes(u.pathname)){
+if(req.method==='GET'&&['/','/cubechat.html','/data/cubechat/sailing-family-conversation.json','/cubechat-network.html','/cubechat-host.html','/cubechat-provision.html','/cubechat-forum.html','/cubechat-key-handoff.html','/cubechat-large-keys.html','/shadowrun-binary-cube-engine.js','/cubechat-large-key-adapter.js','/cubechat-key-ledger-core.js','/cubechat-key-ledger.js'].includes(u.pathname)){
  const name=u.pathname==='/'?'cubechat-network.html':u.pathname.slice(1);
  const file=path.join(ROOT,name);return fs.readFile(file,(err,data)=>err?respond(res,404,'Not found'):respond(res,200,data,mime[path.extname(file)]));
 }

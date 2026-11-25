@@ -9,20 +9,28 @@ textarea,input{width:100%;background:#0c1724;color:inherit;border:1px solid #617
 button{background:#256e98;border:1px solid #79bce4;color:#fff;border-radius:7px;padding:9px 14px;cursor:pointer;margin:7px 6px 7px 0}
 button:disabled{opacity:.55}button:focus-visible{outline:3px solid #f2ce7b}code{overflow-wrap:anywhere}
 #wire{max-height:190px;overflow:auto;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}#status{min-height:24px}#status.error{color:#ffb6a9}
+.card{margin-bottom:16px}.card h2{margin-top:0}.bubble{white-space:pre-wrap}.bubble small{display:block;color:#c3d9eb;font-size:11px;margin-bottom:5px}#scenarioStatus{min-height:24px;color:#b8dbef}
 @media(max-width:750px){.grid{grid-template-columns:1fr}}
 </style></head><body>
 <p><a href="software.html#cubechat">← Software</a> · <a href="binary-cube-text-encoder.html">Cube Text Encoder</a> · <a href="cubechat-network.html">IPv4 / IPv6 Chat Connection</a> · <a href="blacklight-binary-cube-encryption.html">Cube Laboratory</a></p>
 <h1>CubeChat</h1><p class="muted">First functional milestone: two local independent participants using different A→B and B→A cube keys. This is a local exchange test, not an Internet messenger.</p>
 <p class="warn"><strong>Experimental local prototype.</strong> The Latin-cube permutation is not a secure cipher. This prototype additionally authenticates and encrypts each cube-encoded message with AES-256-GCM. It uses the browser's secure random API, not a certified external physical random source. Keys are kept only in page memory, and both participants are simulated locally.</p>
+<section class="card" aria-labelledby="scenarioTitle"><h2 id="scenarioTitle">Two families, six boats</h2>
+<p>Nora Hart in Seattle and Ben Mercer in Bellevue are the friends everybody keeps asking to organize the family sailing trip. A recent marriage has joined their families; the fleet grows from four boats to six and 50 people before a possible two-boat Hawaii passage.</p>
+<p class="muted" id="scenarioNotice">Fictional conversation for testing. People, dates, amounts and bookings are invented. This is not navigation or passage advice.</p>
+<button id="scenarioLoad">Load sailing conversation</button><button id="scenarioNext" disabled>Send next exchange</button><button id="scenarioPlay" disabled>Play remaining conversation</button><button id="scenarioPause" disabled>Pause</button>
+<a href="data/cubechat/sailing-family-conversation.json" download>Conversation JSON</a>
+<div id="scenarioStatus" role="status" aria-live="polite">Load the conversation to start a fresh session, then step through it or play it all.</div></section>
 <button id="setup">Create two directional channels</button><button id="reset">Clear session</button>
 <div id="status" role="status" aria-live="polite">Select “Create two directional channels” to begin.</div>
-<div class="grid"><section class="card"><h2>Participant A</h2><small class="muted">Outgoing: A→B · Incoming: B→A</small><div class="messages" id="am" aria-label="Participant A messages"></div><label for="at">Message from A</label><textarea id="at" placeholder="Write as A"></textarea><button id="as" disabled>Send to B</button></section>
-<section class="card"><h2>Participant B</h2><small class="muted">Outgoing: B→A · Incoming: A→B</small><div class="messages" id="bm" aria-label="Participant B messages"></div><label for="bt">Message from B</label><textarea id="bt" placeholder="Write as B"></textarea><button id="bs" disabled>Send to A</button></section></div>
+<div class="grid"><section class="card"><h2 id="aName">Participant A</h2><small class="muted">Outgoing: A→B · Incoming: B→A</small><div class="messages" id="am" aria-label="Participant A messages" tabindex="0"></div><label for="at">Message from A</label><textarea id="at" placeholder="Write as A"></textarea><button id="as" disabled>Send to B</button></section>
+<section class="card"><h2 id="bName">Participant B</h2><small class="muted">Outgoing: B→A · Incoming: A→B</small><div class="messages" id="bm" aria-label="Participant B messages" tabindex="0"></div><label for="bt">Message from B</label><textarea id="bt" placeholder="Write as B"></textarea><button id="bs" disabled>Send to A</button></section></div>
 <section class="card"><h2>Wire inspection</h2><p class="muted">Only the serialized encrypted envelope crosses the simulated boundary. No plaintext or cube key is included.</p><pre id="wire">No messages sent.</pre><button id="tamper" disabled>Test corrupted ciphertext rejection</button><button id="test" disabled>Run bidirectional round-trip self-test</button></section>
 <script src="shadowrun-binary-cube-engine.js"></script><script>
 (()=>{'use strict';
 const E=window.ShadowrunBinaryCubeEngine,$=id=>document.getElementById(id),encoder=new TextEncoder(),decoder=new TextDecoder('utf-8',{fatal:true});
-const HEADER='cubechat-local-v1';let peers=null,lastEnvelope=null,busy=false;
+const HEADER='cubechat-local-v1',SCENARIO_URL='data/cubechat/sailing-family-conversation.json';
+let peers=null,lastEnvelope=null,busy=false,scenario=null,scenarioIndex=0,playing=false,pauseRequested=false;
 const hex=a=>Array.from(a,x=>x.toString(16).padStart(2,'0')).join('');
 const b64=a=>btoa(Array.from(a,x=>String.fromCharCode(x)).join(''));
 const un64=s=>Uint8Array.from(atob(s),x=>x.charCodeAt(0));
@@ -31,9 +39,9 @@ function fromBits(s){if(s.length%8)throw Error('Non-byte-aligned recovered data'
 function announce(s,error=false){$('status').textContent=s;$('status').className=error?'error':''}
 function makeChannel(name){const secret=crypto.getRandomValues(new Uint8Array(32)),key=E.createKey({gridSize:64,seed:hex(secret),maskDensity:1,inputFace:'top',outputFace:'front'});return {name,secret,cubeKey:key,keyPromise:crypto.subtle.importKey('raw',secret,'AES-GCM',false,['encrypt','decrypt']),next:0,seen:new Set()}}
 function makePeer(name,outgoing,incoming){return {name,outgoing,incoming}}
-async function setup(){if(!E||!crypto?.subtle||!crypto.getRandomValues)throw Error('Canonical engine or Web Crypto is unavailable');const ab=makeChannel('AB'),ba=makeChannel('BA');peers={A:makePeer('A',ab,ba),B:makePeer('B',{...ba,seen:new Set(),next:0},{...ab,seen:new Set(),next:0})};lastEnvelope=null;$('am').textContent='';$('bm').textContent='';$('wire').textContent='No messages sent.';for(const id of ['as','bs','test'])$(id).disabled=false;$('tamper').disabled=true;announce('Independent A→B and B→A channel keys created locally. No private key exported.')}
+async function setup(){if(!E||!crypto?.subtle||!crypto.getRandomValues)throw Error('Canonical engine or Web Crypto is unavailable. Open this page over localhost or HTTPS.');const ab=makeChannel('AB'),ba=makeChannel('BA');peers={A:makePeer('A',ab,ba),B:makePeer('B',{...ba,seen:new Set(),next:0},{...ab,seen:new Set(),next:0})};lastEnvelope=null;clearScenario();$('am').textContent='';$('bm').textContent='';$('at').value='';$('bt').value='';$('wire').textContent='No messages sent.';announce('Fresh independent A→B and B→A channel keys created locally. No private key exported.')}
 function aad(obj){return encoder.encode(JSON.stringify({format:obj.format,channel:obj.channel,sequence:obj.sequence,profile:obj.profile}))}
-async function send(senderName,text,render=true){if(!peers)throw Error('Create channels first');if(!text)throw Error('Type a message first');
+async function send(senderName,text,render=true,metadata=null){if(!peers)throw Error('Create channels first');if(!text)throw Error('Type a message first');
 const sender=peers[senderName],receiver=peers[senderName==='A'?'B':'A'],ch=sender.outgoing;
 const raw=encoder.encode(text),cube=E.encryptBinary(bits(raw),ch.cubeKey);
 const iv=crypto.getRandomValues(new Uint8Array(12)),env={format:HEADER,channel:ch.name,sequence:ch.next,profile:'latin-cube-64',iv:b64(iv),ciphertext:''};
@@ -42,25 +50,41 @@ env.ciphertext=b64(encrypted);
 const wire=JSON.stringify(env);const received=await receive(receiver,wire);
 ch.next++;
 if(received!==text)throw Error('Round-trip mismatch');
-if(render){bubble(senderName,text,true);bubble(receiver.name,received,false);$('wire').textContent=JSON.stringify(env,null,2);lastEnvelope={wire,receiver:receiver.name};$('tamper').disabled=false}
+if(render){bubble(senderName,text,true,metadata);bubble(receiver.name,received,false,metadata);$('wire').textContent=JSON.stringify(env,null,2);lastEnvelope={wire,receiver:receiver.name}}
 return {received,wire};
 }
-async function receive(receiver,wire){
+async function receive(receiver,wire,{integrityProbe=false}={}){
 const env=JSON.parse(wire),ch=receiver.incoming;
 if(env.format!==HEADER||env.channel!==ch.name||env.profile!=='latin-cube-64'||!Number.isSafeInteger(env.sequence)||env.sequence<0)throw Error('Invalid channel envelope');
-if(ch.seen.has(env.sequence))throw Error('Replay rejected');
+if(!integrityProbe&&ch.seen.has(env.sequence))throw Error('Replay rejected');
 const iv=un64(env.iv),ciphertext=un64(env.ciphertext);if(iv.length!==12)throw Error('Invalid nonce');
 const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad(env)},await ch.keyPromise,ciphertext);
 const cube=JSON.parse(decoder.decode(plain));const decoded=decoder.decode(fromBits(E.decryptBinary(cube,ch.cubeKey)));
-ch.seen.add(env.sequence);return decoded;
+if(!integrityProbe)ch.seen.add(env.sequence);return decoded;
 }
-function bubble(name,text,out){const d=document.createElement('div');d.className='bubble'+(out?' out':'');d.textContent=text;const box=$(name.toLowerCase()+'m');box.append(d);box.scrollTop=box.scrollHeight}
-async function action(fn){if(busy)return;busy=true;for(const id of ['as','bs','test','tamper','setup'])$(id).disabled=true;try{await fn()}catch(e){announce(e.message,true)}finally{busy=false;$('setup').disabled=false;for(const id of ['as','bs','test'])$(id).disabled=!peers;$('tamper').disabled=!lastEnvelope}}
+function bubble(name,text,out,metadata){const d=document.createElement('div');d.className='bubble'+(out?' out':'');if(metadata){const label=document.createElement('small');label.textContent=metadata;d.append(label)}const body=document.createElement('span');body.textContent=text;d.append(body);const box=$(name.toLowerCase()+'m');box.append(d);box.scrollTop=box.scrollHeight}
+function updateControls(){for(const id of ['setup','reset','scenarioLoad'])$(id).disabled=busy;for(const id of ['as','bs','test'])$(id).disabled=busy||!peers;$('tamper').disabled=busy||!lastEnvelope;for(const id of ['scenarioNext','scenarioPlay'])$(id).disabled=busy||!scenario||scenarioIndex>=scenario.messages.length;$('scenarioPause').disabled=!playing||pauseRequested}
+function clearScenario(){scenario=null;scenarioIndex=0;$('aName').textContent='Participant A';$('bName').textContent='Participant B';$('scenarioStatus').textContent='Load the conversation to start a fresh session, then step through it or play it all.'}
+async function action(fn){if(busy)return;busy=true;updateControls();try{await fn()}catch(e){announce(e.message,true)}finally{busy=false;updateControls()}}
+function validateScenario(value){
+ if(value?.schema!=='cubechat-scenario-v1'||value.fictional!==true||!value.participants?.A?.name||!value.participants?.B?.name||!Array.isArray(value.stages)||!Array.isArray(value.messages)||!value.messages.length)throw Error('Invalid fictional conversation');
+ const stages=new Set(value.stages.map(s=>s.id)),ids=new Set();
+ for(const message of value.messages){if(!['A','B'].includes(message.sender)||typeof message.text!=='string'||!message.text.trim()||!stages.has(message.stage)||!Number.isFinite(Date.parse(message.at))||typeof message.id!=='string'||ids.has(message.id))throw Error('Invalid conversation exchange');ids.add(message.id)}return value;
+}
+function scenarioProgress(){const total=scenario.messages.length;if(scenarioIndex===total){$('scenarioStatus').textContent='Complete: '+total+' fictional messages delivered and decoded exactly. You can continue as either friend below.';return}const next=scenario.messages[scenarioIndex],stage=scenario.stages.find(s=>s.id===next.stage);$('scenarioStatus').textContent=(pauseRequested?'Paused. ':'')+scenarioIndex+' / '+total+' delivered · Next: '+stage.title+' · '+scenario.participants[next.sender].name}
+async function loadScenario(){const response=await fetch(SCENARIO_URL);if(!response.ok)throw Error('Could not load sailing conversation ('+response.status+'). Use the CubeChat localhost server.');const loaded=validateScenario(await response.json());await setup();scenario=loaded;scenarioIndex=0;pauseRequested=false;$('aName').textContent=scenario.participants.A.name+' · A';$('bName').textContent=scenario.participants.B.name+' · B';$('scenarioNotice').textContent=scenario.notice;scenarioProgress();announce('Fictional sailing conversation loaded. Fresh channels are ready.')}
+async function nextExchange(){const message=scenario.messages[scenarioIndex],stage=scenario.stages.find(s=>s.id===message.stage);const metadata=scenario.participants[message.sender].name+' · '+message.at.slice(0,10)+' '+message.at.slice(11,16)+' PT · '+stage.title;await send(message.sender,message.text,true,metadata);scenarioIndex++;scenarioProgress()}
+async function playScenario(){playing=true;pauseRequested=false;updateControls();try{while(scenarioIndex<scenario.messages.length&&!pauseRequested){await nextExchange();await new Promise(resolve=>setTimeout(resolve,25))}}finally{playing=false;scenarioProgress();updateControls()}announce(scenarioIndex===scenario.messages.length?'Conversation complete. Every message passed an exact encrypted round-trip.':'Conversation paused after '+scenarioIndex+' messages.')}
 $('setup').onclick=()=>action(setup);
-$('reset').onclick=()=>{peers=null;lastEnvelope=null;for(const id of ['as','bs','tamper','test'])$(id).disabled=true;$('am').textContent='';$('bm').textContent='';$('wire').textContent='No messages sent.';announce('Session cleared from page memory.')};
+$('reset').onclick=()=>{if(busy)return;peers=null;lastEnvelope=null;clearScenario();for(const id of ['am','bm'])$(id).textContent='';for(const id of ['at','bt'])$(id).value='';$('wire').textContent='No messages sent.';announce('Session cleared from page memory.');updateControls()};
 $('as').onclick=()=>action(async()=>{await send('A',$('at').value);$('at').value='';announce('A → B: cube encoded, AES-GCM authenticated, delivered and decoded.')});
 $('bs').onclick=()=>action(async()=>{await send('B',$('bt').value);$('bt').value='';announce('B → A: cube encoded, AES-GCM authenticated, delivered and decoded.')});
 $('test').onclick=()=>action(async()=>{const samples=['Test A → B: 你好 🌍','Test B → A: zeros 0000000000'];for(let i=0;i<samples.length;i++)await send(i?'B':'A',samples[i],false);announce('PASS: both directional channels recovered their distinct UTF-8 payloads exactly.')});
-$('tamper').onclick=()=>action(async()=>{const env=JSON.parse(lastEnvelope.wire),data=un64(env.ciphertext);data[0]^=1;env.ciphertext=b64(data);try{await receive(peers[lastEnvelope.receiver],JSON.stringify(env));throw Error('FAIL: modified ciphertext was accepted')}catch(e){if(e.message.startsWith('FAIL:'))throw e;announce('PASS: modified ciphertext rejected by authenticated decryption.')}})
+$('tamper').onclick=()=>action(async()=>{const env=JSON.parse(lastEnvelope.wire),data=un64(env.ciphertext);data[0]^=1;env.ciphertext=b64(data);try{await receive(peers[lastEnvelope.receiver],JSON.stringify(env),{integrityProbe:true})}catch(e){if(e.name!=='OperationError')throw e;announce('PASS: modified ciphertext rejected by AES-GCM authenticated decryption.');return}throw Error('FAIL: modified ciphertext was accepted')});
+$('scenarioLoad').onclick=()=>action(loadScenario);
+$('scenarioNext').onclick=()=>action(async()=>{await nextExchange();announce('Fictional exchange delivered and decoded exactly.')});
+$('scenarioPlay').onclick=()=>action(playScenario);
+$('scenarioPause').onclick=()=>{if(!playing)return;pauseRequested=true;updateControls()};
+if(new URLSearchParams(location.search).get('scenario')==='sailing-family-trip')action(async()=>{await loadScenario();await playScenario()});
 })();
 </script></body></html>

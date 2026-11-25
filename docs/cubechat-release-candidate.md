@@ -1,6 +1,6 @@
 # CubeChat Experimental Release Candidate — 2026-10-10
 
-**Status: PRE-RELEASE CANDIDATE; not security audited; not a published GitHub Release.**
+**Status: experimental pre-release candidate. Publication gates remain open.**
 Suggested tag: `cubechat-v0.1.0-alpha.1` (only create tag/release when the packaging and smoke-test gates pass).
 
 ## User-facing components
@@ -70,6 +70,19 @@ The build command creates `dist/cubechat-v0.1.0-alpha.1-portable.zip` with the h
 
 ## Expanded binary fixtures and local consumable-key ledger (2026-10-10)
 
-The current experimental implementation additionally contains image/file round-trip acceptance code for PNG, JPEG, GIF, WebP, PDF, WAV, ZIP, Unicode text, JSON, and arbitrary binary files; see `docs/cubechat-file-types-and-ledger.md`. The host and guest now call a strict IndexedDB same-origin ledger before consuming outgoing CCLK2 key bytes and atomically record received ranges, while preserving an explicit first-enrollment warning. The relay and source ZIP now include the two ledger modules. This does not protect against deleted/restored storage, cross-origin or cross-device reuse, malicious cloned material, browser power-loss rollback, or the still-volatile non-large-key replay counters.
+The current experimental implementation includes round-trip tests for PNG, JPEG, GIF, WebP, PDF, WAV, ZIP, Unicode text, JSON, and arbitrary binary files. The same-origin IndexedDB ledger stores CCLK2 consumption and message sequence/replay state. After deleted or restored storage, browser power-loss rollback, or moving to another origin or device, re-provision the keys. See the [ledger notes](cubechat-file-types-and-ledger.md).
 
 **Verification boundary:** The 11 fixture paths and pure state transitions were executed in a JavaScript compatibility host using the fetched canonical engine; this is not a native Node test run. Full Node, IndexedDB/browser, two-device, binary file transport, ZIP extraction, and release tests remain outstanding. Do not tag or publish on this evidence alone.
+
+## November 24, 2026 audit and verification
+
+| Area | Evidence or remaining gate |
+| --- | --- |
+| Browser send and replay | Passed both host and guest flows with overlapping sends, failed retries, draft preservation, CCLK2 accounting, and continued sending after guest reload. Headless Chrome passed IndexedDB v1 migration, 30 concurrent same-origin sequence reservations, concurrent duplicate rejection, and reload persistence. |
+| Relay and forum | Passed loopback static routes, forum permission and persistence, isolated profiles, offline delivery counts, and per-route admission. Controlled response tests passed global admission, idle-route removal, output caps, and stalled-drain cleanup. |
+| Capture and portable ZIP | Passed all 72 messages, six key sets, independent offline verification, and export from an explicit path without a latest-run file. Built and extracted the portable ZIP, then passed the loopback smoke test from the extracted sources. |
+| Binary fixtures and local simulation | Native Node passed all 11 byte-for-byte fixtures, wrong-key and bit-flip checks, and the 72-message local simulation. |
+| Key handoff | The generated WAV and text fixtures recovered the exact transfer and SHA-256, exported matching host and guest keys, and rejected a truncated WAV in the Node DOM harness. |
+| Release gates still open | Trusted HTTPS and interruption handling on independent devices, Linux/macOS/Android browser coverage, and browser power-loss or storage-rollback checks. The relay still trusts client-provided routing labels. The portable alpha remains unpublished. |
+
+Use the [LAN development instructions](cubechat-lan-development.md) to rerun the test commands. The [Android development ledger](../cubechat-android/DEVELOPMENT_LEDGER.md) covers the native app and transport separately.

@@ -27,3 +27,6 @@ Thumbs.db
 identity-private/
 **/identity-private/
 **/.identity-private/
+
+# Generated capture runs contain separate local ground truth and fresh test secrets.
+artifacts/cubechat-capture/

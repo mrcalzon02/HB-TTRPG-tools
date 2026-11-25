@@ -54,7 +54,7 @@ The server now serves both ledger modules and the portable ZIP packager includes
 
 - Browser IndexedDB is *not* a rollback-resistant, externally backed trusted key ledger. Browser data deletion, profile restore, database rollback, origin changes, another device, or concurrent independently copied key files can defeat global one-time-consumption guarantees. Do not re-enroll previously used material as new when a ledger is missing.
 - Strict durability requests improve the browser persistence boundary, but do not constitute a validated power-loss or hardware-secure transaction guarantee. An unsupported strict transaction must fail rather than fall back silently.
-- Existing deterministic/AES chat-mode sequence and replay state remains volatile. The browser ledger does **not** by itself solve all message lifecycle, key rotation, sender identity, or AEAD nonce problems.
+- Both browser chat modes persist transmit sequences and an authenticated receive replay window scoped by origin, profile, and directional key. Key rotation and peer identity remain separate protocol requirements.
 - No encrypted persistent contact history, mobile-native key vault, peer-to-peer offline transport, QR pairing, or production-ready secure file transmission is supplied by this patch.
 - Same-origin key consumption must be reimported after page reload, because secret key bytes remain in page memory; only identifiers and consumption positions persist. This is intentional. Old key material with unknown usage history must be retired.
 - Independent-browser execution, interruption injection, rapid concurrent-tab reservations, storage quota failure, browser data clear/reimport, and restart-with-old-backup are required acceptance gates before treating consumable mode as robust.
