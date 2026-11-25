@@ -3,11 +3,13 @@ package org.cubechat.android;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ClipboardManager;
 import android.content.ClipDescription;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,7 +49,9 @@ public final class FirewallRecoveryUiTest {
         View root = activity.findViewById(android.R.id.content);
         Button recovery = buttonNamed(root, "Recovery");
         assertNotNull("Recovery tab exists", recovery);
-        recovery.performClick();
+        Button shortcut = buttonNamed(root, "Recovery & release status");
+        assertNotNull("Lockdown screen links to Recovery", shortcut);
+        shortcut.performClick();
         assertTrue("Shows ordinary recovery heading", hasText(root, "Recovery & manual controls"));
         assertTrue("Does not claim perfect shutdown", hasText(root, "NOT proof"));
         assertTrue("Shows external VPN limitation", hasText(root, "not independently checked"));
@@ -90,6 +94,7 @@ public final class FirewallRecoveryUiTest {
         AlertDialog confirm = ShadowAlertDialog.getLatestAlertDialog();
         assertNotNull("User-requested release requires an explicit confirmation", confirm);
         confirm.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
+        shadowOf(Looper.getMainLooper()).idle();
         assertFalse("Ordinary manual release leaves no CubeChat request armed",
                 LockdownFirewall.armed(app));
         assertTrue("Release attempt timestamp saved",

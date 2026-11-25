@@ -185,7 +185,8 @@ A developer-invoked [hardware feasibility probe](../scripts/radioguard-readonly-
 - [x] Add offline synthetic packet, bypass and non-IP-scope tests (41 assertions) to manual smoke script. **No kernel/radio claims.**
 - [x] Add manual, read-only ADB inventory script and host-only mock checks. **No handset has been probed or marked compatible.**
 - [ ] Probe exact spare handset only after model/firmware and rollback information are available.
-- [ ] Implement passive Connections screen and threat history only after permission/privacy review.
+- [x] Implement the passive Connections screen and local encrypted aggregate History in development source. See the [Android ledger](../DEVELOPMENT_LEDGER.md) for software verification.
+- [ ] Verify platform permissions and passive observation accuracy on an approved spare handset, and complete the privacy review before a release claim.
 - [ ] Resume runtime firewall changes only after P0 findings and supported approach are reviewed.
 
 ### Engineering truthfulness

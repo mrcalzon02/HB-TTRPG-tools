@@ -91,11 +91,10 @@ final class RelayForwarder implements Closeable {
             if (fromClient.readInt() != MAGIC) return;
             int hops = fromClient.readUnsignedByte();
             if (hops < 1 || hops > MAX_HOPS || (nextIsRelay && hops == 1)) return;
-            if (fromClient.readInt() != DirectProtocol.MAGIC) return;
-            int size = fromClient.readUnsignedByte();
-            if (size < 64 || size > 128) return;
-            byte[] guestKey = new byte[size], challenge = new byte[32];
-            fromClient.readFully(guestKey); DirectProtocol.publicKey(guestKey);
+            int magic = fromClient.readInt();
+            if (magic != DirectProtocol.MAGIC && magic != DirectProtocol.LEGACY_MAGIC) return;
+            byte[] guestKey = DirectProtocol.readKey(fromClient), challenge = new byte[32];
+            byte[] guestShare = magic == DirectProtocol.MAGIC ? DirectProtocol.readKey(fromClient) : null;
             fromClient.readFully(challenge);
             // Prepare before bind/connect. No unprotected retry on VPN failure.
             socketProtector.protect(outgoing);
@@ -106,7 +105,12 @@ final class RelayForwarder implements Closeable {
             DataOutputStream toHost = new DataOutputStream(outgoing.getOutputStream());
             DataInputStream fromHost = new DataInputStream(outgoing.getInputStream());
             DataOutputStream toClient = new DataOutputStream(incoming.getOutputStream());
-            toHost.writeInt(DirectProtocol.MAGIC); toHost.writeByte(size); toHost.write(guestKey); toHost.write(challenge); toHost.flush();
+            toHost.writeInt(magic);
+            writeKey(toHost, guestKey);
+            if (guestShare != null) writeKey(toHost, guestShare);
+            toHost.write(challenge);
+            toHost.flush();
+            if (guestShare != null) writeKey(toClient, DirectProtocol.readKey(fromHost));
             copy(fromHost, toClient, 64, new byte[64]); // Host challenge + proof
             copy(fromClient, toHost, 32, new byte[32]); // Guest proof
             copy(fromHost, toClient, 32, new byte[32]); // Host acceptance
@@ -124,6 +128,12 @@ final class RelayForwarder implements Closeable {
             end(incoming, outgoing); slots.release();
         }
     }
+
+    private static void writeKey(DataOutputStream out, byte[] key) throws IOException {
+        out.writeByte(key.length);
+        out.write(key);
+    }
+
     private static void copy(DataInputStream in, DataOutputStream out, int count, byte[] buffer) throws IOException {
         for (int left = count; left > 0;) {
             int n = Math.min(left, buffer.length);

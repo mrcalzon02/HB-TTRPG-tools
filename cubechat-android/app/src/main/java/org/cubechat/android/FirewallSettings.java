@@ -34,6 +34,7 @@ import java.util.List;
  */
 public final class FirewallSettings extends Activity {
     private static final int VPN_CONSENT = 243, CELL_PERMISSION = 244;
+    private static final int RECOVERY_TAB = 5;
     private static final String RECOVERY_PREFS = "cubechat-firewall-recovery";
     private static final long MIN_CELL_REFRESH_MS = 15_000L;
     private static final CellObservationBook CELL_HISTORY = new CellObservationBook();
@@ -148,7 +149,7 @@ public final class FirewallSettings extends Activity {
         else if (tab == 2) showRadios();
         else if (tab == 3) showConnections();
         else if (tab == 4) showHistory();
-        else if (tab == 5) showRecovery();
+        else if (tab == RECOVERY_TAB) showRecovery();
         else showDevice();
     }
 
@@ -192,7 +193,7 @@ public final class FirewallSettings extends Activity {
             text(page, "STANDARD APPLICATION · This installation cannot enforce device-owner radio restrictions. A malicious app with elevated privileges may circumvent IP filtering.", 15, DANGER);
         }
         button(page, "Open Android VPN settings", () -> open(Settings.ACTION_VPN_SETTINGS));
-        button(page, "Recovery & release status", () -> { tab = 4; render(); });
+        button(page, "Recovery & release status", () -> { tab = RECOVERY_TAB; render(); });
         text(page, "REQUIRED for fail-closed IP filtering: Select CubeChat as Always-on VPN, then enable Block connections without VPN in Android's VPN settings. Android may require a separate VPN consent prompt.", 15, MUTED);
         if (Build.VERSION.SDK_INT < 29) text(page,
                 "Android 8–9 cannot report the OS lockdown flags to this screen through the public VpnService API. Treat this status as unverified until device tests.", 14, DANGER);

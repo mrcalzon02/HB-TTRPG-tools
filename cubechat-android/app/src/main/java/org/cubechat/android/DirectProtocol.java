@@ -41,7 +41,8 @@ final class DirectProtocol implements Closeable {
     // Odd controls are ignored by older clients. Each is authenticated by the live record layer.
     static final long PURGE_HELLO = 0x4343505247000001L;
     static final long PURGE_NOTICE = 0x4343505247000003L;
-    static final int MAGIC = 0x43554232; // CUB2
+    static final int MAGIC = 0x43554233; // CUB3
+    static final int LEGACY_MAGIC = 0x43554232; // Forwarding compatibility only.
     private static final SecureRandom RANDOM = new SecureRandom();
     // SO_TIMEOUT covers only reads. A stalled socket write must also release the mailbox worker.
     private static final ScheduledThreadPoolExecutor WRITE_TIMEOUT = new ScheduledThreadPoolExecutor(1, task -> {
@@ -111,19 +112,49 @@ final class DirectProtocol implements Closeable {
         return key;
     }
 
-    private static byte[] sessionSeed(PrivateKey privateKey, byte[] remote, byte[] token,
-                                      byte[] client, byte[] host, byte[] cnonce, byte[] snonce) throws Exception {
+    private static byte[] sharedSecret(PrivateKey privateKey, byte[] remote) throws Exception {
         KeyAgreement agreement = KeyAgreement.getInstance("ECDH");
         agreement.init(privateKey);
         agreement.doPhase(publicKey(remote), true);
-        // The QR secret is the HMAC extract salt; both public identities and challenges bind this connection.
-        return mac(mac(token, agreement.generateSecret()), label("CubeChat direct session v2"), client, host, cnonce, snonce);
+        return agreement.generateSecret();
+    }
+
+    private static byte[] sessionSeed(KeyPair identity, byte[] remote, KeyPair ephemeral, byte[] remoteShare,
+                                      byte[] token, byte[] client, byte[] host, byte[] clientShare,
+                                      byte[] hostShare, byte[] cnonce, byte[] snonce) throws Exception {
+        byte[] staticSecret = sharedSecret(identity.getPrivate(), remote);
+        byte[] auth = null, ephemeralSecret = null, extracted = null;
+        try {
+            auth = mac(token, label("CubeChat v3 pairing authentication"), staticSecret);
+            ephemeralSecret = sharedSecret(ephemeral.getPrivate(), remoteShare);
+            extracted = mac(auth, ephemeralSecret);
+            return mac(extracted, label("CubeChat direct session v3"),
+                    keyField(client), keyField(host), keyField(clientShare), keyField(hostShare), cnonce, snonce);
+        } finally {
+            Arrays.fill(staticSecret, (byte) 0);
+            if (auth != null) Arrays.fill(auth, (byte) 0);
+            if (ephemeralSecret != null) Arrays.fill(ephemeralSecret, (byte) 0);
+            if (extracted != null) Arrays.fill(extracted, (byte) 0);
+        }
+    }
+
+    private static byte[] keyField(byte[] key) {
+        return ByteBuffer.allocate(key.length + 1).put((byte)key.length).put(key).array();
+    }
+
+    static byte[] readKey(DataInputStream in) throws Exception {
+        int length = in.readUnsignedByte();
+        if (length < 64 || length > 128) throw new IOException("Invalid pairing key size");
+        byte[] key = read(in, length);
+        publicKey(key);
+        return key;
     }
 
     private final Closeable transport;
     private final DataInputStream in;
     private final DataOutputStream out;
     private final byte[] inboundKey, outboundKey;
+    private volatile boolean closed;
     private long sent, received;
 
     private DirectProtocol(Closeable transport, DataInputStream in, DataOutputStream out,
@@ -161,40 +192,45 @@ final class DirectProtocol implements Closeable {
 
     private static DirectProtocol exchange(DataInputStream in, DataOutputStream out, Closeable transport, boolean host,
                                      KeyPair identity, byte[] expectedPeer, byte[] token, AcceptPeer acceptPeer) throws Exception {
-        byte[] local = identity.getPublic().getEncoded(), remote;
-        byte[] cnonce, snonce, seed;
-        if (host) {
-            if (in.readInt() != MAGIC) throw new IOException("Unknown handshake");
-            int keyLength = in.readUnsignedByte();
-            if (keyLength < 64 || keyLength > 128) throw new IOException("Invalid pairing key size");
-            remote = read(in, keyLength);
-            if (expectedPeer != null && !MessageDigest.isEqual(expectedPeer, remote)) throw new IOException("Unknown peer");
-            cnonce = read(in, 32);
-            snonce = random(32);
-            seed = sessionSeed(identity.getPrivate(), remote, token, remote, local, cnonce, snonce);
-            out.write(snonce);
-            out.write(mac(seed, label("host challenge")));
-            out.flush();
-            verify(in, mac(seed, label("guest response")));
-            acceptPeer.accept(remote);
-            out.write(mac(seed, label("accepted")));
-            out.flush();
-        } else {
-            remote = expectedPeer;
-            cnonce = random(32);
-            out.writeInt(MAGIC);
-            out.writeByte(local.length);
-            out.write(local);
-            out.write(cnonce);
-            out.flush();
-            snonce = read(in, 32);
-            seed = sessionSeed(identity.getPrivate(), remote, token, local, remote, cnonce, snonce);
-            verify(in, mac(seed, label("host challenge")));
-            out.write(mac(seed, label("guest response")));
-            out.flush();
-            verify(in, mac(seed, label("accepted")));
+        byte[] local = identity.getPublic().getEncoded();
+        byte[] seed = null;
+        try {
+            if (host) {
+                if (in.readInt() != MAGIC) throw new IOException("Unsupported handshake version");
+                byte[] remote = readKey(in);
+                if (expectedPeer != null && !MessageDigest.isEqual(expectedPeer, remote)) throw new IOException("Unknown peer");
+                byte[] remoteShare = readKey(in), cnonce = read(in, 32), snonce = random(32);
+                KeyPair ephemeral = newIdentity();
+                byte[] localShare = ephemeral.getPublic().getEncoded();
+                seed = sessionSeed(identity, remote, ephemeral, remoteShare, token, remote, local, remoteShare, localShare, cnonce, snonce);
+                out.write(keyField(localShare));
+                out.write(snonce);
+                out.write(mac(seed, label("host challenge")));
+                out.flush();
+                verify(in, mac(seed, label("guest response")));
+                acceptPeer.accept(remote);
+                out.write(mac(seed, label("accepted")));
+                out.flush();
+            } else {
+                if (expectedPeer == null) throw new IOException("Missing pinned host identity");
+                KeyPair ephemeral = newIdentity();
+                byte[] localShare = ephemeral.getPublic().getEncoded(), cnonce = random(32);
+                out.writeInt(MAGIC);
+                out.write(keyField(local));
+                out.write(keyField(localShare));
+                out.write(cnonce);
+                out.flush();
+                byte[] remoteShare = readKey(in), snonce = read(in, 32);
+                seed = sessionSeed(identity, expectedPeer, ephemeral, remoteShare, token, local, expectedPeer, localShare, remoteShare, cnonce, snonce);
+                verify(in, mac(seed, label("host challenge")));
+                out.write(mac(seed, label("guest response")));
+                out.flush();
+                verify(in, mac(seed, label("accepted")));
+            }
+            return new DirectProtocol(transport, in, out, seed, host);
+        } finally {
+            if (seed != null) Arrays.fill(seed, (byte) 0);
         }
-        return new DirectProtocol(transport, in, out, seed, host);
     }
 
     static byte[] unhex(String hex) throws IOException {
@@ -224,6 +260,7 @@ final class DirectProtocol implements Closeable {
     }
 
     synchronized void write(int type, long sequence, String body) throws Exception {
+        if (closed) throw new IOException("Session is closed");
         byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
         if (bytes.length > MAX_BODY || (type == FILE && (sequence != 0 || bytes.length > MAX_FILE_FRAME))) throw new IOException("Message envelope is too large");
         byte[] record = ByteBuffer.allocate(bytes.length + 9).put((byte)type).putLong(sequence).put(bytes).array();
@@ -239,6 +276,7 @@ final class DirectProtocol implements Closeable {
     }
 
     Record readRecord() throws Exception {
+        if (closed) throw new IOException("Session is closed");
         int size = in.readInt();
         if (size < 25 || size > MAX_BODY + 25) throw new IOException("Invalid record size");
         ByteBuffer plain = ByteBuffer.wrap(crypt(Cipher.DECRYPT_MODE, inboundKey, received++, read(in, size)));
@@ -249,5 +287,12 @@ final class DirectProtocol implements Closeable {
         return new Record(type, seq, new String(plain.array(), plain.position(), plain.remaining(), StandardCharsets.UTF_8));
     }
 
-    @Override public void close() throws IOException { transport.close(); }
+    @Override public void close() throws IOException {
+        closed = true;
+        try { transport.close(); }
+        finally {
+            Arrays.fill(inboundKey, (byte) 0);
+            Arrays.fill(outboundKey, (byte) 0);
+        }
+    }
 }

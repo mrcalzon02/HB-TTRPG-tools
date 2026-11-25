@@ -165,7 +165,9 @@ Android permissions for nearby devices, location on older releases, and camera a
 
 The app uses the repository’s canonical `shadowrun-binary-cube-engine.js` and CubeChat’s `latin-cube-64` deterministic profile inside the `cubechat-local-v1` AES-256-GCM envelope. Each pair receives independent, randomly generated directional keys. The app can also host a pair using an existing `cubechat-secret-bundle-v1` or role-A `cubechat-provision-v1` export. Published Qube Lab preset keys should be used only for reproducing those examples. This APK supports text up to 4096 UTF-8 bytes per message. The browser’s experimental consumable-key CCLK2 mode and media fixtures are separate.
 
-The native transport authenticates delivery sessions using the QR credentials and pinned peer identities. Receipt acknowledgements follow a committed inbox write. Rekeying is explicit. The local Android Keystore protects keys, queued envelopes and message text at rest. The APK bundles both current and legacy-WebView builds of the same cube transform for offline operation.
+The development build uses the CUB3 native transport. It authenticates ephemeral P-256 key shares with the existing QR secret and pinned identities, then uses per-connection record keys for messages, attachments, and control records. This protects the session keys against later loss of pairing credentials, provided the ephemeral and session keys remain secret. Receipt acknowledgements follow a committed inbox write. The local Android Keystore protects keys, queued envelopes and message text at rest. The APK bundles both current and legacy-WebView builds of the same cube transform for offline operation.
+
+Upgrade both endpoints and any repeater to use CUB3. Existing key cards and stored conversations carry across the upgrade. A development endpoint rejects the released 0.1.4 CUB2 handshake. Host-side verification uses temporary localhost sockets and in-memory streams. Independent phone and security review gates remain open.
 
 ## Build
 

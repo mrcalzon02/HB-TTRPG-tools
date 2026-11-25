@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -43,7 +44,7 @@ public final class CubeChatReleasesGateTest {
         assertEquals("One fake release-data read before permission changed", 1, requests.get());
     }
 
-    @Test public void quickRelockAndUnlockCannotResurrectPreviousScan() {
+    @Test public void quickRelockAndUnlockCannotResurrectPreviousScan() throws IOException, JSONException {
         AtomicInteger requests = new AtomicInteger();
         UpdateRunGate.Permit permit = UpdateRunGate.enter(() -> true);
         IOException denied = assertThrows(IOException.class, () ->

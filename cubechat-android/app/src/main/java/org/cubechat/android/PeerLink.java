@@ -107,6 +107,7 @@ public final class PeerLink {
     // All persistent state, delivery decisions and message codec calls are serialized here.
     private final ScheduledExecutorService lane = Executors.newSingleThreadScheduledExecutor();
     private final ExecutorService io = Executors.newCachedThreadPool();
+    private final InboundHandshakePool inboundHandshakes = new InboundHandshakePool(4);
     private final android.net.wifi.WifiManager wifi;
     private android.net.wifi.WifiManager.MulticastLock multicast;
     private LanDiscovery.Host advertiser;
@@ -640,7 +641,7 @@ public final class PeerLink {
         if (!started || closed || concealed || pair == null || session != null || route == Route.BLUETOOTH) return;
         if (route == Route.WIFI_DIRECT && wifiEndpoint.isEmpty()) return;
         if (pair.host) {
-            if (server == null) {
+            if (server == null || server.isClosed()) {
                 ServerSocket listening = new ServerSocket();
                 try {
                     listening.setReuseAddress(true);
@@ -713,18 +714,28 @@ public final class PeerLink {
 
     private void acceptLoop(ServerSocket listening, long epoch) {
         while (!closed && !listening.isClosed()) {
-            Socket accepted = null;
             try {
-                accepted = listening.accept();
-                Pairing expected = await(() -> {
-                    generation(epoch);
-                    return pair;
-                });
-                DirectProtocol protocol = DirectProtocol.handshake(accepted, true, expected.identity, expected.remote, expected.token,
-                        peer -> trustPeer(peer, epoch));
-                await(() -> { generation(epoch); open(protocol); return null; });
-            } catch (Exception e) { close(accepted); }
+                Socket accepted = listening.accept();
+                if (listening.isClosed()) close(accepted);
+                else inboundHandshakes.submit(accepted, socket -> acceptPeer(socket, epoch));
+            } catch (IOException e) { close(listening); return; }
         }
+    }
+
+    private void acceptPeer(Socket socket, long epoch) {
+        DirectProtocol protocol = null;
+        try {
+            Pairing expected = await(() -> { generation(epoch); return pair; });
+            protocol = DirectProtocol.handshake(socket, true, expected.identity, expected.remote, expected.token,
+                    peer -> trustPeer(peer, epoch));
+            DirectProtocol authenticated = protocol;
+            await(() -> {
+                generation(epoch);
+                if (!inboundHandshakes.promote(socket)) throw new IOException("Handshake was canceled");
+                open(authenticated);
+                return null;
+            });
+        } catch (Exception failure) { close(protocol); }
     }
     private void trustPeer(byte[] peer, long epoch) throws Exception {
         await(() -> {
@@ -865,7 +876,7 @@ public final class PeerLink {
         close(bluetoothCandidate); bluetoothCandidate = null;
         close(advertiser); advertiser = null;
         if (multicast != null) { if (multicast.isHeld()) multicast.release(); multicast = null; }
-        close(server); server = null; connecting = false; needsDiscovery = false;
+        close(server); server = null; inboundHandshakes.cancelPending(); connecting = false; needsDiscovery = false;
     }
     /** Immediately conceal the snapshot, then shed vault-backed state on its owning worker. */
     public void lockVault(Runnable onParked) { parkVault(onParked, true); }
@@ -1035,6 +1046,6 @@ public final class PeerLink {
         closed = true;
         synchronized (mailboxes) { mailboxes.remove(this); }
         if (purging) finishPurge();
-        lane.execute(() -> { shutdownNetwork(); close(forwarder); forwarder = null; store.close(); fileIo.shutdown(); io.shutdownNow(); lane.shutdownNow(); });
+        lane.execute(() -> { shutdownNetwork(); inboundHandshakes.close(); close(forwarder); forwarder = null; store.close(); fileIo.shutdown(); io.shutdownNow(); lane.shutdownNow(); });
     }
 }

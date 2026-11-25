@@ -3,8 +3,10 @@ package org.cubechat.android;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.app.AlertDialog;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -53,6 +55,7 @@ public final class FindMessagesUiTest {
         assertTrue(results.getAdapter().getItem(0).toString().contains("needle from me"));
         results.performItemClick(null, 0, results.getAdapter().getItemId(0));
         assertEquals("Selection refers to input snapshot, not filtered row", 2, chosen.get());
+        shadowOf(Looper.getMainLooper()).idle();
         assertEquals("Search query cleared on dialog close", "", input.getText().toString());
     }
 
