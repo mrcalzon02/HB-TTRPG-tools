@@ -41,11 +41,12 @@ jobs:
         run: bash cubechat-android/scripts/test-guardian-host.sh
       - name: Experimental QR luminance host tests
         run: bash cubechat-android/scripts/test-qr-luminance-host.sh
-      - name: Build and test Android
+      - name: Build debug APKs
+        id: android_build
         working-directory: cubechat-android
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest :app:testDebugUnitTest
+          ./gradlew --no-daemon --stacktrace :app:assembleDebug :app:assembleDebugAndroidTest
       - name: Verify signing and SHA256
         working-directory: cubechat-android
         run: |
@@ -110,6 +111,18 @@ jobs:
           adb -s "$serial" shell am start -n org.cubechat.android/.MainActivity
           sleep 3
           adb -s "$serial" shell pidof org.cubechat.android
+      - name: Android unit tests
+        if: ${{ !cancelled() && steps.android_build.outcome == 'success' }}
+        working-directory: cubechat-android
+        run: |
+          cat > "$RUNNER_TEMP/cubechat-robolectric.gradle" <<'GRADLE'
+          allprojects {
+              tasks.withType(Test).configureEach {
+                  systemProperty "robolectric.dependency.repo.url", "https://repo.maven.apache.org/maven2"
+              }
+          }
+          GRADLE
+          ./gradlew --no-daemon --stacktrace --init-script "$RUNNER_TEMP/cubechat-robolectric.gradle" :app:testDebugUnitTest
       - name: Preserve APKs and evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
