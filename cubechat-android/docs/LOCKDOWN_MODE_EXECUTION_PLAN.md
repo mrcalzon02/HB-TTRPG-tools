@@ -185,6 +185,7 @@ A developer-invoked [hardware feasibility probe](../scripts/radioguard-readonly-
 - [x] Add offline synthetic packet, bypass and non-IP-scope tests (41 assertions) to manual smoke script. **No kernel/radio claims.**
 - [x] Add manual, read-only ADB inventory script and host-only mock checks. **No handset has been probed or marked compatible.**
 - [x] Run the debug APK and Android 35 instrumentation on a GitHub-hosted emulator and verify app launch.
+- [x] Verify CUB3 and the storage suite on GitHub-hosted Android 26 and 35 using the same signed APK pair.
 - [ ] Probe exact spare handset only after model/firmware and rollback information are available.
 - [x] Implement the passive Connections screen and local encrypted aggregate History in development source. See the [Android ledger](../DEVELOPMENT_LEDGER.md) for software verification.
 - [ ] Verify platform permissions and passive observation accuracy on an approved spare handset, and complete the privacy review before a release claim.
@@ -201,6 +202,17 @@ A developer-invoked [hardware feasibility probe](../scripts/radioguard-readonly-
 | Contact storage | SQLite upgrade, contact isolation, drafts, outbox counters and replay rejection |
 | Attachment storage | Capacity admission, encrypted storage, resume bookkeeping, integrity, export and cleanup |
 | Password vault | Password-gated migration, credential changes, locked PURGE notices and durable reset marker |
+
+### Hosted CUB3 runtime and minimum-version check
+
+The same test APK exercises CUB3 through Android's crypto provider and loopback TCP. It checks initial pairing, reconnection with pinned identities, UTF-8 message delivery, the authenticated receipt, and refusal of a wrong pairing secret. The five storage, vault and UI groups run alongside the transport check.
+
+| Android API | Result |
+| --- | --- |
+| 26 (minimum supported) | All six instrumentation groups passed and the app launched on GitHub-hosted Ubuntu. [Run](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45543075483) · [Evidence](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45543075483/artifacts/14989654076) |
+| 35 | All six instrumentation groups passed and the app launched on GitHub-hosted Ubuntu. The workflow checked that the Android source matched the API 26 build, then verified the reused pair's SHA-256 checksums and signatures before installing it. [Run](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45544388205) · [Evidence](https://github.com/mrcalzon02/HB-TTRPG-tools/actions/runs/45544388205/artifacts/14990368202) |
+
+The API 26 job built the APK pair and passed the Android unit suite. After Maven rate limits blocked an independent API 35 build, the follow-up job ran the same APK pair on API 35. The underlying app and test source revision was `3539bb424af23ca4363ec9cd63c228ba219a3570`.
 
 ### Physical-device acceptance
 
