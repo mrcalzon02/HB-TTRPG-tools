@@ -1,15 +1,23 @@
 name: CubeChat Lockdown security smoke
+run-name: CubeChat Android API ${{ inputs.emulator_api }} smoke
 on:
   workflow_dispatch:
     inputs:
       run_emulator:
-        description: "Run Android 35 isolated emulator (requires KVM)"
+        description: "Run an isolated Android emulator (requires KVM)"
         type: boolean
         default: true
+      emulator_api:
+        description: "Android emulator API level"
+        type: choice
+        options:
+          - '35'
+          - '26'
+        default: '35'
 permissions:
   contents: read
 concurrency:
-  group: cubechat-security-smoke
+  group: cubechat-security-smoke-${{ inputs.emulator_api }}
   cancel-in-progress: false
 jobs:
   smoke:
@@ -45,8 +53,10 @@ jobs:
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           sha256sum app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk | tee "$RUNNER_TEMP/cubechat-checksums.txt"
-      - name: Android 35 emulator acceptance
+      - name: Android emulator acceptance
         if: inputs.run_emulator
+        env:
+          EMULATOR_API: ${{ inputs.emulator_api }}
         shell: bash
         working-directory: cubechat-android
         run: |
@@ -57,7 +67,8 @@ jobs:
           fi
           ls -l /dev/kvm || true
           test -r /dev/kvm && test -w /dev/kvm || { echo "KVM unavailable even after permission repair; emulator gate not passed"; exit 1; }
-          sdkmanager --install 'emulator' 'system-images;android-35;google_apis;x86_64'
+          image="system-images;android-${EMULATOR_API};google_apis;x86_64"
+          sdkmanager --install 'emulator' "$image"
           export ANDROID_AVD_HOME
           ANDROID_AVD_HOME="$(mktemp -d "$RUNNER_TEMP/cubechat-security-avd.XXXXXXXX")"
           avd="cubechat-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
@@ -70,7 +81,7 @@ jobs:
             rm -rf -- "$ANDROID_AVD_HOME"
           }
           trap cleanup EXIT
-          avdmanager create avd -n "$avd" -k 'system-images;android-35;google_apis;x86_64' <<< no
+          avdmanager create avd -n "$avd" -k "$image" <<< no
           "$ANDROID_HOME/emulator/emulator" -avd "$avd" -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect > "$RUNNER_TEMP/cubechat-emulator.log" 2>&1 &
           emulator_pid=$!
           deadline=$((SECONDS + 360))
@@ -85,11 +96,15 @@ jobs:
             sleep 3
           done
           if [[ -z "$serial" ]]; then tail -100 "$RUNNER_TEMP/cubechat-emulator.log"; exit 1; fi
+          actual_api="$(adb -s "$serial" shell getprop ro.build.version.sdk | tr -d '\r')"
+          echo "Emulator API level: $actual_api"
+          test "$actual_api" = "$EMULATOR_API"
           adb -s "$serial" install -r app/build/outputs/apk/debug/app-debug.apk
           adb -s "$serial" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
           result="$RUNNER_TEMP/cubechat-instrumentation.txt"
           timeout 300 adb -s "$serial" shell am instrument -w -r org.cubechat.android.test/org.cubechat.android.ContactStorageChecks | tr -d '\r' | tee "$result"
           grep -Fxq 'INSTRUMENTATION_RESULT: cubechat_checks=passed' "$result"
+          grep -Fxq 'INSTRUMENTATION_RESULT: direct_transport=passed' "$result"
           grep -Fxq 'INSTRUMENTATION_CODE: -1' "$result"
           # An app that passes instrumentation but cannot launch is not a usable phone app.
           adb -s "$serial" shell am start -n org.cubechat.android/.MainActivity

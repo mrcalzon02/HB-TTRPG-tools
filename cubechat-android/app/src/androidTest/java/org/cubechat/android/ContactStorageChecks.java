@@ -43,6 +43,8 @@ public final class ContactStorageChecks extends Instrumentation {
             result.putString("attachment_storage", "passed");
             VaultStorageChecks.run(context);
             result.putString("password_vault", "passed");
+            DirectTransportChecks.run();
+            result.putString("direct_transport", "passed");
             result.putString("cubechat_checks", "passed");
             result.putString("stream", "PASS: SQLite upgrade, contact isolation, drafts, counters and attachment vault.\nPASS: password-gated migration, credential changes, locked PURGE notices and durable reset marker.\n");
         } catch (Throwable failure) {
